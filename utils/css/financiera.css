@@ -1,0 +1,14 @@
+
+.login-body{
+    background-color: olivedrab;
+}
+
+.border-card-login{
+    border-top: 3px solid #295b28;
+    background-color: rgba(0, 100, 0, 0.818);
+    width: 100%;
+}
+
+.text-title-login{
+    color: aliceblue;
+}

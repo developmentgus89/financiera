@@ -1,0 +1,23 @@
+
+.text-titled{
+    font-size: medium;
+}
+
+.bar-logout{
+    background-color: olive;
+    color: aliceblue;
+}
+
+.colortext{
+    color: white;
+}
+
+.slide-menu{
+    color: white;
+    background-color: darkgreen;
+}
+
+.main-dashboard{
+    color: azure;
+    background-color: #45C46E;
+}
