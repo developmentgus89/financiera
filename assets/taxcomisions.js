@@ -1,68 +1,68 @@
 //Constante de Declaracion para la base Url
-const baseURL = '../Controllers/CustomerController.php';
+const baseURL = '../Controllers/TaxComisionsController.php';
 
 $("#modalAgregar").on('hidden.bs.modal', function () {
-    // location.reload();
+    location.reload();
 });
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
-const btnAgregar           = document.querySelector('#agregar-cliente');
-const btnEditarCliente     = document.querySelector('#agregar-cliente');
-const btnEliminarCliente   = document.querySelector('#btnEliminarCliente');
-const btnInsertarCliente   = document.querySelector('#btnInsertarCliente');
-const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
-const selectGrados         = document.getElementById('icvegrado');
-const selectGradosUDP      = document.getElementById('udp-icvegrado');
+const btnAgregar           = document.querySelector('#agregar-tasa');
+// const btnEditarCliente     = document.querySelector('#agregar-cliente');
+const btnEliminarInteres   = document.querySelector('#btnEliminarCliente');
+const btnInsertarInteres   = document.querySelector('#btnInsertarInteres');
+// const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
+// const selectGrados         = document.getElementById('icvegrado');
+// const selectGradosUDP      = document.getElementById('udp-icvegrado');
 
 
 
 //Funcion para abrir el modal al hacer click
 btnAgregar.addEventListener('click', () => {
-    abrirModalInsertarCliente();
+    abrirModalInsertarTaxes();
 });
 
-btnInsertarCliente.addEventListener('click', () => {
-    let grado   = document.getElementById('icvegrado').value;
-    let name    = document.getElementById('namecustomer').value;
-    let address = document.getElementById('addresscustomer').value;
-    let mobile  = document.getElementById('mobilecustomer').value;
+btnInsertarInteres.addEventListener('click', () => {
+    
+    let taxdescripcion    = document.getElementById('taxdescripcion').value;
+    let taxporcentajeinteres = document.getElementById('taxporcentajeinteres').value;
+    let taxobservaciones  = document.getElementById('taxobservaciones').value;
     
     // const dataTableCliente = $('#tablaClientes').DataTable();
-    insertarCliente(grado, name, address, mobile);
+    insertarInteres(taxdescripcion, taxporcentajeinteres, taxobservaciones);
     // dataTableCliente.destroy();
     $('#modalAgregar').modal('hide');
-    location.reload();
+    // location.reload();
 });
 
-btnActualizarCliente.addEventListener('click', () => {
-    let id = $('#udp-idcustomer').val();
+// btnActualizarImpuesto.addEventListener('click', () => {
+//     let id = $('#udp-idtaxes').val();
 
-    console.log('Valor al dar click ' + id);
-    leerRowCliente(id);
-    let udpcvegrado = document.getElementById('udp-icvegrado').value;
-    let udpname     = document.getElementById('udp-namecustomer').value;
-    let udpaddress  = document.getElementById('udp-addresscustomer').value;
-    let udpmobile   = document.getElementById('udp-mobilecustomer').value;
-    // const dataTableCliente = $('#tablaClientes').DataTable();
-    actualizarCliente(id, udpcvegrado, udpname, udpaddress, udpmobile );
-    // dataTableCliente.destroy();
-    $('#modalEditar').modal('hide');
-    location.reload();
+//     console.log('Valor al dar click ' + id);
+//     leerRowCliente(id);
+//     let udpcvegrado = document.getElementById('udp-icvegrado').value;
+//     let udpname     = document.getElementById('udp-namecustomer').value;
+//     let udpaddress  = document.getElementById('udp-addresscustomer').value;
+//     let udpmobile   = document.getElementById('udp-mobilecustomer').value;
+//     // const dataTableCliente = $('#tablaClientes').DataTable();
+//     actualizarCliente(id, udpcvegrado, udpname, udpaddress, udpmobile );
+//     // dataTableCliente.destroy();
+//     $('#modalEditar').modal('hide');
+//     location.reload();
     
-});
+// });
 
-btnEliminarCliente.addEventListener('click', ( ) => {
-    let id = $('#deleteCliente').val();
-    // const dataTableCliente = $('#tablaClientes').DataTable();
-    eliminarCliente(id);
-    // dataTableCliente.destroy();
-    $('#modalBorrarCliente').modal('hide');
-    location.reload();
-});
+// btnEliminarCliente.addEventListener('click', ( ) => {
+//     let id = $('#deleteCliente').val();
+//     // const dataTableCliente = $('#tablaClientes').DataTable();
+//     eliminarCliente(id);
+//     // dataTableCliente.destroy();
+//     $('#modalBorrarCliente').modal('hide');
+//     location.reload();
+// });
 // Función para leer los clientes
 
 
-const leerClientes = () => {
+const leerImpuestos = () => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -70,51 +70,25 @@ const leerClientes = () => {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
             console.table(data);
-            var tablaClientes = document.querySelector('#tablaClientes');
-            new DataTable( tablaClientes, {
+            var tablaImpuestos = document.querySelector('#tblImpuestos');
+            new DataTable( tablaImpuestos, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['ID','Nombre', 'A. Paterno', 'A. Materno', 'Edad', 'Tipo Cliente', 'Fec. Nacimiento', 'Fec. Registro', 'Status','Acciones'],
+                    headings: ['ID','Descripción', 'Interés', 'Observaciones','Acciones'],
                     data: data.map(function( item ){
                         // return Object.values(item);
-                        var id = item['icvecliente'];
+                        var id = item['icvetasascomisiones'];
                         return [
                             id,
-                            item['cnombre'],
-                            item['capaterno'],
-                            item['camaterno'],
-                            item['iedad'],
-                            item['icvetipocliente'],
-                            item['dfechanaciemiento'],
-                            item['dfechaalta'],
-                            item['cestatus'],
+                            item['cdescripciontascom'],
+                            item['ftasainteres'],
+                            item['cattasacomobs'],
                             `<button class="btn bg-gradient-danger btn-sm" onclick=""><i class="fas fa-trash-alt"></i></button> <button class="btn bg-gradient-success btn-sm" onclick=""><i class="fas fa-edit"></i></button>`
 
                         ]
                     })
                 }
             });
-            // $('#tablaClientes').DataTable({
-            //     data: clientes,
-            //     columns: [
-            //         { data: 'icvecliente' },
-            //         { data: 'cnombre' },
-            //         { data: 'capaterno' },
-            //         { data: 'camaterno' },
-            //         { data: 'iedad' },
-            //         { data: 'icvetipocliente' },
-            //         { data: 'dfechanaciemiento' },
-            //         { data: 'dfechaalta' },
-            //         { data: 'cestatus' },
-            //         {
-            //             data: null,
-            //             render: function (data, type, row) {
-            //                 return '<button type="button" class="btn btn-success btn-sm" onclick="abrirModalActualizarCliente(' + data.id + ')">Editar</button>' +
-            //                     '<button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminarCliente(' + data.id + ')">Eliminar</button>';
-            //             }
-            //         }
-            //     ]
-            // });
         } else {
             console.error('Error al leer los clientes');
         }
@@ -150,7 +124,7 @@ const leerRowCliente = (id) => {
 };
 
 // Función para insertar un cliente
-const insertarCliente = (grado, name, address, mobile) => {
+const insertarInteres = (taxdescripcion, taxporcentajeinteres, taxobservaciones) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL , true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -162,7 +136,7 @@ const insertarCliente = (grado, name, address, mobile) => {
             console.error('Error al insertar el cliente');
         }
     };
-    xhr.send(`operation=create&grado=${grado}&name=${name}&address=${address}&mobile=${mobile}`);
+    xhr.send(`operation=create&descripcion=${taxdescripcion}&pinteres=${taxporcentajeinteres}&observaciones=${taxobservaciones}`);
 };
 
 // Función para actualizar un cliente
@@ -198,7 +172,7 @@ const eliminarCliente = (id) => {
 };
 
 // Función para abrir el modal de insertar cliente
-const abrirModalInsertarCliente = () => {
+const abrirModalInsertarTaxes = () => {
     // Lógica para abrir el modal de insertar cliente
     $('#modalAgregar').modal('show');
 };
@@ -217,7 +191,7 @@ const confirmarEliminarCliente = (id) => {
     $('#deleteCliente').val(id);
     $('#modalBorrarCliente').modal('show');
 };
-leerClientes();
+leerImpuestos();
 
 
 

@@ -1,5 +1,18 @@
 <?php
 session_start();
+
+$sessionLifetime = 900;
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $sessionLifetime) {
+    // Si la sesión ha expirado, destruirla
+    session_unset();
+    session_destroy();
+    session_start(); // Iniciar una nueva sesión si es necesario
+} else {
+    // Si la sesión está activa, actualizar el tiempo de actividad
+    $_SESSION['last_activity'] = time();
+}
+
 if (isset($_SESSION['username'])) {
     // El usuario ha iniciado sesión, puedes mostrar el contenido del template
     

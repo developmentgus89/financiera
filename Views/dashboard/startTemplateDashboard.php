@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- Navbar -->

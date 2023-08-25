@@ -13,11 +13,10 @@
 	<script src="../utils/js/adminlte.min.js"></script>
     <!-- Toastr - JS -->
 	<script src="../utils/plugins/toastr/toastr.min.js"></script>
-    <!-- DashBoard - JS -->
-    <script src="../utils/js/pages/dashboard3.js"></script>
+   
 
 	<!-- DataTables  & Plugins -->
-	<script src="../utils/plugins/datatables/jquery.dataTables.min.js"></script>
+	<!-- <script src="../utils/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="../utils/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="../utils/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 	<script src="../utils/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
@@ -28,7 +27,8 @@
 	<script src="../utils/plugins/pdfmake/vfs_fonts.js"></script>
 	<script src="../utils/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="../utils/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-	<script src="../utils/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+	<script src="../utils/plugins/datatables-buttons/js/buttons.colVis.min.js"></script> -->
+	<script src="../utils/js/vanillaDataTable.js"></script>
 
     <script src="../assets/logout.js"></script>
 	

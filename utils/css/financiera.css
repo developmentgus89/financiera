@@ -12,3 +12,7 @@
 .text-title-login{
     color: aliceblue;
 }
+
+.fondo_cliente_add_modal{
+    background-color: rgba(103, 190, 77, 0.733);
+}

@@ -1,7 +1,7 @@
 <?php
 require_once 'Conexion.php';
 
-class Customer{
+class Taxes{
     private $conexion;
     var $acceso;
 
@@ -10,19 +10,19 @@ class Customer{
         $this->acceso = $db->pdo;
     }
 
-    // public function insertarCliente($icvegrado, $name, $address, $mobile) {
-    //     try {
-    //         // $conexion = $this->conexion->obtenerConexion();
-    //         $query = "INSERT INTO ims_customer (icvegrado, name, address, mobile) VALUES (?, ?, ?, ?)";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$icvegrado, $name, $address, $mobile]);
+    public function insertarInteres( $descripcion, $pinteres, $observaciones) {
+        try {
+            // $conexion = $this->conexion->obtenerConexion();
+            $query = "INSERT INTO cattasascomisiones ( cdescripciontascom, ftasainteres, cattasacomobs) VALUES (?, ?, ?)";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$descripcion, $pinteres, $observaciones]);
 
-    //         // Devuelve true si todo es correcto
-    //         return true;
-    //     } catch (PDOException $e) {
-    //         echo 'Error al insertar el cliente: ' . $e->getMessage();
-    //     }
-    // }
+            // Devuelve true si todo es correcto
+            return true;
+        } catch (PDOException $e) {
+            echo 'Error al insertar el cliente: ' . $e->getMessage();
+        }
+    }
 
     // public function eliminarCliente($id) {
     //     try {
@@ -49,9 +49,9 @@ class Customer{
     //     }
     // }
 
-    public function obtenerClientes() {
+    public function obtenerImpuestos() {
         try {
-            $query = "SELECT * FROM clientes";
+            $query = "SELECT * FROM cattasascomisiones";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 
