@@ -33,7 +33,7 @@
             </ul>
         </li>
         <li class="nav-item">
-            <a href="CustomerBlade" class="nav-link">
+            <a href="CustomerBlade.php" class="nav-link">
             <i class="nav-icon far fa-address-book"></i>
                 <p>
                     Clientes
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="TaxComisionsBlade" class="nav-link">
+                    <a href="TaxComisionsBlade.php" class="nav-link">
                         &nbsp;&nbsp;<i class="nav-icon fas fa-money-check-alt"></i>
                         <p>Tasas y Comisiones</p>
                     </a>

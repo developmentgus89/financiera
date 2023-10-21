@@ -2,7 +2,7 @@
 const baseURL = '../Controllers/CustomerController.php';
 
 $("#modalAgregar").on('hidden.bs.modal', function () {
-    // location.reload();
+    location.reload();
 });
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
@@ -78,13 +78,15 @@ const leerClientes = () => {
                     data: data.map(function( item ){
                         // return Object.values(item);
                         var id = item['icvecliente'];
+                        var tipoCliente = item['icvetipocliente'];
+                        let typeClient = tipoCliente == 1 ? 'ACTIVO' : 'INACTIVO';
                         return [
                             id,
                             item['cnombre'],
                             item['capaterno'],
                             item['camaterno'],
                             item['iedad'],
-                            item['icvetipocliente'],
+                            typeClient,
                             item['dfechanaciemiento'],
                             item['dfechaalta'],
                             item['cestatus'],
@@ -94,27 +96,6 @@ const leerClientes = () => {
                     })
                 }
             });
-            // $('#tablaClientes').DataTable({
-            //     data: clientes,
-            //     columns: [
-            //         { data: 'icvecliente' },
-            //         { data: 'cnombre' },
-            //         { data: 'capaterno' },
-            //         { data: 'camaterno' },
-            //         { data: 'iedad' },
-            //         { data: 'icvetipocliente' },
-            //         { data: 'dfechanaciemiento' },
-            //         { data: 'dfechaalta' },
-            //         { data: 'cestatus' },
-            //         {
-            //             data: null,
-            //             render: function (data, type, row) {
-            //                 return '<button type="button" class="btn btn-success btn-sm" onclick="abrirModalActualizarCliente(' + data.id + ')">Editar</button>' +
-            //                     '<button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminarCliente(' + data.id + ')">Eliminar</button>';
-            //             }
-            //         }
-            //     ]
-            // });
         } else {
             console.error('Error al leer los clientes');
         }
@@ -157,7 +138,7 @@ const insertarCliente = (grado, name, address, mobile) => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('Cliente insertado correctamente');
-            // Lógica adicional después de insertar el cliente
+            leerClientes();
         } else {
             console.error('Error al insertar el cliente');
         }

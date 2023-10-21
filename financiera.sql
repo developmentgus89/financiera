@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 25-08-2023 a las 01:04:38
--- Versión del servidor: 8.0.27
+-- Tiempo de generación: 25-08-2023 a las 06:00:47
+-- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `catroles`;
 CREATE TABLE IF NOT EXISTS `catroles` (
-  `icveroles` int NOT NULL AUTO_INCREMENT,
-  `cnombrerol` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `icveroles` int(11) NOT NULL AUTO_INCREMENT,
+  `cnombrerol` varchar(50) CHARACTER SET latin1 NOT NULL,
   `bstatus` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`icveroles`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -43,19 +43,28 @@ CREATE TABLE IF NOT EXISTS `catroles` (
 
 DROP TABLE IF EXISTS `cattasascomisiones`;
 CREATE TABLE IF NOT EXISTS `cattasascomisiones` (
-  `icvetasascomisiones` int NOT NULL AUTO_INCREMENT,
+  `icvetasascomisiones` int(11) NOT NULL AUTO_INCREMENT,
   `cdescripciontascom` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `ftasainteres` double NOT NULL COMMENT 'Este sería el manejo de interés que se le cobrará al cliente',
   `cattasacomobs` varchar(100) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`icvetasascomisiones`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cattasascomisiones`
 --
 
 INSERT INTO `cattasascomisiones` (`icvetasascomisiones`, `cdescripciontascom`, `ftasainteres`, `cattasacomobs`) VALUES
-(1, 'TASA INTERES A1', 8.9, 'NINGUNA');
+(1, 'TASA INTERES A1', 8.9, 'NINGUNA'),
+(2, 'TASA INTERES A2', 9.9, 'CLIENTES A2'),
+(3, 'TASA INTERÉS A3', 10.9, 'CLIENTE A3'),
+(4, 'TASA INTERES B1', 15.9, 'CLIENTES B1'),
+(5, 'TASA DE INTERES B2', 16.9, 'CLIENTE B2'),
+(6, 'TASA INTERES B3', 17.9, 'CLIENTES B3'),
+(7, 'TASA DE INTERES C1', 22.9, 'CLIENTES C1'),
+(8, 'TASA INTERES C2', 23.9, 'CLIENTES C2'),
+(9, 'TASA INTERES C3', 26.9, 'CLIENTES C3'),
+(10, 'TASA INTERES C4', 29.9, 'CLIENTES C4');
 
 -- --------------------------------------------------------
 
@@ -65,10 +74,10 @@ INSERT INTO `cattasascomisiones` (`icvetasascomisiones`, `cdescripciontascom`, `
 
 DROP TABLE IF EXISTS `cattipocliente`;
 CREATE TABLE IF NOT EXISTS `cattipocliente` (
-  `icvetipocliente` int NOT NULL,
-  `cdescriptipocliente` varchar(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cabreviiatipo` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `icvetasascomisiones` int NOT NULL,
+  `icvetipocliente` int(11) NOT NULL,
+  `cdescriptipocliente` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `cabreviiatipo` varchar(11) CHARACTER SET latin1 NOT NULL,
+  `icvetasascomisiones` int(11) NOT NULL,
   PRIMARY KEY (`icvetipocliente`),
   KEY `icvetasacomis_idx` (`icvetasascomisiones`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -88,15 +97,15 @@ INSERT INTO `cattipocliente` (`icvetipocliente`, `cdescriptipocliente`, `cabrevi
 
 DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE IF NOT EXISTS `clientes` (
-  `icvecliente` int NOT NULL AUTO_INCREMENT,
-  `cnombre` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `capaterno` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `camaterno` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `iedad` int NOT NULL,
-  `icvetipocliente` int NOT NULL,
+  `icvecliente` int(11) NOT NULL AUTO_INCREMENT,
+  `cnombre` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `capaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `camaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `iedad` int(11) NOT NULL,
+  `icvetipocliente` int(11) NOT NULL,
   `dfechanaciemiento` date NOT NULL,
   `dfechaalta` date NOT NULL,
-  `cestatus` char(2) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `cestatus` char(2) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`icvecliente`),
   KEY `tipocliente_idx` (`icvetipocliente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -116,18 +125,18 @@ INSERT INTO `clientes` (`icvecliente`, `cnombre`, `capaterno`, `camaterno`, `ied
 
 DROP TABLE IF EXISTS `domicilio`;
 CREATE TABLE IF NOT EXISTS `domicilio` (
-  `icvedomicilio` int NOT NULL AUTO_INCREMENT,
-  `icvecliente` int DEFAULT NULL,
-  `ccalle` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cnuminterior` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `cnumexterior` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `ccolonia` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `cdelegmunicipio` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `centfederativa` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `cpais` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `ccodpostal` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `cfotofrente` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `ccomprodomicilio` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `icvedomicilio` int(11) NOT NULL AUTO_INCREMENT,
+  `icvecliente` int(11) DEFAULT NULL,
+  `ccalle` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `cnuminterior` varchar(10) CHARACTER SET latin1 DEFAULT NULL,
+  `cnumexterior` varchar(10) CHARACTER SET latin1 DEFAULT NULL,
+  `ccolonia` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `cdelegmunicipio` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `centfederativa` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `cpais` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `ccodpostal` varchar(10) CHARACTER SET latin1 DEFAULT NULL,
+  `cfotofrente` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `ccomprodomicilio` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`icvedomicilio`),
   KEY `icvecliente` (`icvecliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -140,8 +149,8 @@ CREATE TABLE IF NOT EXISTS `domicilio` (
 
 DROP TABLE IF EXISTS `histpagoscapitalinv`;
 CREATE TABLE IF NOT EXISTS `histpagoscapitalinv` (
-  `icvepagohist` int NOT NULL AUTO_INCREMENT,
-  `icveinversionista` int DEFAULT NULL,
+  `icvepagohist` int(11) NOT NULL AUTO_INCREMENT,
+  `icveinversionista` int(11) DEFAULT NULL,
   `fmontopagado` decimal(10,2) DEFAULT NULL,
   `dfecha_pago` date DEFAULT NULL,
   PRIMARY KEY (`icvepagohist`),
@@ -156,16 +165,16 @@ CREATE TABLE IF NOT EXISTS `histpagoscapitalinv` (
 
 DROP TABLE IF EXISTS `inversionistas`;
 CREATE TABLE IF NOT EXISTS `inversionistas` (
-  `icveinversionista` int NOT NULL AUTO_INCREMENT,
-  `cnombre` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `capaterno` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `camaterno` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `iedad` int DEFAULT NULL,
-  `cdomicilio` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `ctelefono` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `icveinversionista` int(11) NOT NULL AUTO_INCREMENT,
+  `cnombre` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `capaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `camaterno` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `iedad` int(11) DEFAULT NULL,
+  `cdomicilio` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `ctelefono` varchar(15) CHARACTER SET latin1 DEFAULT NULL,
   `fcantidadinvertida` decimal(10,2) DEFAULT NULL,
-  `cuentabancaria` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `cemail` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `cuentabancaria` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `cemail` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `dfecha_pago` date DEFAULT NULL,
   `dfecha_alta` date DEFAULT NULL,
   PRIMARY KEY (`icveinversionista`)
@@ -179,8 +188,8 @@ CREATE TABLE IF NOT EXISTS `inversionistas` (
 
 DROP TABLE IF EXISTS `paginteresesinv`;
 CREATE TABLE IF NOT EXISTS `paginteresesinv` (
-  `icvepago` int NOT NULL AUTO_INCREMENT,
-  `icveinversionista` int NOT NULL,
+  `icvepago` int(11) NOT NULL AUTO_INCREMENT,
+  `icveinversionista` int(11) NOT NULL,
   `fmonto_pagado` decimal(10,2) NOT NULL,
   `dfechapago` date NOT NULL,
   PRIMARY KEY (`icvepago`),
@@ -195,9 +204,9 @@ CREATE TABLE IF NOT EXISTS `paginteresesinv` (
 
 DROP TABLE IF EXISTS `permisosacceso`;
 CREATE TABLE IF NOT EXISTS `permisosacceso` (
-  `icvepermisoacceso` int NOT NULL AUTO_INCREMENT,
-  `cpantalla` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cdescripcion` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `icvepermisoacceso` int(11) NOT NULL AUTO_INCREMENT,
+  `cpantalla` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `cdescripcion` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`icvepermisoacceso`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -209,9 +218,9 @@ CREATE TABLE IF NOT EXISTS `permisosacceso` (
 
 DROP TABLE IF EXISTS `rolespermiso`;
 CREATE TABLE IF NOT EXISTS `rolespermiso` (
-  `icverolpermiso` int NOT NULL AUTO_INCREMENT,
-  `icveroles` int DEFAULT NULL,
-  `icvepermisoacceso` int DEFAULT NULL,
+  `icverolpermiso` int(11) NOT NULL AUTO_INCREMENT,
+  `icveroles` int(11) DEFAULT NULL,
+  `icvepermisoacceso` int(11) DEFAULT NULL,
   PRIMARY KEY (`icverolpermiso`),
   KEY `icveroles` (`icveroles`),
   KEY `icvepermisoacceso` (`icvepermisoacceso`)
@@ -225,14 +234,14 @@ CREATE TABLE IF NOT EXISTS `rolespermiso` (
 
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `icveusuario` int NOT NULL AUTO_INCREMENT,
-  `cusername` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cpassword` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cnombre` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `capellido` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `icveusuario` int(11) NOT NULL AUTO_INCREMENT,
+  `cusername` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `cpassword` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `cnombre` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `capellido` varchar(100) CHARACTER SET latin1 NOT NULL,
   `dfechavencimiento` date DEFAULT NULL,
-  `icverol` int DEFAULT NULL,
-  `cavatar` varchar(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `icverol` int(11) DEFAULT NULL,
+  `cavatar` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`icveusuario`),
   UNIQUE KEY `cusername` (`cusername`),
   KEY `icverol` (`icverol`)

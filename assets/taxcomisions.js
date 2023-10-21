@@ -1,18 +1,33 @@
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/TaxComisionsController.php';
 
+const textInputs = document.querySelectorAll('input[type="text"]');
+
+textInputs.forEach( input => {
+    input.addEventListener('input', function(){
+        this.value = this.value.toUpperCase();
+    });
+});
+
 $("#modalAgregar").on('hidden.bs.modal', function () {
     location.reload();
 });
 
+$("#modalEditar").on('hidden.bs.modal', function () {
+    location.reload();
+});
+
+$("#modalBorrarTasaInteres").on('hidden.bs.modal', function () {
+    location.reload();
+});
+
 //Recuperacion de los valores de los botones dentro de la vista Customers
-const btnAgregar           = document.querySelector('#agregar-tasa');
-// const btnEditarCliente     = document.querySelector('#agregar-cliente');
-const btnEliminarInteres   = document.querySelector('#btnEliminarCliente');
-const btnInsertarInteres   = document.querySelector('#btnInsertarInteres');
-// const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
-// const selectGrados         = document.getElementById('icvegrado');
-// const selectGradosUDP      = document.getElementById('udp-icvegrado');
+const btnAgregar               = document.querySelector('#agregar-tasa');
+const btnEliminarInteres       = document.querySelector('#btnEliminarInteres');
+const btnInsertarInteres       = document.querySelector('#btnInsertarInteres');
+const btnActualizarTasaInteres = document.querySelector('#btnActualizarTasaInteres');
+const btnDeleteTasaInteres     = document.querySelector('#btnEliminarTasaInteres');
+
 
 
 
@@ -29,39 +44,34 @@ btnInsertarInteres.addEventListener('click', () => {
     
     // const dataTableCliente = $('#tablaClientes').DataTable();
     insertarInteres(taxdescripcion, taxporcentajeinteres, taxobservaciones);
+    location.reload();
     // dataTableCliente.destroy();
     $('#modalAgregar').modal('hide');
-    // location.reload();
+    
 });
 
-// btnActualizarImpuesto.addEventListener('click', () => {
-//     let id = $('#udp-idtaxes').val();
+btnActualizarTasaInteres.addEventListener('click', () => {
+    let id = document.getElementById('udp-icvetasascomisiones').value;
 
-//     console.log('Valor al dar click ' + id);
-//     leerRowCliente(id);
-//     let udpcvegrado = document.getElementById('udp-icvegrado').value;
-//     let udpname     = document.getElementById('udp-namecustomer').value;
-//     let udpaddress  = document.getElementById('udp-addresscustomer').value;
-//     let udpmobile   = document.getElementById('udp-mobilecustomer').value;
-//     // const dataTableCliente = $('#tablaClientes').DataTable();
-//     actualizarCliente(id, udpcvegrado, udpname, udpaddress, udpmobile );
-//     // dataTableCliente.destroy();
-//     $('#modalEditar').modal('hide');
-//     location.reload();
+    console.log('Valor al dar click ' + id);
+    let udpcdescripciontascom  = document.getElementById('udp-cdescripciontascom').value;
+    let udpftasainteresame = document.getElementById('udp-ftasainteres').value;
+    let udpcattasacomobs  = document.getElementById('udp-cattasacomobs').value;
+    actualizarTasaInteres(id, udpcdescripciontascom, udpftasainteresame, udpcattasacomobs);
+    // dataTableCliente.destroy();
+    $('#modalEditar').modal('hide');
+    location.reload();
     
-// });
+});
 
-// btnEliminarCliente.addEventListener('click', ( ) => {
-//     let id = $('#deleteCliente').val();
-//     // const dataTableCliente = $('#tablaClientes').DataTable();
-//     eliminarCliente(id);
-//     // dataTableCliente.destroy();
-//     $('#modalBorrarCliente').modal('hide');
-//     location.reload();
-// });
+btnEliminarInteres.addEventListener('click', ( ) => {
+    let id = $('#deleteTasaInteres').val();
+    eliminarTasaInteres(id);
+    $('#modalBorrarCliente').modal('hide');
+    location.reload();
+});
+
 // Función para leer los clientes
-
-
 const leerImpuestos = () => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
@@ -83,7 +93,7 @@ const leerImpuestos = () => {
                             item['cdescripciontascom'],
                             item['ftasainteres'],
                             item['cattasacomobs'],
-                            `<button class="btn bg-gradient-danger btn-sm" onclick=""><i class="fas fa-trash-alt"></i></button> <button class="btn bg-gradient-success btn-sm" onclick=""><i class="fas fa-edit"></i></button>`
+                            `<button class="btn bg-gradient-danger btn-sm" onclick="confirmarEliminarTasaInteres(${ id })"><i class="fas fa-trash-alt"></i></button> <button class="btn bg-gradient-success btn-sm" onclick="leerRowTax( ${ id })"><i class="fas fa-edit"></i></button>`
 
                         ]
                     })
@@ -96,34 +106,40 @@ const leerImpuestos = () => {
     xhr.send('operation=read');
 };
 
-const leerRowCliente = (id) => {
+/**
+ * 
+ * @param {number} id 
+ */
+const leerRowTax = (id) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            const cliente = JSON.parse(xhr.responseText);
-            console.table(cliente);
-            const defaultOptionUDP = document.createElement('option');
-            defaultOptionUDP.value = cliente[0].icvegrado;
-            defaultOptionUDP.textContent = cliente[0].cgradoabrevia;
-            selectGradosUDP.append(defaultOptionUDP);
-            leerGrados2();
-            document.getElementById('udp-icvegrado').value = cliente[0].icvegrado;
-            document.getElementById('udp-namecustomer').value     = cliente[0].name;
-            document.getElementById('udp-addresscustomer').value = cliente[0].address;
-            document.getElementById('udp-mobilecustomer').value  = cliente[0].mobile;
+            const tasa = JSON.parse(xhr.responseText);
+            console.table(tasa);
+            document.getElementById('udp-icvetasascomisiones').value = tasa[0].icvetasascomisiones;
+            document.getElementById('udp-cdescripciontascom').value     = tasa[0].cdescripciontascom;
+            document.getElementById('udp-ftasainteres').value = tasa[0].ftasainteres;
+            document.getElementById('udp-cattasacomobs').value  = tasa[0].cattasacomobs;
+            $('#modalEditar').modal('show');
             
             
             
         } else {
-            console.error('Error al leer el cliente');
+            console.error('Error al leer el la tasa de interes');
         }
     };
     xhr.send(`operation=row&id=${id}`);
 };
 
 // Función para insertar un cliente
+/**
+ * 
+ * @param {String} taxdescripcion 
+ * @param {number} taxporcentajeinteres 
+ * @param {String} taxobservaciones 
+ */
 const insertarInteres = (taxdescripcion, taxporcentajeinteres, taxobservaciones) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL , true);
@@ -131,7 +147,7 @@ const insertarInteres = (taxdescripcion, taxporcentajeinteres, taxobservaciones)
     xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('Cliente insertado correctamente');
-            // Lógica adicional después de insertar el cliente
+           
         } else {
             console.error('Error al insertar el cliente');
         }
@@ -139,8 +155,15 @@ const insertarInteres = (taxdescripcion, taxporcentajeinteres, taxobservaciones)
     xhr.send(`operation=create&descripcion=${taxdescripcion}&pinteres=${taxporcentajeinteres}&observaciones=${taxobservaciones}`);
 };
 
-// Función para actualizar un cliente
-const actualizarCliente = (id, icvegrado, name, address, mobile ) => {
+// Función para actualizar una tasa de interes
+/**
+ * 
+ * @param {Number} id 
+ * @param {String} udpcdescripciontascom 
+ * @param {Number} udpnudpftasainteresame 
+ * @param {String} udpcattasacomobs 
+ */
+const actualizarTasaInteres = (id, udpcdescripciontascom, udpftasainteresame, udpcattasacomobs ) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL , true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -152,18 +175,22 @@ const actualizarCliente = (id, icvegrado, name, address, mobile ) => {
             console.error('Error al actualizar el cliente');
         }
     };
-    xhr.send(`operation=update&id=${id}&icvegrado=${icvegrado}&name=${name}&address=${address}&mobile=${mobile}`);
+    xhr.send(`operation=update&id=${id}&udpcdescripciontascom=${udpcdescripciontascom}&udpftasainteresame=${udpftasainteresame}&udpcattasacomobs=${udpcattasacomobs}`);
 };
 
 // Función para eliminar un cliente
-const eliminarCliente = (id) => {
+/**
+ * 
+ * @param {number} id 
+ */
+const eliminarTasaInteres = (id) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL , true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
             console.log('Cliente eliminado correctamente');
-            // Lógica adicional después de eliminar el cliente
+            location.reload();
         } else {
             console.error('Error al eliminar el cliente');
         }
@@ -186,11 +213,20 @@ const abrirModalActualizarCliente = (id) => {
 
 
 // Función para eliminar el registro de un cliente
-const confirmarEliminarCliente = (id) => {
+/**
+ * 
+ * @param {number} id 
+ */
+const confirmarEliminarTasaInteres = (id) => {
     // Lógica para mostrar confirmación de eliminar cliente
-    $('#deleteCliente').val(id);
-    $('#modalBorrarCliente').modal('show');
+    $('#deleteTasaInteres').val(id);
+    const element = document.querySelector('#elementText');
+    element.innerHTML = `<h2> ${ id } </h2>`;
+    console.log(id);
+    $('#modalBorrarTasaInteres').modal('show');
 };
+
+
 leerImpuestos();
 
 

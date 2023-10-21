@@ -16,3 +16,7 @@
 .fondo_cliente_add_modal{
     background-color: rgba(103, 190, 77, 0.733);
 }
+
+.fondo_cliente_edit_modal{
+    background-color: rgba(39, 90, 24, 0.877);
+}

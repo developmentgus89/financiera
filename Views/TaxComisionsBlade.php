@@ -55,7 +55,7 @@ include_once "dashboard/startTemplateDashboard.php";
     <div class="modal-dialog" role="document">
         <div class="modal-content fondo_cliente_add_modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarLabel">Agregar Nuevo Cliente</h5>
+                <h5 class="modal-title" id="modalAgregarLabel">Agregar nueva tasa de inter&eacute;s</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -102,55 +102,55 @@ include_once "dashboard/startTemplateDashboard.php";
 <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content fondo_cliente_edit_modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel">Editar Cliente</h5>
+                <h5 class="modal-title" id="modalEditarLabel">Editar Tasa de Inter&eacute;s</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" name="udp-idcustomer" id="udp-idcustomer" hidden>
-                <label for="">Grado: </label>
-                <select class="form-control" name="udp-icvegrado" id="udp-icvegrado">
-                </select>
-                <label for="udp-namecustomer">Nombre</label>
-                <input type="text" class="form-control" name="udp-namecustomer" id="udp-namecustomer"
-                    placeholder="Nombre del Cliente">
-                <label for="udp-addresscustomer">Direcci&oacute;n</label>
-                <input type="text" class="form-control" name="udp-addresscustomer" id="udp-addresscustomer"
+                <input type="text" class="form-control" name="udp-icvetasascomisiones" id="udp-icvetasascomisiones" hidden>
+                <label for="">Nombre de la Tasa de Inter&eacute;s: </label>
+                <input type="text" class="form-control" name="udp-cdescripciontascom" id="udp-cdescripciontascom"
+                    placeholder="Nombre del tabulador de inter&eacute;s">
+                <label for="udp-ftasainteres">Porcentaje de Inter&eacute;s:</label>
+                <input type="number" step="0.01" class="form-control" name="udp-ftasainteres" id="udp-ftasainteres"
                     placeholder="Direcci&oacute;n del Cliente">
-                <label for="udp-mobilecustomer">Tel&eacute;fono</label>
-                <input type="text" class="form-control" name="udp-mobilecustomer" id="udp-mobilecustomer"
-                    placeholder="Tel&eacute;fono del Cliente">
+                <label for="udp-cattasacomobs">Observaciones:</label>
+                <input type="text" class="form-control" name="udp-cattasacomobs" id="udp-cattasacomobs"
+                    placeholder="Descripci&oacute;n detallada">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="btnActualizarCliente">Actualizar</button>
+                <button type="button" class="btn btn-success" id="btnActualizarTasaInteres">Actualizar</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modalBorrarCliente">
+<div class="modal fade" id="modalBorrarTasaInteres">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
             <div class="modal-header">
-                <h4 class="modal-title">Borrar Registros</h4>
+                <h4 class="modal-title">Borrar Tasa de Inter&eacute;s</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Desea eliminar el Cliente
+                Desea eliminar la tasa de inter&eacute;s
                 <div class="form-group">
-                    <label for="deleteCliente">Id del Cliente:</label>
-                    <input type="text" class="form-control" name="deleteCliente" id="deleteCliente" readonly>
+                    <label for="deleteTasaInteres">Id de la Tasa de Inter&eacute;s:</label>
+                    <input type="text" class="form-control" name="deleteTasaInteres" id="deleteTasaInteres" hidden>
+                </div>
+                <div id="elementText">
+
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-outline-light" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" id="btnEliminarCliente">Eliminar</button>
+                <button type="button" class="btn btn-warning" id="btnEliminarInteres">Eliminar</button>
             </div>
         </div>
         <!-- /.modal-content -->

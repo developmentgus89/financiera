@@ -24,30 +24,30 @@ class Taxes{
         }
     }
 
-    // public function eliminarCliente($id) {
-    //     try {
-    //         $query = "DELETE FROM ims_customer WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$id]);
+    public function eliminarTasaInteres($id) {
+        try {
+            $query = "DELETE FROM cattasascomisiones WHERE icvetasascomisiones = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$id]);
 
-    //         echo 'Cliente eliminado correctamente';
-    //     } catch (PDOException $e) {
-    //         echo 'Error al eliminar el cliente: ' . $e->getMessage();
-    //     }
-    // }
+            echo 'Tasa de interes eliminada correctamente';
+        } catch (PDOException $e) {
+            echo 'Error al eliminar la tasa de interes: ' . $e->getMessage();
+        }
+    }
 
-    // public function actualizarCliente($id, $icvegrado, $name, $address, $mobile) {
-    //     try {
+    public function actualizarTasaInteres($id, $udpcdescripciontascom, $udpftasainteresame, $udpcattasacomobs) {
+        try {
             
-    //         $query = "UPDATE ims_customer SET icvegrado = ?, name = ?, address = ?, mobile = ? WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$icvegrado, $name, $address, $mobile, $id]);
+            $query = "UPDATE cattasascomisiones SET cdescripciontascom = ?, ftasainteres = ?, cattasacomobs = ? WHERE icvetasascomisiones = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$udpcdescripciontascom, $udpftasainteresame, $udpcattasacomobs, $id]);
 
-    //         echo 'Cliente actualizado correctamente';
-    //     } catch (PDOException $e) {
-    //         echo 'Error al actualizar el cliente: ' . $e->getMessage();
-    //     }
-    // }
+            echo 'Tasa de interes actualizada correctamente';
+        } catch (PDOException $e) {
+            echo 'Error al actualizar la tasa de interes: ' . $e->getMessage();
+        }
+    }
 
     public function obtenerImpuestos() {
         try {
@@ -58,6 +58,18 @@ class Taxes{
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error en la consulta: ' . $e->getMessage();
+        }
+    }
+
+    
+    public function rowTaxInteres($id){
+        try {
+            $query = "SELECT * FROM cattasascomisiones WHERE icvetasascomisiones = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$id]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta del impuesto' . $e->getMessage();
         }
     }
 

@@ -16,33 +16,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $taxes->insertarInteres($descripcion, $pinteres, $observaciones);
             break;
         case 'read':
-            // Leer clientes
+            // Leer inpuestos
             $impuestos = $taxes->obtenerImpuestos();
             echo json_encode($impuestos);
             break;
         case 'update':
-            // Actualizar cliente
-            $id        = $_POST['id'];
-            $icvegrado = $_POST['icvegrado'];
-            $name      = $_POST['name'];
-            $address   = $_POST['address'];
-            $mobile    = $_POST['mobile'];
-
-            // $taxes->actualizarCliente($id, $icvegrado, $name, $address, $mobile);
+            // Actualizar tasa de interes
+            $id                    = $_POST['id'];
+            $udpcdescripciontascom = $_POST['udpcdescripciontascom'];
+            $udpftasainteresame    = $_POST['udpftasainteresame'];
+            $udpcattasacomobs      = $_POST['udpcattasacomobs'];
+            $taxes->actualizarTasaInteres($id, $udpcdescripciontascom, $udpftasainteresame, $udpcattasacomobs);
             break;
         case 'delete':
-            // Eliminar cliente
+            // Eliminar tasa de interes
             $id = $_POST['id'];
-
-            // $taxes->eliminarCliente($id);
+            $taxes->eliminarTasaInteres($id);
             break;
 
         case 'row':
-            // Eliminar cliente
+            // Consultar tasa de interes
             $id = $_POST['id'];
-
-            // $cliente = $taxes->rowCustomer($id);
-            echo json_encode($cliente);
+            $tasaInteres = $taxes->rowTaxInteres($id);
+            echo json_encode($tasaInteres);
             break;
         // case 'createselect':
         //     // Leer marcas
