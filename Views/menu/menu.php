@@ -58,7 +58,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="TypeClientBlade.php" class="nav-link">
                         &nbsp;&nbsp;<i class="nav-icon fas fa-tools"></i>
                         <p>Tipos de Cliente</p>
                     </a>

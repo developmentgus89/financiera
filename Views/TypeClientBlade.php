@@ -22,21 +22,21 @@ include_once "dashboard/startTemplateDashboard.php";
     <div class="col-md-12">
         <div class="card card-info">
             <div class="card-header">
-                <h2 class="col-6">Cat&aacute;logo de Tasas y Comisiones</h2>
+                <h2 class="col-6 ">Cat&aacute;logo de Tipos de Cliente</h2>
                 <div class="col-2 card-title">
 
                 </div>
                 <div class="col-4 card-title">
                     <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="agregar-tasa">
-                        <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Tasa o Comisi&oacute;n
+                        <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Tipo de Cliente
                     </button>
                 </div>
 
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="tblImpuestos" class="table table-bordered table-dark">
-                  
+                <table id="tblTipoCliente" class="table table-bordered table-dark">
+
                 </table>
             </div>
             <!-- /.card-body -->
@@ -47,13 +47,12 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 <!-- /.content -->
 <!-- Modal Agregar -->
-<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content fondo_cliente_add_modal">
+<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content fondo-tipo-cliente">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarLabel">Agregar nueva tasa de inter&eacute;s</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h4 class="modal-title" id="modalAgregarLabel">Agregar nuevo Tipo de Cliente</h4>
+                <button type="button" class="close btnCloseColor" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -61,72 +60,67 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="taxdescripcion">Nombre de la tasa de Interés:</label>
-                            <input type="text" class="form-control" name="taxdescripcion" id="taxdescripcion"
-                                aria-describedby="htaxdescripcion" placeholder="">
-                            <small id="htaxdescripcion" class="form-text">Descripci&oacute;n de la Tasa de Inter&eacute;s.</small>
+                            <label for="typeclientdescripcion">Descripci&oacute;n del Tipo de Cliente:</label>
+                            <input type="text" class="form-control" name="typeclientdescripcion" id="typeclientdescripcion" aria-describedby="htaxdescripcion" placeholder="">
+                            <small id="htaxdescripcion" class="form-text">Descripci&oacute;n larga tipo de cliente.</small>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group">
-                            <label for="taxporcentajeinteres">Porcentaje de Interés:</label>
-                            <input type="number" step="0.01" class="form-control" name="taxporcentajeinteres" id="taxporcentajeinteres"
-                                aria-describedby="htaxporcentajeinteres" placeholder="">
-                            <small id="htaxporcentajeinteres" class="form-text">Indique el porcentaje de la Tasa de Inter&eacute;s.</small>
+                            <label for="abreTipoClient">Abreviatura del Tipo Cliente:</label>
+                            <input type="text" class="form-control" name="abreTipoClient" id="abreTipoClient" aria-describedby="habreTipoClient" placeholder="">
+                            <small id="habreTipoClient" class="form-text">Indique la abreviatura del tipo de cliente.</small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="form-group">
-                            <label for="taxobservaciones">Observaciones:</label>
-                            <input type="text" class="form-control" name="taxobservaciones" id="taxobservaciones"
-                                aria-describedby="htaxobservaciones" placeholder="">
-                            <small id="htaxobservaciones" class="form-text">Observaciones no son obligatorias pero se sugiere capturar.</small>
+                            <label for="typeClientTax">Tasa de Inter&eacute;s:</label>
+                            <select class="form-control" name="typeClientTax" id="typeClientTax">
+                            </select>
+                            <small id="htypeClientTax" class="form-text">Observaciones no son obligatorias pero se sugiere capturar.</small>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="btnInsertarInteres">Agregar</button>
+                <button type="button" class="btn btn-success" id="btnInsertarTipoCliente">Agregar</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal Editar -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel"
-    aria-hidden="true">
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content fondo_cliente_edit_modal">
+        <div class="modal-content modal-lg fondo_cliente_edit_modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel">Editar Tasa de Inter&eacute;s</h5>
+                <h5 class="modal-title" id="modalEditarLabel">Editar registro del "Tipo Cliente"</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" name="udp-icvetasascomisiones" id="udp-icvetasascomisiones" hidden>
-                <label for="">Nombre de la Tasa de Inter&eacute;s: </label>
-                <input type="text" class="form-control" name="udp-cdescripciontascom" id="udp-cdescripciontascom"
-                    placeholder="Nombre del tabulador de inter&eacute;s">
-                <label for="udp-ftasainteres">Porcentaje de Inter&eacute;s:</label>
-                <input type="number" step="0.01" class="form-control" name="udp-ftasainteres" id="udp-ftasainteres"
-                    placeholder="Direcci&oacute;n del Cliente">
-                <label for="udp-cattasacomobs">Observaciones:</label>
-                <input type="text" class="form-control" name="udp-cattasacomobs" id="udp-cattasacomobs"
-                    placeholder="Descripci&oacute;n detallada">
+                <input type="text" class="form-control" name="udp-icvetipocliente" id="udp-icvetipocliente" hidden>
+                <label for="udp-cdescriptipocliente">Descripción del Tipo de Cliente: </label>
+                <input type="text" class="form-control" name="udp-cdescriptipocliente" id="udp-cdescriptipocliente" placeholder="Nombre del tabulador de inter&eacute;s">
+                <label for="udp-cabreviiatipo">Abreviaci&oacute;n:</label>
+                <input type="text" class="form-control" name="udp-cabreviiatipo" id="udp-cabreviiatipo" placeholder="Direcci&oacute;n del Cliente">
+                <label for="udp-tasainteres">% Tasa de Inter&eacute;s:</label>
+                <select class="form-control" name="udp-tasainteres" id="udp-tasainteres">
+                </select>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="btnActualizarTasaInteres">Actualizar</button>
+                <button type="button" class="btn btn-success" id="btnActTasaInteresTCliente">Actualizar</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modalBorrarTasaInteres">
+<div class="modal fade" id="modalBorrarTipoCliente">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
             <div class="modal-header">
@@ -138,8 +132,8 @@ include_once "dashboard/startTemplateDashboard.php";
             <div class="modal-body">
                 Desea eliminar la tasa de inter&eacute;s
                 <div class="form-group">
-                    <label for="deleteTasaInteres">Id de la Tasa de Inter&eacute;s:</label>
-                    <input type="text" class="form-control" name="deleteTasaInteres" id="deleteTasaInteres" hidden>
+                    <label for="deleteTipoClienteId">Id de la Tasa de Inter&eacute;s:</label>
+                    <input type="text" class="form-control" name="deleteTipoClienteId" id="deleteTipoClienteId" hidden>
                 </div>
                 <div id="elementText">
 
@@ -177,5 +171,5 @@ include_once "dashboard/footerDashBoard.php";
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
 </script> -->
-<script src="../assets/taxcomisions.js"></script>
+<script src="../assets/typeclient.js"></script>
 <script src="../assets/conf.js"></script>

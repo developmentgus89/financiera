@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 25-08-2023 a las 06:00:47
+-- Tiempo de generación: 22-10-2023 a las 00:56:53
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -48,23 +48,15 @@ CREATE TABLE IF NOT EXISTS `cattasascomisiones` (
   `ftasainteres` double NOT NULL COMMENT 'Este sería el manejo de interés que se le cobrará al cliente',
   `cattasacomobs` varchar(100) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`icvetasascomisiones`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cattasascomisiones`
 --
 
 INSERT INTO `cattasascomisiones` (`icvetasascomisiones`, `cdescripciontascom`, `ftasainteres`, `cattasacomobs`) VALUES
-(1, 'TASA INTERES A1', 8.9, 'NINGUNA'),
-(2, 'TASA INTERES A2', 9.9, 'CLIENTES A2'),
-(3, 'TASA INTERÉS A3', 10.9, 'CLIENTE A3'),
-(4, 'TASA INTERES B1', 15.9, 'CLIENTES B1'),
-(5, 'TASA DE INTERES B2', 16.9, 'CLIENTE B2'),
-(6, 'TASA INTERES B3', 17.9, 'CLIENTES B3'),
-(7, 'TASA DE INTERES C1', 22.9, 'CLIENTES C1'),
-(8, 'TASA INTERES C2', 23.9, 'CLIENTES C2'),
-(9, 'TASA INTERES C3', 26.9, 'CLIENTES C3'),
-(10, 'TASA INTERES C4', 29.9, 'CLIENTES C4');
+(1, 'TASA SEMANAL DEL 10 % FINANCIERA MAYORQUIN', 10, 'TASA DE INICIO PARA CLIENTES'),
+(2, 'TASA SEMANAL DEL 8 %', 8.06, 'TASA PARA CLIENTES PREFERENCIALES EDITADO');
 
 -- --------------------------------------------------------
 
@@ -74,20 +66,19 @@ INSERT INTO `cattasascomisiones` (`icvetasascomisiones`, `cdescripciontascom`, `
 
 DROP TABLE IF EXISTS `cattipocliente`;
 CREATE TABLE IF NOT EXISTS `cattipocliente` (
-  `icvetipocliente` int(11) NOT NULL,
-  `cdescriptipocliente` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `icvetipocliente` int(11) NOT NULL AUTO_INCREMENT,
+  `cdescriptipocliente` varchar(250) CHARACTER SET latin1 NOT NULL,
   `cabreviiatipo` varchar(11) CHARACTER SET latin1 NOT NULL,
   `icvetasascomisiones` int(11) NOT NULL,
-  PRIMARY KEY (`icvetipocliente`),
-  KEY `icvetasacomis_idx` (`icvetasascomisiones`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  PRIMARY KEY (`icvetipocliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cattipocliente`
 --
 
 INSERT INTO `cattipocliente` (`icvetipocliente`, `cdescriptipocliente`, `cabreviiatipo`, `icvetasascomisiones`) VALUES
-(1, 'A1', 'A1', 1);
+(1, 'CLIENTES INICIALES DE LA FINANCIERA', 'A1', 1);
 
 -- --------------------------------------------------------
 
@@ -106,16 +97,8 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `dfechanaciemiento` date NOT NULL,
   `dfechaalta` date NOT NULL,
   `cestatus` char(2) CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`icvecliente`),
-  KEY `tipocliente_idx` (`icvetipocliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-
---
--- Volcado de datos para la tabla `clientes`
---
-
-INSERT INTO `clientes` (`icvecliente`, `cnombre`, `capaterno`, `camaterno`, `iedad`, `icvetipocliente`, `dfechanaciemiento`, `dfechaalta`, `cestatus`) VALUES
-(1, 'ADRIAN GUSTAVO', 'ANGULO', 'MELENDEZ', 33, 1, '2023-12-31', '2023-08-20', '1');
+  PRIMARY KEY (`icvecliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -254,22 +237,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`icveusuario`, `cusername`, `cpassword`, `cnombre`, `capellido`, `dfechavencimiento`, `icverol`, `cavatar`) VALUES
 (1, 'gangulo', '$2y$10$OjRNp4Ca7VtDHR5aB.ysT.Q9vJUx4KfkHpZ28k41a4sPNTqKXCu1C', 'Gustavo', 'Angulo', '2023-12-31', 1, NULL),
 (2, 'nmayorquin', '$2y$10$rsS/To2KkElV0uNXekRY0emltoWDuPdsuFXX.n.ZXukJAwaT7yI.6', 'Noemi', 'Mayorquin', '2023-12-31', 1, NULL);
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `cattipocliente`
---
-ALTER TABLE `cattipocliente`
-  ADD CONSTRAINT `icvetasacomis` FOREIGN KEY (`icvetasascomisiones`) REFERENCES `cattasascomisiones` (`icvetasascomisiones`);
-
---
--- Filtros para la tabla `clientes`
---
-ALTER TABLE `clientes`
-  ADD CONSTRAINT `tipocliente` FOREIGN KEY (`icvetipocliente`) REFERENCES `cattipocliente` (`icvetipocliente`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

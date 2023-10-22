@@ -17,6 +17,18 @@
     background-color: rgba(103, 190, 77, 0.733);
 }
 
+.fondo-tipo-cliente{
+    background-color: rgba(7, 39, 77, 0.877);
+}
+
 .fondo_cliente_edit_modal{
     background-color: rgba(39, 90, 24, 0.877);
+}
+
+.text-title-cat{
+    color: black;
+}
+
+.btnCloseColor{
+    color: aliceblue;
 }
