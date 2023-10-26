@@ -10,19 +10,42 @@ class Customer{
         $this->acceso = $db->pdo;
     }
 
-    // public function insertarCliente($icvegrado, $name, $address, $mobile) {
-    //     try {
-    //         // $conexion = $this->conexion->obtenerConexion();
-    //         $query = "INSERT INTO ims_customer (icvegrado, name, address, mobile) VALUES (?, ?, ?, ?)";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$icvegrado, $name, $address, $mobile]);
+    public function insertarCliente(
+        $cnombre,
+        $capelpat,
+        $capelmat,
+        $cedad,
+        $typeClient,
+        $cdatebirthday,
+        $clientDateRegister,
+        $clienteStatus,
+        $ctelefono
+    ) {
+        try {
+            $query = "INSERT INTO clientes (cnombre, capaterno, camaterno, iedad,
+                        icvetipocliente, dfechanaciemiento, dfechaalta, cestatus, ctelefono) 
+                        VALUES (
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        )";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([
+                $cnombre,
+                $capelpat,
+                $capelmat,
+                $cedad,
+                $typeClient,
+                $cdatebirthday,
+                $clientDateRegister,
+                $clienteStatus,
+                $ctelefono
+            ]);
 
-    //         // Devuelve true si todo es correcto
-    //         return true;
-    //     } catch (PDOException $e) {
-    //         echo 'Error al insertar el cliente: ' . $e->getMessage();
-    //     }
-    // }
+            // Devuelve true si todo es correcto
+            return true;
+        } catch (PDOException $e) {
+            echo 'Error al insertar el cliente: ' . $e->getMessage();
+        }
+    }
 
     // public function eliminarCliente($id) {
     //     try {
@@ -51,7 +74,21 @@ class Customer{
 
     public function obtenerClientes() {
         try {
-            $query = "SELECT * FROM clientes";
+            $query = "SELECT * FROM clientes 
+                    inner join cattipocliente 
+                    on clientes.icvetipocliente = cattipocliente.icvetipocliente";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta: ' . $e->getMessage();
+        }
+    }
+
+    public function obtenerTiposClientes(){
+        try {
+            $query = "SELECT * FROM cattipocliente";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 
@@ -76,4 +113,3 @@ class Customer{
     //     }
     // }
 }
-?>

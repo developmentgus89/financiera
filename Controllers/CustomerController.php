@@ -9,12 +9,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($operation) {
         case 'create':
             // Crear cliente
-            $grado = $_POST['grado'];
-            $name = $_POST['name'];
-            $address = $_POST['address'];
-            $mobile = $_POST['mobile'];
+            $cnombre = $_POST['cnombre'];
+            $capelpat = $_POST['capelpat'];
+            $capelmat = $_POST['capelmat'];
+            $ctelefono = $_POST['ctelefono'];
+            $cedad = $_POST['cedad'];
+            $typeClient = $_POST['typeClient'];
+            $cdatebirthday = $_POST['cdatebirthday'];
+            $clientDateRegister = $_POST['clientDateRegister'];
+            $clienteStatus = $_POST['clienteStatus'];
 
-            $customer->insertarCliente($grado, $name, $address, $mobile);
+            $customer->insertarCliente(
+                $cnombre,
+                $capelpat,
+                $capelmat,
+                $cedad,
+                $typeClient,
+                $cdatebirthday,
+                $clientDateRegister,
+                $clienteStatus,
+                $ctelefono
+            );
             break;
         case 'read':
             // Leer clientes
@@ -29,27 +44,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $address   = $_POST['address'];
             $mobile    = $_POST['mobile'];
 
-            $customer->actualizarCliente($id, $icvegrado, $name, $address, $mobile);
+            // $customer->actualizarCliente($id, $icvegrado, $name, $address, $mobile);
             break;
         case 'delete':
             // Eliminar cliente
             $id = $_POST['id'];
 
-            $customer->eliminarCliente($id);
+            // $customer->eliminarCliente($id);
             break;
 
         case 'row':
             // Eliminar cliente
             $id = $_POST['id'];
 
-            $cliente = $customer->rowCustomer($id);
+            // $cliente = $customer->rowCustomer($id);
             echo json_encode($cliente);
             break;
-        // case 'createselect':
-        //     // Leer marcas
-        //     $catGrados = $grados->obtenerGrados();
-        //     echo json_encode($catGrados);
-        //     break;
+        case 'readtypesclients':
+            // Leer tipos de cliente
+            $tiposCliente = $customer->obtenerTiposClientes();
+            echo json_encode($tiposCliente);
+            break;
         default:
             echo 'Operación no válida';
             break;

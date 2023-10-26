@@ -23,7 +23,7 @@ include_once "dashboard/startTemplateDashboard.php";
     <div class="col-md-12">
         <div class="card card-success">
             <div class="card-header">
-                <h3 class="col-6 card-title">Cat&aacute;logo de Clientes</h3>
+                <h2 class="col-6 card-title"><strong>Cat&aacute;logo de Clientes</strong></h2>
                 <div class="col-2 card-title">
 
                 </div>
@@ -50,12 +50,11 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 <!-- /.content -->
 <!-- Modal Agregar -->
-<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLabel"
-    aria-hidden="true">
+<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content fondo_cliente_add_modal">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarLabel">Agregar Nuevo Cliente</h5>
+                <h4 class="modal-title" id="modalAgregarLabel"><strong>Agregar Nuevo Cliente</strong></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -65,25 +64,71 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="clinombre">Nombre:</label>
-                            <input type="text" class="form-control" name="clinombre" id="clinombre"
-                                aria-describedby="hclinombre" placeholder="">
+                            <input type="text" class="form-control" name="clinombre" id="clinombre" aria-describedby="hclinombre" placeholder="">
                             <small id="hclinombre" class="form-text">Capture el nombre del cliente</small>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="cliapaterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" name="cliapaterno" id="cliapaterno"
-                                aria-describedby="hcliapaterno" placeholder="">
+                            <input type="text" class="form-control" name="cliapaterno" id="cliapaterno" aria-describedby="hcliapaterno" placeholder="">
                             <small id="hcliapaterno" class="form-text">Capture el apellido paterno del cliente</small>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="cliamaterno">Apellido Materno:</label>
-                            <input type="text" class="form-control" name="cliamaterno" id="cliamaterno"
-                                aria-describedby="hcliamaterno" placeholder="">
+                            <input type="text" class="form-control" name="cliamaterno" id="cliamaterno" aria-describedby="hcliamaterno" placeholder="">
                             <small id="hcliamaterno" class="form-text">Capture el Apellido Materno del cliente</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cliEdad">Edad:</label>
+                            <input type="number" step="1" min="18" value="18" class="form-control" name="cliEdad" id="cliEdad" aria-describedby="hcliEdad" placeholder="">
+                            <small id="hcliEdad" class="form-text">Cliente debe ser mayor de edad.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="typeClient">Tipo de cliente</label>
+                            <select class="form-control" name="typeClient" id="typeClient">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="clienteStatus">Estatus del Cliente</label>
+                            <select class="form-control" name="clienteStatus" id="clienteStatus">
+                                <option value="">SELECCIONE UN ESTATUS</option>
+                                <option value="A">ACTIVO</option>
+                                <option value="I">INACTIVO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="clientDate">Fecha de Nacimiento:</label>
+                            <input type="date" class="form-control" name="clientDate" id="clientDate" aria-describedby="hclientDate" placeholder="">
+                            <small id="hclientDate" class="form-text">dd/mm/aaaa</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="clientDateRegister">Fecha de Registro:</label>
+                            <input type="date" class="form-control" name="clientDateRegister" id="clientDateRegister" aria-describedby="hclientDateRegister" placeholder="">
+                            <small id="hclientDateRegister" class="form-text">dd/mm/aaaa</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="ctelefono">Tel&eacute;fono:</label>
+                            <input type="number" class="form-control" name="ctelefono" id="ctelefono" aria-describedby="hctelefono">
+                            <small id="hctelefono" class="form-text">N&aacute;mero fijo d de celular</small>
                         </div>
                     </div>
                 </div>
@@ -97,8 +142,7 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 <!-- Modal Editar -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel"
-    aria-hidden="true">
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,14 +157,11 @@ include_once "dashboard/startTemplateDashboard.php";
                 <select class="form-control" name="udp-icvegrado" id="udp-icvegrado">
                 </select>
                 <label for="udp-namecustomer">Nombre</label>
-                <input type="text" class="form-control" name="udp-namecustomer" id="udp-namecustomer"
-                    placeholder="Nombre del Cliente">
+                <input type="text" class="form-control" name="udp-namecustomer" id="udp-namecustomer" placeholder="Nombre del Cliente">
                 <label for="udp-addresscustomer">Direcci&oacute;n</label>
-                <input type="text" class="form-control" name="udp-addresscustomer" id="udp-addresscustomer"
-                    placeholder="Direcci&oacute;n del Cliente">
+                <input type="text" class="form-control" name="udp-addresscustomer" id="udp-addresscustomer" placeholder="Direcci&oacute;n del Cliente">
                 <label for="udp-mobilecustomer">Tel&eacute;fono</label>
-                <input type="text" class="form-control" name="udp-mobilecustomer" id="udp-mobilecustomer"
-                    placeholder="Tel&eacute;fono del Cliente">
+                <input type="text" class="form-control" name="udp-mobilecustomer" id="udp-mobilecustomer" placeholder="Tel&eacute;fono del Cliente">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
