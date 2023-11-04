@@ -41,13 +41,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="InvestorsBlade.php" class="nav-link">
                 <i class="nav-icon fas fa-layer-group"></i>
                 <p>
                     Inversionistas
                 </p>
             </a>
         </li>
+       
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-users-cog"></i>

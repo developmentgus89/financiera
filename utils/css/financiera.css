@@ -25,6 +25,16 @@
     background-color: rgba(39, 90, 24, 0.877);
 }
 
+.fondo-modal-add-inv{
+    background-color: rgba(8, 66, 137, 0.779);
+    color: white;
+}
+
+.fondo-tabs{
+    background-color: rgba(0, 100, 0, 0.818);
+    color: white;
+}
+
 .text-title-cat{
     color: black;
 }
@@ -32,3 +42,13 @@
 .btnCloseColor{
     color: aliceblue;
 }
+
+.divider{
+    color: white;
+    background-color: white;
+}
+
+/* hr{
+    color: white;
+    background-color: white;
+} */
