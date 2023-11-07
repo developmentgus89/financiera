@@ -169,11 +169,27 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="invclabe">Cuenta Bancaria:</label>
+                            <label for="invclabe">Tipo de Cuenta:</label>
                             <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
                             <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE)</small>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invclabe">Instituci&oacute;n Bancaria:</label>
+                            <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
+                            <small id="hinvclabe" class="form-text">Banco a la que pertenece esa cuenta.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invclabe">Cuenta Bancaria:</label>
+                            <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
+                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE, Débito. Cuenta)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="invemail">E-Mail:</label>
