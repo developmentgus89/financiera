@@ -494,6 +494,38 @@ const totalCapital = () => {
     xhr.send(`operation=totalCapital`);
 }
 
+//TODO: Refactorizar cada una de las funciones
+// const totalCapital = async () => {
+//     try {
+//         const response = await fetch(baseURL, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/x-www-form-urlencoded'
+//             },
+//             body: 'operation=totalCapital'
+//         });
+//         if (response.ok) {
+//             const data = await response.json();
+//             console.table(data);
+
+//             const totalCapitalInv = document.getElementById('totalInvestorsCapital');
+//             let totalCapital = parseFloat(data[0].capital);
+//             let cantidadFormateada = totalCapital.toLocaleString('es-MX', {
+//                 style: 'currency',
+//                 currency: 'MXN'
+//             });
+
+//             totalCapitalInv.innerHTML = data[0].capital == null ? '$ 0.00' : cantidadFormateada;
+//             console.log(data.capital);
+//         } else {
+//             console.error('Error al ejecutar el método total de inversionistas');
+//         }
+//     } catch (error) {
+//         console.error('Error inesperado:', error);
+//     }
+// };
+
+
 // Función para abrir el modal de insertar Inversionista
 const openModalInsertInvestor = () => {
     // Lógica para abrir el modal de insertar inversionista
