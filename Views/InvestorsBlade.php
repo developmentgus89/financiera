@@ -169,9 +169,16 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="invclabe">Tipo de Cuenta:</label>
-                            <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE)</small>
+                            <div class="form-group">
+                              <label for="">Tipo de Cuenta:</label>
+                              <select class="form-control" name="" id="">
+                                <option value="">SELECCIONE</option>
+                                <option value="1">CLABE</option>
+                                <option value="2">TARJETA D&Eacute;BITO</option>
+                                <option value="3">CTA BANCARIA</option>
+                                
+                              </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
