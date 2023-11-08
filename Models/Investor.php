@@ -39,17 +39,20 @@ class Investor{
         $invedad,
         $invtelefono,
         $invcantinvertida,
-        $invclabe,
+        $invtipocuenta,
+        $invinstbancaria,
+        $invctabancaria,
         $invemail,
         $invDateRegister
     ) {
         try {
             $query = "INSERT INTO inversionistas (cnombre, capaterno, camaterno, iedad,
-                        ctelefono, fcantidadinvertida, cuentabancaria, cemail, dfecha_alta, cantpagadacapital) 
-                        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+                        ctelefono, fcantidadinvertida, itipocuenta, icvebanco, cuentabancaria, cemail, dfecha_alta, cantpagadacapital) 
+                        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
             $statement = $this->acceso->prepare($query);
             $statement->execute([ $invnombre, $invapaterno, $invamaterno, $invedad,
-                                $invtelefono, $invcantinvertida, $invclabe, $invemail, $invDateRegister ]);
+                                $invtelefono, $invcantinvertida, $invtipocuenta, $invinstbancaria, 
+                                $invctabancaria, $invemail, $invDateRegister ]);
 
             //* Obtenemos el último valor del ultimo inversionista insertado apra la clave
             $icveinversionista = $this->acceso->lastInsertId();
@@ -89,7 +92,13 @@ class Investor{
     //         echo 'Error al eliminar el cliente: ' . $e->getMessage();
     //     }
     // }
-
+    
+        
+    /**
+     * updateInvestor
+     *
+     * @return void
+     */
     public function updateInvestor(
         $udpidcveinvestor,
         $udpinvnombre,
@@ -161,6 +170,19 @@ class Investor{
         }
     }
 
+
+    public function get_banks(){
+        try {
+            $query = "SELECT * FROM catbancos";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta: ' . $e->getMessage();
+        }
+    }
+
     public function obtenerTiposClientes(){
         try {
             $query = "SELECT * FROM cattipocliente";
@@ -172,7 +194,13 @@ class Investor{
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
-
+    
+    /**
+     * rowInvestor
+     *
+     * @param $id 
+     * @return void
+     */
     public function rowInvestor($id){
         try {
             $query = "SELECT * FROM inversionistas 

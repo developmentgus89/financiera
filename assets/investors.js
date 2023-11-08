@@ -34,6 +34,7 @@ $('#udp-invcantinvertida').inputmask('currency',{
 
 $('#modalAgregar').on('shown.bs.modal' , () => {
     const invnombre = document.querySelector('#invnombre');
+    getBanks();
     invnombre.focus();
 });
 
@@ -49,12 +50,14 @@ $("#modalEditar").on('hidden.bs.modal', function () {
 //Recuperacion de los valores de los botones dentro de la vista Customers
 const btnAgregar           = document.querySelector('#agregar-inversionista');
 
-const btnEliminarCliente   = document.querySelector('#btnEliminarCliente');
-const btnInsertInvestor    = document.querySelector('#btnInsertInvestor');
-const btnUpdateInvestor    = document.querySelector('#btnUpdateInvestor');
-const selectTipoCliente    = document.querySelector('#typeClient');
-const btnRegresaModal      = document.querySelector('#btnRegresaModal');
-const btnIrAInv            = document.querySelector('#btnIrAInv');
+const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
+const btnInsertInvestor  = document.querySelector('#btnInsertInvestor');
+const btnUpdateInvestor  = document.querySelector('#btnUpdateInvestor');
+const selectTipoCliente  = document.querySelector('#typeClient');
+const btnRegresaModal    = document.querySelector('#btnRegresaModal');
+const btnIrAInv          = document.querySelector('#btnIrAInv');
+const selectBanco        = document.querySelector('#invinstbancaria');
+const selectBancoUDP     = document.querySelector('#udp-invinstbancaria');
 
 
 
@@ -80,76 +83,44 @@ btnInsertInvestor.addEventListener('click', () => {
     let invedad          = document.getElementById('invedad');
     let invtelefono      = document.getElementById('invtelefono');
     let invcantinvertida = document.getElementById('invcantinvertida');
-    let invclabe         = document.getElementById('invclabe');
+    let invtipocuenta    = document.getElementById('invtipocuenta');
+    let invinstbancaria  = document.getElementById('invinstbancaria');
+    let invctabancaria   = document.getElementById('invctabancaria');
     let invemail         = document.getElementById('invemail');
     let invDateRegister  = document.getElementById('invDateRegister');
 
+    
+
 
     const valFormInvestor = () => {
-        removeError(invnombre);
+        const fields = [
+            { element: invnombre, message: 'Ingrese el nombre del inversionista por favor' },
+            { element: invapaterno, message: 'Ingrese el apellido paterno del Inversionista' },
+            { element: invamaterno, message: 'Ingrese el apellido materno del inversionista' },
+            { element: invedad, message: 'Ingrese la edad del inversionista' },
+            { element: invtelefono, message: 'Ingrese el n\u00famero de telefono del inversionista' },
+            { element: invcantinvertida, message: 'Ingrese el nombre del inversionista' },
+            { element: invtipocuenta, message: 'Ingrese el tipo de cuenta bancaria del inversionista' },
+            { element: invinstbancaria, message: 'Seleccione el banco de la cuenta bancaria' },
+            { element: invctabancaria, message: 'Ingrese el n\u00famero de cuenta CLABE, dep\u00f3sito o tarjeta.' },
+            { element: invemail, message: 'Ingrese el correo electr\u00f3nico del inversionista' },
+            { element: invDateRegister, message: 'Seleccione la fechca de registro' }
+        ];
 
-        if (invnombre.value == '' || invnombre.value == null) {
-            showError(invnombre, 'Ingrese el nombre del inversionista');
-            invnombre.focus();
-        } else if (invapaterno.value == '' || invapaterno.value == null) {
-            removeError(invnombre);
-            showError(invapaterno, 'Ingrese el apellido paterno del Inversionista');
-            invapaterno.focus();
-        } else if (invamaterno.value == '' || invamaterno.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            showError(invamaterno, 'Ingrese el apellido materno del Inversionista');
-            invamaterno.focus();
-        } else if (invedad.value == '' || invedad.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            showError(invedad, 'Ingrese la edad del inversionista');
-        } else if (invtelefono.value == '' || invtelefono.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            removeError(invedad);
-            showError(invtelefono, 'Ingrese el numero de telefono del Inversionista');
-        } else if (invcantinvertida.value == '' || invcantinvertida.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            removeError(invedad);
-            removeError(invtelefono);
-            showError(invcantinvertida, 'Ingrese la cantidad de inversion inicial del Inversionista');
-        } else if (invclabe.value == '' || invclabe.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            removeError(invedad);
-            removeError(invtelefono);
-            removeError(invcantinvertida);
-            showError(invclabe, 'Ingrese la CLABE para los depositos bancarios.');
-        } else if (invemail.value == '' || invemail.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            removeError(invedad);
-            removeError(invtelefono);
-            removeError(invcantinvertida);
-            removeError(invclabe);
-            showError(invemail, 'Capture el correo electronico de contacto del inversionista');
-        } else if (invDateRegister.value == '' || invDateRegister.value == null) {
-            removeError(invnombre);
-            removeError(invapaterno);
-            removeError(invamaterno);
-            removeError(invedad);
-            removeError(invtelefono);
-            removeError(invcantinvertida);
-            removeError(invclabe);
-            removeError(invemail);
-            showError(invDateRegister, 'Capture la fecha de registro del inversionista');
-        } else {
+        let hasError = false;
+
+        for (const field of fields) {
+            removeError(field.element);
+            if (field.element.value === '' || field.element.value === null) {
+                showError(field.element, field.message);
+                field.element.focus();
+                hasError = true;
+                break;
+            }
+        }
+        
+        if (!hasError) {
             removeError(invDateRegister);
-            
-           
-
             verifInsInsvestor(
                 invnombre.value,
                 invapaterno.value,
@@ -157,22 +128,12 @@ btnInsertInvestor.addEventListener('click', () => {
                 invedad.value,
                 invtelefono.value,
                 invcantinvertida.value,
-                invclabe.value,
+                invtipocuenta.value,
+                invinstbancaria.value,
+                invctabancaria.value,
                 invemail.value,
-                invDateRegister.value 
+                invDateRegister.value
             );
-            
-            // insertInvestor(
-            //     invnombre.value,
-            //     invapaterno.value,
-            //     invamaterno.value,
-            //     invedad.value,
-            //     invtelefono.value,
-            //     invcantinvertida.value,
-            //     invclabe.value,
-            //     invemail.value,
-            //     invDateRegister.value
-            // );
         }
     }
 
@@ -283,7 +244,9 @@ const readRowInvestor = (id) => {
             document.getElementById('udp-invedad').value = inversionista[0].iedad;
             document.getElementById('udp-invtelefono').value = inversionista[0].ctelefono;
             document.getElementById('udp-invcantinvertida').value = inversionista[0].fcantidadinvertida;
-            document.getElementById('udp-invclabe').value = inversionista[0].cuentabancaria;
+            document.getElementById('udp-invtipocuenta').value = inversionista[0].itipocuenta;
+            document.getElementById('udp-invinstbancaria').value = inversionista[0].icvebanco;
+            document.getElementById('udp-invctabancaria').value = inversionista[0].cuentabancaria;
             document.getElementById('udp-invemail').value = inversionista[0].cemail;
             document.getElementById('udp-invDateRegister').value = inversionista[0].dfecha_alta;
 
@@ -303,6 +266,10 @@ const readRowInvestor = (id) => {
                 currency: 'MXN'
             });
             cantPagCapital.innerHTML = `<h3> ${ cantPagCapitalF } </h3>`;
+
+            selectBancoUDP.innerHTML = '';
+            
+
             $('#modalEditar').modal('show');
         } else {
             console.error('Error al leer el Inversionista');
@@ -327,7 +294,8 @@ const readRowInvestor = (id) => {
 const insertInvestor = (
     invnombre, invapaterno, invamaterno,
     invedad, invtelefono, invcantinvertida,
-    invclabe, invemail, invDateRegister) => {
+    invtipocuenta, invinstbancaria, invctabancaria,
+    invemail, invDateRegister) => {
     
     invcantinvertida = invcantinvertida.substring(4);
     invcantinvertida = invcantinvertida.replace(/,/g, '');
@@ -340,7 +308,9 @@ const insertInvestor = (
         '&invedad='+ invedad +
         '&invtelefono='+ invtelefono + 
         '&invcantinvertida=' + invcantinvertida +
-        '&invclabe=' + invclabe +
+        '&invtipocuenta=' + invtipocuenta +
+        '&invinstbancaria=' + invinstbancaria +
+        '&invctabancaria=' + invctabancaria +
         '&invemail=' + invemail +
         '&invDateRegister=' + invDateRegister;
     console.log(params);
@@ -360,9 +330,17 @@ const insertInvestor = (
 };
 
 const verifInsInsvestor = ( 
-    invnombre, invapaterno, invamaterno,
-    invedad, invtelefono, invcantinvertida,
-    invclabe, invemail, invDateRegister
+    invnombre,
+    invapaterno,
+    invamaterno,
+    invedad,
+    invtelefono,
+    invcantinvertida,
+    invtipocuenta,
+    invinstbancaria,
+    invctabancaria,
+    invemail,
+    invDateRegister
     ) => {
     let params = 
         'operation=rowCount'+ 
@@ -381,7 +359,8 @@ const verifInsInsvestor = (
                     insertInvestor(
                         invnombre, invapaterno, invamaterno,
                         invedad, invtelefono, invcantinvertida,
-                        invclabe, invemail, invDateRegister
+                        invtipocuenta, invinstbancaria, invctabancaria,
+                        invemail, invDateRegister
                     );
                 }else {
                     $('#modalAgregar').modal('hide');
@@ -524,6 +503,38 @@ const totalCapital = () => {
 //         console.error('Error inesperado:', error);
 //     }
 // };
+
+//Funcion para poder llenar la lista de bancos
+
+const getBanks = () => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const banks = JSON.parse(xhr.responseText);
+            console.log('listado de categorias');
+            console.table(banks);
+
+            selectBanco.innerHTML = '';
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'SELECCIONE BANCO';
+            selectBanco.appendChild(defaultOption);
+
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                option.value = bank.icvebanco;
+                option.textContent = bank.cnombrebanco;
+                selectBanco.append(option);
+            });
+        } else {
+            console.error('Error al leer las categorias');
+        }
+    };
+    xhr.send('operation=readbanks');
+}
 
 
 // Función para abrir el modal de insertar Inversionista

@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $invedad = $_POST['invedad'];
             $invtelefono = $_POST['invtelefono'];
             $invcantinvertida = $_POST['invcantinvertida'];
-            $invclabe = $_POST['invclabe'];
+            $invtipocuenta = $_POST['invtipocuenta'];
+            $invinstbancaria = $_POST['invinstbancaria'];
+            $invctabancaria = $_POST['invctabancaria'];
             $invemail = $_POST['invemail'];
             $invDateRegister = $_POST['invDateRegister'];
 
@@ -26,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $invedad,
                 $invtelefono,
                 $invcantinvertida,
-                $invclabe,
+                $invtipocuenta,
+                $invinstbancaria,
+                $invctabancaria,
                 $invemail,
                 $invDateRegister
             );
@@ -107,6 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Leer tipos de cliente
             $tiposCliente = $customer->obtenerTiposClientes();
             echo json_encode($tiposCliente);
+            break;
+        case 'readbanks':
+            $catbanks = $investor->get_banks();
+            echo json_encode($catbanks);
             break;
         default:
             echo 'Operación no válida';
