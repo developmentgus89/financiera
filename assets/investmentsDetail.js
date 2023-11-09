@@ -49,6 +49,10 @@ const readPersonInvestor = ( icveinvestor ) => {
             document.getElementById('selInvEdad').value = inversionista[0].iedad;
             document.getElementById('selInvTelefono').value = inversionista[0].ctelefono;
             document.getElementById('selInvCapInv').value = inversionista[0].fcantidadinvertida;
+
+            let cantInversions = document.querySelector('#totalInvertions');
+            cantInversions.innerHTML = inversionista[0].totinversiones;
+
        
             let cantTotalInvertida = document.querySelector('#cTotalInvertida');
             let cantTotInv = parseFloat(inversionista[0].fcantidadinvertida);
@@ -100,11 +104,11 @@ const getDetailsInvestor = ( icveinvestor) => {
             new DataTable(tableInvestors, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['No.','Fecha Inversion', 'Monto', 'Estatus', 'Tipo de Operación', 'Observaciones'],
+                    headings: ['Fecha Inversion', 'Monto', 'Estatus', 'Tipo de Operación', 'Observaciones'],
                     data: data.map(function (item) {
                         // return Object.values(item);
-                        let count = 0;
-                        count ++;
+                        // let count = 1;
+                        // count ++;
                         var id = item['icvedetalleinver'];
                         let cantidadInvertida = parseFloat(item['dmonto']);
                         let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX',{
@@ -112,8 +116,6 @@ const getDetailsInvestor = ( icveinvestor) => {
                             currency: 'MXN'
                         });
                         return [
-                            
-                            count,
                             item['dfecharegistro'],
                             cantidadFormateada,
                             item['cstatus'] == 'A' ? 'ACTIVO' : 'INACTIVO',

@@ -81,19 +81,6 @@ class Investor{
         }
     }
 
-    // public function eliminarCliente($id) {
-    //     try {
-    //         $query = "DELETE FROM ims_customer WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$id]);
-
-    //         echo 'Cliente eliminado correctamente';
-    //     } catch (PDOException $e) {
-    //         echo 'Error al eliminar el cliente: ' . $e->getMessage();
-    //     }
-    // }
-    
-        
     /**
      * updateInvestor
      *
@@ -106,28 +93,24 @@ class Investor{
         $udpinvamaterno,
         $udpinvedad,
         $udpinvtelefono,
-        $udpinvclabe,
+        $udpinvtipocuenta,
+        $udpinvinstbancaria,
+        $udpinvctabancaria,
         $udpinvemail,
         $udpinvDateRegister
     ) {
         try {
             
             $query = "UPDATE inversionistas SET cnombre = ?, capaterno = ?, camaterno = ?, iedad = ?, 
-                        ctelefono = ?, cuentabancaria = ?, cemail = ?, dfecha_alta = ?
+                        ctelefono = ?, itipocuenta = ?, icvebanco = ?, cuentabancaria = ?, cemail = ?, dfecha_alta = ?
                         WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([ 
-                $udpinvnombre,
-                $udpinvapaterno,
-                $udpinvamaterno,
-                $udpinvedad,
-                $udpinvtelefono,
-                $udpinvclabe,
-                $udpinvemail,
-                $udpinvDateRegister,
-                $udpidcveinvestor
+                $udpinvnombre, $udpinvapaterno, $udpinvamaterno,
+                $udpinvedad, $udpinvtelefono, $udpinvtipocuenta,
+                $udpinvinstbancaria, $udpinvctabancaria, 
+                $udpinvemail, $udpinvDateRegister, $udpidcveinvestor
             ]);
-
             echo 'Inversionista actualizado correctamente';
         } catch (PDOException $e) {
             echo 'Error al actualizar el cliente: ' . $e->getMessage();
@@ -203,8 +186,11 @@ class Investor{
      */
     public function rowInvestor($id){
         try {
-            $query = "SELECT * FROM inversionistas 
-            WHERE icveinversionista = ?";
+            $query = "SELECT *,
+                        (SELECT COUNT(*) FROM inverdetalle WHERE icveinversionista = inversionistas.icveinversionista) AS totinversiones
+                    FROM inversionistas
+                    INNER JOIN catbancos ON inversionistas.icvebanco = catbancos.icvebanco
+                    WHERE icveinversionista =  ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$id]);
 
@@ -212,5 +198,9 @@ class Investor{
         } catch (PDOException $e) {
             echo 'Error en la consulta: ' . $e->getMessage();
         }
+    }
+
+    public function get_investmentDetails(){
+
     }
 }

@@ -101,7 +101,9 @@ include_once "dashboard/startTemplateDashboard.php";
 
                                                     <div class="info-box-content">
                                                         <span class="info-box-text">Total de Inversiones.</span>
-                                                        <span class="info-box-number">1,410</span>
+                                                        <span class="info-box-number">
+                                                            <div id="totalInvertions"></div>
+                                                        </span>
                                                     </div>
                                                     <!-- /.info-box-content -->
                                                 </div>

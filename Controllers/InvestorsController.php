@@ -64,23 +64,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $udpinvamaterno      = $_POST['udpinvamaterno'];
             $udpinvedad          = $_POST['udpinvedad'];
             $udpinvtelefono      = $_POST['udpinvtelefono'];
-            $udpinvclabe         = $_POST['udpinvclabe'];
+            $udpinvtipocuenta    = $_POST['udpinvtipocuenta'];
+            $udpinvinstbancaria  = $_POST['udpinvinstbancaria'];
+            $udpinvctabancaria   = $_POST['udpinvctabancaria'];
             $udpinvemail         = $_POST['udpinvemail'];
             $udpinvDateRegister  = $_POST['udpinvDateRegister'];
 
-            echo json_encode($investor->rowsCount($invnombre,$invapaterno,$invamaterno));
+            // echo json_encode($investor->rowsCount($invnombre,$invapaterno,$invamaterno));
             
-            // $investor->updateInvestor(
-            //     $udpidcveinvestor,
-            //     $udpinvnombre,
-            //     $udpinvapaterno,
-            //     $udpinvamaterno,
-            //     $udpinvedad,
-            //     $udpinvtelefono,
-            //     $udpinvclabe,
-            //     $udpinvemail,
-            //     $udpinvDateRegister
-            // );
+            $investor->updateInvestor(
+                $udpidcveinvestor,
+                $udpinvnombre,
+                $udpinvapaterno,
+                $udpinvamaterno,
+                $udpinvedad,
+                $udpinvtelefono,
+                $udpinvtipocuenta,
+                $udpinvinstbancaria,
+                $udpinvctabancaria,
+                $udpinvemail,
+                $udpinvDateRegister
+            );
             break;
         case 'delete':
             // Eliminar cliente

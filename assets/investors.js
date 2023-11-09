@@ -140,32 +140,47 @@ btnInsertInvestor.addEventListener('click', () => {
     valFormInvestor();
 });
 
+//*
+
 btnUpdateInvestor.addEventListener('click', () => {
     let id = document.getElementById('udp-idcveinvestor').value;
     console.log('Valor al dar click ' + id);
-        let udpidcveinvestor = document.getElementById('udp-idcveinvestor').value;
-        let udpinvnombre = document.getElementById('udp-invnombre').value;
-        let udpinvapaterno = document.getElementById('udp-invapaterno').value;
-        let udpinvamaterno = document.getElementById('udp-invamaterno').value;
-        let udpinvedad = document.getElementById('udp-invedad').value;
-        let udpinvtelefono = document.getElementById('udp-invtelefono').value;
-        let udpinvclabe = document.getElementById('udp-invclabe').value;
-        let udpinvemail = document.getElementById('udp-invemail').value;
-        let udpinvDateRegister = document.getElementById('udp-invDateRegister').value;
+
+    const fields = [
+        'udp-idcveinvestor',
+        'udp-invnombre',
+        'udp-invapaterno',
+        'udp-invamaterno',
+        'udp-invedad',
+        'udp-invtelefono',
+        'udp-invtipocuenta',
+        'udp-invinstbancaria',
+        'udp-invctabancaria',
+        'udp-invemail',
+        'udp-invDateRegister'
+    ];
+
+    const values = {};
+
+    fields.forEach((field) => {
+        values[field] = document.getElementById(field).value;
+    });
 
         updateInvestor(
-            udpidcveinvestor,
-            udpinvnombre,
-            udpinvapaterno,
-            udpinvamaterno,
-            udpinvedad,
-            udpinvtelefono,
-            udpinvclabe,
-            udpinvemail,
-            udpinvDateRegister
+            values['udp-idcveinvestor'],
+            values['udp-invnombre'],
+            values['udp-invapaterno'],
+            values['udp-invamaterno'],
+            values['udp-invedad'],
+            values['udp-invtelefono'],
+            values['udp-invtipocuenta'],
+            values['udp-invinstbancaria'],
+            values['udp-invctabancaria'],
+            values['udp-invemail'],
+            values['udp-invDateRegister']
         );
     // // dataTableCliente.destroy();
-    $('#modalEditar').modal('hide');
+    // $('#modalEditar').modal('hide');
     // location.reload();
 
 });
@@ -246,6 +261,10 @@ const readRowInvestor = (id) => {
             document.getElementById('udp-invcantinvertida').value = inversionista[0].fcantidadinvertida;
             document.getElementById('udp-invtipocuenta').value = inversionista[0].itipocuenta;
             document.getElementById('udp-invinstbancaria').value = inversionista[0].icvebanco;
+            const dOption = document.createElement('option');
+            dOption.value = inversionista[0].icvebanco;
+            dOption.textContent = inversionista[0].cnombrebanco;
+            selectBancoUDP.append(dOption);
             document.getElementById('udp-invctabancaria').value = inversionista[0].cuentabancaria;
             document.getElementById('udp-invemail').value = inversionista[0].cemail;
             document.getElementById('udp-invDateRegister').value = inversionista[0].dfecha_alta;
@@ -266,10 +285,7 @@ const readRowInvestor = (id) => {
                 currency: 'MXN'
             });
             cantPagCapital.innerHTML = `<h3> ${ cantPagCapitalF } </h3>`;
-
-            selectBancoUDP.innerHTML = '';
-            
-
+            getBanks(true,inversionista[0].icvebanco,'');
             $('#modalEditar').modal('show');
         } else {
             console.error('Error al leer el Inversionista');
@@ -398,7 +414,9 @@ const updateInvestor = (
     udpinvamaterno,
     udpinvedad,
     udpinvtelefono,
-    udpinvclabe,
+    udpinvtipocuenta,
+    udpinvinstbancaria,
+    udpinvctabancaria,
     udpinvemail,
     udpinvDateRegister
 ) => {
@@ -410,17 +428,24 @@ const updateInvestor = (
         '&udpinvamaterno='+ udpinvamaterno +
         '&udpinvedad='+ udpinvedad + 
         '&udpinvtelefono=' + udpinvtelefono +
-        '&udpinvclabe=' + udpinvclabe +
+        '&udpinvtipocuenta=' + udpinvtipocuenta +
+        '&udpinvinstbancaria=' + udpinvinstbancaria +
+        '&udpinvctabancaria=' + udpinvctabancaria +
         '&udpinvemail=' + udpinvemail + 
         '&udpinvDateRegister=' + udpinvDateRegister;
-    console.log(params);
+
+    console.log(`Listado de parametros con codigo simplificado ${params} `);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.log('Inversionista actualizado actualizado correctamente');
-            location.reload();
+            console.table(xhr.responseText);
+            toastr.success('Registro actualizado correctamente');
+            setTimeout(() => {
+                getInvestors();
+                $("#modalEditar").modal("hide");    
+            }, 650);
         } else {
             console.error('Error al actualizar el Inversionista');
         }
@@ -505,8 +530,13 @@ const totalCapital = () => {
 // };
 
 //Funcion para poder llenar la lista de bancos
-
-const getBanks = () => {
+/**
+ * 
+ * @param {number} op //* Operacion para cargar el catálogo de bancos
+ * @param {number} idbank //* Clave del banco
+ * @param {String} bankdesc //* Descripción larga del banco
+ */
+const getBanks = (op, idbank, bankdesc) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -528,7 +558,20 @@ const getBanks = () => {
                 option.value = bank.icvebanco;
                 option.textContent = bank.cnombrebanco;
                 selectBanco.append(option);
+                
             });
+
+            if(op){
+
+                console.log('Carga listado de bancos para la actualización');
+                banks.forEach( bankUDP => {
+                    const option = document.createElement('option');
+                    option.value = bankUDP.icvebanco;
+                    option.textContent = bankUDP.cnombrebanco;
+                    selectBancoUDP.appendChild(option);
+                });
+            }
+            
         } else {
             console.error('Error al leer las categorias');
         }
@@ -555,6 +598,7 @@ const abrirModalActualizarCliente = (id) => {
 const confirmarEliminarCliente = (id) => {
     // Lógica para mostrar confirmación de eliminar Inversionista
     $('#deleteCliente').val(id);
+    getBanks(true);
     $('#modalBorrarCliente').modal('show');
 };
 
