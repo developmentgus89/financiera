@@ -7,6 +7,8 @@ const URL = '../Controllers/InvestorsController.php';
 //Declaracion de variables para los botones
 
 const btnAddInversion = document.querySelector("#btnAddInversion");
+const btnSaveInvesments = document.querySelector("#btnSaveInvesments");
+
 
 //Funciones generales
 
@@ -135,7 +137,28 @@ const getDetailsInvestor = ( icveinvestor) => {
     console.log('Estoy entrando a la otra función');
 };
 
-//Funciones para botones
+//Funciones para botones generalmente reciben el event => click con un función anónima
+
+btnSaveInvesments.addEventListener('click', () => {
+    const fieldsInvesments = [
+        'inputDateInver',
+        'inputMontoInver',
+        'inputObsInver'
+    ];
+
+    const values = {  };
+
+    fieldsInvesments.forEach(field => {
+        values[field] = document.getElementById(field).value;
+    });
+
+    //TODO: Desarrollar la función para que se registren estos datos
+    fncInsertInvesments(
+        values['inputDateInver'],
+        values['inputMontoInver'],
+        values['inputObsInver']
+    );
+});
 
 btnAddInversion.addEventListener('click', function(){
     $('#modal-add-inversion').modal('show');

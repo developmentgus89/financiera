@@ -329,7 +329,7 @@ include_once "dashboard/startTemplateDashboard.php";
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-success" id="btnSaveInvesments">Guardar</button>
             </div>
         </div>
         <!-- /.modal-content -->
