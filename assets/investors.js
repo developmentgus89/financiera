@@ -1,15 +1,6 @@
 
-
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
-
-// const textInputs = document.querySelectorAll('input[type="text"]');
-
-// textInputs.forEach(input => {
-//     input.addEventListener('input', function () {
-//         this.value = this.value.toUpperCase();
-//     });
-// });
 
 $('#invcantinvertida').inputmask('currency',{
     radixPoint: '.',
@@ -30,7 +21,6 @@ $('#udp-invcantinvertida').inputmask('currency',{
     digits: 2,
     rightAlign: false
 });
-
 
 $('#modalAgregar').on('shown.bs.modal' , () => {
     const invnombre = document.querySelector('#invnombre');

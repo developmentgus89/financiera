@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $rowCountInv = $investor->rowsCount($invnombre, $invapaterno, $invamaterno);
             echo json_encode($rowCountInv);
-            
+
             break;
         case 'read':
             // Leer clientes
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $udpinvDateRegister  = $_POST['udpinvDateRegister'];
 
             // echo json_encode($investor->rowsCount($invnombre,$invapaterno,$invamaterno));
-            
+
             $investor->updateInvestor(
                 $udpidcveinvestor,
                 $udpinvnombre,
@@ -119,6 +119,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'readbanks':
             $catbanks = $investor->get_banks();
             echo json_encode($catbanks);
+            break;
+        case 'createInvesment':
+            $cveinvestor     = $_POST['cveinvestor'];
+            $inputDateInver  = $_POST['inputDateInver'];
+            $inputMontoInver = $_POST['inputMontoInver'];
+            $inputObsInver   = $_POST['inputObsInver'];
+
+            $createInvestorDetails = $investor->set_invesmentsdetails($cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver);
             break;
         default:
             echo 'Operación no válida';

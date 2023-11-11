@@ -25,6 +25,7 @@ include_once "dashboard/startTemplateDashboard.php";
             <div class="card card-success">
                 <div class="card-header">
                     <h1 class="col-6"><strong>Detalle de Inversiones.</strong></h1>
+                      <input type="text" name="fieldicveinversionista" id="fieldicveinversionista" hidden>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -291,7 +292,7 @@ include_once "dashboard/startTemplateDashboard.php";
     </div>
 </div>
 
-<div class="modal fade" id="modal-add-inversion">
+<div class="modal fade" id="modalAddInversion">
     <div class="modal-dialog">
         <div class="modal-content bg-info">
             <div class="modal-header">
@@ -312,7 +313,7 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputMontoInver">CANTIDAD $:</label>
-                          <input type="number" step="0.5"
+                          <input type="text" step="0.5"
                             class="form-control" name="inputMontoInver" id="inputMontoInver">
                         </div>
                     </div>
@@ -359,6 +360,7 @@ include_once "dashboard/footerDashBoard.php";
     });
 </script> -->
 <script src="../utils/js/libs/crypto.js"></script>
+<script typ="module" src="../assets/conf.js"></script>
 <script src="../assets/investorsDetails.js"></script>
 <script src="../assets/investmentsDetail.js"></script>
 <script typ="module" src="../assets/conf.js"></script>

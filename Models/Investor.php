@@ -1,16 +1,19 @@
 <?php
 require_once 'Conexion.php';
 
-class Investor{
+class Investor
+{
     private $conexion;
     var $acceso;
 
-    public function __construct() {
+    public function __construct()
+    {
         $db = new Conexion();
         $this->acceso = $db->pdo;
     }
-    
-    public function rowsCount($invnombre, $invapaterno, $invamaterno){
+
+    public function rowsCount($invnombre, $invapaterno, $invamaterno)
+    {
         try {
             $query = "SELECT (
                 SELECT COUNT(0) 
@@ -28,7 +31,7 @@ class Investor{
             $statement->execute([$invnombre, $invapaterno, $invamaterno, $invnombre, $invapaterno, $invamaterno]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Erro al ejecutar la consulta de existencia del inversionista '. $e->getMessage();
+            echo 'Erro al ejecutar la consulta de existencia del inversionista ' . $e->getMessage();
         }
     }
 
@@ -50,9 +53,11 @@ class Investor{
                         ctelefono, fcantidadinvertida, itipocuenta, icvebanco, cuentabancaria, cemail, dfecha_alta, cantpagadacapital) 
                         VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([ $invnombre, $invapaterno, $invamaterno, $invedad,
-                                $invtelefono, $invcantinvertida, $invtipocuenta, $invinstbancaria, 
-                                $invctabancaria, $invemail, $invDateRegister ]);
+            $statement->execute([
+                $invnombre, $invapaterno, $invamaterno, $invedad,
+                $invtelefono, $invcantinvertida, $invtipocuenta, $invinstbancaria,
+                $invctabancaria, $invemail, $invDateRegister
+            ]);
 
             //* Obtenemos el último valor del ultimo inversionista insertado apra la clave
             $icveinversionista = $this->acceso->lastInsertId();
@@ -70,14 +75,15 @@ class Investor{
             echo 'Error al insertar el inversionista: ' . $e->getMessage();
         }
     }
-    public function getInvestorDetails($icveinvestor){
+    public function getInvestorDetails($icveinvestor)
+    {
         try {
             $query = "SELECT * FROM inverdetalle WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error al traer las inversiones del inversionista' . $e->getMessage(); 
+            echo 'Error al traer las inversiones del inversionista' . $e->getMessage();
         }
     }
 
@@ -100,15 +106,15 @@ class Investor{
         $udpinvDateRegister
     ) {
         try {
-            
+
             $query = "UPDATE inversionistas SET cnombre = ?, capaterno = ?, camaterno = ?, iedad = ?, 
                         ctelefono = ?, itipocuenta = ?, icvebanco = ?, cuentabancaria = ?, cemail = ?, dfecha_alta = ?
                         WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([ 
+            $statement->execute([
                 $udpinvnombre, $udpinvapaterno, $udpinvamaterno,
                 $udpinvedad, $udpinvtelefono, $udpinvtipocuenta,
-                $udpinvinstbancaria, $udpinvctabancaria, 
+                $udpinvinstbancaria, $udpinvctabancaria,
                 $udpinvemail, $udpinvDateRegister, $udpidcveinvestor
             ]);
             echo 'Inversionista actualizado correctamente';
@@ -117,7 +123,8 @@ class Investor{
         }
     }
 
-    public function getInvestors() {
+    public function getInvestors()
+    {
         try {
             $query = "SELECT * FROM inversionistas";
             $statement = $this->acceso->prepare($query);
@@ -129,7 +136,8 @@ class Investor{
         }
     }
 
-    public function getTotalInvestors() {
+    public function getTotalInvestors()
+    {
         try {
             $query = "SELECT count(0) AS total FROM inversionistas";
             $statement = $this->acceso->prepare($query);
@@ -141,7 +149,8 @@ class Investor{
         }
     }
 
-    public function getTotalCapital() {
+    public function getTotalCapital()
+    {
         try {
             $query = "SELECT sum(fcantidadinvertida) AS capital FROM inversionistas";
             $statement = $this->acceso->prepare($query);
@@ -154,7 +163,8 @@ class Investor{
     }
 
 
-    public function get_banks(){
+    public function get_banks()
+    {
         try {
             $query = "SELECT * FROM catbancos";
             $statement = $this->acceso->prepare($query);
@@ -166,7 +176,8 @@ class Investor{
         }
     }
 
-    public function obtenerTiposClientes(){
+    public function obtenerTiposClientes()
+    {
         try {
             $query = "SELECT * FROM cattipocliente";
             $statement = $this->acceso->prepare($query);
@@ -177,14 +188,15 @@ class Investor{
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
-    
+
     /**
      * rowInvestor
      *
      * @param $id 
      * @return void
      */
-    public function rowInvestor($id){
+    public function rowInvestor($id)
+    {
         try {
             $query = "SELECT *,
                         (SELECT COUNT(*) FROM inverdetalle WHERE icveinversionista = inversionistas.icveinversionista) AS totinversiones
@@ -200,7 +212,30 @@ class Investor{
         }
     }
 
-    public function get_investmentDetails(){
 
+    //? para que era este método
+    public function get_investmentDetails()
+    {
+    }
+
+    //! Insercion de inversion
+
+    public function set_invesmentsdetails($cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver)
+    {
+        try {
+            $query = "INSERT INTO inverdetalle (icveinversionista,dfecharegistro,dmonto, cstatus, invtipooperacion, invdetobservaciones)
+                VALUES (?, ?, ?, 'A', 'I', ?)";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver]);
+            
+            $queryUpdate = "UPDATE inversionistas SET fcantidadinvertida = fcantidadinvertida + ? WHERE icveinversionista = ? ";
+            $statement2 = $this->acceso->prepare($queryUpdate);
+            $statement2->execute([$inputMontoInver, $cveinvestor]);
+
+            return true;
+            
+        } catch (PDOException $e) {
+            echo 'Error'.$e->getMessage();
+        }
     }
 }
