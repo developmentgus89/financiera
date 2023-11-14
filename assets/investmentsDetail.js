@@ -150,6 +150,11 @@ const getDetailsInvestor = (icveinvestor) => {
 };
 
 
+const getDetailsInvestorPays = (icveinvestor) => {
+
+}
+
+
 /**
  * 
  * @param {Date} inputDateInver 

@@ -25,7 +25,7 @@ include_once "dashboard/startTemplateDashboard.php";
             <div class="card card-success">
                 <div class="card-header">
                     <h1 class="col-6"><strong>Detalle de Inversiones.</strong></h1>
-                      <input type="text" name="fieldicveinversionista" id="fieldicveinversionista" hidden>
+                    <input type="text" name="fieldicveinversionista" id="fieldicveinversionista" hidden>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -178,7 +178,8 @@ include_once "dashboard/startTemplateDashboard.php";
 
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-pays" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                        Control de pagos de inter&eacute;s.
+                                        <table id="tableInvestorsDetailsPays" class="table table-bordered table-dark">
+                                        </table>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                         Control de egresos o retiros de capital.
@@ -305,25 +306,22 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
-                          <input type="date"
-                            class="form-control" name="inputDateInver" id="inputDateInver">
+                            <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
+                            <input type="date" class="form-control" name="inputDateInver" id="inputDateInver">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputMontoInver">CANTIDAD $:</label>
-                          <input type="text" step="0.5"
-                            class="form-control" name="inputMontoInver" id="inputMontoInver">
+                            <label for="inputMontoInver">CANTIDAD $:</label>
+                            <input type="text" step="0.5" class="form-control" name="inputMontoInver" id="inputMontoInver">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                    <div class="form-group">
-                          <label for="inputObsInver">OBSERVACIONES:</label>
-                          <input type="text" 
-                            class="form-control" name="inputObsInver" id="inputObsInver">
+                        <div class="form-group">
+                            <label for="inputObsInver">OBSERVACIONES:</label>
+                            <input type="text" class="form-control" name="inputObsInver" id="inputObsInver">
                         </div>
                     </div>
                 </div>
