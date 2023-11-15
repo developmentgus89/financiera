@@ -40,7 +40,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false"><b>Inversiones</b></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false"><b>Egresos</b></a>
+                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false"><b>Pagos a Capital</b></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-pays" data-toggle="pill" href="#custom-tabs-one-pays" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false"><b>Pagos</b></a>
@@ -166,7 +166,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         </div>
                                                     </div>
                                                     <!-- /.card-header -->
-                                                    <div class="card-body">
+                                                    <div class="card-body fondo-tabs">
                                                         <table id="tableInvestorsDetails" class="table table-bordered table-dark">
                                                         </table>
                                                     </div>

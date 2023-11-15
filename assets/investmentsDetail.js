@@ -35,6 +35,7 @@ const descifra = () => {
         // document.getElementById('cveinversionista').innerHTML= `CVE: ${params.icveinvestor}`;
         readPersonInvestor(params.icveinvestor);
         getDetailsInvestor(params.icveinvestor);
+        getDetailsInvestorPays(params.icveinvestor);
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
     }
 
@@ -149,9 +150,52 @@ const getDetailsInvestor = (icveinvestor) => {
     console.log('Estoy entrando a la otra función');
 };
 
-
-const getDetailsInvestorPays = (icveinvestor) => {
-
+/**
+ * 
+ * @param {number} icveinvestor 
+ */
+const getDetailsInvestorPays = ( icveinvestor) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL , true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            console.warn('Detalle de pagos de interes a inversionistas');
+            console.table(data);
+            var tblPaysInterests = document.querySelector('#tableInvestorsDetailsPays');
+            new DataTable(tblPaysInterests, {
+                data: {
+                    // headings: Object.keys(data[0]),
+                    headings: ['CVE PAGO', 'Importe', 'Fecha Hora Generado', 'Estatus Pago', 'Fecha Confirmación', 'Nombre', 'Apellido Paterno', 'Apellido Materno', 'Confirmar Pago'],
+                    data: data.map(function (item) {
+                        
+                        var id = item['icvepago'];
+                        let cantPago = parseFloat(item['importe']);
+                        let cantPagoFormateada = cantPago.toLocaleString('es-MX', {
+                            style: 'currency',
+                            currency: 'MXN'
+                        });
+                        return [
+                            id,
+                            cantPagoFormateada,
+                            item['fecha'],
+                            item['statuspago'],
+                            item['dtfechapagconfirmado'],
+                            item['cnombre'],
+                            item['capaterno'],
+                            item['camaterno'],
+                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`, 
+                            // `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
+                        ]
+                    })
+                }
+            });
+        }else{
+            toastr.error(`Error al leer los pagos del imversionista`);
+        }
+    };
+    xhr.send(`operation=readPaysInterests&icveinves=${icveinvestor}`);
 }
 
 

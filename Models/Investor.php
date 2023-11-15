@@ -238,4 +238,21 @@ class Investor
             echo 'Error'.$e->getMessage();
         }
     }
+
+    public function get_paysinterests($cveinvestor){
+        try {
+            $query = "SELECT pagos.icvepago, pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
+                        pagos.cstatuspago AS statuspago, pagos.dtfechapagconfirmado, inversionistas.cnombre, 
+                        inversionistas.capaterno, inversionistas.camaterno
+                        FROM paginteresesinv AS pagos 
+                        INNER JOIN inversionistas 
+                        on pagos.icveinversionista = inversionistas.icveinversionista
+                        where pagos.icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$cveinvestor]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+        }
+    }
 }

@@ -128,6 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $createInvestorDetails = $investor->set_invesmentsdetails($cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver);
             break;
+        case 'readPaysInterests':
+            $icveinvestor = $_POST['icveinves'];
+            $pagos = $investor->get_paysinterests($icveinvestor);
+            echo json_encode($pagos);
+            break;
         default:
             echo 'Operación no válida';
             break;
