@@ -238,7 +238,14 @@ class Investor
             echo 'Error'.$e->getMessage();
         }
     }
-
+    
+        
+    /**
+     * get_paysinterests
+     *
+     * @param  number $cveinvestor
+     * @return JSON [paginteresesinv]
+     */
     public function get_paysinterests($cveinvestor){
         try {
             $query = "SELECT pagos.icvepago, pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
@@ -253,6 +260,63 @@ class Investor
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+        }
+    }
+
+        
+    /**
+     * get_countinvesments
+     *
+     * @param  number $icveinvestor
+     * @return json
+     */
+    public function get_countinvesments($icveinvestor){
+        try {
+            $query = "SELECT count(0) AS totalinversiones FROM inverdetalle WHERE icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinvestor]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error al contar las inversiones del inversionista'. $e->getMessage();
+        }
+    }
+
+        
+    /**
+     * get_paysinvesments
+     *
+     * @param  number $icvedetalleinver
+     * @return json inverdetalle | error String
+     */
+    public function get_paysinvesments($icvedetalleinver){
+        try {
+            $query = "SELECT * FROM inverdetalle WHERE icvedetalleinver = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icvedetalleinver]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la captura del detalle del inversionista'. $e->getMessage();
+        }
+    }
+
+    
+    /**
+     * set_updateDetailInvesment
+     *
+     * @param  number $udpcveinverdetalle
+     * @param  Date $udpinputDateInver
+     * @param  number $udpinputMontoInver
+     * @param  String $udpinputObsInver
+     * @return JSON 
+     */
+    public function set_updateDetailInvesment($udpcveinverdetalle, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
+        try {
+            $query = "UPDATE inverdetalle SET dfecharegistro = ?, dmonto = ?, invdetobservaciones = ? WHERE icvedetalleinver = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$udpinputDateInver, $udpinputMontoInver, $udpinputObsInver, $udpcveinverdetalle]);
+            return true;
+        } catch (PDOException $e) {
+            echo 'Error al actualiar la inversion del inversionista'. $e->getMessage();
         }
     }
 }

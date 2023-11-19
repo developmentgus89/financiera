@@ -133,6 +133,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pagos = $investor->get_paysinterests($icveinvestor);
             echo json_encode($pagos);
             break;
+        case 'countdetails':
+            $icveinvestor = $_POST['icveinvestor'];
+            $invesments = $investor->get_countinvesments($icveinvestor);
+            echo json_encode($invesments);
+            break;
+        case 'readUDPPago':
+            $icvedetalleinver = $_POST['icvedetalleinver'];
+            $invesmentsPays = $investor->get_paysinvesments($icvedetalleinver);
+            echo json_encode($invesmentsPays);
+            break;
+        case 'UpdateDetailInvesment':
+            $udpcveinverdetalle = $_POST['udpcveinverdetalle'];
+            $udpinputDateInver  = $_POST['udpinputDateInver'];
+            $udpinputMontoInver = $_POST['udpinputMontoInver'];
+            $udpinputObsInver   = $_POST['udpinputObsInver'];
+            $invesmentsDetail   = $investor->set_updateDetailInvesment(
+                                                $udpcveinverdetalle, 
+                                                $udpinputDateInver,
+                                                $udpinputMontoInver,
+                                                $udpinputObsInver 
+                                            );
+            break;
         default:
             echo 'Operación no válida';
             break;

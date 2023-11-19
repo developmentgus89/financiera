@@ -1,7 +1,17 @@
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
 
-$('#inputMontoInver').inputmask('currency',{
+$('#inputMontoInver').inputmask('currency', {
+    radixPoint: '.',
+    groupSeparator: ',',
+    allowMinus: false,
+    autoGroup: true,
+    prefix: 'MXN ',
+    digits: 2,
+    rightAlign: false
+});
+
+$('#udpinputMontoInver').inputmask('currency', {
     radixPoint: '.',
     groupSeparator: ',',
     allowMinus: false,
@@ -18,6 +28,7 @@ $('#inputMontoInver').inputmask('currency',{
 
 const btnAddInversion = document.querySelector("#btnAddInversion");
 const btnSaveInvesments = document.querySelector("#btnSaveInvesments");
+const btnSaveInvesmentsDetail = document.querySelector('#btnSaveInvesmentsDetail');
 
 
 
@@ -36,6 +47,7 @@ const descifra = () => {
         readPersonInvestor(params.icveinvestor);
         getDetailsInvestor(params.icveinvestor);
         getDetailsInvestorPays(params.icveinvestor);
+        countDetailsInvestor(params.icveinvestor);
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
     }
 
@@ -51,7 +63,7 @@ const descifra = () => {
  */
 const readPersonInvestor = (icveinvestor) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL , true);
+    xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
@@ -105,10 +117,35 @@ const readPersonInvestor = (icveinvestor) => {
  * 
  * @param {number} icveinvestor 
  */
+const countDetailsInvestor = (icveinvestor) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            console.warn('Conteo de las inversiones para determinar si tiene 1 o ninguna');
+            console.table(data);
+            let count = data[0].totalinversiones;
+            if (count >= 1) {
+                btnAddInversion.disabled = true;
+                btnAddInversion.classList = 'btn btn-dark';
+            }
+        } else {
+            toastr.error(`Error al contar las inversiones del inversionista`);
+        }
+    };
+    xhr.send(`operation=countdetails&icveinvestor=${icveinvestor}`);
+}
+
+/**
+ * 
+ * @param {number} icveinvestor 
+ */
 
 const getDetailsInvestor = (icveinvestor) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL , true);
+    xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
@@ -116,10 +153,10 @@ const getDetailsInvestor = (icveinvestor) => {
             console.warn('Detalle de inversionistas');
             console.table(data);
             var tableInvestors = document.querySelector('#tableInvestorsDetails');
-            new DataTable(tableInvestors, {
+            var table = new DataTable(tableInvestors, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['Fecha Inversion', 'Monto', 'Estatus', 'Tipo de Operación', 'Observaciones'],
+                    headings: ['Fecha Inversion', 'Monto', 'Estatus', 'Tipo de Operación', 'Observaciones', 'Modificar'],
                     data: data.map(function (item) {
                         // return Object.values(item);
                         // let count = 1;
@@ -136,27 +173,28 @@ const getDetailsInvestor = (icveinvestor) => {
                             item['cstatus'] == 'A' ? 'ACTIVO' : 'INACTIVO',
                             item['invtipooperacion'] == 'I' ? 'INGRESO' : 'EGRESO',
                             item['invdetobservaciones'],
-                            // `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`, 
+                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openEditionInvesment(${id})"><i class="fas fa-money-check"></i>&nbsp;EDITAR </button>`
                             // `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
                         ]
                     })
                 }
             });
+
+            table.row.add(['Total', '','$ 40,000.00']).draw();
         } else {
             console.error('Error al leer los Inversionistas');
         }
     };
     xhr.send(`operation=readdetails&icveinves=${icveinvestor}`);
-    console.log('Estoy entrando a la otra función');
 };
 
 /**
  * 
  * @param {number} icveinvestor 
  */
-const getDetailsInvestorPays = ( icveinvestor) => {
+const getDetailsInvestorPays = (icveinvestor) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL , true);
+    xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
@@ -169,7 +207,7 @@ const getDetailsInvestorPays = ( icveinvestor) => {
                     // headings: Object.keys(data[0]),
                     headings: ['CVE PAGO', 'Importe', 'Fecha Hora Generado', 'Estatus Pago', 'Fecha Confirmación', 'Nombre', 'Apellido Paterno', 'Apellido Materno', 'Confirmar Pago'],
                     data: data.map(function (item) {
-                        
+
                         var id = item['icvepago'];
                         let cantPago = parseFloat(item['importe']);
                         let cantPagoFormateada = cantPago.toLocaleString('es-MX', {
@@ -185,13 +223,13 @@ const getDetailsInvestorPays = ( icveinvestor) => {
                             item['cnombre'],
                             item['capaterno'],
                             item['camaterno'],
-                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`, 
+                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick=""><i class="fas fa-money-check"></i></button>`
                             // `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
                         ]
                     })
                 }
             });
-        }else{
+        } else {
             toastr.error(`Error al leer los pagos del imversionista`);
         }
     };
@@ -235,15 +273,86 @@ const fncInsertInvesments = (inputDateInver, inputMontoInver, inputObsInver) => 
             setTimeout(() => {
                 location.reload();
             }, 650);
-                    
+
         } else {
             console.error('Error al insertar la inversion del Inversionista');
         }
-        
+
     };
     xhr.send(params);
 }
 
+/**
+ * 
+ * @param {number} udpcveinverdetalle 
+ * @param {Date} udpinputDateInver 
+ * @param {number} udpinputMontoInver 
+ * @param {String} udpinputObsInver 
+ */
+const fncUpdateInvesments = (
+    udpcveinverdetalle, 
+    udpinputDateInver,
+    udpinputMontoInver,
+    udpinputObsInver) => {
+
+    udpinputMontoInver = udpinputMontoInver.substring(4);
+    udpinputMontoInver = udpinputMontoInver.replace(/,/g, '');
+
+    let params =
+        'operation=UpdateDetailInvesment' +
+        '&udpcveinverdetalle=' + udpcveinverdetalle +
+        '&udpinputDateInver=' + udpinputDateInver +
+        '&udpinputMontoInver=' + udpinputMontoInver +
+        '&udpinputObsInver=' + udpinputObsInver;
+
+    // //! Petición HTTP
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.stringify(xhr.responseText);
+            console.table(data);
+            toastr.success('Registro actualizado correctamente');
+            setTimeout(() => {
+                $("#modalEditionInvesment").modal("hide");
+                alert(`CVE detalle Inversionista ${udpcveinverdetalle}`)
+            }, 350);
+
+            setTimeout(() => {
+                location.reload();
+            }, 650);
+
+        } else {
+            console.error('Error al insertar la inversion del Inversionista');
+        }
+
+    };
+    xhr.send(params);
+}
+
+/**
+ * 
+ * @param {number} icveinvestor 
+ */
+const openEditionInvesment = (icvedetalleinver) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            console.warn('Detalle de la confirmación del pago a inversionista');
+            console.table(data);
+            document.getElementById('udpcveinverdetalle').value = data[0].icvedetalleinver;
+            document.getElementById('udpinputDateInver').value  = data[0].dfecharegistro;
+            document.getElementById('udpinputMontoInver').value = data[0].dmonto;
+            document.getElementById('udpinputObsInver').value   = data[0].invdetobservaciones;
+            $('#modalEditionInvesment').modal('show');
+        }
+    };
+    xhr.send(`operation=readUDPPago&icvedetalleinver=${icvedetalleinver}`);
+};
 
 //Funciones para botones generalmente reciben el event => click con un función anónima
 
@@ -272,7 +381,6 @@ btnSaveInvesments.addEventListener('click', () => {
 
     if (!hasError) {
         reportError(inputObsInver);
-        //TODO: Desarrollar la función para que se registren estos datos
         fncInsertInvesments(
             inputDateInver.value,
             inputMontoInver.value,
@@ -284,5 +392,41 @@ btnSaveInvesments.addEventListener('click', () => {
 btnAddInversion.addEventListener('click', function () {
     $('#modalAddInversion').modal('show');
 });
+
+btnSaveInvesmentsDetail.addEventListener('click', function(){
+    let udpcveinverdetalle = document.getElementById('udpcveinverdetalle').value;
+    let udpinputDateInver  = document.getElementById('udpinputDateInver');
+    let udpinputMontoInver = document.getElementById('udpinputMontoInver');
+    let udpinputObsInver   = document.getElementById('udpinputObsInver');
+    
+    const fieldsUDP = [
+        {element: udpinputDateInver, message: 'La fecha de inversion no puede estar vacia.'},
+        {element: udpinputMontoInver, message: 'El monto de la inversion no puede estar vacio.'},
+        {element: udpinputObsInver, message: 'Capture las observaciones, este campo no puede estar vacio.'}
+    ];
+
+    let hasError = false;
+
+    for (fields of fieldsUDP) {
+        removeError(fields.element);
+        if (fields.element.value === '' || fields.element.value === null) {
+            showError(fields.element, fields.message);
+            fields.element.focus();
+            hasError = true;
+            break;
+        }
+    }
+
+    if (!hasError) {
+        reportError(udpinputObsInver);
+        fncUpdateInvesments(
+            udpcveinverdetalle,
+            udpinputDateInver.value,
+            udpinputMontoInver.value,
+            udpinputObsInver.value
+        );
+    }
+});
+
 
 window.addEventListener('load', descifra);

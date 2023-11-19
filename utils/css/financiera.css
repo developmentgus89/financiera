@@ -23,6 +23,7 @@
 
 .fondo_cliente_edit_modal{
     background-color: rgba(39, 90, 24, 0.877);
+    color: aliceblue;
 }
 
 .fondo-modal-add-inv{
@@ -46,6 +47,10 @@
 .divider{
     color: white;
     background-color: white;
+}
+
+table{
+    display: inline-flexbox;
 }
 
 /* hr{

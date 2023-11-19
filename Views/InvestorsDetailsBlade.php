@@ -167,19 +167,22 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     </div>
                                                     <!-- /.card-header -->
                                                     <div class="card-body fondo-tabs">
-                                                        <table id="tableInvestorsDetails" class="table table-bordered table-dark">
-                                                        </table>
+                                                        <div class="container-fluid">
+                                                            <table id="tableInvestorsDetails" class="table table-bordered">
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                     <!-- /.card-body -->
                                                 </div>
                                                 <!-- /.card -->
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-pays" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                        <table id="tableInvestorsDetailsPays" class="table table-bordered table-dark">
-                                        </table>
+                                        <div class="container">
+                                            <table id="tableInvestorsDetailsPays" class="table table-bordered">
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                         Control de egresos o retiros de capital.
@@ -202,96 +205,6 @@ include_once "dashboard/startTemplateDashboard.php";
 <!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-<!-- Modal Agregar -->
-<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content fondo-modal-add-inv">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalAgregarLabel"><strong>Agregar Nuevo Inversionista.</strong></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invnombre">Nombre:</label>
-                            <input type="text" class="form-control" name="invnombre" id="invnombre" aria-describedby="hclinombre" placeholder="">
-                            <small id="hclinombre" class="form-text">Capture el nombre del Inversionista</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invapaterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" name="invapaterno" id="invapaterno" aria-describedby="hcliapaterno" placeholder="">
-                            <small id="hcliapaterno" class="form-text">Capture el apellido paterno del Inversionista</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invamaterno">Apellido Materno:</label>
-                            <input type="text" class="form-control" name="invamaterno" id="invamaterno" aria-describedby="hcliamaterno" placeholder="">
-                            <small id="hcliamaterno" class="form-text">Capture el Apellido Materno del Inversionista</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="invedad">Edad:</label>
-                            <input type="number" step="1" min="18" value="18" class="form-control" name="invedad" id="invedad" aria-describedby="hinvedad" placeholder="">
-                            <small id="hinvedad" class="form-text">Edad del inversionista.</small>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label for="invtelefono">Tel&eacute;fono:</label>
-                                <input type="number" class="form-control" name="invtelefono" id="invtelefono" aria-describedby="hinvtelefono" placeholder="">
-                                <small id="hinvtelefono" class="form-text">Cliente debe ser mayor de edad.</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="invcantinvertida">Cantidad Invertida:</label>
-                            <input type="text" class="form-control" name="invcantinvertida" id="invcantinvertida" aria-describedby="hinvcantinvertida" placeholder="">
-                            <small id="hinvcantinvertida" class="form-text">Capital inicial de inversi&oacute;n</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invclabe">Cuenta Bancaria:</label>
-                            <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE)</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invemail">E-Mail:</label>
-                            <input type="email" class="form-control" name="invemail" id="invemail" aria-describedby="hinvemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-                            <small id="hinvemail" class="form-text">Correo electr&oacute;nico de contacto</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invDate">Fecha de Registro:</label>
-                            <input type="date" class="form-control" name="invDateRegister" id="invDateRegister" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hclientDateRegister" class="form-text">dd/mm/aaaa</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-gradient-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn bg-gradient-success" id="btnInsertInvestor">Agregar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="modalAddInversion">
     <div class="modal-dialog">
@@ -329,6 +242,50 @@ include_once "dashboard/startTemplateDashboard.php";
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success" id="btnSaveInvesments">Guardar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modalEditionInvesment">
+    <div class="modal-dialog">
+        <div class="modal-content fondo_cliente_edit_modal">
+            <div class="modal-header">
+                <h4 class="modal-title">Edici&oacute;n de la Inversi&oacute;n</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
+                            <input type="number" class="form-control" name="udpcveinverdetalle" id="udpcveinverdetalle" hidden>
+                            <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="inputMontoInver">CANTIDAD $:</label>
+                            <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputObsInver">OBSERVACIONES:</label>
+                            <input type="text" class="form-control" name="udpinputObsInver" id="udpinputObsInver">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" name="btnSaveInvesmentsDetail" id="btnSaveInvesmentsDetail" >Guardar</button>
             </div>
         </div>
         <!-- /.modal-content -->
