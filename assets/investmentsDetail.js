@@ -354,6 +354,7 @@ const openEditionInvesment = (icvedetalleinver) => {
     xhr.send(`operation=readUDPPago&icvedetalleinver=${icvedetalleinver}`);
 };
 
+//TODO: Recuperar la funcion de la promesa
 //Funciones para botones generalmente reciben el event => click con un función anónima
 
 btnSaveInvesments.addEventListener('click', () => {
