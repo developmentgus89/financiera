@@ -2,7 +2,7 @@
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
 
-$('#invcantinvertida').inputmask('currency',{
+$('#invcantinvertida').inputmask('currency', {
     radixPoint: '.',
     groupSeparator: ',',
     allowMinus: false,
@@ -12,7 +12,7 @@ $('#invcantinvertida').inputmask('currency',{
     rightAlign: false
 });
 
-$('#udp-invcantinvertida').inputmask('currency',{
+$('#udp-invcantinvertida').inputmask('currency', {
     radixPoint: '.',
     groupSeparator: ',',
     allowMinus: false,
@@ -22,9 +22,10 @@ $('#udp-invcantinvertida').inputmask('currency',{
     rightAlign: false
 });
 
-$('#modalAgregar').on('shown.bs.modal' , () => {
+$('#modalAgregar').on('shown.bs.modal', () => {
     const invnombre = document.querySelector('#invnombre');
     getBanks();
+    getInterestInvesment();
     invnombre.focus();
 });
 
@@ -38,16 +39,17 @@ $("#modalEditar").on('hidden.bs.modal', function () {
 });
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
-const btnAgregar           = document.querySelector('#agregar-inversionista');
+const btnAgregar = document.querySelector('#agregar-inversionista');
 
 const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
-const btnInsertInvestor  = document.querySelector('#btnInsertInvestor');
-const btnUpdateInvestor  = document.querySelector('#btnUpdateInvestor');
-const selectTipoCliente  = document.querySelector('#typeClient');
-const btnRegresaModal    = document.querySelector('#btnRegresaModal');
-const btnIrAInv          = document.querySelector('#btnIrAInv');
-const selectBanco        = document.querySelector('#invinstbancaria');
-const selectBancoUDP     = document.querySelector('#udp-invinstbancaria');
+const btnInsertInvestor = document.querySelector('#btnInsertInvestor');
+const btnUpdateInvestor = document.querySelector('#btnUpdateInvestor');
+const selectTipoCliente = document.querySelector('#typeClient');
+const btnRegresaModal = document.querySelector('#btnRegresaModal');
+const btnIrAInv = document.querySelector('#btnIrAInv');
+const selectBanco = document.querySelector('#invinstbancaria');
+const selectBancoUDP = document.querySelector('#udp-invinstbancaria');
+const selectInterests = document.querySelector('#invinteres');
 
 
 
@@ -72,6 +74,7 @@ btnInsertInvestor.addEventListener('click', () => {
     let invamaterno      = document.getElementById('invamaterno');
     let invedad          = document.getElementById('invedad');
     let invtelefono      = document.getElementById('invtelefono');
+    let invinteres       = document.getElementById('invinteres');
     let invcantinvertida = document.getElementById('invcantinvertida');
     let invtipocuenta    = document.getElementById('invtipocuenta');
     let invinstbancaria  = document.getElementById('invinstbancaria');
@@ -79,7 +82,7 @@ btnInsertInvestor.addEventListener('click', () => {
     let invemail         = document.getElementById('invemail');
     let invDateRegister  = document.getElementById('invDateRegister');
 
-    
+
 
 
     const valFormInvestor = () => {
@@ -89,6 +92,7 @@ btnInsertInvestor.addEventListener('click', () => {
             { element: invamaterno, message: 'Ingrese el apellido materno del inversionista' },
             { element: invedad, message: 'Ingrese la edad del inversionista' },
             { element: invtelefono, message: 'Ingrese el n\u00famero de telefono del inversionista' },
+            { element: invinteres, message: 'Seleccione el Interes para este inversionista.' },
             { element: invcantinvertida, message: 'Ingrese el nombre del inversionista' },
             { element: invtipocuenta, message: 'Ingrese el tipo de cuenta bancaria del inversionista' },
             { element: invinstbancaria, message: 'Seleccione el banco de la cuenta bancaria' },
@@ -108,7 +112,7 @@ btnInsertInvestor.addEventListener('click', () => {
                 break;
             }
         }
-        
+
         if (!hasError) {
             removeError(invDateRegister);
             verifInsInsvestor(
@@ -117,6 +121,7 @@ btnInsertInvestor.addEventListener('click', () => {
                 invamaterno.value,
                 invedad.value,
                 invtelefono.value,
+                invinteres.value,
                 invcantinvertida.value,
                 invtipocuenta.value,
                 invinstbancaria.value,
@@ -156,19 +161,19 @@ btnUpdateInvestor.addEventListener('click', () => {
         values[field] = document.getElementById(field).value;
     });
 
-        updateInvestor(
-            values['udp-idcveinvestor'],
-            values['udp-invnombre'],
-            values['udp-invapaterno'],
-            values['udp-invamaterno'],
-            values['udp-invedad'],
-            values['udp-invtelefono'],
-            values['udp-invtipocuenta'],
-            values['udp-invinstbancaria'],
-            values['udp-invctabancaria'],
-            values['udp-invemail'],
-            values['udp-invDateRegister']
-        );
+    updateInvestor(
+        values['udp-idcveinvestor'],
+        values['udp-invnombre'],
+        values['udp-invapaterno'],
+        values['udp-invamaterno'],
+        values['udp-invedad'],
+        values['udp-invtelefono'],
+        values['udp-invtipocuenta'],
+        values['udp-invinstbancaria'],
+        values['udp-invctabancaria'],
+        values['udp-invemail'],
+        values['udp-invDateRegister']
+    );
     // // dataTableCliente.destroy();
     // $('#modalEditar').modal('hide');
     // location.reload();
@@ -197,12 +202,12 @@ const getInvestors = () => {
             new DataTable(tableInvestors, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['ID', 'Nombre', 'A. Paterno', 'A. Materno', 'Telefono', 'Edad', 'Cant. Inversion', 'Fec. Registro', 'Cta. Bancaria', '','',''],
+                    headings: ['ID', 'Nombre', 'A. Paterno', 'A. Materno', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Cta. Bancaria', '', '', ''],
                     data: data.map(function (item) {
                         // return Object.values(item);
                         var id = item['icveinversionista'];
                         let cantidadInvertida = parseFloat(item['fcantidadinvertida']);
-                        let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX',{
+                        let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX', {
                             style: 'currency',
                             currency: 'MXN'
                         });
@@ -214,9 +219,10 @@ const getInvestors = () => {
                             item['ctelefono'],
                             item['iedad'],
                             cantidadFormateada,
+                            `${item['ftasainteres']} %`,
                             item['dfecha_alta'],
                             item['cuentabancaria'],
-                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`, 
+                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`,
                             `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`,
                             `<button class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar Datos" onclick=""><i class="fas fa-trash-alt"></i></button>`
                         ]
@@ -261,7 +267,7 @@ const readRowInvestor = (id) => {
 
             let cantTotalInvertida = document.querySelector('#cantTotalInvertida');
             let cantTotInv = parseFloat(inversionista[0].fcantidadinvertida);
-            cantTotInv = cantTotInv.toLocaleString('es-MX',{
+            cantTotInv = cantTotInv.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
@@ -270,12 +276,12 @@ const readRowInvestor = (id) => {
 
             let cantPagCapital = document.querySelector('#cantPagCapital');
             let cantPagCapitalF = parseFloat(inversionista[0].cantpagadacapital);
-            cantPagCapitalF = cantPagCapitalF.toLocaleString('es-MX',{
+            cantPagCapitalF = cantPagCapitalF.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
-            cantPagCapital.innerHTML = `<h3> ${ cantPagCapitalF } </h3>`;
-            getBanks(true,inversionista[0].icvebanco,'');
+            cantPagCapital.innerHTML = `<h3> ${cantPagCapitalF} </h3>`;
+            getBanks(true, inversionista[0].icvebanco, '');
             $('#modalEditar').modal('show');
         } else {
             console.error('Error al leer el Inversionista');
@@ -299,20 +305,21 @@ const readRowInvestor = (id) => {
  */
 const insertInvestor = (
     invnombre, invapaterno, invamaterno,
-    invedad, invtelefono, invcantinvertida,
+    invedad, invtelefono, invinteres, invcantinvertida,
     invtipocuenta, invinstbancaria, invctabancaria,
     invemail, invDateRegister) => {
-    
+
     invcantinvertida = invcantinvertida.substring(4);
     invcantinvertida = invcantinvertida.replace(/,/g, '');
 
-    let params = 
-        'operation=create'+ 
-        '&invnombre='+ invnombre +
-        '&invapaterno='+ invapaterno +
-        '&invamaterno='+ invamaterno +
-        '&invedad='+ invedad +
-        '&invtelefono='+ invtelefono + 
+    let params =
+        'operation=create' +
+        '&invnombre=' + invnombre +
+        '&invapaterno=' + invapaterno +
+        '&invamaterno=' + invamaterno +
+        '&invedad=' + invedad +
+        '&invtelefono=' + invtelefono +
+        '&invinteres=' + invinteres +
         '&invcantinvertida=' + invcantinvertida +
         '&invtipocuenta=' + invtipocuenta +
         '&invinstbancaria=' + invinstbancaria +
@@ -327,7 +334,7 @@ const insertInvestor = (
         if (xhr.status === 200) {
             const inversionista = JSON.parse(xhr.responseText);
             console.table(inversionista); //Cachamos el error
-                inversionista ? location.reload() : console.warn('Error al crear el inversionista');
+            console.log(`Mensaje $$$ ${inversionista[0].msj}`);
         } else {
             console.error('Error al insertar el Inversionista');
         }
@@ -335,51 +342,56 @@ const insertInvestor = (
     xhr.send(params);
 };
 
-const verifInsInsvestor = ( 
+const verifInsInsvestor = (
     invnombre,
     invapaterno,
     invamaterno,
     invedad,
     invtelefono,
+    invinteres,
     invcantinvertida,
     invtipocuenta,
     invinstbancaria,
     invctabancaria,
     invemail,
     invDateRegister
-    ) => {
-    let params = 
-        'operation=rowCount'+ 
-        '&invnombre='+ invnombre +
-        '&invapaterno='+ invapaterno +
-        '&invamaterno='+ invamaterno;
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', baseURL, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                const inversionista = JSON.parse(xhr.responseText);
-                
-                if( !inversionista[0] ) {
-                    console.warn('No existe el inversionista');
-                    insertInvestor(
-                        invnombre, invapaterno, invamaterno,
-                        invedad, invtelefono, invcantinvertida,
-                        invtipocuenta, invinstbancaria, invctabancaria,
-                        invemail, invDateRegister
-                    );
-                }else {
-                    $('#modalAgregar').modal('hide');
-                    document.getElementById('go-icveinvestor').value = inversionista[0].icveinversionista;
-                    $('#m-danger-msj').modal('show');
-                    
-                }
-                
+) => {
+    let params =
+        'operation=rowCount' +
+        '&invnombre=' + invnombre +
+        '&invapaterno=' + invapaterno +
+        '&invamaterno=' + invamaterno;
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', baseURL, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const inversionista = JSON.parse(xhr.responseText);
+
+            if (!inversionista[0]) {
+                console.warn('No existe el inversionista');
+                insertInvestor(
+                    invnombre, invapaterno, invamaterno,
+                    invedad, invtelefono, invinteres, invcantinvertida,
+                    invtipocuenta, invinstbancaria, invctabancaria,
+                    invemail, invDateRegister
+                );
+                toastr.success('Se inserto el inversionista correctamente');
+                setTimeout(() => {
+                    location.reload();
+                }, 750);
             } else {
-                console.error('Error al insertar el Inversionista');
+                $('#modalAgregar').modal('hide');
+                document.getElementById('go-icveinvestor').value = inversionista[0].icveinversionista;
+                $('#m-danger-msj').modal('show');
+
             }
-        };
-        xhr.send(params);
+
+        } else {
+            console.error('Error al insertar el Inversionista');
+        }
+    };
+    xhr.send(params);
 }
 
 
@@ -410,18 +422,18 @@ const updateInvestor = (
     udpinvemail,
     udpinvDateRegister
 ) => {
-    let params = 
-        'operation=update'+ 
-        '&udpidcveinvestor='+ udpidcveinvestor +
-        '&udpinvnombre='+ udpinvnombre +
-        '&udpinvapaterno='+ udpinvapaterno +
-        '&udpinvamaterno='+ udpinvamaterno +
-        '&udpinvedad='+ udpinvedad + 
+    let params =
+        'operation=update' +
+        '&udpidcveinvestor=' + udpidcveinvestor +
+        '&udpinvnombre=' + udpinvnombre +
+        '&udpinvapaterno=' + udpinvapaterno +
+        '&udpinvamaterno=' + udpinvamaterno +
+        '&udpinvedad=' + udpinvedad +
         '&udpinvtelefono=' + udpinvtelefono +
         '&udpinvtipocuenta=' + udpinvtipocuenta +
         '&udpinvinstbancaria=' + udpinvinstbancaria +
         '&udpinvctabancaria=' + udpinvctabancaria +
-        '&udpinvemail=' + udpinvemail + 
+        '&udpinvemail=' + udpinvemail +
         '&udpinvDateRegister=' + udpinvDateRegister;
 
     console.log(`Listado de parametros con codigo simplificado ${params} `);
@@ -434,7 +446,7 @@ const updateInvestor = (
             toastr.success('Registro actualizado correctamente');
             setTimeout(() => {
                 getInvestors();
-                $("#modalEditar").modal("hide");    
+                $("#modalEditar").modal("hide");
             }, 650);
         } else {
             console.error('Error al actualizar el Inversionista');
@@ -474,12 +486,12 @@ const totalCapital = () => {
 
             const totalCapitalInv = document.getElementById('totalInvestorsCapital');
             let totalCapital = parseFloat(data[0].capital);
-            let cantidadFormateada = totalCapital.toLocaleString('es-MX',{
+            let cantidadFormateada = totalCapital.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
 
-            data[0].capital == null ? totalCapitalInv.innerHTML = `$ 0.00` :  totalCapitalInv.innerHTML = cantidadFormateada;
+            data[0].capital == null ? totalCapitalInv.innerHTML = `$ 0.00` : totalCapitalInv.innerHTML = cantidadFormateada;
             console.log(data.capital);
         } else {
             console.error('Error al ejecutar el metodo total de inversionistas');
@@ -487,37 +499,6 @@ const totalCapital = () => {
     };
     xhr.send(`operation=totalCapital`);
 }
-
-//TODO: Refactorizar cada una de las funciones
-// const totalCapital = async () => {
-//     try {
-//         const response = await fetch(baseURL, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/x-www-form-urlencoded'
-//             },
-//             body: 'operation=totalCapital'
-//         });
-//         if (response.ok) {
-//             const data = await response.json();
-//             console.table(data);
-
-//             const totalCapitalInv = document.getElementById('totalInvestorsCapital');
-//             let totalCapital = parseFloat(data[0].capital);
-//             let cantidadFormateada = totalCapital.toLocaleString('es-MX', {
-//                 style: 'currency',
-//                 currency: 'MXN'
-//             });
-
-//             totalCapitalInv.innerHTML = data[0].capital == null ? '$ 0.00' : cantidadFormateada;
-//             console.log(data.capital);
-//         } else {
-//             console.error('Error al ejecutar el método total de inversionistas');
-//         }
-//     } catch (error) {
-//         console.error('Error inesperado:', error);
-//     }
-// };
 
 //Funcion para poder llenar la lista de bancos
 /**
@@ -548,25 +529,62 @@ const getBanks = (op, idbank, bankdesc) => {
                 option.value = bank.icvebanco;
                 option.textContent = bank.cnombrebanco;
                 selectBanco.append(option);
-                
+
             });
 
-            if(op){
+            if (op) {
 
                 console.log('Carga listado de bancos para la actualización');
-                banks.forEach( bankUDP => {
+                banks.forEach(bankUDP => {
                     const option = document.createElement('option');
                     option.value = bankUDP.icvebanco;
                     option.textContent = bankUDP.cnombrebanco;
                     selectBancoUDP.appendChild(option);
                 });
             }
-            
+
         } else {
             console.error('Error al leer las categorias');
         }
     };
     xhr.send('operation=readbanks');
+}
+
+const getInterestInvesment = async () => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'operation=getInterests'
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la solicitud para recuperar los intereses del catalogo');
+        }
+
+        const dataInterest = await response.json();
+        console.table(dataInterest);
+
+        selectInterests.innerHTML = ``;
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'SELECCIONE INTERES';
+        selectInterests.appendChild(defaultOption);
+
+        dataInterest.forEach(interest => {
+            const option = document.createElement('option');
+            option.value = interest.icvetasascomisiones;
+            option.textContent = `Descripcion: ${interest.cdescripciontascom} -> ${interest.ftasainteres}`;
+            selectInterests.append(option);
+
+        });
+
+    } catch (error) {
+        throw new Error(`Error al leer los registro del catalogo de intereses ${error.message}`);
+    }
 }
 
 

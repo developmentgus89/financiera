@@ -76,7 +76,7 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="card card-secondary">
+        <div class="card card-success">
             <div class="card-header">
                 <div class="row">
                     <h2 class="col-6"><strong>Cat&aacute;logo de Inversionistas</strong></h2>
@@ -84,7 +84,7 @@ include_once "dashboard/startTemplateDashboard.php";
 
                     </div>
                     <div class="col-2 mt-2">
-                        <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="agregar-inversionista">
+                        <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="agregar-inversionista">
                             <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Inversionista.
                         </button>
                     </div>
@@ -94,8 +94,8 @@ include_once "dashboard/startTemplateDashboard.php";
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="tableInvestors" class="table table-bordered table-dark">
+            <div class="card-body fondo-tabs">
+                <table id="tableInvestors" class="table table-bordered">
                 </table>
             </div>
             <!-- /.card-body -->
@@ -149,7 +149,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <small id="hinvedad" class="form-text">Edad del inversionista.</small>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="invtelefono">Tel&eacute;fono:</label>
@@ -158,7 +158,14 @@ include_once "dashboard/startTemplateDashboard.php";
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="invinteres">Inter&eacute;s Mensual:</label>
+                            <select class="form-control" name="invinteres" id="invinteres">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="invcantinvertida">Cantidad Invertida:</label>
                             <input type="text" class="form-control" name="invcantinvertida" id="invcantinvertida" aria-describedby="hinvcantinvertida" placeholder="">

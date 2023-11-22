@@ -156,13 +156,14 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <hr class="divider">
                                         <div class="row">
                                             <div class="col-xl-12">
-                                                <div class="card card-secondary">
+                                                <div class="card card-success">
                                                     <div class="card-header">
                                                         <h2 class="card-title col-md-6"><strong>Registro de Inversiones.</strong></h2>
                                                         <div class="card-title col-md-6">
                                                             <button type="button" class="btn bg-gradient-primary btn-sm" id="btnAddInversion">
                                                                 <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Inversi&oacute;n.
                                                             </button>
+                                                              <input type="text" class="form-control" name="icvedetalleinvinput" id="icvedetalleinvinput" hidden>
                                                         </div>
                                                     </div>
                                                     <!-- /.card-header -->
@@ -233,6 +234,15 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label for="inputInteres">Porcetaje de Inter&eacute;s de la inversi&oacute;n:</label>
+                              <select class="form-control" name="inputInteres" id="inputInteres">
+                              </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label for="inputObsInver">OBSERVACIONES:</label>
                             <input type="text" class="form-control" name="inputObsInver" id="inputObsInver">
                         </div>
@@ -264,6 +274,7 @@ include_once "dashboard/startTemplateDashboard.php";
                         <div class="form-group">
                             <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
                             <input type="number" class="form-control" name="udpcveinverdetalle" id="udpcveinverdetalle" hidden>
+                            <input type="number" class="form-control" name="udpcveinversionista" id="udpcveinversionista" hidden>
                             <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver">
                         </div>
                     </div>
@@ -293,6 +304,29 @@ include_once "dashboard/startTemplateDashboard.php";
     <!-- /.modal-dialog -->
 </div>
 
+
+<div class="modal fade" id="m-warning-msj">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">confirmaci&oacute;n de Pago.</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" name="go-icveinvestor" id="go-icveinvestor" hidden>
+                <p>Desea confirmar el pago del </p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal" id="btnRegresaModal">Cerrar</button>
+                <button type="button" class="btn btn-outline-light" id="btnIrAInv">Ir a Inversionista</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 
 <?php

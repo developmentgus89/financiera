@@ -41,6 +41,7 @@ class Investor
         $invamaterno,
         $invedad,
         $invtelefono,
+        $invinteres,
         $invcantinvertida,
         $invtipocuenta,
         $invinstbancaria,
@@ -49,13 +50,14 @@ class Investor
         $invDateRegister
     ) {
         try {
-            $query = "INSERT INTO inversionistas (cnombre, capaterno, camaterno, iedad,
+            $query = "INSERT INTO inversionistas (icvetasascomisiones, cnombre, capaterno, camaterno, iedad,
                         ctelefono, fcantidadinvertida, itipocuenta, icvebanco, cuentabancaria, cemail, dfecha_alta, cantpagadacapital) 
-                        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
             $statement = $this->acceso->prepare($query);
             $statement->execute([
-                $invnombre, $invapaterno, $invamaterno, $invedad,
-                $invtelefono, $invcantinvertida, $invtipocuenta, $invinstbancaria,
+                $invinteres, $invnombre, $invapaterno, 
+                $invamaterno, $invedad, $invtelefono, 
+                $invcantinvertida, $invtipocuenta, $invinstbancaria,
                 $invctabancaria, $invemail, $invDateRegister
             ]);
 
@@ -63,14 +65,15 @@ class Investor
             $icveinversionista = $this->acceso->lastInsertId();
 
             //* Se genera el Query para la inserción del detalle del inversionista
-            $queryInverdetalle = "INSERT INTO inverdetalle (icveinversionista, dfecharegistro, 
+            $queryInverdetalle = "INSERT INTO inverdetalle (icveinversionista, icvetasascomisiones, dfecharegistro, 
                                 dmonto, cstatus, invtipooperacion, invdetobservaciones) 
-                                VALUES (?, ?, ?, 'A', 'I', 'INVERSION INCIAL')";
+                                VALUES (?, ?, ?, ?, 'A', 'I', 'INVERSION INCIAL')";
             $statementInverdetalle = $this->acceso->prepare($queryInverdetalle);
-            $statementInverdetalle->execute([$icveinversionista, $invDateRegister, $invcantinvertida]);
+            $statementInverdetalle->execute([$icveinversionista, $invinteres, $invDateRegister, $invcantinvertida]);
 
             // Devuelve true si todo es correcto
-            return true;
+            $resp['msj'] = true;
+            return $resp;
         } catch (PDOException $e) {
             echo 'Error al insertar el inversionista: ' . $e->getMessage();
         }
@@ -78,7 +81,10 @@ class Investor
     public function getInvestorDetails($icveinvestor)
     {
         try {
-            $query = "SELECT * FROM inverdetalle WHERE icveinversionista = ?";
+            $query = "SELECT * FROM inverdetalle 
+                        INNER JOIN cattasascomisiones 
+                        ON inverdetalle.icvetasascomisiones = cattasascomisiones.icvetasascomisiones
+                        WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -126,7 +132,9 @@ class Investor
     public function getInvestors()
     {
         try {
-            $query = "SELECT * FROM inversionistas";
+            $query = "SELECT * FROM inversionistas 
+                        INNER JOIN cattasascomisiones 
+                        ON inversionistas.icvetasascomisiones = cattasascomisiones.icvetasascomisiones";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 
@@ -175,6 +183,19 @@ class Investor
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
+
+    public function get_interest()
+    {
+        try {
+            $query = "SELECT * FROM cattasascomisiones";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta: ' . $e->getMessage();
+        }
+    }    
 
     public function obtenerTiposClientes()
     {
@@ -248,13 +269,14 @@ class Investor
      */
     public function get_paysinterests($cveinvestor){
         try {
-            $query = "SELECT pagos.icvepago, pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
+            $query = "SELECT pagos.icvepago, inverdetalle.icvedetalleinver, inverdetalle.dmonto AS montoinve,
+                        pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
                         pagos.cstatuspago AS statuspago, pagos.dtfechapagconfirmado, inversionistas.cnombre, 
                         inversionistas.capaterno, inversionistas.camaterno
                         FROM paginteresesinv AS pagos 
-                        INNER JOIN inversionistas 
-                        on pagos.icveinversionista = inversionistas.icveinversionista
-                        where pagos.icveinversionista = ?";
+                        INNER JOIN inversionistas on pagos.icveinversionista = inversionistas.icveinversionista
+                        INNER JOIN inverdetalle on inverdetalle.icveinversionista = pagos.icveinversionista
+                    where pagos.icveinversionista = ? ORDER BY pagos.dfecharegistro DESC";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$cveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -309,14 +331,64 @@ class Investor
      * @param  String $udpinputObsInver
      * @return JSON 
      */
-    public function set_updateDetailInvesment($udpcveinverdetalle, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
+    public function set_updateDetailInvesment($udpcveinversionista, $udpcveinverdetalle, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
         try {
             $query = "UPDATE inverdetalle SET dfecharegistro = ?, dmonto = ?, invdetobservaciones = ? WHERE icvedetalleinver = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$udpinputDateInver, $udpinputMontoInver, $udpinputObsInver, $udpcveinverdetalle]);
-            return true;
+
+            $query2 = "UPDATE inversionistas SET fcantidadinvertida = ? WHERE icveinversionista = ?";
+            $statement2 = $this->acceso->prepare($query2);
+            $statement2->execute([$udpinputMontoInver, $udpcveinversionista]);
+
+            $resp['msj'] = true;
+            $resp['text'] = 'Se actualizo el inversionista correctamente';
+            return $resp;
         } catch (PDOException $e) {
             echo 'Error al actualiar la inversion del inversionista'. $e->getMessage();
+        }
+    }
+
+    
+    /**
+     * get_paysdetailsinterest
+     *
+     * @param  number $icveinversionista
+     * @return void
+     */
+    public function get_paysdetailsinterest($icveinversionista){
+        try {
+            $query = "SELECT * FROM paginteresesinv WHERE icveinversionista = ?
+                        ORDER BY dfecharegistro DESC";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error al actualiar la inversion del inversionista'. $e->getMessage());
+        }
+    }
+
+    public function set_paysdetailsinterest($icveinversionista){
+        try {
+            $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, fmonto_pagado, dfecharegistro, cstatuspago)
+                        SELECT 
+                            inverdetalle.icveinversionista,
+                            inverdetalle.icvedetalleinver,
+                            ROUND(inverdetalle.dmonto * (tc.ftasainteres / 100), 2) AS fmonto_pagado,
+                            NOW() AS dfecharegistro,
+                            'NP' AS cstatuspago
+                        FROM 
+                            inverdetalle 
+                        INNER JOIN inversionistas  ON inverdetalle.icveinversionista = inversionistas.icveinversionista
+                        INNER JOIN cattasascomisiones tc ON inversionistas.icvetasascomisiones = tc.icvetasascomisiones
+                    WHERE inversionistas.icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista]);
+            $resp['msj'] = true;
+            $resp['text'] = "Se insertó el pago correctamente.";
+            return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error al insertar el pago');
         }
     }
 }

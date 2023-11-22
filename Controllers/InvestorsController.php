@@ -9,17 +9,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($operation) {
         case 'create':
             // Crear inversionista
-            $invnombre = $_POST['invnombre'];
-            $invapaterno = $_POST['invapaterno'];
-            $invamaterno = $_POST['invamaterno'];
-            $invedad = $_POST['invedad'];
-            $invtelefono = $_POST['invtelefono'];
+            $invnombre        = $_POST['invnombre'];
+            $invapaterno      = $_POST['invapaterno'];
+            $invamaterno      = $_POST['invamaterno'];
+            $invedad          = $_POST['invedad'];
+            $invtelefono      = $_POST['invtelefono'];
+            $invinteres       = $_POST['invinteres'];
             $invcantinvertida = $_POST['invcantinvertida'];
-            $invtipocuenta = $_POST['invtipocuenta'];
-            $invinstbancaria = $_POST['invinstbancaria'];
-            $invctabancaria = $_POST['invctabancaria'];
-            $invemail = $_POST['invemail'];
-            $invDateRegister = $_POST['invDateRegister'];
+            $invtipocuenta    = $_POST['invtipocuenta'];
+            $invinstbancaria  = $_POST['invinstbancaria'];
+            $invctabancaria   = $_POST['invctabancaria'];
+            $invemail         = $_POST['invemail'];
+            $invDateRegister  = $_POST['invDateRegister'];
 
             $createInvestor = $investor->newInvestor(
                 $invnombre,
@@ -27,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $invamaterno,
                 $invedad,
                 $invtelefono,
+                $invinteres,
                 $invcantinvertida,
                 $invtipocuenta,
                 $invinstbancaria,
@@ -35,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $invDateRegister
             );
             echo json_encode($createInvestor);
-
             break;
         case 'rowCount':
             $invnombre = $_POST['invnombre'];
@@ -56,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $investorsDetails = $investor->getInvestorDetails($icveinvestor);
             echo json_encode($investorsDetails);
             break;
+
         case 'update':
             // Actualizar inversionista
             $udpidcveinvestor    = $_POST['udpidcveinvestor'];
@@ -144,16 +146,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($invesmentsPays);
             break;
         case 'UpdateDetailInvesment':
-            $udpcveinverdetalle = $_POST['udpcveinverdetalle'];
-            $udpinputDateInver  = $_POST['udpinputDateInver'];
-            $udpinputMontoInver = $_POST['udpinputMontoInver'];
-            $udpinputObsInver   = $_POST['udpinputObsInver'];
-            $invesmentsDetail   = $investor->set_updateDetailInvesment(
+            $udpcveinversionista = $_POST['udpcveinversionista'];
+            $udpcveinverdetalle  = $_POST['udpcveinverdetalle'];
+            $udpinputDateInver   = $_POST['udpinputDateInver'];
+            $udpinputMontoInver  = $_POST['udpinputMontoInver'];
+            $udpinputObsInver    = $_POST['udpinputObsInver'];
+            $invesmentsDetail    = $investor->set_updateDetailInvesment(
+                                                $udpcveinversionista,
                                                 $udpcveinverdetalle, 
                                                 $udpinputDateInver,
                                                 $udpinputMontoInver,
                                                 $udpinputObsInver 
                                             );
+            echo json_encode($invesmentsDetail);
+            break;
+
+        case 'readdetailsinverpays':
+            $icveinversionista    = $_POST['icveinversionista'];
+            $invesmentsDetailPays = $investor->get_paysdetailsinterest($icveinversionista);
+            echo json_encode($invesmentsDetailPays);
+            break;
+
+        case 'insertDetailsPaysInvesment':
+            $icveinversionista = $_POST['icveinversionista'];
+            $insertPaysInterest = $investor->set_paysdetailsinterest($icveinversionista);
+            echo json_encode($insertPaysInterest);
+            break;
+        case 'getInterests':
+            $getInterests = $investor->get_interest();
+            echo json_encode($getInterests);
             break;
         default:
             echo 'Operación no válida';
