@@ -12,7 +12,7 @@ class Investor
         $this->acceso = $db->pdo;
     }
 
-    public function rowsCount($invnombre, $invapaterno, $invamaterno)
+    public function rowsCount($invnombre, $invapaterno, $invamaterno) 
     {
         try {
             $query = "SELECT (
@@ -241,13 +241,13 @@ class Investor
 
     //! Insercion de inversion
 
-    public function set_invesmentsdetails($cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver)
+    public function set_invesmentsdetails($cveinvestor, $inputDateInver, $inputInteres, $inputMontoInver, $inputObsInver)
     {
         try {
-            $query = "INSERT INTO inverdetalle (icveinversionista,dfecharegistro,dmonto, cstatus, invtipooperacion, invdetobservaciones)
-                VALUES (?, ?, ?, 'A', 'I', ?)";
+            $query = "INSERT INTO inverdetalle (icveinversionista, icvetasascomisiones, dfecharegistro,dmonto, cstatus, invtipooperacion, invdetobservaciones)
+                VALUES (?, ?, ?, ?, 'A', 'I', ?)";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver]);
+            $statement->execute([$cveinvestor, $inputInteres, $inputDateInver, $inputMontoInver, $inputObsInver]);
             
             $queryUpdate = "UPDATE inversionistas SET fcantidadinvertida = fcantidadinvertida + ? WHERE icveinversionista = ? ";
             $statement2 = $this->acceso->prepare($queryUpdate);
@@ -269,7 +269,7 @@ class Investor
      */
     public function get_paysinterests($cveinvestor){
         try {
-            $query = "SELECT pagos.icvepago, inverdetalle.icvedetalleinver, inverdetalle.dmonto AS montoinve,
+            $query = "SELECT pagos.icvepago, inverdetalle.icvedetalleinver, pagos.montoinvhist AS montoinvehist,
                         pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
                         pagos.cstatuspago AS statuspago, pagos.dtfechapagconfirmado, inversionistas.cnombre, 
                         inversionistas.capaterno, inversionistas.camaterno
@@ -331,15 +331,15 @@ class Investor
      * @param  String $udpinputObsInver
      * @return JSON 
      */
-    public function set_updateDetailInvesment($udpcveinversionista, $udpcveinverdetalle, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
+    public function set_updateDetailInvesment($udpcveinversionista, $udpcveinverdetalle, $udpicveinteres, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
         try {
-            $query = "UPDATE inverdetalle SET dfecharegistro = ?, dmonto = ?, invdetobservaciones = ? WHERE icvedetalleinver = ?";
+            $query = "UPDATE inverdetalle SET dfecharegistro = ?, icvetasascomisiones = ?, dmonto = ?, invdetobservaciones = ? WHERE icvedetalleinver = ?";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$udpinputDateInver, $udpinputMontoInver, $udpinputObsInver, $udpcveinverdetalle]);
+            $statement->execute([$udpinputDateInver, $udpicveinteres, $udpinputMontoInver, $udpinputObsInver, $udpcveinverdetalle]);
 
-            $query2 = "UPDATE inversionistas SET fcantidadinvertida = ? WHERE icveinversionista = ?";
+            $query2 = "UPDATE inversionistas SET icvetasascomisiones = ?, fcantidadinvertida = ? WHERE icveinversionista = ?";
             $statement2 = $this->acceso->prepare($query2);
-            $statement2->execute([$udpinputMontoInver, $udpcveinversionista]);
+            $statement2->execute([$udpicveinteres, $udpinputMontoInver, $udpcveinversionista]);
 
             $resp['msj'] = true;
             $resp['text'] = 'Se actualizo el inversionista correctamente';
@@ -370,10 +370,11 @@ class Investor
 
     public function set_paysdetailsinterest($icveinversionista){
         try {
-            $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, fmonto_pagado, dfecharegistro, cstatuspago)
+            $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, fmonto_pagado, dfecharegistro, cstatuspago)
                         SELECT 
                             inverdetalle.icveinversionista,
                             inverdetalle.icvedetalleinver,
+                            inverdetalle.dmonto,
                             ROUND(inverdetalle.dmonto * (tc.ftasainteres / 100), 2) AS fmonto_pagado,
                             NOW() AS dfecharegistro,
                             'NP' AS cstatuspago
@@ -389,6 +390,26 @@ class Investor
             return $resp;
         } catch (PDOException $e) {
             throw new Error('Error al insertar el pago');
+        }
+    }
+    
+    /**
+     * set_confirmpayment
+     *
+     * @param  number $icvepayment cve pago
+     * @param  String $document name document
+     * @return array[] String | String Error
+     */
+    public function set_confirmpayment($icvepayment, $document) : array {
+        try {
+            $query = "UPDATE paginteresesinv SET cstatuspago = 'P', comprobantepago = ? WHERE icvepago = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$document, $icvepayment]);
+            $resp['msj'] = true;
+            $resp['text'] = 'Se confirmó el pago correctamente';
+            return $resp; 
+        } catch (PDOException $e) {
+            throw new Error('No se pudo confirmar el pago correctamente'. $e->getMessage());
         }
     }
 }

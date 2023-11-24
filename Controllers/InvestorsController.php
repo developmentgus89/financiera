@@ -125,10 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'createInvesment':
             $cveinvestor     = $_POST['cveinvestor'];
             $inputDateInver  = $_POST['inputDateInver'];
+            $inputInteres    = $_POST['inputInteres'];
             $inputMontoInver = $_POST['inputMontoInver'];
             $inputObsInver   = $_POST['inputObsInver'];
 
-            $createInvestorDetails = $investor->set_invesmentsdetails($cveinvestor, $inputDateInver, $inputMontoInver, $inputObsInver);
+            $createInvestorDetails = $investor->set_invesmentsdetails($cveinvestor, $inputDateInver, $inputInteres, $inputMontoInver, $inputObsInver);
             break;
         case 'readPaysInterests':
             $icveinvestor = $_POST['icveinves'];
@@ -149,11 +150,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $udpcveinversionista = $_POST['udpcveinversionista'];
             $udpcveinverdetalle  = $_POST['udpcveinverdetalle'];
             $udpinputDateInver   = $_POST['udpinputDateInver'];
+            $udpicveinteres      = $_POST['udpicveinteres'];
             $udpinputMontoInver  = $_POST['udpinputMontoInver'];
             $udpinputObsInver    = $_POST['udpinputObsInver'];
             $invesmentsDetail    = $investor->set_updateDetailInvesment(
                                                 $udpcveinversionista,
-                                                $udpcveinverdetalle, 
+                                                $udpcveinverdetalle,
+                                                $udpicveinteres,
                                                 $udpinputDateInver,
                                                 $udpinputMontoInver,
                                                 $udpinputObsInver 
@@ -172,10 +175,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $insertPaysInterest = $investor->set_paysdetailsinterest($icveinversionista);
             echo json_encode($insertPaysInterest);
             break;
+
         case 'getInterests':
             $getInterests = $investor->get_interest();
             echo json_encode($getInterests);
             break;
+
+        case 'confirmpay':
+            $icvepago = $_POST['icvepago'];
+            $comprobante = $_POST['comprobante'];
+            $icvepaymentconfirm = $investor->set_confirmpayment($icvepago, $comprobante);
+            echo json_encode($icvepaymentconfirm);
+            break;
+
+        case 'upload':
+            $fileName = $_FILES['voucher']['name'];
+            $carac['resp'] = true;
+            $carc['fileN'] = $fileName;
+            echo json_encode($carac);
+            break;
+
         default:
             echo 'Operación no válida';
             break;

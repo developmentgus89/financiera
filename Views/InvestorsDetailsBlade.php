@@ -163,7 +163,6 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             <button type="button" class="btn bg-gradient-primary btn-sm" id="btnAddInversion">
                                                                 <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Inversi&oacute;n.
                                                             </button>
-                                                              <input type="text" class="form-control" name="icvedetalleinvinput" id="icvedetalleinvinput" hidden>
                                                         </div>
                                                     </div>
                                                     <!-- /.card-header -->
@@ -235,8 +234,8 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="inputInteres">Porcetaje de Inter&eacute;s de la inversi&oacute;n:</label>
-                              <select class="form-control" name="inputInteres" id="inputInteres">
-                              </select>
+                            <select class="form-control" name="inputInteres" id="inputInteres">
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -260,7 +259,7 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 <div class="modal fade" id="modalEditionInvesment">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content fondo_cliente_edit_modal">
             <div class="modal-header">
                 <h4 class="modal-title">Edici&oacute;n de la Inversi&oacute;n</h4>
@@ -270,7 +269,7 @@ include_once "dashboard/startTemplateDashboard.php";
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
                             <input type="number" class="form-control" name="udpcveinverdetalle" id="udpcveinverdetalle" hidden>
@@ -278,7 +277,14 @@ include_once "dashboard/startTemplateDashboard.php";
                             <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="icveinteres">Inter&eacute;s:</label>
+                            <select class="form-control" name="udpicveinteres" id="udpicveinteres">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="inputMontoInver">CANTIDAD $:</label>
                             <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver">
@@ -296,7 +302,7 @@ include_once "dashboard/startTemplateDashboard.php";
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" name="btnSaveInvesmentsDetail" id="btnSaveInvesmentsDetail" >Guardar</button>
+                <button type="button" class="btn btn-success" name="btnSaveInvesmentsDetail" id="btnSaveInvesmentsDetail">Guardar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -305,22 +311,22 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 
-<div class="modal fade" id="m-warning-msj">
+<div class="modal fade" id="m-confirm-pay">
     <div class="modal-dialog">
-        <div class="modal-content bg-danger">
+        <div class="modal-content bg-warning">
             <div class="modal-header">
-                <h4 class="modal-title">confirmaci&oacute;n de Pago.</h4>
+                <h3 class="modal-title">Confirmaci&oacute;n de Pago.</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                <input type="text" class="form-control" name="icvepayment" id="icvepayment" hidden>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" name="go-icveinvestor" id="go-icveinvestor" hidden>
-                <p>Desea confirmar el pago del </p>
+                <div id="text-msj">¿Desea confirmar el pago del inversionista? </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-light" data-dismiss="modal" id="btnRegresaModal">Cerrar</button>
-                <button type="button" class="btn btn-outline-light" id="btnIrAInv">Ir a Inversionista</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">NO</button>
+                <button type="button" class="btn btn-success" id="btnIrAInv">SI</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -328,6 +334,37 @@ include_once "dashboard/startTemplateDashboard.php";
     <!-- /.modal-dialog -->
 </div>
 
+
+<div class="modal fade" id="m-adddocument-pay">
+    <div class="modal-dialog">
+        <form id="formSubir" action="" method="post" enctype="multipart/form-data">
+            <div class="modal-content bg-info">
+                <div class="modal-header">
+                    <h3 class="modal-title">Adjunta Comprobante de Pago.</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="">Adjuntar Documento: <span id="cvepagodoc"></span></label>
+                            <input type="file" class="form-control-file" name="paycompfile" id="paycompfile" accept="image/*" aria-describedby="fileHelpAdjDoc">
+                            <small id="fileHelpAdjDoc" class="form-text">Campo para subir el comprobante de pago.</small>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">CANCELAR</button>
+                    <button type="button" class="btn btn-success" id="btnSaveDocument">GUARDAR</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+    </div>
+    </form>
+    <!-- /.modal-dialog -->
+</div>
 
 <?php
 include_once "dashboard/endTemplateDashboard.php";

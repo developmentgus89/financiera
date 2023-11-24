@@ -1,9 +1,7 @@
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
 
-document.addEventListener('DOMContentLoaded', function(){
-
-});
+// document.addEventListener('',);
 
 $('#inputMontoInver').inputmask('currency', {
     radixPoint: '.',
@@ -26,13 +24,24 @@ $('#udpinputMontoInver').inputmask('currency', {
 });
 
 //Eventos de modales
-
+$("#m-confirm-pay").on('hidden.bs.modal', function () {
+    // location.reload();
+});
 
 //Declaracion de variables para los botones y campos globales
 
 const btnAddInversion = document.querySelector("#btnAddInversion");
 const btnSaveInvesments = document.querySelector("#btnSaveInvesments");
 const btnSaveInvesmentsDetail = document.querySelector('#btnSaveInvesmentsDetail');
+const btnSaveDocument = document.querySelector('#btnSaveDocument');
+
+//Declaracion de las pestagnas
+
+const panelPagos = document.getElementById('custom-tabs-pays');
+
+//Declaracion para los selects
+const selectInterest = document.getElementById('udpicveinteres');
+const sInpuInterest  = document.getElementById('inputInteres');
 
 
 
@@ -52,6 +61,7 @@ const descifra = () => {
         getDetailsInvestorPays(params.icveinvestor);
         countDetailsInvestor(params.icveinvestor);
         getDetailsPaysInvesment(params.icveinvestor);
+        getInterests();
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
     }
 
@@ -60,6 +70,12 @@ const descifra = () => {
     console.table(paramDescript);
 
 }
+
+//Eventos de componentes dentro de la pantalla
+panelPagos.addEventListener('DOMContentLoaded', function(){
+    let cve = document.getElementById('fieldicveinversionista').value;
+    getDetailsInvestorPays(cve);
+});
 
 /**
  * 
@@ -132,8 +148,8 @@ const countDetailsInvestor = (icveinvestor) => {
             console.table(data);
             let count = data[0].totalinversiones;
             if (count >= 1) {
-                btnAddInversion.disabled = true;
-                btnAddInversion.classList = 'btn btn-dark';
+                // btnAddInversion.disabled = true;
+                // btnAddInversion.classList = 'btn btn-dark';
             }
         } else {
             toastr.error(`Error al contar las inversiones del inversionista`);
@@ -156,7 +172,7 @@ const getDetailsInvestor = (icveinvestor) => {
             const data = JSON.parse(xhr.responseText);
             console.warn('Detalle de inversionistas');
             console.table(data);
-            document.getElementById('icvedetalleinvinput').value = data[0].icvedetalleinver;
+            // document.getElementById('icvedetalleinvinput').value = data[0].icvedetalleinver;
             var tableInvestors = document.querySelector('#tableInvestorsDetails');
             var table = new DataTable(tableInvestors, {
                 data: {
@@ -186,8 +202,6 @@ const getDetailsInvestor = (icveinvestor) => {
                     })
                 }
             });
-
-            // table.row.add(['Total', '','$ 40,000.00']).draw();
         } else {
             console.error('Error al leer los Inversionistas');
         }
@@ -198,8 +212,9 @@ const getDetailsInvestor = (icveinvestor) => {
 /**
  * 
  * @param {number} icveinvestor 
+ * @param {boolean} op 
  */
-const getDetailsInvestorPays = (icveinvestor) => {
+const getDetailsInvestorPays = (icveinvestor, op) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -209,6 +224,7 @@ const getDetailsInvestorPays = (icveinvestor) => {
             console.warn('Detalle de pagos de interes a inversionistas');
             console.table(data);
             var tblPaysInterests = document.querySelector('#tableInvestorsDetailsPays');
+            // tblPaysInterests.innerHTML = '';
             new DataTable(tblPaysInterests, {
                 perPage: 3,
                 data: {
@@ -217,7 +233,7 @@ const getDetailsInvestorPays = (icveinvestor) => {
                     data: data.map(function (item) {
 
                         var id = item['icvepago'];
-                        let cantImpInv = parseFloat(item['montoinve']);
+                        let cantImpInv = parseFloat(item['montoinvehist']);
                         let cantImpInvFormateada = cantImpInv.toLocaleString('es-MX', {
                             style: 'currency',
                             currency: 'MXN'
@@ -238,7 +254,9 @@ const getDetailsInvestorPays = (icveinvestor) => {
                             item['cnombre'],
                             item['capaterno'],
                             item['camaterno'],
-                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Confirmar Pago" onclick="confirmPayment(${id})"><i class="fas fa-money-check"></i></button>`
+                            item['statuspago'] === 'NP' ?
+                                `<button class="btn bg-gradient-info btn-sm" id="btnConfirmPay" data-toggle="tooltip" data-placement="top" title="Confirmar Pago" onclick="openModalconfirmPayment(${id})"><i class="fas fa-money-check"></i></button>` :
+                                `<button class="btn bg-gradient-secondary btn-sm" id="btnConfirmPay" data-toggle="tooltip" data-placement="top" title="Confirmar Pago" onclick="openModalconfirmPayment(${id})" disabled><i class="fas fa-money-check"></i></button>`
                             // `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
                         ]
                     })
@@ -254,11 +272,68 @@ const getDetailsInvestorPays = (icveinvestor) => {
                     }
                 }
             });
+
         } else {
             toastr.error(`Error al leer los pagos del imversionista`);
         }
     };
     xhr.send(`operation=readPaysInterests&icveinves=${icveinvestor}`);
+}
+
+/**
+ * 
+ * @param {Bolean} op 
+ */
+const getInterests = async (op) => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `operation=getInterests`
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud `);
+        }
+
+        const interests = await response.json();
+        console.table(interests);
+
+        selectInterest.innerHTML = ``;
+        sInpuInterest.innerHTML = ``;
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'SELECCIONE INTERES';
+        selectInterest.appendChild(defaultOption);
+
+        const defaultOption2 = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'SELECCIONE INTERES';
+        sInpuInterest.appendChild(defaultOption);
+
+        interests.forEach(interest => {
+            const option = document.createElement('option');
+            option.value = interest.icvetasascomisiones;
+            option.textContent = `${interest.ftasainteres} % --> ${interest.cdescripciontascom}`;
+            selectInterest.append(option);
+
+        });
+
+        interests.forEach(interest => {
+            const option = document.createElement('option');
+            option.value = interest.icvetasascomisiones;
+            option.textContent = `${interest.ftasainteres} % --> ${interest.cdescripciontascom}`;
+            sInpuInterest.append(option);
+
+        });
+
+
+    } catch (error) {
+        throw new Error(`Error en la solicitud par obtener los interes del catalogo ${error.message}`);
+    }
 }
 
 
@@ -268,7 +343,7 @@ const getDetailsInvestorPays = (icveinvestor) => {
  * @param {number} inputMontoInver 
  * @param {String} inputObsInver 
  */
-const fncInsertInvesments = (inputDateInver, inputMontoInver, inputObsInver) => {
+const fncInsertInvesments = (inputDateInver, inputInteres, inputMontoInver, inputObsInver) => {
     let cveinvestor = document.getElementById('fieldicveinversionista').value;
 
     inputMontoInver = inputMontoInver.substring(4);
@@ -278,6 +353,7 @@ const fncInsertInvesments = (inputDateInver, inputMontoInver, inputObsInver) => 
         'operation=createInvesment' +
         '&cveinvestor=' + cveinvestor +
         '&inputDateInver=' + inputDateInver +
+        '&inputInteres=' + inputInteres +
         '&inputMontoInver=' + inputMontoInver +
         '&inputObsInver=' + inputObsInver;
 
@@ -296,8 +372,8 @@ const fncInsertInvesments = (inputDateInver, inputMontoInver, inputObsInver) => 
             }, 350);
 
             setTimeout(() => {
-                location.reload();
-            }, 650);
+                // location.reload();
+            }, 1050);
 
         } else {
             console.error('Error al insertar la inversion del Inversionista');
@@ -318,6 +394,7 @@ const fncUpdateInvesments = (
     udpcveinversionista,
     udpcveinverdetalle,
     udpinputDateInver,
+    udpicveinteres,
     udpinputMontoInver,
     udpinputObsInver) => {
 
@@ -329,6 +406,7 @@ const fncUpdateInvesments = (
         '&udpcveinversionista=' + udpcveinversionista +
         '&udpcveinverdetalle=' + udpcveinverdetalle +
         '&udpinputDateInver=' + udpinputDateInver +
+        '&udpicveinteres=' + udpicveinteres +
         '&udpinputMontoInver=' + udpinputMontoInver +
         '&udpinputObsInver=' + udpinputObsInver;
 
@@ -372,9 +450,10 @@ const openEditionInvesment = (icvedetalleinver) => {
             console.warn('Detalle de la confirmación del pago a inversionista');
             console.table(data);
             document.getElementById('udpcveinverdetalle').value = data[0].icvedetalleinver;
-            document.getElementById('udpinputDateInver').value = data[0].dfecharegistro;
+            document.getElementById('udpinputDateInver').value  = data[0].dfecharegistro;
+            document.getElementById('udpicveinteres').value     = data[0].icvetasascomisiones;
             document.getElementById('udpinputMontoInver').value = data[0].dmonto;
-            document.getElementById('udpinputObsInver').value = data[0].invdetobservaciones;
+            document.getElementById('udpinputObsInver').value   = data[0].invdetobservaciones;
             $('#modalEditionInvesment').modal('show');
         }
     };
@@ -404,6 +483,7 @@ const getDetailsPaysInvesment = async (icveinversionista) => {
         console.table(data);
         if (Object.keys(data).length === 0) {
             insertPaysInvesments(icveinversionista);
+            getDetailsInvestorPays(icveinversionista);
         } else {
             const fechaAnterior = new Date(data[0].dfecharegistro);
             const fechaActual = new Date();
@@ -415,6 +495,7 @@ const getDetailsPaysInvesment = async (icveinversionista) => {
             const diferenciasDias = Math.trunc(difFechasMiliSegundos / (1000 * 60 * 60 * 24));
             console.warn(`Diferencia en dias => ${diferenciasDias}`);
             diferenciasDias >= 30 ? insertPaysInvesments(icveinversionista) : console.warn(`No hacemos nada`);
+            getDetailsInvestorPays(icveinversionista);
         }
 
 
@@ -440,13 +521,13 @@ const insertPaysInvesments = async (icveinversionista) => {
         }
 
         const data = await response.json();
-        if(data.msj){
+        if (data.msj) {
             setTimeout(() => {
                 toastr.info('Se insertó el registro de pago de interes correctamente');
             }, 350);
 
             setTimeout(() => {
-                
+                // getDetailsInvestorPays(icveinversionista);
             }, 1050);
         }
 
@@ -456,17 +537,96 @@ const insertPaysInvesments = async (icveinversionista) => {
 }
 
 const openModalconfirmPayment = async (icvepago) => {
-    
+    document.getElementById('icvepayment').value = icvepago;
+    let text = document.getElementById('text-msj');
+    text.innerHTML = `¿Desea confirmar el pago de interés con número de clave: ${icvepago} ?`;
+    $("#m-confirm-pay").modal("show");
+}
+
+const confirmPay = async () => {
+    let icvepago = document.getElementById('icvepayment').value;
+    let docaddpay = document.getElementById('paycompfile');
+    let file = docaddpay.files[0];
+    try {
+        if (!file) {
+            toastr.error('Debe de seleccionar un archivo');
+            throw new Error('debe de seleccionar un archivo');
+        } else if (!file.type.startsWith('image/')) {
+            toastr.error('El archivo es una imagen');
+            throw new Error('El archivo es una imagen');
+        } else {
+            // const fileName2 = `${icvepago}_${file.name}`;
+            const fileName = `/docs/${file.name}`;
+            const response = await fetch(baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `operation=confirmpay&icvepago=${icvepago}&comprobante=${fileName}`
+            });
+
+            if (!response.ok) {
+                toastr.error(`Error en la solicitud, no se pueden consultar el pago ${icvepago}`);
+                throw new Error(`Error en la solicitud, no se pueden consultar el pago ${icvepago}`);
+            }
+
+            const data = await response.json();
+            if (data.msj) {
+                uploadFile(file);
+
+                setTimeout(() => {
+                    // location.reload();
+                }, 1050);
+            }
+        }
+
+
+    } catch (error) {
+        throw new Error(`Error en la confirmacion del pago ${error.message}`);
+    }
+}
+
+const uploadFile = async (file) => {
+    const formData = new FormData();
+    formData.append('voucher', file);
+
+    console.log(`Características del voucher ${formData}`);
+    console.table(formData);
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `operation=upload&${formData}`
+        });
+
+        if (!response.ok) {
+            toastr.error(`Error en la carga del Voucher de pago.`);
+            throw new Error(`Error en la carga del Voucher de pago.`);
+        }
+
+        const data = await response.json();
+        console.table(data);
+
+    } catch (error) {
+        toastr.error(`Error al subir la carga del voucher ${error.message}`);
+        console.log(error);
+    }
+
 }
 
 //Funciones para botones generalmente reciben el event => click con un función anónima
 btnSaveInvesments.addEventListener('click', () => {
     let inputDateInver = document.getElementById('inputDateInver');
+    let inputInteres = document.getElementById('inputInteres');
     let inputMontoInver = document.getElementById('inputMontoInver');
     let inputObsInver = document.getElementById('inputObsInver');
 
     const fieldsInvesments = [
         { element: inputDateInver, message: 'SELECCIONE LA FECHA DE INVERSI' },
+        { element: inputInteres, message: 'SELECCIONE LE PORCENTAJE DE INTERES' },
         { element: inputMontoInver, message: 'DEBE INGRESAR EL MONTO A INVERTIR' },
         { element: inputObsInver, message: 'INGRESE LAS OBSERVACIONES' }
     ];
@@ -487,6 +647,7 @@ btnSaveInvesments.addEventListener('click', () => {
         reportError(inputObsInver);
         fncInsertInvesments(
             inputDateInver.value,
+            inputInteres.value,
             inputMontoInver.value,
             inputObsInver.value
         );
@@ -499,13 +660,15 @@ btnAddInversion.addEventListener('click', function () {
 
 btnSaveInvesmentsDetail.addEventListener('click', function () {
     let udpcveinversionista = document.getElementById('fieldicveinversionista').value;
-    let udpcveinverdetalle = document.getElementById('udpcveinverdetalle').value;
-    let udpinputDateInver = document.getElementById('udpinputDateInver');
-    let udpinputMontoInver = document.getElementById('udpinputMontoInver');
-    let udpinputObsInver = document.getElementById('udpinputObsInver');
+    let udpcveinverdetalle  = document.getElementById('udpcveinverdetalle').value;
+    let udpicveinteres      = document.getElementById('udpicveinteres');
+    let udpinputDateInver   = document.getElementById('udpinputDateInver');
+    let udpinputMontoInver  = document.getElementById('udpinputMontoInver');
+    let udpinputObsInver    = document.getElementById('udpinputObsInver');
 
     const fieldsUDP = [
         { element: udpinputDateInver, message: 'La fecha de inversion no puede estar vacia.' },
+        { element: udpicveinteres, message: 'Debe de Seleccionar el tipo de interes.' },
         { element: udpinputMontoInver, message: 'El monto de la inversion no puede estar vacio.' },
         { element: udpinputObsInver, message: 'Capture las observaciones, este campo no puede estar vacio.' }
     ];
@@ -528,10 +691,23 @@ btnSaveInvesmentsDetail.addEventListener('click', function () {
             udpcveinversionista,
             udpcveinverdetalle,
             udpinputDateInver.value,
+            udpicveinteres.value,
             udpinputMontoInver.value,
             udpinputObsInver.value
         );
     }
+});
+
+btnIrAInv.addEventListener('click', function () {
+    let icvepago = document.getElementById('icvepayment').value;
+    $("#m-confirm-pay").modal("hide");
+    let textnopaydoc = document.getElementById('cvepagodoc');
+    textnopaydoc.innerHTML = icvepago;
+    $("#m-adddocument-pay").modal("show");
+});
+
+btnSaveDocument.addEventListener('click', function () {
+    confirmPay();
 });
 
 
