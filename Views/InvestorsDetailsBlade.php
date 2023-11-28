@@ -180,6 +180,19 @@ include_once "dashboard/startTemplateDashboard.php";
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-pays" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                         <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                      <label for="">INVERSIONES:</label>
+                                                      <select class="form-control" name="selInversionesPays" id="selInversionesPays" onchange="getAmountInterestPayments(this.value)">
+                                                      </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                </div>
+                                            </div>
                                             <table id="tableInvestorsDetailsPays" class="table table-bordered">
                                             </table>
                                         </div>
@@ -386,7 +399,7 @@ include_once "dashboard/footerDashBoard.php";
     });
 </script> -->
 <script src="../utils/js/libs/crypto.js"></script>
-<script typ="module" src="../assets/conf.js"></script>
+<script type="module" src="../assets/conf.js"></script>
 <script src="../assets/investorsDetails.js"></script>
 <script src="../assets/investmentsDetail.js"></script>
-<script typ="module" src="../assets/conf.js"></script>
+<script type="module" src="../assets/conf.js"></script>

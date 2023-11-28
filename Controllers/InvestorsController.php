@@ -131,21 +131,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $createInvestorDetails = $investor->set_invesmentsdetails($cveinvestor, $inputDateInver, $inputInteres, $inputMontoInver, $inputObsInver);
             break;
-        case 'readPaysInterests':
-            $icveinvestor = $_POST['icveinves'];
-            $pagos = $investor->get_paysinterests($icveinvestor);
+
+        case 'getPaysInterestsByInvestor':
+            $icveinversionista = $_POST['icveinversionista'];
+            $pagos = $investor->get_investments($icveinversionista);
             echo json_encode($pagos);
             break;
+
+        case 'getPaysInterestsToInvestor':
+            $icveinversion = $_POST['icveinversion'];
+            $pagos = $investor->get_paysinterestbyinver($icveinversion);
+            echo json_encode($pagos);
+            break;
+
         case 'countdetails':
             $icveinvestor = $_POST['icveinvestor'];
             $invesments = $investor->get_countinvesments($icveinvestor);
             echo json_encode($invesments);
             break;
+            
         case 'readUDPPago':
             $icvedetalleinver = $_POST['icvedetalleinver'];
             $invesmentsPays = $investor->get_paysinvesments($icvedetalleinver);
             echo json_encode($invesmentsPays);
             break;
+
         case 'UpdateDetailInvesment':
             $udpcveinversionista = $_POST['udpcveinversionista'];
             $udpcveinverdetalle  = $_POST['udpcveinverdetalle'];

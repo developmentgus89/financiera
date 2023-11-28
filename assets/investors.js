@@ -202,7 +202,7 @@ const getInvestors = () => {
             new DataTable(tableInvestors, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['ID', 'Nombre', 'A. Paterno', 'A. Materno', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Cta. Bancaria', '', '', ''],
+                    headings: ['ID', 'Nombre', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Detalle', 'Modificar'],
                     data: data.map(function (item) {
                         // return Object.values(item);
                         var id = item['icveinversionista'];
@@ -213,18 +213,14 @@ const getInvestors = () => {
                         });
                         return [
                             id,
-                            item['cnombre'],
-                            item['capaterno'],
-                            item['camaterno'],
+                            `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
                             item['ctelefono'],
                             item['iedad'],
                             cantidadFormateada,
                             `${item['ftasainteres']} %`,
                             item['dfecha_alta'],
-                            item['cuentabancaria'],
                             `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`,
-                            `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`,
-                            `<button class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar Datos" onclick=""><i class="fas fa-trash-alt"></i></button>`
+                            `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
                         ]
                     })
                 }

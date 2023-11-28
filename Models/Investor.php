@@ -78,13 +78,14 @@ class Investor
             echo 'Error al insertar el inversionista: ' . $e->getMessage();
         }
     }
+
     public function getInvestorDetails($icveinvestor)
     {
         try {
             $query = "SELECT * FROM inverdetalle 
                         INNER JOIN cattasascomisiones 
                         ON inverdetalle.icvetasascomisiones = cattasascomisiones.icvetasascomisiones
-                        WHERE icveinversionista = ?";
+                        WHERE icveinversionista = ? ORDER BY inverdetalle.dfecharegistro DESC";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -269,19 +270,48 @@ class Investor
      */
     public function get_paysinterests($cveinvestor){
         try {
-            $query = "SELECT pagos.icvepago, inverdetalle.icvedetalleinver, pagos.montoinvhist AS montoinvehist,
-                        pagos.fmonto_pagado AS importe, pagos.dfecharegistro AS fecha,
-                        pagos.cstatuspago AS statuspago, pagos.dtfechapagconfirmado, inversionistas.cnombre, 
-                        inversionistas.capaterno, inversionistas.camaterno
-                        FROM paginteresesinv AS pagos 
-                        INNER JOIN inversionistas on pagos.icveinversionista = inversionistas.icveinversionista
-                        INNER JOIN inverdetalle on inverdetalle.icveinversionista = pagos.icveinversionista
-                    where pagos.icveinversionista = ? ORDER BY pagos.dfecharegistro DESC";
+            $query = "SELECT * FROM vw_paysinterests WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$cveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+        }
+    }
+
+    
+    /**
+     * get_investments = Detalle de las inversiones
+     *
+     * @param  number $cveinvestor
+     * @return Array[] String | Error Message PDOException
+     */
+    public function get_investments($cveinvestor){
+        try {
+            $query = "SELECT * FROM inverdetalle WHERE icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$cveinvestor]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+        }
+
+    }   
+    
+    /**
+     * get_paysinterestbyinver
+     *
+     * @param  number $icvedetalleinver
+     * @return Array[] String
+     */
+    public function get_paysinterestbyinver($icveinversion){
+        try {
+            $query = "SELECT * FROM paginteresesinv WHERE icvedetalleinver = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversion]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Erro al obetener los pagos de esa inversion'. $e->getMessage());
         }
     }
 
@@ -389,7 +419,7 @@ class Investor
             $resp['text'] = "Se insertó el pago correctamente.";
             return $resp;
         } catch (PDOException $e) {
-            throw new Error('Error al insertar el pago');
+            throw new Error('Error al insertar el pago'. $e->getMessage());
         }
     }
     
