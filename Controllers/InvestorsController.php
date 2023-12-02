@@ -45,17 +45,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $rowCountInv = $investor->rowsCount($invnombre, $invapaterno, $invamaterno);
             echo json_encode($rowCountInv);
-
             break;
-        case 'read':
+
+        case 'getRowsInvestments':
             // Leer clientes
             $investors = $investor->getInvestors();
             echo json_encode($investors);
             break;
-        case 'readdetails':
-            $icveinvestor = $_POST['icveinves'];
-            $investorsDetails = $investor->getInvestorDetails($icveinvestor);
+
+        case 'getInvestments':
+            $icveinversionista = $_POST['icveinversionista'];
+            $investorsDetails  = $investor->getInvestorDetails($icveinversionista);
             echo json_encode($investorsDetails);
+            break;
+
+        case 'getInvestorStatistics':
+            $icveinversionista           = $_POST['icveinversionista'];
+            $investorsDetailsStatistics  = $investor->getInvestorStatistics($icveinversionista);
+            echo json_encode($investorsDetailsStatistics);
+            break;
+
+        case 'insertAddInvestment':
             break;
 
         case 'update':

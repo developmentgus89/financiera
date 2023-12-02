@@ -135,7 +135,9 @@ class Investor
         try {
             $query = "SELECT * FROM inversionistas 
                         INNER JOIN cattasascomisiones 
-                        ON inversionistas.icvetasascomisiones = cattasascomisiones.icvetasascomisiones";
+                            ON inversionistas.icvetasascomisiones = cattasascomisiones.icvetasascomisiones
+                        INNER JOIN catbancos
+                            ON inversionistas.icvebanco = catbancos.icvebanco";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 
@@ -144,6 +146,28 @@ class Investor
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
+    
+    /**
+     * getInvestorStatistics
+     *
+     * @param  number $icveinversionista
+     * @return Array[] String | Message Error
+     */
+    public function getInvestorStatistics($icveinversionista){
+        try {
+            $query = "SELECT count(0) AS total, SUM(dmonto) as totalcapital
+                        FROM inverdetalle WHERE icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista]);
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            throw new Error('Error en la consulta: '. $e->getMessage());
+        }
+    }
+
+    
 
     public function getTotalInvestors()
     {

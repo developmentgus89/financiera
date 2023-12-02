@@ -439,6 +439,6 @@ include_once "dashboard/footerDashBoard.php";
     });
 </script> -->
 <script src="../utils/js/libs/crypto.js"></script>
-<script typ="module" src="../assets/conf.js"></script>
+<script type="module" src="../assets/conf.js"></script>
 <script src="../assets/investorsDetails.js"></script>
 <script src="../assets/investors.js"></script>

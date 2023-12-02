@@ -1,6 +1,6 @@
-
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
+
 
 $('#invcantinvertida').inputmask('currency', {
     radixPoint: '.',
@@ -69,18 +69,18 @@ btnIrAInv.addEventListener('click', () => {
 });
 
 btnInsertInvestor.addEventListener('click', () => {
-    let invnombre        = document.getElementById('invnombre');
-    let invapaterno      = document.getElementById('invapaterno');
-    let invamaterno      = document.getElementById('invamaterno');
-    let invedad          = document.getElementById('invedad');
-    let invtelefono      = document.getElementById('invtelefono');
-    let invinteres       = document.getElementById('invinteres');
+    let invnombre = document.getElementById('invnombre');
+    let invapaterno = document.getElementById('invapaterno');
+    let invamaterno = document.getElementById('invamaterno');
+    let invedad = document.getElementById('invedad');
+    let invtelefono = document.getElementById('invtelefono');
+    let invinteres = document.getElementById('invinteres');
     let invcantinvertida = document.getElementById('invcantinvertida');
-    let invtipocuenta    = document.getElementById('invtipocuenta');
-    let invinstbancaria  = document.getElementById('invinstbancaria');
-    let invctabancaria   = document.getElementById('invctabancaria');
-    let invemail         = document.getElementById('invemail');
-    let invDateRegister  = document.getElementById('invDateRegister');
+    let invtipocuenta = document.getElementById('invtipocuenta');
+    let invinstbancaria = document.getElementById('invinstbancaria');
+    let invctabancaria = document.getElementById('invctabancaria');
+    let invemail = document.getElementById('invemail');
+    let invDateRegister = document.getElementById('invDateRegister');
 
 
 
@@ -187,50 +187,56 @@ btnEliminarCliente.addEventListener('click', () => {
     $('#modalBorrarCliente').modal('hide');
     location.reload();
 });
+
 // Función para leer los Inversionistas
+const getInvestors = async () => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `operation=getRowsInvestments`
+        });
 
-
-const getInvestors = () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
-            console.table(data);
-            var tableInvestors = document.querySelector('#tableInvestors');
-            new DataTable(tableInvestors, {
-                data: {
-                    // headings: Object.keys(data[0]),
-                    headings: ['ID', 'Nombre', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Detalle', 'Modificar'],
-                    data: data.map(function (item) {
-                        // return Object.values(item);
-                        var id = item['icveinversionista'];
-                        let cantidadInvertida = parseFloat(item['fcantidadinvertida']);
-                        let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX', {
-                            style: 'currency',
-                            currency: 'MXN'
-                        });
-                        return [
-                            id,
-                            `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
-                            item['ctelefono'],
-                            item['iedad'],
-                            cantidadFormateada,
-                            `${item['ftasainteres']} %`,
-                            item['dfecha_alta'],
-                            `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`,
-                            `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
-                        ]
-                    })
-                }
-            });
-        } else {
-            console.error('Error al leer los Inversionistas');
+        if (!response.ok) {
+            throw new Error(`Error con el servidor`);
         }
-    };
-    xhr.send('operation=read');
-};
+
+        const data = await response.json();
+        console.table(data);
+
+        var tableInvestors = document.querySelector('#tableInvestors');
+        new DataTable(tableInvestors, {
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Nombre', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Detalle', 'Modificar'],
+                data: data.map(function (item) {
+                    // return Object.values(item);
+                    var id = item['icveinversionista'];
+                    let cantidadInvertida = parseFloat(item['fcantidadinvertida']);
+                    let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    return [
+                        id,
+                        `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
+                        item['ctelefono'],
+                        item['iedad'],
+                        cantidadFormateada,
+                        `${item['ftasainteres']} %`,
+                        item['dfecha_alta'],
+                        `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`,
+                        `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`
+                    ]
+                })
+            }
+        });
+    } catch (error) {
+        throw new Error(`No se pudo completar la consulta de los inversionistas ${error.message}`);
+    }
+}
 
 /**
  * 
