@@ -1,7 +1,7 @@
 <?php
 require_once 'Conexion.php';
 
-class Investor
+class Investor 
 {
     private $conexion;
     var $acceso;
@@ -16,17 +16,10 @@ class Investor
     {
         try {
             $query = "SELECT (
-                SELECT COUNT(0) 
-                FROM inversionistas 
-                WHERE cnombre LIKE ? 
-                AND capaterno LIKE ? 
-                AND camaterno LIKE ?
-            ) AS totalrow, 
-            inversionistas.*
-            FROM inversionistas 
-            WHERE cnombre LIKE ? 
-            AND capaterno LIKE ? 
-            AND camaterno LIKE ?";
+                        SELECT COUNT(0) FROM inversionistas 
+                        WHERE cnombre LIKE ? AND capaterno LIKE ? AND camaterno LIKE ?
+                    ) AS totalrow, 
+            inversionistas.* FROM inversionistas WHERE cnombre LIKE ? AND capaterno LIKE ? AND camaterno LIKE ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$invnombre, $invapaterno, $invamaterno, $invnombre, $invapaterno, $invamaterno]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -36,18 +29,10 @@ class Investor
     }
 
     public function newInvestor(
-        $invnombre,
-        $invapaterno,
-        $invamaterno,
-        $invedad,
-        $invtelefono,
-        $invinteres,
-        $invcantinvertida,
-        $invtipocuenta,
-        $invinstbancaria,
-        $invctabancaria,
-        $invemail,
-        $invDateRegister
+        $invnombre, $invapaterno, $invamaterno,
+        $invedad, $invtelefono, $invinteres,
+        $invcantinvertida, $invtipocuenta, $invinstbancaria,
+        $invctabancaria, $invemail, $invDateRegister
     ) {
         try {
             $query = "INSERT INTO inversionistas (icvetasascomisiones, cnombre, capaterno, camaterno, iedad,
@@ -259,9 +244,23 @@ class Investor
     }
 
 
-    //? para que era este método
-    public function get_investmentDetails()
+    //! Trae los datos del inversionista asi como el interés que se le aplicó a su inversión
+    //! y se une con el catálogo de bancos
+    public function getInvestorsRow($icveinversionista)
     {
+        try {
+            $query = "SELECT * FROM inversionistas 
+                        INNER JOIN cattasascomisiones 
+                            ON inversionistas.icvetasascomisiones = cattasascomisiones.icvetasascomisiones
+                        INNER JOIN catbancos
+                            ON inversionistas.icvebanco = catbancos.icvebanco 
+                        WHERE icveinversionista = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('No se puede completar la consulta' . $e->getMessage());
+        }
     }
 
     //! Insercion de inversion

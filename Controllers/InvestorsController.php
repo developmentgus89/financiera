@@ -47,9 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($rowCountInv);
             break;
 
-        case 'getRowsInvestments':
-            // Leer clientes
+        case 'getAllInvestments':
             $investors = $investor->getInvestors();
+            echo json_encode($investors);
+            break;
+
+        case 'getRowsInvestments':
+            // Leer inversionista con detalle
+            $icveinversionista = $_POST["icveinversionista"];
+            $investors         = $investor->getInvestorsRow($icveinversionista);
             echo json_encode($investors);
             break;
 
@@ -66,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'insertAddInvestment':
+            //TODO: Continuar con la construccion del metodo de clase.
             break;
 
         case 'update':

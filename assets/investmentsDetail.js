@@ -341,7 +341,19 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
         '&InputInteres=' + InputInteres +
         '&InputObsInver=' + InputObsInver;
   try {
-    //TODO: Continua manana con la creacion de la funcion para la insertar add inversion
+    const response = await fetch(baseURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params
+    });
+
+    if(!response.ok){
+      throw new Error('Error con la comunicacion con el servidor');
+    }
+
+    
   } catch (error) {
     
   }

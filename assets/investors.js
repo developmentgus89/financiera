@@ -196,7 +196,7 @@ const getInvestors = async () => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `operation=getRowsInvestments`
+            body: `operation=getAllInvestments`
         });
 
         if (!response.ok) {
