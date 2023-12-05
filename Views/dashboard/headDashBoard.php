@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="../utils/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <!-- Toastr -->
   <link rel="stylesheet" href="../utils/plugins/toastr/toastr.min.css">
+  <!-- Toastify JS -->
+  <link rel="stylesheet" href="../utils/css/toastify.min.css">
 
   <!-- DataTables -->
   <!-- <link rel="stylesheet" href="../utils/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">

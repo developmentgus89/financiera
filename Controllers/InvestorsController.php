@@ -72,7 +72,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'insertAddInvestment':
-            //TODO: Continuar con la construccion del metodo de clase.
+            $icveinversionista = $_POST['icveinversionista'];
+            $InputDateInver    = $_POST['InputDateInver'];
+            $InputMontoInver   = $_POST['InputMontoInver'];
+            $InputInteres      = $_POST['InputInteres'];
+            $InputObsInver     = $_POST['InputObsInver'];
+
+            $respInsert = $investor->setNewInvestment(
+                $icveinversionista,
+                $InputDateInver,
+                $InputMontoInver,
+                $InputInteres,
+                $InputObsInver
+            );
+
+            echo json_encode($respInsert);
             break;
 
         case 'update':

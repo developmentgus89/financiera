@@ -13,6 +13,8 @@
 	<script src="../utils/js/adminlte.min.js"></script>
     <!-- Toastr - JS -->
 	<script src="../utils/plugins/toastr/toastr.min.js"></script>
+	<!-- Toastify - JS -->
+	<script src="../utils/js/libs/toastify-js.js"></script>
    
 
 	<!-- DataTables  & Plugins -->
@@ -29,6 +31,7 @@
 	<script src="../utils/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="../utils/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script src="../utils/js/vanillaDataTable.js"></script>
+	
 
     <script src="../assets/logout.js"></script>
 	

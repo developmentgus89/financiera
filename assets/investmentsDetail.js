@@ -27,18 +27,28 @@ $('#udpinputMontoInver').inputmask('currency', {
   rightAlign: false
 });
 
+$('#setInputMontoInver').inputmask('currency', {
+  radixPoint: '.',
+  groupSeparator: ',',
+  allowMinus: false,
+  autoGroup: true,
+  prefix: 'MXN ',
+  digits: 2,
+  rightAlign: false
+});
+
 //Eventos de modales
 $("#m-confirm-pay").on('hidden.bs.modal', function () {
   // location.reload();
 });
 
 //Declaracion de variables para los botones y campos globales
-
 const btnAddInversion = document.querySelector("#btnAddInversion");
 const btnSaveInvesments = document.querySelector("#btnSaveInvesments");
 const btnSaveUpdateInvesmentsDetail = document.querySelector('#btnSaveUpdateInvesmentsDetail');
 const btnSaveDocument = document.querySelector('#btnSaveDocument');
 const btnSeeBankData = document.querySelector('#seeBankData');
+const btnBackInvestments = document.querySelector('#btnBackInvestments');
 
 //Declaracion de las pestagnas
 
@@ -46,7 +56,7 @@ const panelPagos = document.getElementById('custom-tabs-pays');
 
 //Declaracion para los selects
 const selectInterest = document.getElementById('udpicveinteres');
-const sInpuInterest = document.getElementById('inputInteres');
+const sInpuInterest = document.getElementById('setIinputInteres');
 const selInversiones = document.getElementById('selInversiones');
 const selDetailsPaysInterest = document.getElementById('selInversionesPays');
 
@@ -203,7 +213,7 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
             item['dfecharegistro'],
             `<button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Intereses"><i class="fas fa-money-check"></i></button>`,
             `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Retiros a Capital"><i class="fas fa-coins"></i></button>`,
-            `<button class="btn bg-gradient-warning btn-sx" id="btnEditionInvest" onclick="openEditionInvesment(${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>`
+            `<button class="btn bg-gradient-warning btn-sx" onclick="openEditionInvesment(${icveinversionista},${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>`
           ]
         })
       }
@@ -273,10 +283,12 @@ const getInterests = async (op) => {
 
 
 /**
-* 
-* @param {number} icveinvestor 
-*/
-const openEditionInvesment = async (icvedetalleinver) => {
+ * 
+ * @param {Number} icveinversionista 
+ * @param {Number} icvedetalleinver 
+ */
+const openEditionInvesment = async (icveinversionista, icvedetalleinver) => {
+  document.getElementById('udpcveinversionista').value = icveinversionista;
   try {
     const response = await fetch(baseURL, {
       method: 'POST',
@@ -307,39 +319,24 @@ const openEditionInvesment = async (icvedetalleinver) => {
 };
 
 const updateInvestmentData = async (
+  udpcveinversionista,
   udpcveinverdetalle,
   udpinputDateInver,
   udpicveinteres,
   udpinputMontoInver,
   udpinputObsInver) => {
+  udpinputMontoInver = udpinputMontoInver.substring(4);
+  udpinputMontoInver = udpinputMontoInver.replace(/,/g, '');
   let params =
-    'operation=update' +
+    'operation=UpdateDetailInvesment' +
+    '&udpcveinversionista=' + udpcveinversionista +
     '&udpcveinverdetalle=' + udpcveinverdetalle +
     '&udpinputDateInver=' + udpinputDateInver +
     '&udpicveinteres=' + udpicveinteres +
     '&udpinputMontoInver=' + udpinputMontoInver +
     '&udpinputObsInver=' + udpinputObsInver;
-  try {
-    const response = await fetch(baseURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `operation=readUDPPago&icvedetalleinver=${icvedetalleinver}`
-    });
-  } catch (error) {
 
-  }
-}
-
-const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMontoInver, InputInteres, InputObsInver) => {
-  let params =
-        'operation=insertAddInvestment' +
-        '&icveinversionista=' + icveinversionista +
-        '&InputDateInver=' + InputDateInver +
-        '&InputMontoInver=' + InputMontoInver +
-        '&InputInteres=' + InputInteres +
-        '&InputObsInver=' + InputObsInver;
+  // console.error(params);
   try {
     const response = await fetch(baseURL, {
       method: 'POST',
@@ -349,23 +346,75 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
       body: params
     });
 
-    if(!response.ok){
+    const data = await response.json();
+    console.warn('Actualizacion de la inversion detalles');
+    console.table(data);
+    toastr.success('Se actualizaron los datos de la inversión correctamente');
+    setTimeout(() => {
+      $("#modalEditionInvesment").modal("hide");
+    }, 350);
+
+    setTimeout(() => {
+      location.reload();
+    }, 650);
+
+  } catch (error) {
+    throw new Error(`Error en la operacion: ${error.message}`);
+  }
+}
+
+const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMontoInver, InputInteres, InputObsInver) => {
+  InputMontoInver = InputMontoInver.substring(4);
+  InputMontoInver = InputMontoInver.replace(/,/g, '');
+  let params =
+    'operation=insertAddInvestment' +
+    '&icveinversionista=' + icveinversionista +
+    '&InputDateInver=' + InputDateInver +
+    '&InputMontoInver=' + InputMontoInver +
+    '&InputInteres=' + InputInteres +
+    '&InputObsInver=' + InputObsInver;
+  console.warn(`Esto sucede para cuando se guarda la nueva inversion`);
+  console.log(params);
+  try {
+    const response = await fetch(baseURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params
+    });
+
+    if (!response.ok) {
       throw new Error('Error con la comunicacion con el servidor');
     }
 
-    
+    const data = await response.json();
+
+    console.table(data);
+
+    toastr.success('Se insertó la inversión correctamente');
+    setTimeout(() => {
+      $("#modalAddInversion").modal("hide");
+    }, 350);
+
+    setTimeout(() => {
+      location.reload();
+    }, 650);
+
+
   } catch (error) {
-    
+
   }
 }
 
 btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
   const fields = [
-    'fieldicveinversionista',
-    'setInputDateInver',
-    'setInputMontoInver',
-    'setIinputInteres',
-    'setInputObsInver',
+    'udpcveinversionista',
+    'udpcveinverdetalle',
+    'udpinputDateInver',
+    'udpinputMontoInver',
+    'udpicveinteres',
+    'udpinputObsInver',
   ];
 
   const values = {};
@@ -375,6 +424,7 @@ btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
   });
 
   updateInvestmentData(
+    values['udpcveinversionista'],
     values['udpcveinverdetalle'],
     values['udpinputDateInver'],
     values['udpicveinteres'],
@@ -433,6 +483,16 @@ btnSaveInvesments.addEventListener('click', function () {
 
   valFormAddInvestment();
 });
+
+
+btnBackInvestments.addEventListener('click', function () {
+  console.log('Click en el boton regreso');
+  window.location.href = 'InvestorsBlade.php';
+});
+
+let setInputMontoInver = document.getElementById('setInputMontoInver');
+
+
 
 
 //! Graficos

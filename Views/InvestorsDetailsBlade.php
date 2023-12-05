@@ -44,7 +44,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                     <h3 class="card-title">Datos y seguimiento del Inversionista</h3>
 
                                     <div class="card-tools">
-
+                                        <button id="btnBackInvestments" type="button" class="btn btn-danger">Regresar</button>
                                     </div>
                                 </div>
                                 <div class="card-body">

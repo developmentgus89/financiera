@@ -210,7 +210,7 @@ const getInvestors = async () => {
         new DataTable(tableInvestors, {
             data: {
                 // headings: Object.keys(data[0]),
-                headings: ['ID', 'Nombre', 'Telefono', 'Edad', 'Cant. Inversion', '% Int.', 'Fec. Registro', 'Detalle', 'Modificar'],
+                headings: ['ID', 'Nombre', 'Telefono', 'Edad', 'Cant. Inversion', 'Fec. Registro', 'Detalle', 'Modificar'],
                 data: data.map(function (item) {
                     // return Object.values(item);
                     var id = item['icveinversionista'];
@@ -225,7 +225,6 @@ const getInvestors = async () => {
                         item['ctelefono'],
                         item['iedad'],
                         cantidadFormateada,
-                        `${item['ftasainteres']} %`,
                         item['dfecha_alta'],
                         `<button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="openDetailInv(${id})"><i class="fas fa-money-check"></i></button>`,
                         `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="readRowInvestor(${id})"><i class="fas fa-edit"></i></button>`

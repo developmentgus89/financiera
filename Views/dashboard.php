@@ -86,3 +86,4 @@ include_once "dashboard/endTemplateDashboard.php";
 <?php
 include_once "dashboard/footerDashBoard.php";
 ?>
+<script src="../assets/dashboard.js"></script>
