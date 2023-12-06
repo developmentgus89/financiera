@@ -1,7 +1,7 @@
 <?php
 require_once 'Conexion.php';
 
-class Investor 
+class Investor
 {
     private $conexion;
     var $acceso;
@@ -12,7 +12,7 @@ class Investor
         $this->acceso = $db->pdo;
     }
 
-    public function rowsCount($invnombre, $invapaterno, $invamaterno) 
+    public function rowsCount($invnombre, $invapaterno, $invamaterno)
     {
         try {
             $query = "SELECT (
@@ -29,10 +29,18 @@ class Investor
     }
 
     public function newInvestor(
-        $invnombre, $invapaterno, $invamaterno,
-        $invedad, $invtelefono, $invinteres,
-        $invcantinvertida, $invtipocuenta, $invinstbancaria,
-        $invctabancaria, $invemail, $invDateRegister
+        $invnombre,
+        $invapaterno,
+        $invamaterno,
+        $invedad,
+        $invtelefono,
+        $invinteres,
+        $invcantinvertida,
+        $invtipocuenta,
+        $invinstbancaria,
+        $invctabancaria,
+        $invemail,
+        $invDateRegister
     ) {
         try {
             $query = "INSERT INTO inversionistas (cnombre, capaterno, camaterno, iedad,
@@ -40,8 +48,8 @@ class Investor
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
             $statement = $this->acceso->prepare($query);
             $statement->execute([
-                $invnombre, $invapaterno, 
-                $invamaterno, $invedad, $invtelefono, 
+                $invnombre, $invapaterno,
+                $invamaterno, $invedad, $invtelefono,
                 $invcantinvertida, $invtipocuenta, $invinstbancaria,
                 $invctabancaria, $invemail, $invDateRegister
             ]);
@@ -63,7 +71,7 @@ class Investor
             echo 'Error al insertar el inversionista: ' . $e->getMessage();
         }
     }
-    
+
     /**
      * getInvestorDetails
      *
@@ -135,14 +143,15 @@ class Investor
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
-    
+
     /**
      * getInvestorStatistics
      *
      * @param  number $icveinversionista
      * @return Array[] String | Message Error
      */
-    public function getInvestorStatistics($icveinversionista){
+    public function getInvestorStatistics($icveinversionista)
+    {
         try {
             $query = "SELECT count(0) AS total, SUM(dmonto) as totalcapital
                         FROM inverdetalle WHERE icveinversionista = ?";
@@ -150,13 +159,12 @@ class Investor
             $statement->execute([$icveinversionista]);
 
             return $statement->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
-            throw new Error('Error en la consulta: '. $e->getMessage());
+            throw new Error('Error en la consulta: ' . $e->getMessage());
         }
     }
 
-    
+
 
     public function getTotalInvestors()
     {
@@ -209,7 +217,7 @@ class Investor
         } catch (PDOException $e) {
             echo 'Error en la consulta: ' . $e->getMessage();
         }
-    }    
+    }
 
     public function obtenerTiposClientes()
     {
@@ -274,109 +282,112 @@ class Investor
                 VALUES (?, ?, ?, ?, 'A', 'I', ?)";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$cveinvestor, $inputInteres, $inputDateInver, $inputMontoInver, $inputObsInver]);
-            
+
             $queryUpdate = "UPDATE inversionistas SET fcantidadinvertida = fcantidadinvertida + ? WHERE icveinversionista = ? ";
             $statement2 = $this->acceso->prepare($queryUpdate);
             $statement2->execute([$inputMontoInver, $cveinvestor]);
 
             return true;
-            
         } catch (PDOException $e) {
-            echo 'Error'.$e->getMessage();
+            echo 'Error' . $e->getMessage();
         }
     }
-    
-        
+
+
     /**
      * get_paysinterests
      *
      * @param  number $cveinvestor
      * @return JSON [paginteresesinv]
      */
-    public function get_paysinterests($cveinvestor){
+    public function get_paysinterests($cveinvestor)
+    {
         try {
             $query = "SELECT * FROM vw_paysinterests WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$cveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+            echo 'Error no se pueden traer el detalle de los pagos' . $e->getMessage();
         }
     }
 
-    
+
     /**
      * get_investments = Detalle de las inversiones
      *
      * @param  number $cveinvestor
      * @return Array[] String | Error Message PDOException
      */
-    public function get_investments($cveinvestor){
+    public function get_investments($cveinvestor)
+    {
         try {
             $query = "SELECT * FROM inverdetalle WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$cveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error no se pueden traer el detalle de los pagos'. $e->getMessage();
+            echo 'Error no se pueden traer el detalle de los pagos' . $e->getMessage();
         }
+    }
 
-    }   
-    
     /**
      * get_paysinterestbyinver
      *
      * @param  number $icvedetalleinver
      * @return Array[] String
      */
-    public function get_paysinterestbyinver($icveinversion){
+    public function get_paysinterestbyinver($icveinversion)
+    {
         try {
             $query = "SELECT * FROM paginteresesinv WHERE icvedetalleinver = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icveinversion]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new Error('Erro al obetener los pagos de esa inversion'. $e->getMessage());
+            throw new Error('Erro al obetener los pagos de esa inversion' . $e->getMessage());
         }
     }
 
-        
+
     /**
      * get_countinvesments
      *
      * @param  number $icveinvestor
      * @return json
      */
-    public function get_countinvesments($icveinvestor){
+    public function get_countinvesments($icveinvestor)
+    {
         try {
             $query = "SELECT count(0) AS totalinversiones FROM inverdetalle WHERE icveinversionista = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icveinvestor]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error al contar las inversiones del inversionista'. $e->getMessage();
+            echo 'Error al contar las inversiones del inversionista' . $e->getMessage();
         }
     }
 
-        
+
     /**
      * get_paysinvesments
      *
      * @param  number $icvedetalleinver
      * @return json inverdetalle | error String
      */
-    public function get_paysinvesments($icvedetalleinver){
+    public function get_paysinvesments($icvedetalleinver)
+    {
         try {
             $query = "SELECT * FROM inverdetalle WHERE icvedetalleinver = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icvedetalleinver]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error en la captura del detalle del inversionista'. $e->getMessage();
+            echo 'Error en la captura del detalle del inversionista' . $e->getMessage();
         }
     }
 
-    
+
     /**
      * !Método para insertar una nueva inversión por inversionista
      * setNewInvestment
@@ -388,16 +399,19 @@ class Investor
      * @param  String $InputObsInver
      * @return Array[] String
      */
-    public function setNewInvestment($icveinversionista, $InputDateInver, $InputMontoInver, $InputInteres, $InputObsInver){
+    public function setNewInvestment($icveinversionista, $InputDateInver, $InputMontoInver, $InputInteres, $InputObsInver)
+    {
         try {
             $query = "INSERT INTO inverdetalle (icveinversionista, icvetasascomisiones, 
                         dfecharegistro,dmonto, cstatus, 
                         invtipooperacion, invdetobservaciones)
                     VALUES (?, ?, ?, ?, 'A', 'I', ?)";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$icveinversionista, $InputInteres, $InputDateInver,
-                                $InputMontoInver, $InputObsInver]);
-            
+            $statement->execute([
+                $icveinversionista, $InputInteres, $InputDateInver,
+                $InputMontoInver, $InputObsInver
+            ]);
+
             $query2 = "UPDATE inversionistas SET fcantidadinvertida = fcantidadinvertida + ? WHERE icveinversionista = ?";
             $statement2 = $this->acceso->prepare($query2);
             $statement2->execute([$InputMontoInver, $icveinversionista]);
@@ -405,13 +419,12 @@ class Investor
             $resp['msj'] = true;
             $resp['text'] = "Se insertó correctmenete la nueva inversión";
             return $resp;
-             
         } catch (PDOException $e) {
-            throw new Error("Error Processing Request". $e->getMessage());
+            throw new Error("Error Processing Request" . $e->getMessage());
         }
     }
 
-    
+
     /**
      * set_updateDetailInvesment
      *
@@ -421,7 +434,8 @@ class Investor
      * @param  String $udpinputObsInver
      * @return JSON 
      */
-    public function set_updateDetailInvesment($udpcveinversionista, $udpcveinverdetalle, $udpicveinteres, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver){
+    public function set_updateDetailInvesment($udpcveinversionista, $udpcveinverdetalle, $udpicveinteres, $udpinputDateInver, $udpinputMontoInver, $udpinputObsInver)
+    {
         try {
             $query = "UPDATE inverdetalle SET dfecharegistro = ?, icvetasascomisiones = ?, dmonto = ?, invdetobservaciones = ? WHERE icvedetalleinver = ?";
             $statement = $this->acceso->prepare($query);
@@ -440,18 +454,19 @@ class Investor
             $resp['text'] = "Se actualizo el inversionista correctamente";
             return $resp;
         } catch (PDOException $e) {
-            echo 'Error al actualiar la inversion del inversionista'. $e->getMessage();
+            echo 'Error al actualiar la inversion del inversionista' . $e->getMessage();
         }
     }
 
-    
+
     /**
      * get_paysdetailsinterest
      *
      * @param  number $icveinversionista
      * @return void
      */
-    public function get_paysdetailsinterest($icveinversionista){
+    public function get_paysdetailsinterest($icveinversionista)
+    {
         try {
             $query = "SELECT * FROM paginteresesinv WHERE icveinversionista = ?
                         ORDER BY dfecharegistro DESC";
@@ -459,11 +474,12 @@ class Investor
             $statement->execute([$icveinversionista]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new Error('Error al actualiar la inversion del inversionista'. $e->getMessage());
+            throw new Error('Error al actualiar la inversion del inversionista' . $e->getMessage());
         }
     }
 
-    public function set_paysdetailsinterest($icveinversionista){
+    public function set_paysdetailsinterest($icveinversionista)
+    {
         try {
             $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, fmonto_pagado, dfecharegistro, cstatuspago)
                         SELECT 
@@ -484,10 +500,10 @@ class Investor
             $resp['text'] = "Se insertó el pago correctamente.";
             return $resp;
         } catch (PDOException $e) {
-            throw new Error('Error al insertar el pago'. $e->getMessage());
+            throw new Error('Error al insertar el pago' . $e->getMessage());
         }
     }
-    
+
     /**
      * set_confirmpayment
      *
@@ -495,16 +511,17 @@ class Investor
      * @param  String $document name document
      * @return array[] String | String Error
      */
-    public function set_confirmpayment($icvepayment, $document) : array {
+    public function set_confirmpayment($icvepayment, $document): array
+    {
         try {
             $query = "UPDATE paginteresesinv SET cstatuspago = 'P', comprobantepago = ? WHERE icvepago = ?";
             $statement = $this->acceso->prepare($query);
             $statement->execute([$document, $icvepayment]);
             $resp['msj'] = true;
             $resp['text'] = 'Se confirmó el pago correctamente';
-            return $resp; 
+            return $resp;
         } catch (PDOException $e) {
-            throw new Error('No se pudo confirmar el pago correctamente'. $e->getMessage());
+            throw new Error('No se pudo confirmar el pago correctamente' . $e->getMessage());
         }
     }
 }

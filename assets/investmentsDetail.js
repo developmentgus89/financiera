@@ -200,8 +200,8 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
         headings: ['ID', 'Monto', '% Interes', 'Fec. Registro', 'INTERESES', 'RETIROS', 'EDITAR'],
         data: data.map(function (item) {
           // return Object.values(item);
-          var id = item['icvedetalleinver'];
-          let cantidadInvertida = parseFloat(item['dmonto']);
+          var id                 = item['icvedetalleinver'];
+          let cantidadInvertida  = parseFloat(item['dmonto']);
           let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX', {
             style: 'currency',
             currency: 'MXN'
@@ -211,7 +211,7 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
             cantidadFormateada,
             `${item['ftasainteres']} %`,
             item['dfecharegistro'],
-            `<button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Intereses"><i class="fas fa-money-check"></i></button>`,
+            `<button class="btn bg-gradient-info btn-sx" onclick="openViewPaysInvestment(${icveinversionista}, ${id}, ${item['ftasainteres']}, ${item['dmonto']})" data-toggle="tooltip" data-placement="top" title="Intereses"><i class="fas fa-money-check"></i></button>`,
             `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Retiros a Capital"><i class="fas fa-coins"></i></button>`,
             `<button class="btn bg-gradient-warning btn-sx" onclick="openEditionInvesment(${icveinversionista},${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>`
           ]

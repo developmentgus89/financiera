@@ -94,8 +94,8 @@ include_once "dashboard/startTemplateDashboard.php";
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body fondo-tabs">
-                <table id="tableInvestors" class="table table-bordered">
+            <div class="card-body table-responsive p-0 fondo-tabs">
+                <table id="tableInvestors" class="table table-hover text-nowrap">
                 </table>
             </div>
             <!-- /.card-body -->

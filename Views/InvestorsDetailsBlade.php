@@ -166,8 +166,8 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <button id="btnAddInversion" type="button" class="btn btn-primary"><i class="nav-icon fas fa-money-bill-wave"></i>&nbsp; &nbsp;Agregar</button>
                                     </div>
                                 </div>
-                                <div class="card-body bg-success">
-                                    <table id="tblInversiones" class="table table-bordered">
+                                <div class="card-body table-responsive p-0 bg-success">
+                                    <table id="tblInversiones" class="table table table-hover text-nowrap">
                                     </table>
                                 </div>
                             </div>
@@ -293,30 +293,6 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 
-<div class="modal fade" id="m-confirm-pay">
-    <div class="modal-dialog">
-        <div class="modal-content bg-warning">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirmaci&oacute;n de Pago.</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <input type="text" class="form-control" name="icvepayment" id="icvepayment" hidden>
-            </div>
-            <div class="modal-body">
-                <div id="text-msj">¿Desea confirmar el pago del inversionista? </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">NO</button>
-                <button type="button" class="btn btn-success" id="btnIrAInv">SI</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-
 <!-- Modal -->
 <div class="modal fade" id="modalSeeDataBank" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -355,37 +331,6 @@ include_once "dashboard/startTemplateDashboard.php";
     </div>
 </div>
 
-
-<div class="modal fade" id="m-adddocument-pay">
-    <div class="modal-dialog">
-        <form id="formSubir" action="" method="post" enctype="multipart/form-data">
-            <div class="modal-content bg-info">
-                <div class="modal-header">
-                    <h3 class="modal-title">Adjunta Comprobante de Pago.</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="">Adjuntar Documento: <span id="cvepagodoc"></span></label>
-                            <input type="file" class="form-control-file" name="paycompfile" id="paycompfile" accept="image/*" aria-describedby="fileHelpAdjDoc">
-                            <small id="fileHelpAdjDoc" class="form-text">Campo para subir el comprobante de pago.</small>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">CANCELAR</button>
-                    <button type="button" class="btn btn-success" id="btnSaveDocument">GUARDAR</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-    </div>
-    </form>
-    <!-- /.modal-dialog -->
-</div>
 
 <?php
 include_once "dashboard/endTemplateDashboard.php";
