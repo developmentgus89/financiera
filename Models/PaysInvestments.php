@@ -126,4 +126,21 @@ class PaysInvestments
         }
     }
 
+    
+    /**
+     * getSumInterest
+     *
+     * @param  number $icvedetinversion
+     * @return Array[] JSON | PDOException
+     */
+    public function getSumInterest($icvedetinversion){
+        try {
+            $query = "SELECT SUM(fmonto_pagado) AS totalpaginv FROM paginteresesinv WHERE icvedetalleinver = ? AND cstatuspago = 'P'";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icvedetinversion]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('No se pudo completar la instruccion' . $e->getMessage());
+        }
+    }
 }

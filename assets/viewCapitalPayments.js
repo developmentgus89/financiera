@@ -352,7 +352,6 @@ const viewVoucherCapitalPayment = async (idcapitalpayment) => {
     } catch (error) {
         throw new Error(`No se pudo obtener el voucher de pago a capital: ${error.message}`);
     }
-    // $('#modalViewVoucher').modal('show');
 }
 
 

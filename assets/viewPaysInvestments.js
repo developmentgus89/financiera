@@ -11,6 +11,7 @@ const descifraParams = () => {
         console.table(params);
 
         getDataInvestment(params.icveinvestor);
+        getSumInterest(params.icveinvestor);
         getPaysInsterestsInvestment(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
         
         // insertPaysInsterests(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
@@ -84,12 +85,18 @@ const getDataInvestment = async (icvedetalleinver) => {
         document.getElementById('interesInvestment').innerHTML = `${data[0].ftasainteres} %`;
         // document.getElementById('totalInterestInvestment').innerHTML = '$ 0.00 MXN';
 
+
     } catch (error) {
         throw new Error(`No se puede acceder a la informacion de la inversion ${error.message}`);
     }
 }
 
 
+/**
+ *  getSumInterest
+ * 
+ * @param {number} icvedetalleinver 
+ */
 const getSumInterest = async (icvedetalleinver) => {
     let params =
         'operation=getSumInterest' +
@@ -110,6 +117,21 @@ const getSumInterest = async (icvedetalleinver) => {
         const data = await response.json();
         console.warn('Total de Intereses Pagados de esa inversion');
         console.table(data);
+
+        let totalPagInterest = data[0].totalpaginv;
+
+        totalPagInterest = parseFloat(totalPagInterest);
+        totalPagInterest = totalPagInterest.toLocaleString('es-MX', {
+            style: 'currency',
+            currency: 'MXN'
+        });
+
+        if(isNaN(totalPagInterest) === 0 || totalPagInterest === null) totalPagInterest = '0.00';
+
+
+
+        document.getElementById('totalInterestInvestment').innerHTML = totalPagInterest;
+
     } catch (error) {
         throw new Error(`No se puede obtener la suma total de intereses ${error.message}`);
     }

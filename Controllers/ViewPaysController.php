@@ -65,6 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $getVoucher = $pays->getVoucher($idpay);
             echo json_encode($getVoucher);
             break;
+        
+        case 'getSumInterest':
+            $icvedetinversion  = $_POST['icvedetalleinver'];
+            $sumInterest = $pays->getSumInterest($icvedetinversion);
+            echo json_encode($sumInterest);
+            break;
 
         default:
             echo 'Operación no válida en la Vista de Pagos de Interes';
