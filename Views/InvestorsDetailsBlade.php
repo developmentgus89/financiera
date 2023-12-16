@@ -133,19 +133,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                 <div class="col-12 col-sm-12">
                                                     <div class="info-box bg-primary">
                                                         <div class="info-box-content">
-                                                            <h5 class="info-box-text text-center"><strong>Inter&eacute;s</strong></h5>
+                                                            <strong>Inter&eacute;s Pagado</strong>
                                                             <span class="info-box-text text-center"></span>
-                                                            <span class="info-box-number text-center mb-0">20</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 col-sm-12">
-                                                    <div class="info-box bg-danger">
-                                                        <div class="info-box-content">
-                                                            <span class="info-box-text text-center">Pagos de Inter&eacute;s Pendientes.</span>
-                                                            <span class="info-box-number text-center mb-0">20</span>
+                                                            <span class="info-box-number text-center mb-0"><div id="interesTotalPagado"></div></span>
                                                         </div>
                                                     </div>
                                                 </div>

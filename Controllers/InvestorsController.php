@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $invesments = $investor->get_countinvesments($icveinvestor);
             echo json_encode($invesments);
             break;
-            
+
         case 'readUDPPago':
             $icvedetalleinver = $_POST['icvedetalleinver'];
             $invesmentsPays = $investor->get_paysinvesments($icvedetalleinver);
@@ -195,13 +195,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $udpinputMontoInver  = $_POST['udpinputMontoInver'];
             $udpinputObsInver    = $_POST['udpinputObsInver'];
             $invesmentsDetail    = $investor->set_updateDetailInvesment(
-                                                $udpcveinversionista,
-                                                $udpcveinverdetalle,
-                                                $udpicveinteres,
-                                                $udpinputDateInver,
-                                                $udpinputMontoInver,
-                                                $udpinputObsInver 
-                                            );
+                $udpcveinversionista,
+                $udpcveinverdetalle,
+                $udpicveinteres,
+                $udpinputDateInver,
+                $udpinputMontoInver,
+                $udpinputObsInver
+            );
             echo json_encode($invesmentsDetail);
             break;
 
@@ -234,6 +234,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $carac['resp'] = true;
             $carc['fileN'] = $fileName;
             echo json_encode($carac);
+            break;
+
+        case 'getSumCapitalPayment':
+            $icveinversionista = $_POST['icveinversionista'];
+            $sumInterestsTotal = $investor->getSumCapitalPayment($icveinversionista);
+            echo json_encode($sumInterestsTotal);
             break;
 
         default:

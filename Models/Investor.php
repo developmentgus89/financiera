@@ -524,4 +524,23 @@ class Investor
             throw new Error('No se pudo confirmar el pago correctamente' . $e->getMessage());
         }
     }
+
+
+    /**
+     * getSumCapitalPayment
+     *
+     * @param  number $icveinversionista
+     * @return Array[] JSON | PDOException
+     */
+    public function getSumCapitalPayment($icveinversionista){
+        try {
+            $query = "SELECT SUM(fmonto_pagado) AS total FROM paginteresesinv 
+                        WHERE icveinversionista = ? AND cstatuspago = 'P'";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista ]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error en la insercion del pago' . $e->getMessage());
+        }
+    }
 }

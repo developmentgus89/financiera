@@ -13,6 +13,10 @@
     color: aliceblue;
 }
 
+.fin-text-white{
+    color: white;
+}
+
 .fondo_cliente_add_modal{
     background-color: rgba(103, 190, 77, 0.733);
 }
@@ -62,6 +66,18 @@ table{
     display: inline-flexbox;
 }
 
+.bg-modalVoucher{
+    background-color: darkolivegreen;
+}
+
+.bg-modalCapitalPayment{
+    background-color: rgba(20, 71, 20, 0.719);
+}
+
+.bg-dark-financira{
+    background-color: black;
+    color: white;
+}
 /* hr{
     color: white;
     background-color: white;

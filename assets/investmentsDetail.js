@@ -75,6 +75,8 @@ const descifra = () => {
     getInvestmentDetails(params.icveinvestor);
     getInvestmentsByInvestor(params.icveinvestor);
     document.getElementById('fieldicveinversionista').value = params.icveinvestor;
+
+    getSumCapitalPayment(params.icveinvestor);
   }
 
   console.log(`Parametros son: ${queryParams}`);
@@ -170,6 +172,40 @@ const getInvestmentDetails = async (icveinversionista) => {
   }
 }
 
+
+const getSumCapitalPayment = async (icveinversionista) => {
+  try {
+    const response = await fetch(baseURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `operation=getSumCapitalPayment&icveinversionista=${icveinversionista}`
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error con el servidor, no se puede ejecutar la operacion de estadisticas`);
+    }
+
+    const data = await response.json();
+
+    console.warn(`Total de Pago de Intereses`);
+    console.table(data);
+
+    let cantPaysInterests = document.querySelector('#interesTotalPagado');
+    let cantTotInv = parseFloat(data[0].total);
+    cantTotInv = cantTotInv.toLocaleString('es-MX', {
+      style: 'currency',
+      currency: 'MXN'
+    });
+
+    cantPaysInterests.innerHTML = cantTotInv;
+
+  } catch (error) {
+    throw new Error(`No se pudo completar las estadisticas del inversionista ${error.message}`);
+  }
+}
+
 /**
  * 
  * @param {Number} icveinversionista 
@@ -197,7 +233,7 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
     new DataTable(tblInvestments, {
       data: {
         // headings: Object.keys(data[0]),
-        headings: ['ID', 'Monto', '% Interes', 'Fec. Registro', 'INTERESES', 'RETIROS', 'EDITAR'],
+        headings: ['ID', 'Monto', '% Interes', 'Fec. Registro', 'INTERESES', 'PAGOS CAPITAL', 'EDITAR'],
         data: data.map(function (item) {
           // return Object.values(item);
           var id                 = item['icvedetalleinver'];
@@ -211,9 +247,9 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
             cantidadFormateada,
             `${item['ftasainteres']} %`,
             item['dfecharegistro'],
-            `<button class="btn bg-gradient-info btn-sx" onclick="openViewPaysInvestment(${icveinversionista}, ${id}, ${item['ftasainteres']}, ${item['dmonto']})" data-toggle="tooltip" data-placement="top" title="Intereses"><i class="fas fa-money-check"></i></button>`,
-            `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Retiros a Capital"><i class="fas fa-coins"></i></button>`,
-            `<button class="btn bg-gradient-warning btn-sx" onclick="openEditionInvesment(${icveinversionista},${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>`
+            `<button class="btn bg-gradient-info btn-sx" style="margin: auto; display: block;" onclick="openViewPaysInvestment(${icveinversionista}, ${id}, ${item['ftasainteres']}, ${item['dmonto']})" data-toggle="tooltip" data-placement="top" title="Intereses"><i class="fas fa-money-check"></i></button>`,
+            `<button class="btn bg-gradient-primary btn-sx" style="margin: auto; display: block;" onclick="openViewCapitalPayments(${icveinversionista},${id})" data-toggle="tooltip" data-placement="top" title="Retiros a Capital"><i class="fas fa-coins"></i></button>`,
+            `<button class="btn bg-gradient-warning btn-sx" style="margin: auto; display: block;" onclick="openEditionInvesment(${icveinversionista},${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>`
           ]
         })
       }

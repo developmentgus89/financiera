@@ -21,10 +21,11 @@ include_once "dashboard/startTemplateDashboard.php";
 <!-- Main content -->
 <div class="content">
     <div class="col-md-12">
-        <div class="card card-success">
+        <div class="card bg-financiera-success">
             <div class="card-header">
-                <h2 class="col-6 card-title"><strong>Cat&aacute;logo de Pagos de Intereses</strong></h2>
+                <h2 class="col-6 card-title"><strong>Control de Pagos a Capital</strong></h2>
                 <div class="card-tools">
+                    <button id="btnAddCapitalPayment" type="button" class="btn btn-primary">Registrar Pago</button>
                     <button id="btnBackPaysInvestments" type="button" class="btn btn-danger" onclick="window.history.back()">Regresar</button>
                 </div>
             </div>
@@ -33,10 +34,10 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-5">
                         <!-- Profile Image -->
-                        <div class="card card-success card-outline">
+                        <div class="card card-success ">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="../utils/img/iconInvestment.png" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="../utils/img/capitalPayment.png" alt="User profile picture">
                                 </div>
 
                                 <h3 class="profile-username text-center text-title-cat">
@@ -44,7 +45,7 @@ include_once "dashboard/startTemplateDashboard.php";
 
                                 <h4 class="text-muted text-center">Detalle de la Inversi&oacute;n</h4>
 
-                                <ul class="list-group list-group-unbordered mb-3">
+                                <ul class="list-group list-group-unbordered mb-3 bg-financiera-success">
                                     <li class="list-group-item">
                                         <b class="text-title-cat"><i class="nav-icon fas fa-hand-holding-usd"></i> Monto:</b> <span class="float-right text-title-cat">
                                             <div id="montoInvestment"></div>
@@ -61,13 +62,8 @@ include_once "dashboard/startTemplateDashboard.php";
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b class="text-title-cat"><i class="nav-icon fas fa-percent"></i> Interes Aplicado:</b> <a class="float-right text-title-cat">
-                                            <div id="interesInvestment"></div>
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b class="text-title-cat"><i class="fas fa-comment-dollar"></i> Intereses Pagados:</b> <a class="float-right text-title-cat">
-                                            <div id="totalInterestInvestment"></div>
+                                        <b class="text-title-cat"><i class="fas fa-comment-dollar"></i> Capital Pagado:</b> <a class="float-right text-title-cat">
+                                            <div id="capitalSum"></div>
                                         </a>
                                     </li>
                                 </ul>
@@ -78,10 +74,10 @@ include_once "dashboard/startTemplateDashboard.php";
                     </div>
                     <div class="col-md-7">
                         <!-- Profile Image -->
-                        <div class="card card-primary card-outline">
-                            <div class="card-body table-responsive box-profile bg-financiera-success">
-                                <h3 class="">Control de Pagos.</h3>
-                                <table id="tblPaysInvestments" class="table table-hover text-nowrap">
+                        <div class="card card-success card-outline">
+                            <div class="card-body table-responsive box-profile bg-financiera-success2">
+                                <h3 class="">Control de Pagos a Capital.</h3>
+                                <table id="tblCapitalPayments" class="table table-hover text-nowrap">
                                 </table>
                             </div>
                             <!-- /.card-body -->
@@ -99,7 +95,7 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 <!-- /.content -->
 
-<div class="modal fade" id="m-confirm-pay">
+<div class="modal fade" id="modalAddCapitalPayments">
     <div class="modal-dialog">
         <div class="modal-content bg-warning">
             <div class="modal-header">
@@ -107,10 +103,10 @@ include_once "dashboard/startTemplateDashboard.php";
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <input type="text" class="form-control" name="icvepayment" id="icvepayment" hidden>
+                <input type="text" class="form-control" name="icvecapitalpayment" id="icvecapitalpayment" hidden>
             </div>
             <div class="modal-body">
-                <div id="text-msj">¿Desea confirmar el pago del inversionista? </div>
+                <div id="text-msj">¿Desea registrar un pago a capital? </div>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">NO</button>
@@ -123,30 +119,38 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 
-<div class="modal fade" id="m-adddocument-pay">
+<div class="modal fade" id="modConfirCapitalPayments">
     <div class="modal-dialog">
         <form id="formSubir" action="" method="post" enctype="multipart/form-data">
-            <div class="modal-content bg-info">
+            <div class="modal-content bg-modalCapitalPayment">
                 <div class="modal-header">
-                    <h3 class="modal-title">Adjunta Comprobante de Pago.</h3>
+                    <h3 class="modal-title">Confirmaci&oacute;n de Pago a Capital.</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="fin-text-white" aria-hidden="true">&times;</span>
                     </button>
-                    <input type="text" class="form-control" name="icvepaymentdoc" id="icvepaymentdoc" hidden>
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="amountCapitalPayment">Monto Pagado:</label>
+                                <input type="text" class="form-control" name="amountCapitalPayment" id="amountCapitalPayment" aria-describedby="helpId">
+                                <small id="helpId" class="form-text fin-text-white">Capital que se est&aacute; pagando</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group">
-                            <label for="">Adjuntar Documento: <span id="cvepagodoc"></span></label>
-                            <input type="file" class="form-control-file" name="paycompfile" id="paycompfile" accept="image/*" aria-describedby="fileHelpAdjDoc">
+                            <label for="">Adjuntar Voucher: <span id="cvepagodoc"></span></label>
+                            <input type="file" class="form-control-file" name="CapitalPaymentVoucher" id="CapitalPaymentVoucher" accept="image/*" aria-describedby="fileHelpAdjDoc">
                             <small id="fileHelpAdjDoc" class="form-text">Campo para subir el comprobante de pago.</small>
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnRegresaModal">CANCELAR</button>
-                    <button type="button" class="btn btn-success" id="btnConfirmPay">GUARDAR</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
+                    <button type="button" class="btn btn-success" id="btnConfirmCapitalPayment">GUARDAR</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -156,7 +160,7 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 
-<div class="modal fade" id="modalProgressBar">
+<div class="modal fade" id="modalProgressBarCapital">
     <div class="modal-dialog">
         <form id="formSubir" action="" method="post" enctype="multipart/form-data">
             <div class="modal-content bg-financiera-success">
@@ -186,12 +190,12 @@ include_once "dashboard/startTemplateDashboard.php";
     <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modalViewVoucher">
+<div class="modal fade" id="modalViewVoucherCapital">
     <div class="modal-dialog modal-lg">
         <form id="formSubir" action="" method="post" enctype="multipart/form-data">
             <div class="modal-content bg-success">
                 <div class="modal-header">
-                    <h3 class="modal-title">Cargando Comprobante.</h3>
+                    <h3 class="modal-title">Vista Previa del Voucher.</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -199,11 +203,11 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="modal-body">
                     <div class="container mt-3 text-center">
                         <h2>Voucher de Pago</h2>
-                        <img id="voucher" src="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
+                        <img id="voucherCapitalPayment" src="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -232,5 +236,5 @@ include_once "dashboard/footerDashBoard.php";
 <script src="../utils/plugins/chart.js/Chart.min.js"></script>
 <script src="../assets/getInterestsForInvestment.js"></script>
 <script src="../assets/investorsDetails.js"></script>
-<script src="../assets/viewPaysInvestments.js"></script>
+<script src="../assets/viewCapitalPayments.js"></script>
 <script src="../assets/conf.js"></script>

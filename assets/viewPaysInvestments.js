@@ -9,9 +9,10 @@ const descifraParams = () => {
         var paramsDescript = CryptoJS.AES.decrypt(paramsEncriptado, 'financiera').toString(CryptoJS.enc.Utf8);
         const params = JSON.parse(paramsDescript);
         console.table(params);
-        
+
         getDataInvestment(params.icveinvestor);
         getPaysInsterestsInvestment(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
+        
         // insertPaysInsterests(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
     }
 }
@@ -21,15 +22,14 @@ const descifraParams = () => {
  */
 const btnShowDialogAddDoc = document.getElementById('btnShowDialogAddDoc');
 
-btnShowDialogAddDoc.addEventListener('click', function(){
-
+btnShowDialogAddDoc.addEventListener('click', function () {
     showDialogAddDocument();
 });
 
 
 const btnRegresaModal = document.getElementById('btnRegresaModal');
 
-btnRegresaModal.addEventListener('click', function(){
+btnRegresaModal.addEventListener('click', function () {
     $('#m-adddocument-pay').modal('hide');
     $('#m-confirm-pay').modal('show');
     console.info("Cambio de modales");
@@ -38,8 +38,8 @@ btnRegresaModal.addEventListener('click', function(){
 
 const btnConfirmPay = document.getElementById('btnConfirmPay');
 
-btnConfirmPay.addEventListener('click', function(){
-    toastr.info('Sera para pagar el pago de interes a inversionista','CONFIRMA PAGO');
+btnConfirmPay.addEventListener('click', function () {
+    uploadImage();
 });
 
 
@@ -78,51 +78,84 @@ const getDataInvestment = async (icvedetalleinver) => {
         data[0].cstatus == 'A' ? status = 'ACTIVO' : status = 'INACTIVO';
 
 
-        document.getElementById('montoInvestment').innerHTML         = montoF;
-        document.getElementById('dateInvestment').innerHTML          = data[0].dfecharegistro;
-        document.getElementById('statusInvestment').innerHTML        = status;
-        document.getElementById('interesInvestment').innerHTML       = `${data[0].ftasainteres} %`;
-        document.getElementById('totalInterestInvestment').innerHTML = '$ 0.00 MXN';
+        document.getElementById('montoInvestment').innerHTML = montoF;
+        document.getElementById('dateInvestment').innerHTML = data[0].dfecharegistro;
+        document.getElementById('statusInvestment').innerHTML = status;
+        document.getElementById('interesInvestment').innerHTML = `${data[0].ftasainteres} %`;
+        // document.getElementById('totalInterestInvestment').innerHTML = '$ 0.00 MXN';
 
     } catch (error) {
         throw new Error(`No se puede acceder a la informacion de la inversion ${error.message}`);
     }
 }
 
+
+const getSumInterest = async (icvedetalleinver) => {
+    let params =
+        'operation=getSumInterest' +
+        '&icvedetalleinver=' + icvedetalleinver;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        console.warn('Total de Intereses Pagados de esa inversion');
+        console.table(data);
+    } catch (error) {
+        throw new Error(`No se puede obtener la suma total de intereses ${error.message}`);
+    }
+}
+
+/**
+ * 
+ * @param {number} icveinversionista 
+ * @param {number} icvedetalleinver 
+ * @param {number} interes 
+ * @param {number} dmonto 
+ */
 const insertPaysInsterests = async (icveinversionista, icvedetalleinver, interes, dmonto) => {
     let params =
         'operation=insertPaysInsterests' +
         '&icveinversionista=' + icveinversionista +
         '&icvedetalleinver=' + icvedetalleinver +
-        '&interes=' + interes + 
+        '&interes=' + interes +
         '&dmonto=' + dmonto;
 
-        console.log(params);
-    
-        try {
-            const response = await fetch(baseURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params
-            });
+    console.log(params);
 
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud con el servidor para insertar el pago`);
-            }
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
-            const data = await response.json();
-            console.table(data);
-
-            if(data.msj === 'success'){
-                location.reload();
-            }
-
-        } catch (error) {
-            throw new Error(`No se puede insertar el pago de interes: ${error.message}`);
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud con el servidor para insertar el pago`);
         }
-    
+
+        const data = await response.json();
+        console.table(data);
+
+        if (data.msj === 'success') {
+            location.reload();
+        }
+
+    } catch (error) {
+        throw new Error(`No se puede insertar el pago de interes: ${error.message}`);
+    }
+
 
 }
 
@@ -152,9 +185,9 @@ const getPaysInsterestsInvestment = async (icveinversionista, icvedetalleinver, 
 
         const data = await response.json();
 
-        if(Object.keys(data).length === 0){
+        if (Object.keys(data).length === 0) {
             insertPaysInsterests(icveinversionista, icvedetalleinver, interes, dmonto);
-        }else {
+        } else {
             let fechaActual = new Date();
             let fechaAnterior = new Date(data[0].dfecharegistro);
 
@@ -162,7 +195,7 @@ const getPaysInsterestsInvestment = async (icveinversionista, icvedetalleinver, 
             const diferenciaEnDias = Math.ceil(difMilisegundos / (1000 * 60 * 60 * 24));
             console.error(`LA DIFERENCIA EN DIAS ES -> ${diferenciaEnDias}`);
 
-            if(diferenciaEnDias >= 27){
+            if (diferenciaEnDias >= 27) {
                 insertPaysInsterests(icveinversionista, icvedetalleinver, interes, dmonto);
             }
         }
@@ -171,13 +204,14 @@ const getPaysInsterestsInvestment = async (icveinversionista, icvedetalleinver, 
         var tblPaysInvestments = document.getElementById('tblPaysInvestments');
 
         new DataTable(tblPaysInvestments, {
-            perPage: 1,
+            perPage: 5,
             data: {
                 // headings: Object.keys(data[0]),
                 headings: ['ID', 'Monto Invertido', 'Fecha Registro', 'Interes', 'Estatus Pago', 'PAGAR / VER'],
                 data: data.map(function (item) {
                     // return Object.values(item);
                     var id = item['icvepago'];
+                    var comprobante = item['comprobantepago'];
                     let cantidadInvertida = parseFloat(item['montoinvhist']);
                     let cantidadFormateada = cantidadInvertida.toLocaleString('es-MX', {
                         style: 'currency',
@@ -193,10 +227,10 @@ const getPaysInsterestsInvestment = async (icveinversionista, icvedetalleinver, 
                         cantidadFormateada,
                         item['dfecharegistro'],
                         interesFormateado,
-                        item['cstatuspago'] == 'NP' ? `<span class="badge badge-danger">No Pagado</span>` : `<span class="badge badge-success">Pagado</span>` ,
-                        item['cstatuspago'] == 'NP' ? 
+                        item['cstatuspago'] == 'NP' ? `<span class="badge badge-danger">No Pagado</span>` : `<span class="badge badge-success">Pagado</span>`,
+                        item['cstatuspago'] == 'NP' ?
                             `<button class="btn bg-gradient-danger btn-sx" onclick="showMessageConfirmPay(${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-check-circle"></i></button>`
-                            : `<button class="btn bg-gradient-success btn-sx" onclick="viewVoucher()" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-receipt"></i></button>`
+                            : `<button class="btn bg-gradient-success btn-sx" onclick="viewVoucher(${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-receipt"></i></button>`
                     ]
                 })
             }
@@ -228,8 +262,112 @@ const showDialogAddDocument = () => {
 
 
     // console.info(params);
-    
+
     console.info(`CVE Pago ${cvepays}`);
 }
+
+/**
+ * Subir Imagen al Servidor
+ */
+const uploadImage = () => {
+    var formData = new FormData();
+    var imageFile = document.getElementById('paycompfile').files[0];
+    let idpay = document.getElementById('icvepaymentdoc').value;
+
+    if(!imageFile){
+        toastr.error('Error','No ha seleccionado una imagen');
+        throw new Error('No ha seleccionado la imagen.');
+    }
+
+    //Se construye el objeto de tipo archivo
+    formData.append("file", imageFile);
+
+    //Se agrega el parametro para el operador del controlador
+    formData.append('operation', 'uploadimage');
+    formData.append('idpay', idpay);
+
+    console.info(formData);
+    console.table(formData);
+
+    fetch(baseURL, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.info(data);
+            setTimeout(progressBar, 1000);
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+
+/**
+ * progressBar
+ */
+const progressBar = () => {
+    $('#m-adddocument-pay').modal('hide');
+    $('#modalProgressBar').modal('show');
+
+    let progress = 0;
+
+    function updateProgressBar() {
+        let progressBar = document.getElementById("myProgressBar");
+        progress += 1; // Incrementar el progreso
+        progressBar.style.width = progress + '%';
+        progressBar.setAttribute('aria-valuenow', progress);
+
+        if (progress < 100) {
+            setTimeout(updateProgressBar, 100); // Ajusta el tiempo según sea necesario
+        } else {
+            document.getElementById("statusMessage").style.display = 'block';
+            location.reload();
+        }
+
+    }
+
+    updateProgressBar();
+}
+
+
+const viewVoucher = async (idpay) => {
+    console.info(idpay);
+    console.info(`Hola mundo VOucher`);
+
+    let params =
+        'operation=getVoucherPay' +
+        '&idpay=' + idpay;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        console.table(data);
+        console.log(data[0].comprobantepago);
+        let img = document.getElementById('voucher');
+        img.src = data[0].comprobantepago;
+        
+        $('#modalViewVoucher').modal('show');
+    } catch (error) {
+        throw new Error(`No se pudo obtener el voucher ${error.message}`);
+    }
+    // $('#modalViewVoucher').modal('show');
+}
+
+
+
+
 
 window.addEventListener('load', descifraParams);

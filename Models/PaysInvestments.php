@@ -5,7 +5,7 @@ class PaysInvestments
 {
     private $conexion;
     var $acceso;
-    
+
     /**
      * __construct
      *
@@ -16,14 +16,15 @@ class PaysInvestments
         $db = new Conexion();
         $this->acceso = $db->pdo;
     }
-    
+
     /**
      * getDataInvestment
      *
      * @param  Number $icvedetinversion
      * @return Array[] String
      */
-    public function getDataInvestment($icvedetinversion){
+    public function getDataInvestment($icvedetinversion)
+    {
         try {
             $query = "SELECT * FROM inverdetalle 
                         INNER JOIN cattasascomisiones ON
@@ -33,10 +34,10 @@ class PaysInvestments
             $statement->execute([$icvedetinversion]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            throw new Error('Erro en la consulta de los datos de la inversion'. $e->getMessage());
+            throw new Error('Erro en la consulta de los datos de la inversion' . $e->getMessage());
         }
     }
-    
+
     /**
      * getPaysInvestment
      *
@@ -44,7 +45,8 @@ class PaysInvestments
      * @param  number $icvedetinversion
      * @return Array[] String
      */
-    public function getPaysInvestment($icveinversionista, $icvedetinversion){
+    public function getPaysInvestment($icveinversionista, $icvedetinversion)
+    {
         try {
             $query = "SELECT * FROM paginteresesinv WHERE icveinversionista = ? AND icvedetalleinver = ?
                         ORDER BY dfecharegistro DESC";
@@ -56,7 +58,7 @@ class PaysInvestments
         }
     }
 
-    
+
     /**
      * setInsertPays
      *
@@ -66,8 +68,9 @@ class PaysInvestments
      * @param  double $dmonto
      * @return Array[] String
      */
-    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto){
-        $payInterest = round(($dmonto * $interes)/100,2);
+    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto)
+    {
+        $payInterest = round(($dmonto * $interes) / 100, 2);
         try {
             $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
                                                 fmonto_pagado, dfecharegistro, cstatuspago, 
@@ -79,7 +82,48 @@ class PaysInvestments
             $resp['text'] = 'Se inserto el pago correctamente';
             return $resp;
         } catch (PDOException $e) {
-            throw new Error('Error en la insercion del pago'. $e->getMessage());
+            throw new Error('Error en la insercion del pago' . $e->getMessage());
+        }
     }
+
+    
+    /**
+     * confirmPay
+     *
+     * @param  number $idpay
+     * @param  String $comprobante
+     * @return Array[] String
+     */
+    public function confirmPay($idpay, $comprobante){
+        try {
+            $query = "UPDATE paginteresesinv SET cstatuspago = 'P', dtfechapagconfirmado = NOW(), comprobantepago = CONCAT('../docs/',?) 
+                    WHERE icvepago = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$comprobante, $idpay ]);
+            $resp['msj'] = 'success';
+            $resp['text'] = 'Se confirmo el pago correctamente';
+            return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error en la insercion del pago' . $e->getMessage());
+        }
     }
+
+    
+    /**
+     * getVoucher
+     *
+     * @param  number $idpay
+     * @return Array[] String
+     */
+    public function getVoucher($idpay){
+        try {
+            $query = "SELECT * FROM paginteresesinv WHERE icvepago = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$idpay ]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error en la insercion del pago' . $e->getMessage());
+        }
+    }
+
 }
