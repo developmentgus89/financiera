@@ -48,6 +48,15 @@
                 </p>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="InvestorsBlade.php" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                    N&oacute;mina.
+                </p>
+            </a>
+        </li>
        
         <li class="nav-item">
             <a href="#" class="nav-link">

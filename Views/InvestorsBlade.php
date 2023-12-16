@@ -76,26 +76,26 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="card card-secondary">
+        <div class="card card-success">
             <div class="card-header">
                 <div class="row">
-                <h2 class="col-6"><strong>Cat&aacute;logo de Inversionistas</strong></h2>
-                <div class="col-2">
-                    
-                </div>
-                <div class="col-2 mt-2">
-                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="agregar-inversionista">
-                        <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Inversionista.
-                    </button>
-                </div>
-                <div class="col-2">
-                    
-                </div>
+                    <h2 class="col-6"><strong>Cat&aacute;logo de Inversionistas</strong></h2>
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-2 mt-2">
+                        <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="agregar-inversionista">
+                            <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Inversionista.
+                        </button>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="tableInvestors" class="table table-bordered table-dark">
+            <div class="card-body table-responsive p-0 fondo-tabs">
+                <table id="tableInvestors" class="table table-hover text-nowrap">
                 </table>
             </div>
             <!-- /.card-body -->
@@ -149,7 +149,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <small id="hinvedad" class="form-text">Edad del inversionista.</small>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="invtelefono">Tel&eacute;fono:</label>
@@ -158,7 +158,14 @@ include_once "dashboard/startTemplateDashboard.php";
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="invinteres">Inter&eacute;s Mensual:</label>
+                            <select class="form-control" name="invinteres" id="invinteres">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="invcantinvertida">Cantidad Invertida:</label>
                             <input type="text" class="form-control" name="invcantinvertida" id="invcantinvertida" aria-describedby="hinvcantinvertida" placeholder="">
@@ -169,11 +176,33 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="invclabe">Cuenta Bancaria:</label>
-                            <input type="text" class="form-control" name="invclabe" id="invclabe" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE)</small>
+                            <div class="form-group">
+                                <label for="invtipocuenta">Tipo de Cuenta:</label>
+                                <select class="form-control" name="invtipocuenta" id="invtipocuenta">
+                                    <option value="">SELECCIONE</option>
+                                    <option value="1">CLABE</option>
+                                    <option value="2">TARJETA D&Eacute;BITO</option>
+                                    <option value="3">CTA BANCARIA</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invinstbancaria">Instituci&oacute;n Bancaria:</label>
+                            <select class="form-control" name="invinstbancaria" id="invinstbancaria">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invctabancaria">Cuenta Bancaria:</label>
+                            <input type="text" class="form-control" name="invctabancaria" id="invctabancaria" aria-describedby="hclientDateRegister" placeholder="">
+                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE, Débito. Cuenta)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="invemail">E-Mail:</label>
@@ -261,11 +290,33 @@ include_once "dashboard/startTemplateDashboard.php";
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="udp-invclabe">Cuenta Bancaria:</label>
-                            <input type="text" class="form-control" name="udp-invclabe" id="udp-invclabe" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE)</small>
+                            <div class="form-group">
+                                <label for="invtipocuenta">Tipo de Cuenta:</label>
+                                <select class="form-control" name="udp-invtipocuenta" id="udp-invtipocuenta">
+                                    <option value="">SELECCIONE</option>
+                                    <option value="1">CLABE</option>
+                                    <option value="2">TARJETA D&Eacute;BITO</option>
+                                    <option value="3">CTA BANCARIA</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invinstbancaria">Instituci&oacute;n Bancaria:</label>
+                            <select class="form-control" name="udp-invinstbancaria" id="udp-invinstbancaria">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="invctabancaria">Cuenta Bancaria:</label>
+                            <input type="text" class="form-control" name="udp-invctabancaria" id="udp-invctabancaria" aria-describedby="hclientDateRegister" placeholder="">
+                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE, Débito. Cuenta)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="udp-invemail">E-Mail:</label>
@@ -388,6 +439,6 @@ include_once "dashboard/footerDashBoard.php";
     });
 </script> -->
 <script src="../utils/js/libs/crypto.js"></script>
-<script typ="module" src="../assets/conf.js"></script>
+<script src="../assets/conf.js"></script>
 <script src="../assets/investorsDetails.js"></script>
 <script src="../assets/investors.js"></script>
