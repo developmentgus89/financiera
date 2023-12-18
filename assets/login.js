@@ -3,38 +3,61 @@ const btnIniciarSesion = document.querySelector('#btnLoginStart');
 
 /*Eventos de teclado*/
 
-document.addEventListener("keydown", function(event){
+document.addEventListener("keydown", function (event) {
     if (event.key === "Enter" || event.keyCode === 13) {
         // Realizar alguna acción cuando se presione Enter en cualquier lugar de la página
         validInputs();
-    } 
+    }
 });
 
 
-const access_login = (username, password) => {
-        const xhr = new XMLHttpRequest();
-        let respuesta;
+const access_login = async (username, password) => {
+    const params = `username=${username}&password=${password}`;
 
-        // Configurar la solicitud AJAX
-        xhr.open('POST', 'Controllers/LoginController.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    try {
+        const response = await fetch('Controllers/LoginController.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
-        xhr.onload = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Manejar la respuesta del servidor
-                const response = JSON.parse(xhr.responseText);
-                console.table(response);
-                // console.log('Respuesta desde el servidor' + response.msj);
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
 
-                response.msj === 'SUCCESS' ? window.location.href = 'Views/dashboard.php'
-                    : toastr.error('Error al iniciar sesion, verifique su usuario y contraseña.');// Mostrar la respuesta en un cuadro de diálogo
-            }
-        };
-
-        // Enviar los datos de usuario y contraseña en la solicitud
-        const params = `username=${username}&password=${password}`;
-        xhr.send(params);
+        const data = await response.json();
+        console.warn('Total de Intereses Pagados de esa inversion');
+        console.table(data);
+        data.msj === 'SUCCESS' ? window.location.href = 'Views/dashboard.php'
+            : toastr.error('Error al iniciar sesion, verifique su usuario y contraseña.');// Mostrar la respuesta en un cuadro de diálogo
+    } catch (error) {
+        throw new Error(`No se puede obtener la suma total de intereses ${error.message}`);
     }
+    // const xhr = new XMLHttpRequest();
+    // let respuesta;
+
+    // // Configurar la solicitud AJAX
+    // xhr.open('POST', 'Controllers/LoginController.php', );
+    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // xhr.onload = function () {
+    //     if (xhr.readyState === 4 && xhr.status === 200) {
+    //         // Manejar la respuesta del servidor
+    //         const response = JSON.parse(xhr.responseText);
+    //         console.table(response);
+    //         // console.log('Respuesta desde el servidor' + response.msj);
+
+    //         // response.msj === 'SUCCESS' ? window.location.href = 'Views/dashboard.php'
+    //         //     : toastr.error('Error al iniciar sesion, verifique su usuario y contraseña.');// Mostrar la respuesta en un cuadro de diálogo
+    //     }
+    // };
+
+    // // Enviar los datos de usuario y contraseña en la solicitud
+    // const params = `username=${username}&password=${password}`;
+    // xhr.send(params);
+}
 
 
 const validInputs = () => {

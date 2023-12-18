@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 21-11-2023 a las 04:27:00
+-- Tiempo de generación: 16-12-2023 a las 08:29:45
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -20,84 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `financiera`
 --
-
-DELIMITER $$
---
--- Procedimientos
---
-DROP PROCEDURE IF EXISTS `GenerarPagosMensuales`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GenerarPagosMensuales` ()  BEGIN
-    DECLARE fecha_actual DATE;
-    DECLARE inversionista_id INT;
-    DECLARE detalle_id INT;
-    DECLARE monto_pagado DECIMAL(10,2);
-    DECLARE monto_inversion DECIMAL(10,2);
-    DECLARE done INT DEFAULT FALSE;
-
-    
-
-    -- Crear un cursor implícito para seleccionar inversiones activas
-    DECLARE curInversiones CURSOR FOR
-        SELECT icveinversionista, icvedetalleinver, dmonto
-        FROM inverdetalle
-        WHERE cstatus = 'A';
-
-    -- Manejar el final del cursor
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-	-- Obtener la fecha actual
-    SET fecha_actual = '2023-12-02 08:00:00';
-    -- Abre el cursor
-    OPEN curInversiones;
-
-    -- Inicializa el cursor
-    FETCH curInversiones INTO inversionista_id, detalle_id, monto_inversion;
-
-    -- Verifica si el cursor devolvió alguna fila
-    IF NOT done THEN
-        read_loop: LOOP
-            -- Se calcula el 10% del monto de la inversión
-            SET monto_pagado = monto_inversion * 0.10;
-            
-            -- Verificar si ya existe un registro para este mes
-            IF NOT EXISTS (
-                SELECT 1
-                FROM paginteresesinv
-                WHERE icveinversionista = inversionista_id
-                    AND icvedetalleinver = detalle_id
-                    AND MONTH(dfecharegistro) = MONTH(fecha_actual)
-                    AND YEAR(dfecharegistro) = YEAR(fecha_actual)
-            ) THEN
-                -- Verificar si ya existe un registro de pago para este mes
-                IF NOT EXISTS (
-                    SELECT 1
-                    FROM paginteresesinv
-                    WHERE icveinversionista = inversionista_id
-                        AND MONTH(dfecharegistro) = MONTH(fecha_actual)
-                        AND YEAR(dfecharegistro) = YEAR(fecha_actual)
-                        AND cstatuspago = 'NP'
-                ) THEN
-                    -- Insertar nuevo registro en paginteresesinv
-                    -- El Status dice que NP = No pagado, P = Pagado
-                    INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, fmonto_pagado, dfecharegistro, cstatuspago)
-                    VALUES (inversionista_id, detalle_id, monto_pagado, NOW(), 'NP');
-                END IF;
-            END IF;
-
-            -- Intentar recuperar la siguiente fila
-            FETCH curInversiones INTO inversionista_id, detalle_id, monto_inversion;
-
-            -- Si no hay más filas, salir del bucle
-            IF done THEN
-                LEAVE read_loop;
-            END IF;
-        END LOOP;
-    END IF;
-
-    -- Cerrar el cursor
-    CLOSE curInversiones;
-END$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -229,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `cattasascomisiones` (
   `ftasainteres` double NOT NULL COMMENT 'Este sería el manejo de interés que se le cobrará al cliente',
   `cattasacomobs` varchar(100) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`icvetasascomisiones`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cattasascomisiones`
@@ -237,9 +159,10 @@ CREATE TABLE IF NOT EXISTS `cattasascomisiones` (
 
 INSERT INTO `cattasascomisiones` (`icvetasascomisiones`, `cdescripciontascom`, `ftasainteres`, `cattasacomobs`) VALUES
 (1, 'TASA SEMANAL DEL 10 % FINANCIERA MAYORQUIN', 10, 'TASA DE INICIO PARA CLIENTES'),
-(2, 'TASA SEMANAL DEL 8 %', 8.06, 'TASA PARA CLIENTES PREFERENCIALES EDITADO'),
+(2, 'TASA MENSUAL DEL 5 %', 5, 'TAS DE INTERES A INVERSIONISTA'),
 (3, 'TASA SEMANL DEL 12%', 12, 'CLEINTES TIPO B1'),
-(4, 'TASA MENSUAL INV 10%', 10, 'PAGO MENSUAL');
+(4, 'TASA MENSUAL INV 10%', 10, 'PAGO MENSUAL'),
+(5, 'TASA DE INTERES MENSUAL A INVER 7.5 %', 7.5, 'INTERES INVERSIONISTA 7.5%');
 
 -- --------------------------------------------------------
 
@@ -323,22 +246,6 @@ CREATE TABLE IF NOT EXISTS `domicilio` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `histpagoscapitalinv`
---
-
-DROP TABLE IF EXISTS `histpagoscapitalinv`;
-CREATE TABLE IF NOT EXISTS `histpagoscapitalinv` (
-  `icvepagohist` int(11) NOT NULL AUTO_INCREMENT,
-  `icveinversionista` int(11) DEFAULT NULL,
-  `fmontopagado` decimal(10,2) DEFAULT NULL,
-  `dfecha_pago` date DEFAULT NULL,
-  PRIMARY KEY (`icvepagohist`),
-  KEY `icveinversionista` (`icveinversionista`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `inverdetalle`
 --
 
@@ -355,15 +262,28 @@ CREATE TABLE IF NOT EXISTS `inverdetalle` (
   PRIMARY KEY (`icvedetalleinver`),
   KEY `cveinverpeople_idx` (`icveinversionista`),
   KEY `cvetaxes_idx` (`icvetasascomisiones`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci COMMENT='	';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf16 COLLATE=utf16_spanish_ci COMMENT='	';
 
 --
 -- Volcado de datos para la tabla `inverdetalle`
 --
 
 INSERT INTO `inverdetalle` (`icvedetalleinver`, `icveinversionista`, `icvetasascomisiones`, `dfecharegistro`, `dmonto`, `cstatus`, `invtipooperacion`, `invdetobservaciones`) VALUES
-(1, 1, 4, '2023-11-20', '50000.00', 'A', 'I', 'INVERSION INCIAL'),
-(2, 2, 4, '2023-11-09', '90000.00', 'A', 'I', 'INVERSION INCIAL');
+(1, 1, 1, '2023-10-25', '35333.00', 'A', 'I', 'INVERSION INCIAL - SE AGREGARON 333 PESOS'),
+(2, 1, 3, '2023-11-15', '56000.00', 'A', 'I', 'ASASASA'),
+(3, 2, 1, '2023-12-03', '1000333.00', 'A', 'I', 'INVERSION INCIAL'),
+(4, 3, 1, '2023-12-03', '1500000.00', 'A', 'I', 'INVERSION INCIAL'),
+(5, 4, 1, '2023-12-03', '100000.00', 'A', 'I', 'INVERSION INCIAL'),
+(6, 2, 1, '2023-12-05', '230000.00', 'A', 'I', 'SEGUNDA INVERSIÓN PARA NANCY'),
+(7, 4, 2, '2023-12-05', '45000.00', 'A', 'I', 'SEGUNDA INVERSION PARA ESLAVA'),
+(8, 1, 3, '2023-12-01', '10666.53', 'A', 'I', 'PRUEBAS DE DEMOSTRACION AL CLIENTE'),
+(9, 2, 3, '2023-12-05', '666666.00', 'A', 'I', 'SOLO BELLAS OBSERACIONES'),
+(10, 5, 4, '2023-12-05', '55000.00', 'A', 'I', 'INVERSION INCIAL'),
+(11, 4, 1, '2023-12-05', '1000000.00', 'A', 'I', 'ENTRA POR CONFIANZA'),
+(12, 1, 2, '2023-10-02', '50000.00', 'A', 'I', 'CUARTA INVERSION O CUALQUIER OBSERVACION'),
+(13, 3, 1, '2023-12-05', '500666.00', 'A', 'I', 'SEGUNDA INVERSION'),
+(14, 1, 4, '2023-12-07', '5555.75', 'A', 'I', 'QUINTA INVERSION O LE PUEDO PONER LO QUE SE ME DE LA GANA'),
+(15, 2, 5, '2023-12-14', '30000.00', 'A', 'I', 'CUARTA INVERSION O LO QUE QUIERA PONER AQUI');
 
 -- --------------------------------------------------------
 
@@ -374,7 +294,6 @@ INSERT INTO `inverdetalle` (`icvedetalleinver`, `icveinversionista`, `icvetasasc
 DROP TABLE IF EXISTS `inversionistas`;
 CREATE TABLE IF NOT EXISTS `inversionistas` (
   `icveinversionista` int(11) NOT NULL AUTO_INCREMENT,
-  `icvetasascomisiones` int(11) NOT NULL,
   `cnombre` varchar(50) CHARACTER SET latin1 NOT NULL,
   `capaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
   `camaterno` varchar(50) CHARACTER SET latin1 NOT NULL,
@@ -388,17 +307,45 @@ CREATE TABLE IF NOT EXISTS `inversionistas` (
   `dfecha_alta` date DEFAULT NULL,
   `cantpagadacapital` decimal(10,2) DEFAULT NULL,
   `invstatus` char(2) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`icveinversionista`),
-  KEY `cvetaxesinv_idx` (`icvetasascomisiones`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  PRIMARY KEY (`icveinversionista`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `inversionistas`
 --
 
-INSERT INTO `inversionistas` (`icveinversionista`, `icvetasascomisiones`, `cnombre`, `capaterno`, `camaterno`, `iedad`, `ctelefono`, `fcantidadinvertida`, `itipocuenta`, `icvebanco`, `cuentabancaria`, `cemail`, `dfecha_alta`, `cantpagadacapital`, `invstatus`) VALUES
-(1, 4, 'ADRIAN GUSTAVO', 'ANGULO', 'MELENDEZ', 33, '5587386942', '50000.00', 2, 14, '0000000000000000', 'mail@mail.com', '2023-11-20', '0.00', NULL),
-(2, 4, 'NANCY ISELA', 'ARREDONDO', 'CURIEL', 36, '5545256957', '90000.00', 2, 8, '4027665749649365', 'mail@mail.com', '2023-11-09', '0.00', NULL);
+INSERT INTO `inversionistas` (`icveinversionista`, `cnombre`, `capaterno`, `camaterno`, `iedad`, `ctelefono`, `fcantidadinvertida`, `itipocuenta`, `icvebanco`, `cuentabancaria`, `cemail`, `dfecha_alta`, `cantpagadacapital`, `invstatus`) VALUES
+(1, 'ADRIAN GUSTAVO', 'ANGULOS', 'MELENDEZ', 34, '5587386942', '207554.53', 2, 28, '66666999999999', 'gusangulomel89@gmail.com', '2023-10-12', '0.00', NULL),
+(2, 'NANCY ISELA', 'ARREDONDO', 'CURIEL', 36, '5545251345', '1966999.00', 2, 8, '4534567845238945', 'ycnan87@hotmial.com', '2023-12-03', '0.00', NULL),
+(3, 'NOEMI', 'MAYORQUIN', 'MELENDEZ', 48, '6645012820', '2000666.00', 2, 28, '456723445578345461', 'mayorquinmn@gmail.com', '2023-12-03', '0.00', NULL),
+(4, 'JOSÉ ISRAEL', 'ESLAVA', 'JIMÉNEZ', 37, '5523232323', '1145000.00', 2, 22, '865545346597899', 'eslava@cibercom.com', '2023-12-03', '0.00', NULL),
+(5, 'PAULINA', 'MAGALLANES', 'LOPEZ', 23, '5556581111', '55000.00', 2, 8, '12323222', 'mailpruebas@mail.com', '2023-12-05', '0.00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pagcapitalinv`
+--
+
+DROP TABLE IF EXISTS `pagcapitalinv`;
+CREATE TABLE IF NOT EXISTS `pagcapitalinv` (
+  `icvepagocapitalinv` int(11) NOT NULL AUTO_INCREMENT,
+  `icveinverdetalle` int(11) NOT NULL,
+  `fmontopagado` decimal(10,2) NOT NULL,
+  `dfecha_pago` datetime NOT NULL,
+  `comprobante` varchar(120) COLLATE latin1_spanish_ci NOT NULL,
+  `statuspago` char(2) COLLATE latin1_spanish_ci DEFAULT NULL,
+  PRIMARY KEY (`icvepagocapitalinv`),
+  KEY `icveinversionista` (`icveinverdetalle`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='Tabla para llevar el registro de pagos directos a capital del inversionista';
+
+--
+-- Volcado de datos para la tabla `pagcapitalinv`
+--
+
+INSERT INTO `pagcapitalinv` (`icvepagocapitalinv`, `icveinverdetalle`, `fmontopagado`, `dfecha_pago`, `comprobante`, `statuspago`) VALUES
+(1, 14, '20000.00', '2023-12-15 22:28:31', '../docs/CapitalPayments/Notion_app_logo-14.png', 'P'),
+(2, 14, '20000.00', '2023-12-15 22:37:49', '../docs/CapitalPayments/KotlinIcon-14.png', 'P');
 
 -- --------------------------------------------------------
 
@@ -411,12 +358,40 @@ CREATE TABLE IF NOT EXISTS `paginteresesinv` (
   `icvepago` int(11) NOT NULL AUTO_INCREMENT,
   `icveinversionista` int(11) NOT NULL,
   `icvedetalleinver` int(11) NOT NULL,
+  `montoinvhist` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Inversión al momento cuando se genera el registro del pago',
   `fmonto_pagado` decimal(10,2) NOT NULL,
   `dfecharegistro` datetime NOT NULL,
   `cstatuspago` char(2) COLLATE latin1_spanish_ci NOT NULL COMMENT 'NP = No Pagado\nP = Pagado',
   `dtfechapagconfirmado` datetime DEFAULT NULL,
+  `comprobantepago` varchar(250) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`icvepago`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `paginteresesinv`
+--
+
+INSERT INTO `paginteresesinv` (`icvepago`, `icveinversionista`, `icvedetalleinver`, `montoinvhist`, `fmonto_pagado`, `dfecharegistro`, `cstatuspago`, `dtfechapagconfirmado`, `comprobantepago`) VALUES
+(1, 1, 8, '10666.53', '1066.65', '2023-11-05 23:35:51', 'P', NULL, NULL),
+(2, 1, 8, '10666.53', '1066.65', '2023-12-05 23:37:28', 'NP', NULL, NULL),
+(3, 1, 2, '56000.00', '6720.00', '2023-11-05 23:38:24', 'NP', NULL, NULL),
+(4, 4, 7, '45000.00', '2250.00', '2023-12-06 00:59:22', 'NP', NULL, NULL),
+(5, 1, 14, '55555.00', '5555.50', '2023-11-06 21:04:19', 'P', '2023-11-15 22:31:06', '../docs/sql_icon-5.png'),
+(6, 3, 13, '500666.00', '50066.60', '2023-12-12 23:31:16', 'NP', NULL, NULL),
+(7, 4, 5, '100000.00', '10000.00', '2023-12-12 23:35:51', 'NP', NULL, NULL),
+(8, 4, 11, '1000000.00', '100000.00', '2023-12-12 23:36:26', 'NP', NULL, NULL),
+(9, 2, 9, '666666.00', '79999.92', '2023-11-14 11:39:47', 'P', '2023-11-14 21:18:15', '../docs/79999-9.jpg'),
+(10, 2, 6, '230000.00', '23000.00', '2023-11-13 11:40:49', 'P', '2023-11-13 20:55:33', '../docs/23000-10.jpg'),
+(11, 1, 2, '56000.00', '6720.00', '2023-12-14 17:05:35', 'NP', NULL, NULL),
+(12, 5, 10, '55000.00', '5500.00', '2023-12-14 18:13:50', 'NP', NULL, NULL),
+(13, 2, 6, '230000.00', '23000.00', '2023-12-14 21:05:48', 'NP', NULL, NULL),
+(14, 2, 3, '1000333.00', '100033.30', '2023-12-14 21:11:50', 'P', '2023-12-14 21:12:16', '../docs/1066-14.jpg'),
+(15, 2, 9, '666666.00', '79999.92', '2023-12-14 21:21:24', 'P', '2023-12-14 21:26:17', '../docs/tipos de datos-15.jpg'),
+(16, 2, 15, '70000.00', '5250.00', '2023-11-14 22:41:54', 'NP', NULL, NULL),
+(17, 2, 15, '30000.00', '2250.00', '2023-12-15 21:45:07', 'NP', NULL, NULL),
+(18, 1, 14, '5555.75', '555.58', '2023-12-15 22:40:20', 'P', '2023-12-16 02:05:27', '../docs/objetivo-18.png'),
+(19, 1, 1, '35333.00', '3533.30', '2023-12-16 01:05:00', 'NP', NULL, NULL),
+(20, 1, 12, '50000.00', '2500.00', '2023-12-16 01:05:09', 'NP', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -476,6 +451,38 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`icveusuario`, `cusername`, `cpassword`, `cnombre`, `capellido`, `dfechavencimiento`, `icverol`, `cavatar`) VALUES
 (1, 'gangulo', '$2y$10$OjRNp4Ca7VtDHR5aB.ysT.Q9vJUx4KfkHpZ28k41a4sPNTqKXCu1C', 'Gustavo', 'Angulo', '2023-12-31', 1, NULL),
 (2, 'nmayorquin', '$2y$10$rsS/To2KkElV0uNXekRY0emltoWDuPdsuFXX.n.ZXukJAwaT7yI.6', 'Noemi', 'Mayorquin', '2023-12-31', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vw_paysinterests`
+-- (Véase abajo para la vista actual)
+--
+DROP VIEW IF EXISTS `vw_paysinterests`;
+CREATE TABLE IF NOT EXISTS `vw_paysinterests` (
+`icvepago` int(11)
+,`icvedetalleinver` int(11)
+,`dmonto` decimal(10,2)
+,`montoinvehist` decimal(10,2)
+,`importe` decimal(10,2)
+,`fecha` datetime
+,`statuspago` char(2)
+,`dtfechapagconfirmado` datetime
+,`icveinversionista` int(11)
+,`cnombre` varchar(50)
+,`capaterno` varchar(50)
+,`camaterno` varchar(50)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vw_paysinterests`
+--
+DROP TABLE IF EXISTS `vw_paysinterests`;
+
+DROP VIEW IF EXISTS `vw_paysinterests`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_paysinterests`  AS SELECT `pagos`.`icvepago` AS `icvepago`, `inverdetalle`.`icvedetalleinver` AS `icvedetalleinver`, `inverdetalle`.`dmonto` AS `dmonto`, `pagos`.`montoinvhist` AS `montoinvehist`, `pagos`.`fmonto_pagado` AS `importe`, `pagos`.`dfecharegistro` AS `fecha`, `pagos`.`cstatuspago` AS `statuspago`, `pagos`.`dtfechapagconfirmado` AS `dtfechapagconfirmado`, `inversionistas`.`icveinversionista` AS `icveinversionista`, `inversionistas`.`cnombre` AS `cnombre`, `inversionistas`.`capaterno` AS `capaterno`, `inversionistas`.`camaterno` AS `camaterno` FROM ((`paginteresesinv` `pagos` join `inversionistas` on((`pagos`.`icveinversionista` = `inversionistas`.`icveinversionista`))) join `inverdetalle` on((`inverdetalle`.`icveinversionista` = `pagos`.`icveinversionista`))) ORDER BY `pagos`.`dfecharegistro` DESC ;
 
 --
 -- Restricciones para tablas volcadas

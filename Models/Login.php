@@ -17,6 +17,7 @@ class Login {
         
         if ($authenticated) {
             $resp['msj'] = "SUCCESS";
+            $resp['text'] = "Entraste muy bien chico";
             echo json_encode($resp);
         } else {
             $resp['msj'] = "ERROR";
