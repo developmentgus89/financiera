@@ -35,28 +35,6 @@ const access_login = async (username, password) => {
     } catch (error) {
         throw new Error(`No se puede obtener la suma total de intereses ${error.message}`);
     }
-    // const xhr = new XMLHttpRequest();
-    // let respuesta;
-
-    // // Configurar la solicitud AJAX
-    // xhr.open('POST', 'Controllers/LoginController.php', );
-    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    // xhr.onload = function () {
-    //     if (xhr.readyState === 4 && xhr.status === 200) {
-    //         // Manejar la respuesta del servidor
-    //         const response = JSON.parse(xhr.responseText);
-    //         console.table(response);
-    //         // console.log('Respuesta desde el servidor' + response.msj);
-
-    //         // response.msj === 'SUCCESS' ? window.location.href = 'Views/dashboard.php'
-    //         //     : toastr.error('Error al iniciar sesion, verifique su usuario y contraseña.');// Mostrar la respuesta en un cuadro de diálogo
-    //     }
-    // };
-
-    // // Enviar los datos de usuario y contraseña en la solicitud
-    // const params = `username=${username}&password=${password}`;
-    // xhr.send(params);
 }
 
 
