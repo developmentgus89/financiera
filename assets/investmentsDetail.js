@@ -1,3 +1,6 @@
+import * as banks from "./bankAccounts.js";
+
+
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
 
@@ -38,26 +41,28 @@ $('#setInputMontoInver').inputmask('currency', {
 });
 
 //Eventos de modales
-$("#m-confirm-pay").on('hidden.bs.modal', function () {
-  // location.reload();
+$("#modalAddDataBank").on('hidden.bs.modal', function () {
+    descifra();
+    $('#modalSeeDataBank').modal('show');
 });
 
 //Declaracion de variables para los botones y campos globales
-const btnAddInversion = document.querySelector("#btnAddInversion");
-const btnSaveInvesments = document.querySelector("#btnSaveInvesments");
+const btnAddInversion               = document.querySelector("#btnAddInversion");
+const btnSaveInvesments             = document.querySelector("#btnSaveInvesments");
 const btnSaveUpdateInvesmentsDetail = document.querySelector('#btnSaveUpdateInvesmentsDetail');
-const btnSaveDocument = document.querySelector('#btnSaveDocument');
-const btnSeeBankData = document.querySelector('#seeBankData');
-const btnBackInvestments = document.querySelector('#btnBackInvestments');
+const btnSaveDocument               = document.querySelector('#btnSaveDocument');
+const btnSeeBankData                = document.querySelector('#seeBankData');
+const btnSeeBeneficiaries           = document.querySelector('#seeBeneficiaries');
+const btnBackInvestments            = document.querySelector('#btnBackInvestments');
 
 //Declaracion de las pestagnas
 
 const panelPagos = document.getElementById('custom-tabs-pays');
 
 //Declaracion para los selects
-const selectInterest = document.getElementById('udpicveinteres');
-const sInpuInterest = document.getElementById('setIinputInteres');
-const selInversiones = document.getElementById('selInversiones');
+const selectInterest         = document.getElementById('udpicveinteres');
+const sInpuInterest          = document.getElementById('setIinputInteres');
+const selInversiones         = document.getElementById('selInversiones');
 const selDetailsPaysInterest = document.getElementById('selInversionesPays');
 
 
@@ -74,9 +79,12 @@ const descifra = () => {
     getInvestment(params.icveinvestor);
     getInvestmentDetails(params.icveinvestor);
     getInvestmentsByInvestor(params.icveinvestor);
+    
     document.getElementById('fieldicveinversionista').value = params.icveinvestor;
 
+    banks.getBanksAccounts(params.icveinvestor);
     getSumCapitalPayment(params.icveinvestor);
+    banks.getBanksCat();
   }
 
   console.log(`Parametros son: ${queryParams}`);
@@ -110,28 +118,6 @@ const getInvestment = async (icveinversionista) => {
     document.getElementById('telephoneInvestor').innerHTML = `${data[0].ctelefono}`;
     document.getElementById('mailInvestor').innerHTML = `${data[0].cemail}`;
 
-    //Seccion de Datos Bancarios
-    let tipoCuenta = '';
-    switch (data[0].itipocuenta) {
-      case '1':
-        tipoCuenta = `CLABE`;
-        break;
-
-      case '2':
-        tipoCuenta = `TARJETA DÉBITO`;
-        break;
-
-      case '3':
-        tipoCuenta = `CTA BANCARIA`;
-        break;
-
-      default:
-        tipoCuenta = `Error Tipo Cuenta`;
-    }
-
-    document.getElementById('tipoCuenta').innerHTML = tipoCuenta;
-    document.getElementById('instBancaria').innerHTML = data[0].cnombrebanco;
-    document.getElementById('ctaBancaria').innerHTML = data[0].cuentabancaria;
   } catch (error) {
     throw new Error(`No se pudo completar la consulta de inversiones del inversionista ${error.message}`);
   }
@@ -399,6 +385,15 @@ const updateInvestmentData = async (
   }
 }
 
+
+/**
+ * 
+ * @param {Number} icveinversionista 
+ * @param {Date} InputDateInver 
+ * @param {Number} InputMontoInver 
+ * @param {Number} InputInteres 
+ * @param {String} InputObsInver 
+ */
 const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMontoInver, InputInteres, InputObsInver) => {
   InputMontoInver = InputMontoInver.substring(4);
   InputMontoInver = InputMontoInver.replace(/,/g, '');
@@ -469,10 +464,15 @@ btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
   );
 });
 
+//Con esto se abre el modal para ver las cuentas bancarias
 btnSeeBankData.addEventListener('click', function () {
   $('#modalSeeDataBank').modal('show');
 });
 
+
+btnSeeBeneficiaries.addEventListener('click', function(){
+  $('#modalSeeBeneficiaries').modal('show');
+});
 
 btnAddInversion.addEventListener('click', function () {
   $('#modalAddInversion').modal('show');
@@ -525,10 +525,6 @@ btnBackInvestments.addEventListener('click', function () {
   console.log('Click en el boton regreso');
   window.location.href = 'InvestorsBlade.php';
 });
-
-let setInputMontoInver = document.getElementById('setInputMontoInver');
-
-
 
 
 //! Graficos

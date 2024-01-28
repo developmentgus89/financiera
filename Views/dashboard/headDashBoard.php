@@ -19,10 +19,8 @@
   <link rel="stylesheet" href="../utils/css/toastify.min.css">
 
   <!-- DataTables -->
-  <!-- <link rel="stylesheet" href="../utils/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../utils/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../utils/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"> -->
   <link rel="stylesheet" href="../utils/css/vanilla-datatable.css">
+  
 
   <!-- jquery-validation -->
   <script src="../utils/plugins/jquery-validation/jquery.validate.min.js"></script>

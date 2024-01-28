@@ -280,12 +280,8 @@ const uploadVoucherCapital = () => {
     console.info(formData);
     console.table(formData);
 
-    fetch(baseURL, {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.text())
-        .then(data => {
+    fetch(baseURL, {method: 'POST', body: formData
+    }).then(response => response.text()).then(data => {
             console.info(data);
             setTimeout(progressBar, 1000);
 
@@ -314,7 +310,7 @@ const progressBar = () => {
             setTimeout(updateProgressBar, 100); // Ajusta el tiempo según sea necesario
         } else {
             document.getElementById("statusMessage").style.display = 'block';
-            // location.reload();
+            // location.reload(); //? Para que la tia no le de F5
         }
     }
 
