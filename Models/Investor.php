@@ -12,7 +12,8 @@ class Investor
         $this->acceso = $db->pdo;
     }
 
-    public function rowsCount($invnombre, $invapaterno, $invamaterno)
+    
+    public function rowsCount($invnombre, $invapaterno, $invamaterno) : int
     {
         try {
             $query = "SELECT (
@@ -163,10 +164,13 @@ class Investor
             throw new Error('Error en la consulta: ' . $e->getMessage());
         }
     }
-
-
-
-    public function getTotalInvestors()
+    
+    /**
+     * getTotalInvestors
+     *
+     * @return string | Error
+     */
+    public function getTotalInvestors() : array
     {
         try {
             $query = "SELECT count(0) AS total FROM inversionistas";
@@ -179,7 +183,7 @@ class Investor
         }
     }
 
-    public function getTotalCapital()
+    public function getTotalCapital(): array
     {
         try {
             $query = "SELECT sum(fcantidadinvertida) AS capital FROM inversionistas";
@@ -193,7 +197,7 @@ class Investor
     }
 
 
-    public function get_banks()
+    public function get_banks(): array
     {
         try {
             $query = "SELECT * FROM catbancos";
@@ -206,7 +210,7 @@ class Investor
         }
     }
 
-    public function get_interest()
+    public function get_interest() : array
     {
         try {
             $query = "SELECT * FROM cattasascomisiones";
@@ -275,7 +279,7 @@ class Investor
 
     //! Insercion de inversion
 
-    public function set_invesmentsdetails($cveinvestor, $inputDateInver, $inputInteres, $inputMontoInver, $inputObsInver)
+    public function set_invesmentsdetails($cveinvestor, $inputDateInver, $inputInteres, $inputMontoInver, $inputObsInver) : bool
     {
         try {
             $query = "INSERT INTO inverdetalle (icveinversionista, icvetasascomisiones, dfecharegistro,dmonto, cstatus, invtipooperacion, invdetobservaciones)
@@ -478,6 +482,14 @@ class Investor
         }
     }
 
+    
+    
+    /**
+     * set_paysdetailsinterest
+     *
+     * @param  number $icveinversionista
+     * @return Array[] String || String Error
+     */
     public function set_paysdetailsinterest($icveinversionista)
     {
         try {

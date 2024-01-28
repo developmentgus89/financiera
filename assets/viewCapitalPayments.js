@@ -280,12 +280,8 @@ const uploadVoucherCapital = () => {
     console.info(formData);
     console.table(formData);
 
-    fetch(baseURL, {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.text())
-        .then(data => {
+    fetch(baseURL, {method: 'POST', body: formData
+    }).then(response => response.text()).then(data => {
             console.info(data);
             setTimeout(progressBar, 1000);
 

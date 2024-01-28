@@ -25,7 +25,7 @@ class CapitalPaymentsInv
      * @param  Number $icvedetinversion
      * @return Array[] String
      */
-    public function getDataInvestment($icvedetinversion)
+    public function getDataInvestment($icvedetinversion) : string
     {
         try {
             $query = "SELECT * FROM inverdetalle 
@@ -65,7 +65,7 @@ class CapitalPaymentsInv
      * @param  number $icvedetalleinver
      * @return Array[] String | PDOException Message
      */
-    public function getCapitalSum($icvedetalleinver)
+    public function getCapitalSum($icvedetalleinver) : string
     {
         try {
             $query = "SELECT SUM(fmontopagado) AS totalcapital FROM pagcapitalinv WHERE icveinverdetalle = ?";
@@ -130,10 +130,11 @@ class CapitalPaymentsInv
      * @param  number $cveinversionista
      * @return Array[] Object
      */
-    static public function updateSumCapitalInv($cveinversionista) {
+    public static function updateSumCapitalInv($cveinversionista) : array {
         try {
             $query = "UPDATE inversionistas SET fcantidadinvertida = (
-                        SELECT SUM(dmonto) FROM inverdetalle WHERE icveinversionista = ?)
+                            SELECT SUM(dmonto) FROM inverdetalle WHERE icveinversionista = ?
+                        )
                       WHERE icveinversionista = ?";
             $statement = self::$conn->prepare($query); //Se usa self para referenciar la clase misma
             $statement->execute([$cveinversionista, $cveinversionista]);

@@ -1,4 +1,4 @@
-import { getBanksAccounts } from "./bankAccounts";
+import * as banks from "./bankAccounts.js";
 
 
 //Constante de Declaracion para la base Url
@@ -82,8 +82,9 @@ const descifra = () => {
     
     document.getElementById('fieldicveinversionista').value = params.icveinvestor;
 
-    getBanksAccounts(params.icveinvestor);
+    banks.getBanksAccounts(params.icveinvestor);
     getSumCapitalPayment(params.icveinvestor);
+    banks.getBanksCat();
   }
 
   console.log(`Parametros son: ${queryParams}`);
@@ -117,28 +118,6 @@ const getInvestment = async (icveinversionista) => {
     document.getElementById('telephoneInvestor').innerHTML = `${data[0].ctelefono}`;
     document.getElementById('mailInvestor').innerHTML = `${data[0].cemail}`;
 
-    //Seccion de Datos Bancarios
-    // let tipoCuenta = '';
-    // switch (data[0].itipocuenta) {
-    //   case '1':
-    //     tipoCuenta = `CLABE`;
-    //     break;
-
-    //   case '2':
-    //     tipoCuenta = `TARJETA DÉBITO`;
-    //     break;
-
-    //   case '3':
-    //     tipoCuenta = `CTA BANCARIA`;
-    //     break;
-
-    //   default:
-    //     tipoCuenta = `Error Tipo Cuenta`;
-    // }
-
-    // document.getElementById('tipoCuenta').innerHTML = tipoCuenta;
-    // document.getElementById('instBancaria').innerHTML = data[0].cnombrebanco;
-    // document.getElementById('ctaBancaria').innerHTML = data[0].cuentabancaria;
   } catch (error) {
     throw new Error(`No se pudo completar la consulta de inversiones del inversionista ${error.message}`);
   }
@@ -546,10 +525,6 @@ btnBackInvestments.addEventListener('click', function () {
   console.log('Click en el boton regreso');
   window.location.href = 'InvestorsBlade.php';
 });
-
-let setInputMontoInver = document.getElementById('setInputMontoInver');
-
-
 
 
 //! Graficos

@@ -228,145 +228,145 @@ include_once "dashboard/startTemplateDashboard.php";
 </div>
 
 <!-- Modal Editar -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content fondo-modal-add-inv">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalEditarLabel">Editar Inversionista y Consulta de Capital</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <input type="text" class="form-control" name="udp-idcveinvestor" id="udp-idcveinvestor" hidden>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="udp-invnombre">Nombre:</label>
-                            <input type="text" class="form-control" name="udp-invnombre" id="udp-invnombre" aria-describedby="hclinombre" placeholder="">
-                            <small id="hclinombre" class="form-text">Capture el nombre del Inversionista</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="udp-invapaterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" name="udp-invapaterno" id="udp-invapaterno" aria-describedby="hcliapaterno" placeholder="">
-                            <small id="hcliapaterno" class="form-text">Capture el apellido paterno del Inversionista</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="udp-invamaterno">Apellido Materno:</label>
-                            <input type="text" class="form-control" name="udp-invamaterno" id="udp-invamaterno" aria-describedby="hcliamaterno" placeholder="">
-                            <small id="hcliamaterno" class="form-text">Capture el Apellido Materno del Inversionista</small>
-                        </div>
-                    </div>
+    <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content fondo-modal-add-inv">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalEditarLabel">Editar Inversionista y Consulta de Capital</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="udp-invedad">Edad:</label>
-                            <input type="number" step="1" min="18" value="18" class="form-control" name="udp-invedad" id="udp-invedad" aria-describedby="hinvedad" placeholder="">
-                            <small id="hinvedad" class="form-text">Edad del inversionista.</small>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" class="form-control" name="udp-idcveinvestor" id="udp-idcveinvestor" hidden>
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="udp-invtelefono">Tel&eacute;fono:</label>
-                                <input type="number" class="form-control" name="udp-invtelefono" id="udp-invtelefono" aria-describedby="hinvtelefono" placeholder="">
-                                <small id="hinvtelefono" class="form-text">Cliente debe ser mayor de edad.</small>
+                                <label for="udp-invnombre">Nombre:</label>
+                                <input type="text" class="form-control" name="udp-invnombre" id="udp-invnombre" aria-describedby="hclinombre" placeholder="">
+                                <small id="hclinombre" class="form-text">Capture el nombre del Inversionista</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="udp-invapaterno">Apellido Paterno:</label>
+                                <input type="text" class="form-control" name="udp-invapaterno" id="udp-invapaterno" aria-describedby="hcliapaterno" placeholder="">
+                                <small id="hcliapaterno" class="form-text">Capture el apellido paterno del Inversionista</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="udp-invamaterno">Apellido Materno:</label>
+                                <input type="text" class="form-control" name="udp-invamaterno" id="udp-invamaterno" aria-describedby="hcliamaterno" placeholder="">
+                                <small id="hcliamaterno" class="form-text">Capture el Apellido Materno del Inversionista</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="udp-invcantinvertida">Cantidad Invertida:</label>
-                            <input type="text" class="form-control" name="udp-invcantinvertida" id="udp-invcantinvertida" aria-describedby="hinvcantinvertida" placeholder="" readonly>
-                            <small id="hinvcantinvertida" class="form-text">Capital inicial de inversi&oacute;n</small>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="udp-invedad">Edad:</label>
+                                <input type="number" step="1" min="18" value="18" class="form-control" name="udp-invedad" id="udp-invedad" aria-describedby="hinvedad" placeholder="">
+                                <small id="hinvedad" class="form-text">Edad del inversionista.</small>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="udp-invtelefono">Tel&eacute;fono:</label>
+                                    <input type="number" class="form-control" name="udp-invtelefono" id="udp-invtelefono" aria-describedby="hinvtelefono" placeholder="">
+                                    <small id="hinvtelefono" class="form-text">Cliente debe ser mayor de edad.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="udp-invcantinvertida">Cantidad Invertida:</label>
+                                <input type="text" class="form-control" name="udp-invcantinvertida" id="udp-invcantinvertida" aria-describedby="hinvcantinvertida" placeholder="" readonly>
+                                <small id="hinvcantinvertida" class="form-text">Capital inicial de inversi&oacute;n</small>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="invtipocuenta">Tipo de Cuenta:</label>
-                                <select class="form-control" name="udp-invtipocuenta" id="udp-invtipocuenta">
-                                    <option value="">SELECCIONE</option>
-                                    <option value="1">CLABE</option>
-                                    <option value="2">TARJETA D&Eacute;BITO</option>
-                                    <option value="3">CTA BANCARIA</option>
+                                <div class="form-group">
+                                    <label for="invtipocuenta">Tipo de Cuenta:</label>
+                                    <select class="form-control" name="udp-invtipocuenta" id="udp-invtipocuenta">
+                                        <option value="">SELECCIONE</option>
+                                        <option value="1">CLABE</option>
+                                        <option value="2">TARJETA D&Eacute;BITO</option>
+                                        <option value="3">CTA BANCARIA</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="invinstbancaria">Instituci&oacute;n Bancaria:</label>
+                                <select class="form-control" name="udp-invinstbancaria" id="udp-invinstbancaria">
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invinstbancaria">Instituci&oacute;n Bancaria:</label>
-                            <select class="form-control" name="udp-invinstbancaria" id="udp-invinstbancaria">
-                            </select>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="invctabancaria">Cuenta Bancaria:</label>
+                                <input type="text" class="form-control" name="udp-invctabancaria" id="udp-invctabancaria" aria-describedby="hclientDateRegister" placeholder="">
+                                <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE, Débito. Cuenta)</small>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="invctabancaria">Cuenta Bancaria:</label>
-                            <input type="text" class="form-control" name="udp-invctabancaria" id="udp-invctabancaria" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hinvclabe" class="form-text">Cuenta de dep&oacute;sito Bancaria (CLABE, Débito. Cuenta)</small>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="udp-invemail">E-Mail:</label>
+                                <input type="email" class="form-control" name="udp-invemail" id="udp-invemail" aria-describedby="hinvemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                <small id="hinvemail" class="form-text">Correo electr&oacute;nico de contacto</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="udp-invDateRegister">Fecha de Registro:</label>
+                                <input type="date" class="form-control" name="udp-invDateRegister" id="udp-invDateRegister" aria-describedby="hclientDateRegister" placeholder="">
+                                <small id="hclientDateRegister" class="form-text">dd/mm/aaaa</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <h2>TOTAL INVERTIDO</h2>
+                                        </th>
+                                        <th>
+                                            <h2>TOTAL PAGADO CAPITAL</h2>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div id="cantTotalInvertida"></div>
+                                        </td>
+                                        <td>
+                                            <div id="cantPagCapital"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="udp-invemail">E-Mail:</label>
-                            <input type="email" class="form-control" name="udp-invemail" id="udp-invemail" aria-describedby="hinvemail" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-                            <small id="hinvemail" class="form-text">Correo electr&oacute;nico de contacto</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="udp-invDateRegister">Fecha de Registro:</label>
-                            <input type="date" class="form-control" name="udp-invDateRegister" id="udp-invDateRegister" aria-describedby="hclientDateRegister" placeholder="">
-                            <small id="hclientDateRegister" class="form-text">dd/mm/aaaa</small>
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btnUpdateInvestor">Actualizar</button>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <h2>TOTAL INVERTIDO</h2>
-                                    </th>
-                                    <th>
-                                        <h2>TOTAL PAGADO CAPITAL</h2>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div id="cantTotalInvertida"></div>
-                                    </td>
-                                    <td>
-                                        <div id="cantPagCapital"></div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="btnUpdateInvestor">Actualizar</button>
             </div>
         </div>
     </div>
-</div>
-
+<!-- Modal Editar -->
 <div class="modal fade" id="modalBorrarCliente">
     <div class="modal-dialog">
         <div class="modal-content bg-danger">
