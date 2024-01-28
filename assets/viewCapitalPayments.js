@@ -314,7 +314,7 @@ const progressBar = () => {
             setTimeout(updateProgressBar, 100); // Ajusta el tiempo según sea necesario
         } else {
             document.getElementById("statusMessage").style.display = 'block';
-            // location.reload();
+            // location.reload(); //? Para que la tia no le de F5
         }
     }
 

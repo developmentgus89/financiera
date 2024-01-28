@@ -79,7 +79,10 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             </span>
                                                         </li>
                                                         <li class="list-group-item">
-                                                            <b class="text-title-cat"><i class="nav-icon fas fa-university p-2"></i>Datos Bancarios</b> <a name="" id="seeBankData" class="float-right" href="#">Ver</a>
+                                                            <b class="text-title-cat"><i class="nav-icon fas fa-university p-2"></i>Cuentas Bancarias</b> <a name="" id="seeBankData" class="float-right" href="#">Ver</a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <b class="text-title-cat"><i class="nav-icon fas fa-id-card p-2"></i>Benefeciarios:</b> <a name="" id="seeBeneficiaries" class="float-right" href="#">Ver</a>
                                                         </li>
                                                         <li class="list-group-item">
                                                             <b class="text-title-cat"><i class="nav-icon fas fa-envelope-open-text p-2"></i> E-Mail</b> <a class="float-right text-title-cat">
@@ -114,7 +117,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     <div class="info-box bg-success">
                                                         <div class="info-box-content">
                                                             <h5 class="info-box-text text-center"><strong>Capital</strong></h5>
-                                                            <span class="info-box-number text-center mb-0"><div id="totalCapital"></div></span>
+                                                            <span class="info-box-number text-center mb-0">
+                                                                <div id="totalCapital"></div>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -124,7 +129,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     <div class="info-box bg-secondary">
                                                         <div class="info-box-content">
                                                             <h5 class="info-box-text text-center"><strong>Inversiones</strong></h5>
-                                                            <span class="info-box-number text-center mb-0"><div id="totalInversiones"></div></span>
+                                                            <span class="info-box-number text-center mb-0">
+                                                                <div id="totalInversiones"></div>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -135,7 +142,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="info-box-content">
                                                             <strong>Inter&eacute;s Pagado</strong>
                                                             <span class="info-box-text text-center"></span>
-                                                            <span class="info-box-number text-center mb-0"><div id="interesTotalPagado"></div></span>
+                                                            <span class="info-box-number text-center mb-0">
+                                                                <div id="interesTotalPagado"></div>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -156,7 +165,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <button id="btnAddInversion" type="button" class="btn btn-primary"><i class="nav-icon fas fa-money-bill-wave"></i>&nbsp; &nbsp;Agregar</button>
                                     </div>
                                 </div>
-                                <div class="card-body table-responsive p-0 bg-success">
+                                <div class="card-body table-responsive p-0 bg-success justify-content-center">
                                     <table id="tblInversiones" class="table table table-hover text-nowrap">
                                     </table>
                                 </div>
@@ -285,37 +294,113 @@ include_once "dashboard/startTemplateDashboard.php";
 
 <!-- Modal -->
 <div class="modal fade" id="modalSeeDataBank" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content fondo_cliente_edit_modal">
             <div class="modal-header">
-                <h3 class="modal-title">Datos Bancarios.</h3>
+                <h3 class="modal-title">Cuentas Bancarias.</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="col-12">
-                    <p class="lead">Datos bancarios para el pago de intereses</p>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <tr>
-                                <th style="width:50%">Tipo Cuenta:</th>
-                                <td><div id="tipoCuenta"></div></td>
-                            </tr>
-                            <tr>
-                                <th style="width:50%">Insitituci&oacute;n Bancaria:</th>
-                                <td><div id="instBancaria"></div></td>
-                            </tr>
-                            <tr>
-                                <th style="width:50%">No. Cuenta:</th>
-                                <td><div id="ctaBancaria"></div></td>
-                            </tr>
-                        </table>
+                    <div class="row justify-content-center">
+                        <div class="card card-success">
+                            <div class="card-header">
+                                <h2 class="card-title">Cat&aacute;logo de Cuentas Bancarias.</h2>
+                                <div class="card-tools float-right m-2">
+                                    <button id="btnAddDataBank" type="button" class="btn btn-primary active"><i class="nav-icon fas fa-layer-group"></i>&nbsp; &nbsp;Agregar</button>
+                                </div>
+                            </div>
+                            <div class="card-body table-responsive p-2 bg-success">
+                                <table id="tblBankAccounts" class="table table table-hover text-nowrap">
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAddDataBank" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content fondo_cliente_edit_modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Captura de Cuenta Bancaria.</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="ctaicvebanco">Banco:</label>
+                              <select class="form-control" name="ctaicvebanco" id="ctaicvebanco">
+                                <option>Banco 1</option>
+                                <option>Banco 2</option>
+                                <option>Banco 3</option>
+                              </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                              <label for=""></label>
+                              <input type="text"
+                                class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                              <small id="helpId" class="form-text text-muted">Help text</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalSeeBeneficiaries" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Control de Beneficiarios del Inversionista.</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="text-center">
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h2 class="card-title">Cat&aacute;logo de Beneficiarios</h2>
+                                    <div class="card-tools float-right m-2">
+                                        <button id="btnAddInversion" type="button" class="btn btn-primary"><i class="nav-icon fas fa-money-bill-wave"></i>&nbsp; &nbsp;Agregar</button>
+                                    </div>
+                                </div>
+                                <div class="card-body table-responsive p-0 bg-success">
+                                    <table id="tblBankAccounts" class="table table table-hover text-nowrap">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -347,5 +432,5 @@ include_once "dashboard/footerDashBoard.php";
 <script src="../utils/plugins/chart.js/Chart.min.js"></script>
 <script src="../assets/getInterestsForInvestment.js"></script>
 <script src="../assets/investorsDetails.js"></script>
-<script src="../assets/investmentsDetail.js"></script>
+<script type="module" src="../assets/investmentsDetail.js"></script>
 <script src="../assets/conf.js"></script>

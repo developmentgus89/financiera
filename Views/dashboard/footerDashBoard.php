@@ -32,6 +32,7 @@
 	<script src="../utils/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<script src="../utils/js/vanillaDataTable.js"></script>
 	
+	
 
     <script src="../assets/logout.js"></script>
 	

@@ -4,7 +4,8 @@ require_once 'Conexion.php';
 class CapitalPaymentsInv
 {
     private $conexion;
-    var $acceso;
+    private $acceso;
+    private static $conn;
 
     /**
      * __construct
@@ -15,6 +16,7 @@ class CapitalPaymentsInv
     {
         $db = new Conexion();
         $this->acceso = $db->pdo;
+        self::$conn = $this->acceso;
     }
 
     /**
@@ -93,15 +95,53 @@ class CapitalPaymentsInv
             $statement = $this->acceso->prepare($query);
             $statement->execute([$icvedetinversion, $amount, $voucher]);
 
+            $cveinversionista = $this->acceso->lastInsertId();
+
+            
             $queryUpdate = "UPDATE inverdetalle SET dmonto = dmonto - ? WHERE icvedetalleinver = ?";
             $statement2 = $this->acceso->prepare($queryUpdate);
             $statement2->execute([$amount, $icvedetinversion]);
-            
+
+            $querySelect = "SELECT icveinversionista FROM inverdetalle WHERE icvedetalleinver = ?";
+            $statementSelect = $this->acceso->prepare($querySelect);
+            $statementSelect->execute([$icvedetinversion]);
+            $result = $statementSelect->fetch(PDO::FETCH_ASSOC);
+
+            if($result){
+                $icveinversionista = $result['icveinversionista'];
+                //Iserción del métoodo estatico
+                $resp['static'] = CapitalPaymentsInv::updateSumCapitalInv($icveinversionista);
+            } else {
+                $resp['static'] = 'Metodo statico con errores';
+            }
+
             $resp['msj'] = true;
             $resp['text'] = 'Se insertó el pago a capital correctamente';
             return $resp;
         } catch (PDOException $e) {
             throw new Error('Error: no se puede insertar el pago a capital. ' . $e->getMessage());
+        }
+    }
+
+    
+    /**
+     * updateSumCapitalInv
+     *
+     * @param  number $cveinversionista
+     * @return Array[] Object
+     */
+    static public function updateSumCapitalInv($cveinversionista) {
+        try {
+            $query = "UPDATE inversionistas SET fcantidadinvertida = (
+                        SELECT SUM(dmonto) FROM inverdetalle WHERE icveinversionista = ?)
+                      WHERE icveinversionista = ?";
+            $statement = self::$conn->prepare($query); //Se usa self para referenciar la clase misma
+            $statement->execute([$cveinversionista, $cveinversionista]);
+            $resp['msj'] = true;
+            $resp['text'] = 'Se insertó el pago a capital correctamente';
+            return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error: no se puede actualizar el total del monto invertido. ' . $e->getMessage());
         }
     }
 

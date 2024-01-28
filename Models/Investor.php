@@ -54,7 +54,7 @@ class Investor
                 $invctabancaria, $invemail, $invDateRegister
             ]);
 
-            //* Obtenemos el último valor del ultimo inversionista insertado apra la clave
+            //* Obtenemos el último valor del ultimo inversionista insertado para la clave
             $icveinversionista = $this->acceso->lastInsertId();
 
             //* Se genera el Query para la inserción del detalle del inversionista
