@@ -13,6 +13,9 @@ const selCatIcveBanco = document.getElementById('selCatIcveBanco');
 
 let tblBankAccountsInstance = null;
 
+const editAccountBank = (id) => {
+    console.warn(`Le mando el ID para editar ${id}`);
+}
 
 export const getBanksAccounts = async (cveinversionista) => {
     try {
@@ -34,22 +37,22 @@ export const getBanksAccounts = async (cveinversionista) => {
 
         const tblBankAccounts = document.getElementById("tblBankAccounts");
 
-        if(tblBankAccountsInstance){
+        if (tblBankAccountsInstance) {
             tblBankAccountsInstance.destroy();
         }
 
         tblBankAccountsInstance = new DataTable(tblBankAccounts, {
             data: {
                 // headings: Object.keys(data[0]),
-                headings: ['Banco', 'Numero de Cuenta', 'Observaciones','Editar','Eliminar'],
+                headings: ['Banco', 'Numero de Cuenta', 'Observaciones', 'Editar', 'Eliminar'],
                 data: data.map(function (item) {
                     // return Object.values(item);                
                     return [
                         item['cnombrebanco'],
                         item['cnumcuenta'],
                         item['cobservaciones'],
-                        `<button id="btnEditAccountBank" class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" att-gus="${item['icvecatctasbancoinv']}"><i class="fas fa-edit"></i></button>`,
-                        `<button id="btnDeleteAccountBank" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" att-gus="${item['icvecatctasbancoinv']}"><i class="fas fa-trash"></i></button>`
+                        `<button id="btnEditAccountBank" class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="editAccountBank(${item['icvecatctasbancoinv']})"><i class="fas fa-edit"></i></button>`,
+                        `<button id="btnDeleteAccountBank" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="${item['icvecatctasbancoinv']}"><i class="fas fa-trash"></i></button>`
                     ]
                 })
             }
@@ -140,7 +143,7 @@ btnSaveAccountBank.addEventListener('click', () => {
                 { element: icveinversionista, message: null },
             );
 
-           setNewDataBank(fields); //Se manda a llmar a la funcion pero se le manda todo el arreglo //! es muy interesante
+            setNewDataBank(fields); //Se manda a llmar a la funcion pero se le manda todo el arreglo //! es muy interesante
         }
     }
 
@@ -152,15 +155,15 @@ btnSaveAccountBank.addEventListener('click', () => {
  * @param {Array} fields 
  */
 const setNewDataBank = async (fields) => {
-    
+
     let params = 'operation=newAccountBank';
     fields.forEach(dataBank => {
         let value;
 
-        if(dataBank.element.type === 'checkbox'){
-            value = dataBank.element.checked ? '1':'0';
+        if (dataBank.element.type === 'checkbox') {
+            value = dataBank.element.checked ? '1' : '0';
         }
-        else{
+        else {
             value = dataBank.element.value;
         }
         params += '&' + dataBank.element.id + '=' + value;
@@ -185,9 +188,9 @@ const setNewDataBank = async (fields) => {
     console.warn(`Respueta desde el controlador al insertar la cuenta bancaria`);
     console.table(data);
 
-    if(data.msj){
-        toastr.success(data.text,'Correcto');
-        setTimeout( async () => {
+    if (data.msj) {
+        toastr.success(data.text, 'Correcto');
+        setTimeout(async () => {
             let icveinversionista = document.getElementById('fieldicveinversionista');
             getBanksAccounts(icveinversionista);
             $('#modalAddDataBank').modal('hide');
@@ -200,7 +203,7 @@ const setNewDataBank = async (fields) => {
             //TODO: Verificar el limpiado del formulario
         }, 650);
         setTimeout(() => {
-            
+
         }, 950);
 
     }
@@ -208,17 +211,15 @@ const setNewDataBank = async (fields) => {
 
 }
 
-const btnEditAccountBank = document.getElementById('btnEditAccountBank');
 
-btnEditAccountBank.addEventListener('click', () => {
-    console.warn(`Hola Btn`);
-});
 
-const deleteAccountBank = (id) =>{
+const deleteAccountBank = (id) => {
     //TODO: Implementar este métoodo
+
+
 
 }
 
-export const updateAccountBank = (id) => {
+const updateAccountBank = (id) => {
     console.log(`Hola el ID de la cuenta bancaria es: ${id}`);
 }
