@@ -181,7 +181,6 @@ include_once "dashboard/startTemplateDashboard.php";
         <!-- /.card-body -->
     </div>
 </div>
-</div>
 
 <!-- /.container-fluid -->
 </div>
@@ -383,7 +382,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                 <label for="observationsAccountBank">Observaciones:</label>
                                 <input type="text" class="form-control" name="observationsAccountBank" id="observationsAccountBank" aria-describedby="helpId" placeholder="Este campo puede ir vac&iacute;o.">
                                 <small id="observationsAccountBank-help" class="form-text">Observaciones de la Cuenta Bancaria.</small>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                     <div class="row justify-content-center">
@@ -446,13 +445,13 @@ include_once "dashboard/startTemplateDashboard.php";
 
 
 <?php
-    include_once "dashboard/endTemplateDashboard.php";
+include_once "dashboard/endTemplateDashboard.php";
 ?>
 
 
 <!-- REQUIRED SCRIPTS -->
 <?php
-    include_once "dashboard/footerDashBoard.php";
+include_once "dashboard/footerDashBoard.php";
 ?>
 
 <script src="../utils/js/libs/crypto.js"></script>
@@ -461,6 +460,6 @@ include_once "dashboard/startTemplateDashboard.php";
 <script src="../utils/plugins/chart.js/Chart.min.js"></script>
 <script src="../assets/getInterestsForInvestment.js"></script>
 <script src="../assets/investorsDetails.js"></script>
-<script text="text/javascript" type="module" src="../assets/investmentsDetail.js"></script>
 <script text="text/javascript" src="../assets/bankAccounts.js"></script>
+<script text="text/javascript" type="module" src="../assets/investmentsDetail.js"></script>
 <script src="../assets/conf.js"></script>
