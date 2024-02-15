@@ -171,7 +171,7 @@ const setNewDataBank = async (fields) => {
 
     console.warn(`String de Params ${params}`);
 
-    //TODO: Validar correctamente la entrada de los datos en el controlador y modelo
+
     const response = await fetch(baseURL2, {
         method: 'POST',
         headers: {
@@ -200,7 +200,6 @@ const setNewDataBank = async (fields) => {
             document.getElementById('typeAccountBank').value = '';
             document.getElementById('observationsAccountBank').value = '';
             document.getElementById('customSwitch3').checked = false;
-            //TODO: Verificar el limpiado del formulario
         }, 650);
         setTimeout(() => {
 

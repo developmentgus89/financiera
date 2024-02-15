@@ -39,20 +39,40 @@ $('#setInputMontoInver').inputmask('currency', {
     rightAlign: false
 });
 
+//Events Modals
+
+$("#modalAddDataBank").on('shown.bs.modal', () => {
+    const selectBanks = document.getElementById('selCatIcveBanco');
+    drawCatalogBanks();
+    // getBanks(selectBanks);
+});
+
 const tblAccountsBanks = document.getElementById('tblAccountsBanks');
 const btnReturnInvestor = document.getElementById('btnReturnInvestor');
 const btnAddAccountBank = document.getElementById('btnAddAccountBank');
+const btnSaveAccountBank = document.getElementById('btnSaveAccountBank');
 
 btnReturnInvestor.addEventListener('click', () => {
     let icveinvestor = getParamsInvestor();
-    const parametro = { icveinvestor: icveinvestor};
-    const paraEncryp = CryptoJS.AES.encrypt(JSON.stringify(parametro),'financiera').toString();
+    const parametro = { icveinvestor: icveinvestor };
+    const paraEncryp = CryptoJS.AES.encrypt(JSON.stringify(parametro), 'financiera').toString();
 
     window.location.href = `InvestorsDetailsBlade.php?cveinvestors=${encodeURIComponent(paraEncryp)}`;
 });
 
 btnAddAccountBank.addEventListener('click', () => {
     $('#modalAddDataBank').modal('show');
+});
+
+
+btnSaveAccountBank.addEventListener('click', () => {
+    let selCatIcveBanco = document.getElementById("selCatIcveBanco");
+    let numberAccountBank = document.getElementById("numberAccountBank");
+    let typeAccountBank = document.getElementById("typeAccountBank");
+    let statusAccountBank = document.getElementById("statusAccountBank");
+    let observationsAccountBank = document.getElementById("observationsAccountBank");
+    let customSwitch3 = document.getElementById("customSwitch3");
+
 });
 
 /**
@@ -95,22 +115,36 @@ const getAccountsBanks = async () => {
                     item['cnombrebanco'],
                     item['cnumcuenta'],
                     item['cobservaciones'],
-                    `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Inversiones" onclick="hacerClick()"><i class="fas fa-edit"></i></button>`,
-                    `<button id="btnDeleteAccountBank" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="hacerClick(${item['icvecatctasbancoinv']})"><i class="fas fa-trash"></i></button>`
+                    `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Cuenta" onclick="editarCuenta(${item['icvecatctasbancoinv']})"><i class="fas fa-edit"></i></button>`,
+                    `<button id="btnDeleteAccountBank" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desactivar Cuenta" onclick="desactivarCuenta(${item['icvecatctasbancoinv']})"><i class="fas fa-trash"></i></button>`
                 ]
             })
         }
     });
-
-
 }
 
-const hacerClick = (id) => {
-    alert(`Hacer clik en el boton con el id ${id}`);
+/**
+ * Se dibuja o carga el catalogo de Bancos en un Select
+ */
+const drawCatalogBanks = async () => {
+    const banks = await moduleAccBanks.moduleAccountsBanks.obtenerBancos();
+    let selectBanks = document.getElementById('selCatIcveBanco');
+    selectBanks.innerHTML = `<option value="">SELECCIONE BANCO</option>` +
+        banks.map(bank => `<option value="${bank.icvebanco}">${bank.cnombrebanco}</option>`).join('');
+    console.table(banks);
 }
 
-window.hacerClick = hacerClick;
+/**
+ * Global Function hacerClick
+ * @param {number} id 
+ */
+window.editarCuenta = (id) => {
+    console.info(`Hacer clik en el boton con el id ${id}`);
+}
 
-// window.addEventListener('load', getParamsInvestor);
+window.desactivarCuenta = (id) => {
+    console.warn(`Se esta desactivando la cuenta con numero ${id}`);
+}
+
 
 getAccountsBanks();

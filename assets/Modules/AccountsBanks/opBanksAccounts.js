@@ -1,7 +1,13 @@
 
 export const moduleAccountsBanks = (() => {
     const baseURL = '../Controllers/BanksAccountsController.php';
+    const baseURL2 = '../Controllers/InvestorsController.php';
 
+    /**
+     * 
+     * @param {number} icveinversionista 
+     * @returns 
+     */
     const getAccountsBanks = async (icveinversionista) => {
         try {
             const data = await getDataAccountsBanks(icveinversionista);
@@ -11,14 +17,26 @@ export const moduleAccountsBanks = (() => {
         }
     }
 
+
+    const getBanks = async () => {
+        try {
+            const data = await getDataBanks();
+            return data;
+        } catch (error) {
+            throw new Error(`Error al dibujar el catalogo de instituciones bancarias ${error.message}`);
+        }
+    }
+
+
+
     /**
      * 
      * @param {number} icveinversionista 
      * @returns Promise
      */
     const getDataAccountsBanks = async (icveinversionista) => {
-        let params = 'operation=getBanksAccounts'+
-                     '&icveinversionista=' + icveinversionista;
+        let params = 'operation=getBanksAccounts' +
+            '&icveinversionista=' + icveinversionista;
         try {
             const response = await fetch(baseURL, {
                 method: 'POST',
@@ -36,8 +54,36 @@ export const moduleAccountsBanks = (() => {
         }
     }
 
+    /**
+     * 
+     * @returns Promise
+     */
+    const getDataBanks = async () => {
+        try {
+            const response = await fetch(baseURL2, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'operation=readbanks'
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al leer las categorías');
+            }
+
+            const banks = await response.json();
+
+            return banks;
+
+        } catch (error) {
+            console.error(`Error en la consulta de los bancos: ${error.message}`);
+        }
+    }
+
     return {
-        obtenerCuentas: getAccountsBanks
+        obtenerCuentas: getAccountsBanks,
+        obtenerBancos: getBanks
     };
 
 })();

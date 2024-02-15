@@ -23,8 +23,9 @@ $('#udp-invcantinvertida').inputmask('currency', {
 });
 
 $('#modalAgregar').on('shown.bs.modal', () => {
-    const invnombre = document.querySelector('#invnombre');
-    getBanks();
+    const invnombre       = document.querySelector('#invnombre');
+    const invinstbancaria = document.querySelector('#invinstbancaria');
+    getBanks(invinstbancaria);
     getInterestInvesment();
     invnombre.focus();
 });
@@ -40,14 +41,12 @@ $("#modalEditar").on('hidden.bs.modal', function () {
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
 const btnAgregar = document.querySelector('#agregar-inversionista');
-
 const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
 const btnInsertInvestor = document.querySelector('#btnInsertInvestor');
 const btnUpdateInvestor = document.querySelector('#btnUpdateInvestor');
 const selectTipoCliente = document.querySelector('#typeClient');
 const btnRegresaModal = document.querySelector('#btnRegresaModal');
 const btnIrAInv = document.querySelector('#btnIrAInv');
-const selectBanco = document.querySelector('#invinstbancaria');
 const selectBancoUDP = document.querySelector('#udp-invinstbancaria');
 const selectInterests = document.querySelector('#invinteres');
 
@@ -501,55 +500,42 @@ const totalCapital = () => {
     xhr.send(`operation=totalCapital`);
 }
 
-//Funcion para poder llenar la lista de bancos
+
 /**
- * 
- * @param {number} op //* Operacion para cargar el catálogo de bancos
+ * @param {HTMLSelectElement} selectBanco //* Select que trae la lista de bancos HTML
+ * @param {boolean} op //* Operacion para cargar el catálogo de bancos
  * @param {number} idbank //* Clave del banco
  * @param {String} bankdesc //* Descripción larga del banco
  */
-const getBanks = (op, idbank, bankdesc) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const banks = JSON.parse(xhr.responseText);
-            console.log('listado de categorias');
-            console.table(banks);
+const getBanks = async (selectBanco, op = false , idbank = null, bankdesc = null) => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'operation=readbanks'
+        });
 
-            selectBanco.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'SELECCIONE BANCO';
-            selectBanco.appendChild(defaultOption);
-
-            banks.forEach(bank => {
-                const option = document.createElement('option');
-                option.value = bank.icvebanco;
-                option.textContent = bank.cnombrebanco;
-                selectBanco.append(option);
-
-            });
-
-            if (op) {
-
-                console.log('Carga listado de bancos para la actualización');
-                banks.forEach(bankUDP => {
-                    const option = document.createElement('option');
-                    option.value = bankUDP.icvebanco;
-                    option.textContent = bankUDP.cnombrebanco;
-                    selectBancoUDP.appendChild(option);
-                });
-            }
-
-        } else {
-            console.error('Error al leer las categorias');
+        if (!response.ok) {
+            throw new Error('Error al leer las categorías');
         }
-    };
-    xhr.send('operation=readbanks');
+
+        const banks = await response.json();
+        console.table(banks);
+
+        selectBanco.innerHTML = `<option value="">SELECCIONE BANCO</option>` +
+            banks.map(bank => `<option value="${bank.icvebanco}">${bank.cnombrebanco}</option>`).join('');
+
+        if (op) {
+            console.log('Carga listado de bancos para la actualización');
+            selectBanco.innerHTML += banks.map(bankUDP => `<option value="${bankUDP.icvebanco}">${bankUDP.cnombrebanco}</option>`).join('');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
+
 
 const getInterestInvesment = async () => {
     try {
@@ -607,7 +593,7 @@ const abrirModalActualizarCliente = (id) => {
 const confirmarEliminarCliente = (id) => {
     // Lógica para mostrar confirmación de eliminar Inversionista
     $('#deleteCliente').val(id);
-    getBanks(true);
+    getBanks(true, selectBanco);
     $('#modalBorrarCliente').modal('show');
 };
 

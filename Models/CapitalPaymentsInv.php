@@ -25,7 +25,7 @@ class CapitalPaymentsInv
      * @param  Number $icvedetinversion
      * @return Array[] String
      */
-    public function getDataInvestment($icvedetinversion) : string
+    public function getDataInvestment($icvedetinversion) : array
     {
         try {
             $query = "SELECT * FROM inverdetalle 
