@@ -1447,7 +1447,7 @@ module.exports = function (exec) {
 
 "use strict";
 
-// TODO: Remove from `core-js@4` since it's moved to entry points
+// : Remove from `core-js@4` since it's moved to entry points
 __webpack_require__(4916);
 var redefine = __webpack_require__(1320);
 var fails = __webpack_require__(7293);
@@ -3140,7 +3140,7 @@ var adapt = function (delta, numPoints, firstTime) {
  * Converts a string of Unicode symbols (e.g. a domain name label) to a
  * Punycode string of ASCII-only symbols.
  */
-// eslint-disable-next-line max-statements -- TODO
+// eslint-disable-next-line max-statements -- 
 var encode = function (input) {
   var output = [];
 
@@ -3538,7 +3538,7 @@ var wrappedDefineProperty = function defineProperty(target, key, descriptor) {
     && has(descriptor, 'value')
     && !has(descriptor, 'get')
     && !has(descriptor, 'set')
-    // TODO: add validation descriptor w/o calling accessors
+    // : add validation descriptor w/o calling accessors
     && !descriptor.configurable
     && (!has(descriptor, 'writable') || descriptor.writable)
     && (!has(descriptor, 'enumerable') || descriptor.enumerable)
@@ -5321,7 +5321,7 @@ for (var COLLECTION_NAME in DOMIterables) {
 
 "use strict";
 
-// TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
+// : in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
 __webpack_require__(6992);
 var $ = __webpack_require__(2109);
 var getBuiltIn = __webpack_require__(5005);
@@ -5676,7 +5676,7 @@ module.exports = {
 
 "use strict";
 
-// TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
+// : in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
 __webpack_require__(8783);
 var $ = __webpack_require__(2109);
 var DESCRIPTORS = __webpack_require__(9781);
@@ -5785,7 +5785,7 @@ var parseIPv4 = function (input) {
   return ipv4;
 };
 
-// eslint-disable-next-line max-statements -- TODO
+// eslint-disable-next-line max-statements -- 
 var parseIPv6 = function (input) {
   var address = [0, 0, 0, 0, 0, 0, 0, 0];
   var pieceIndex = 0;
@@ -6007,7 +6007,7 @@ var CANNOT_BE_A_BASE_URL_PATH = {};
 var QUERY = {};
 var FRAGMENT = {};
 
-// eslint-disable-next-line max-statements -- TODO
+// eslint-disable-next-line max-statements -- 
 var parseURL = function (url, input, stateOverride, base) {
   var state = stateOverride || SCHEME_START;
   var pointer = 0;

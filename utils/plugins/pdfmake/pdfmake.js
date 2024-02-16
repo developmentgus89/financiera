@@ -446,7 +446,7 @@ function checkIsPromise(obj) {
   // Accept native ES6 promises and promises that are implemented in a similar
   // way. Do not accept thenables that use a function as `obj` and that have no
   // `catch` handler.
-  // TODO: thenables are checked up until they have the correct methods,
+  // : thenables are checked up until they have the correct methods,
   // but according to documentation, the `then` method should receive
   // the `fulfill` and `reject` arguments as well or it may be never resolved.
   return isPromise(obj) || obj !== null && _typeof(obj) === 'object' && typeof obj.then === 'function' && typeof obj.catch === 'function';
@@ -766,7 +766,7 @@ function inspectValue(val) {
     showHidden: false,
     // Having a long line as error is better than wrapping the line for
     // comparison for now.
-    // TODO(BridgeAR): `breakLength` should be limited as soon as soon as we
+    // (BridgeAR): `breakLength` should be limited as soon as soon as we
     // have meta information about the inspected properties (i.e., know where
     // in what line the property starts and ends).
     breakLength: Infinity,
@@ -854,7 +854,7 @@ function createErrDiff(actual, expected, operator) {
   if (maxLines === 0) {
     // We have to get the result again. The lines were all removed before.
     var _actualLines = actualInspected.split('\n'); // Only remove lines in case it makes sense to collapse those.
-    // TODO: Accept env to always show the full error.
+    // : Accept env to always show the full error.
 
 
     if (_actualLines.length > 30) {
@@ -1058,7 +1058,7 @@ function (_Error) {
         if (operator === 'notStrictEqual' && _typeof(actual) === 'object' && actual !== null) {
           base = kReadableOperator.notStrictEqualObject;
         } // Only remove lines in case it makes sense to collapse those.
-        // TODO: Accept env to always show the full error.
+        // : Accept env to always show the full error.
 
 
         if (res.length > 30) {
@@ -1300,7 +1300,7 @@ createErrorType('ERR_INVALID_ARG_TYPE', function (name, expected, actual) {
   } else {
     var type = includes(name, '.') ? 'property' : 'argument';
     msg = "The \"".concat(name, "\" ").concat(type, " ").concat(determiner, " ").concat(oneOf(expected, 'type'));
-  } // TODO(BridgeAR): Improve the output by showing `null` and similar.
+  } // (BridgeAR): Improve the output by showing `null` and similar.
 
 
   msg += ". Received type ".concat(_typeof(actual));
@@ -17400,7 +17400,7 @@ var VectorMixin = {
     return this._ctmStack = [];
   },
   save: function save() {
-    this._ctmStack.push(this._ctm.slice()); // TODO: save/restore colorspace and styles so not setting it unnessesarily all the time?
+    this._ctmStack.push(this._ctm.slice()); // : save/restore colorspace and styles so not setting it unnessesarily all the time?
 
 
     return this.addContent('q');
@@ -17766,7 +17766,7 @@ var AFMFont = /*#__PURE__*/function () {
     this.glyphWidths = {};
     this.boundingBoxes = {};
     this.kernPairs = {};
-    this.parse(); // todo: remove charWidths since appears to not be used
+    this.parse(); // : remove charWidths since appears to not be used
 
     this.charWidths = new Array(256);
 
@@ -18602,7 +18602,7 @@ var LineWrapper = /*#__PURE__*/function (_EventEmitter) {
         var shouldContinue;
         var word = text.slice((last != null ? last.position : undefined) || 0, bk.position);
         var w = wordWidths[word] != null ? wordWidths[word] : wordWidths[word] = this.wordWidth(word); // if the word is longer than the whole line, chop it up
-        // TODO: break by grapheme clusters, not JS string characters
+        // : break by grapheme clusters, not JS string characters
 
         if (w > this.lineWidth + this.continuedX) {
           // make some fake break objects
@@ -32250,7 +32250,7 @@ function InflateState() {
   this.dmax = 0;              /* zlib header max distance (INFLATE_STRICT) */
   this.check = 0;             /* protected copy of check value */
   this.total = 0;             /* protected copy of output count */
-  // TODO: may be {}
+  // : may be {}
   this.head = null;           /* where to save gzip header information */
 
   /* sliding window */
@@ -32782,7 +32782,7 @@ function inflate(strm, flush) {
           if (have === 0) { break inf_leave; }
           copy = 0;
           do {
-            // TODO: 2 or 1 bytes?
+            // : 2 or 1 bytes?
             len = input[next + copy++];
             /* use constant limit because in js we should not preallocate memory */
             if (state.head && len &&
@@ -35643,7 +35643,7 @@ module.exports = path.Promise;
 
 var parent = __webpack_require__(1150);
 __webpack_require__(8628);
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(7314);
 __webpack_require__(7479);
 __webpack_require__(6290);
@@ -37387,7 +37387,7 @@ module.exports = function (exec) {
 
 "use strict";
 
-// TODO: Remove from `core-js@4` since it's moved to entry points
+// : Remove from `core-js@4` since it's moved to entry points
 __webpack_require__(4916);
 var uncurryThis = __webpack_require__(1702);
 var redefine = __webpack_require__(1320);
@@ -39484,7 +39484,7 @@ var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
 var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
 
 if (PATCH) {
-  // eslint-disable-next-line max-statements -- TODO
+  // eslint-disable-next-line max-statements -- 
   patchedExec = function exec(string) {
     var re = this;
     var state = getInternalState(re);
@@ -40411,7 +40411,7 @@ var wrappedDefineProperty = function defineProperty(target, key, descriptor) {
     && hasOwn(descriptor, 'value')
     && !hasOwn(descriptor, 'get')
     && !hasOwn(descriptor, 'set')
-    // TODO: add validation descriptor w/o calling accessors
+    // : add validation descriptor w/o calling accessors
     && !descriptor.configurable
     && (!hasOwn(descriptor, 'writable') || descriptor.writable)
     && (!hasOwn(descriptor, 'enumerable') || descriptor.enumerable)
@@ -43705,7 +43705,7 @@ if (!SymbolPrototype[TO_PRIMITIVE]) {
   var valueOf = SymbolPrototype.valueOf;
   // eslint-disable-next-line no-unused-vars -- required for .length
   redefine(SymbolPrototype, TO_PRIMITIVE, function (hint) {
-    // TODO: improve hint logic
+    // : improve hint logic
     return call(valueOf, this);
   });
 }
@@ -44538,7 +44538,7 @@ createTypedArrayConstructor('Uint8', function (init) {
 /***/ 8628:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(9170);
 
 
@@ -44547,7 +44547,7 @@ __webpack_require__(9170);
 /***/ 5743:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(5837);
 
 
@@ -44556,7 +44556,7 @@ __webpack_require__(5837);
 /***/ 7314:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(7922);
 
 
@@ -44565,7 +44565,7 @@ __webpack_require__(7922);
 /***/ 6290:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(4668);
 
 
@@ -44597,7 +44597,7 @@ $({ target: 'Promise', stat: true }, {
 /***/ 3728:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
-// TODO: Remove from `core-js@4`
+// : Remove from `core-js@4`
 __webpack_require__(6373);
 
 
@@ -46424,7 +46424,7 @@ DBCSEncoder.prototype.write = function(str) {
                     nextChar = uCode; // Current character will be written too in the next iteration.
 
                 } else {
-                    // TODO: What if we have no default? (resCode == undefined)
+                    // : What if we have no default? (resCode == undefined)
                     // Then, we should write first char of the sequence as-is and try the rest recursively.
                     // Didn't do it for now because no encoding has this situation yet.
                     // Currently, just skip the sequence and write current char.
@@ -46501,7 +46501,7 @@ DBCSEncoder.prototype.end = function() {
                 newBuf[j++] = dbcsCode & 0xFF; // low byte
             }
         } else {
-            // See todo above.
+            // See  above.
         }
         this.seqObj = undefined;
     }
@@ -46550,7 +46550,7 @@ DBCSDecoder.prototype.write = function(buf) {
             // Normal character, just use it.
         }
         else if (uCode === UNASSIGNED) { // Unknown char.
-            // TODO: Callback with seq.
+            // : Callback with seq.
             uCode = this.defaultCharUnicode.charCodeAt(0);
             i = seqStart; // Skip one byte ('i' will be incremented by the for loop) and try to parse again.
         }
@@ -46714,9 +46714,9 @@ module.exports = {
         encodeAdd: {'\u00a5': 0x5C, '\u203E': 0x7E},
     },
 
-    // TODO: KDDI extension to Shift_JIS
-    // TODO: IBM CCSID 942 = CP932, but F0-F9 custom chars and other char changes.
-    // TODO: IBM CCSID 943 = Shift_JIS = CP932 with original Shift_JIS lower 128 chars.
+    // : KDDI extension to Shift_JIS
+    // : IBM CCSID 942 = CP932, but F0-F9 custom chars and other char changes.
+    // : IBM CCSID 943 = Shift_JIS = CP932 with original Shift_JIS lower 128 chars.
 
 
     // == Chinese/GBK ==========================================================
@@ -53215,7 +53215,7 @@ var MAX_HWM = 0x40000000;
 
 function computeNewHighWaterMark(n) {
   if (n >= MAX_HWM) {
-    // TODO(ronag): Throw ERR_VALUE_OUT_OF_RANGE.
+    // (ronag): Throw ERR_VALUE_OUT_OF_RANGE.
     n = MAX_HWM;
   } else {
     // Get the next highest power of 2 to prevent increasing hwm excessively in
@@ -54189,7 +54189,7 @@ Transform.prototype._destroy = function (err, cb) {
 function done(stream, er, data) {
   if (er) return stream.emit('error', er);
   if (data != null) // single equals check for both `null` and `undefined`
-    stream.push(data); // TODO(BridgeAR): Write a test for these two error cases
+    stream.push(data); // (BridgeAR): Write a test for these two error cases
   // if there's nothing in the write buffer, then that means
   // that nothing more will ever be provided
 
@@ -54465,7 +54465,7 @@ Writable.prototype.pipe = function () {
 };
 
 function writeAfterEnd(stream, cb) {
-  var er = new ERR_STREAM_WRITE_AFTER_END(); // TODO: defer error events consistently everywhere, not just the cb
+  var er = new ERR_STREAM_WRITE_AFTER_END(); // : defer error events consistently everywhere, not just the cb
 
   errorOrDestroy(stream, er);
   process.nextTick(cb, er);
@@ -57987,7 +57987,7 @@ var CFFBlendOp = /*#__PURE__*/function () {
   function CFFBlendOp() {}
 
   CFFBlendOp.decode = function decode(stream, parent, operands) {
-    var numBlends = operands.pop(); // TODO: actually blend. For now just consume the deltas
+    var numBlends = operands.pop(); // : actually blend. For now just consume the deltas
     // since we don't use any of the values anyway.
 
     while (operands.length > numBlends) {
@@ -58352,7 +58352,7 @@ var CFFCustomEncoding = new r.VersionedStruct(new CFFEncodingVersion(), {
   1: {
     nRanges: r.uint8,
     ranges: new r.Array(Range1, 'nRanges')
-  } // TODO: supplement?
+  } // : supplement?
 
 });
 var CFFEncoding = new PredefinedOp([StandardEncoding, ExpertEncoding], new CFFPointer(CFFCustomEncoding, {
@@ -60443,7 +60443,7 @@ var CmapProcessor = (_class = /*#__PURE__*/function () {
         }
 
       case 8:
-        throw new Error('TODO: cmap format 8');
+        throw new Error(': cmap format 8');
 
       case 6:
       case 10:
@@ -60478,7 +60478,7 @@ var CmapProcessor = (_class = /*#__PURE__*/function () {
         }
 
       case 14:
-        throw new Error('TODO: cmap format 14');
+        throw new Error(': cmap format 14');
 
       default:
         throw new Error("Unknown cmap format ".concat(cmap.version));
@@ -60537,7 +60537,7 @@ var CmapProcessor = (_class = /*#__PURE__*/function () {
         }
 
       case 8:
-        throw new Error('TODO: cmap format 8');
+        throw new Error(': cmap format 8');
 
       case 6:
       case 10:
@@ -60558,7 +60558,7 @@ var CmapProcessor = (_class = /*#__PURE__*/function () {
         }
 
       case 14:
-        throw new Error('TODO: cmap format 14');
+        throw new Error(': cmap format 14');
 
       default:
         throw new Error("Unknown cmap format ".concat(cmap.version));
@@ -60782,7 +60782,7 @@ var UnicodeLayoutEngine = /*#__PURE__*/function () {
       var glyph = glyphs[index];
 
       if (glyph.isMark) {
-        // TODO: handle ligatures
+        // : handle ligatures
         clusterEnd = index;
       } else {
         if (clusterStart !== clusterEnd) {
@@ -60805,7 +60805,7 @@ var UnicodeLayoutEngine = /*#__PURE__*/function () {
     var baseBox = base.cbox.copy(); // adjust bounding box for ligature glyphs
 
     if (base.codePoints.length > 1) {
-      // LTR. TODO: RTL support.
+      // LTR. : RTL support.
       baseBox.minX += (base.codePoints.length - 1) * baseBox.width / base.codePoints.length;
     }
 
@@ -60825,7 +60825,7 @@ var UnicodeLayoutEngine = /*#__PURE__*/function () {
         switch (combiningClass) {
           case 'Double_Above':
           case 'Double_Below':
-            // LTR. TODO: RTL support.
+            // LTR. : RTL support.
             position.xOffset += baseBox.minX - markBox.width / 2 - markBox.minX;
             break;
 
@@ -63876,7 +63876,7 @@ var GlyphInfo = /*#__PURE__*/function () {
       var GDEF = this._font.GDEF;
 
       if (GDEF && GDEF.glyphClassDef) {
-        // TODO: clean this up
+        // : clean this up
         var classID = OTProcessor.prototype.getClassID(id, GDEF.glyphClassDef);
         this.isBase = classID === 1;
         this.isLigature = classID === 2;
@@ -64497,7 +64497,7 @@ var IndicShaper = /*#__PURE__*/function (_DefaultShaper3) {
 
     plan.unicodeScript = fromOpenType(plan.script);
     plan.indicConfig = INDIC_CONFIGS[plan.unicodeScript] || INDIC_CONFIGS.Default;
-    plan.isOldSpec = plan.indicConfig.hasOldSpec && plan.script[plan.script.length - 1] !== '2'; // TODO: turn off kern (Khmer) and liga features.
+    plan.isOldSpec = plan.indicConfig.hasOldSpec && plan.script[plan.script.length - 1] !== '2'; // : turn off kern (Khmer) and liga features.
   };
 
   IndicShaper.assignFeatures = function assignFeatures(plan, glyphs) {
@@ -64513,7 +64513,7 @@ var IndicShaper = /*#__PURE__*/function (_DefaultShaper3) {
         glyphs.splice.apply(glyphs, [i, 1].concat(decomposed));
       }
     }; // Decompose split matras
-    // TODO: do this in a more general unicode normalizer
+    // : do this in a more general unicode normalizer
 
 
     for (var i = glyphs.length - 1; i >= 0; i--) {
@@ -65414,7 +65414,7 @@ var UniversalShaper = /*#__PURE__*/function (_DefaultShaper4) {
         glyphs.splice.apply(glyphs, [i, 1].concat(decomposed));
       }
     }; // Decompose split vowels
-    // TODO: do this in a more general unicode normalizer
+    // : do this in a more general unicode normalizer
 
 
     for (var i = glyphs.length - 1; i >= 0; i--) {
@@ -65810,7 +65810,7 @@ var GSUBProcessor = /*#__PURE__*/function (_OTProcessor) {
           var _index2 = this.coverageIndex(table.coverage);
 
           if (_index2 !== -1) {
-            var USER_INDEX = 0; // TODO
+            var USER_INDEX = 0; // 
 
             this.glyphIterator.cur.id = table.alternateSet.get(_index2)[USER_INDEX];
             return true;
@@ -66000,7 +66000,7 @@ var GPOSProcessor = /*#__PURE__*/function (_OTProcessor2) {
       if (value.yAdvDevice) {
         position.yAdvance += variationProcessor.getDelta(variationStore, value.yAdvDevice.a, value.yAdvDevice.b);
       }
-    } // TODO: device tables
+    } // : device tables
 
   };
 
@@ -66275,7 +66275,7 @@ var GPOSProcessor = /*#__PURE__*/function (_OTProcessor2) {
   };
 
   _proto28.getAnchor = function getAnchor(anchor) {
-    // TODO: contour point, device tables
+    // : contour point, device tables
     var x = anchor.xCoordinate;
     var y = anchor.yCoordinate; // Adjustments for font variations
 
@@ -67004,7 +67004,7 @@ var Glyph = (_class$3 = /*#__PURE__*/function () {
      */
 
     this.codePoints = codePoints;
-    this._font = font; // TODO: get this info from GDEF if available
+    this._font = font; // : get this info from GDEF if available
 
     this.isMark = this.codePoints.length > 0 && this.codePoints.every(unicode.isMark);
     this.isLigature = this.codePoints.length > 1;
@@ -69288,7 +69288,7 @@ var TTFSubset = /*#__PURE__*/function (_Subset) {
     //         encodingID: 0
     //         table: cmapTable
     //     ]
-    // TODO: subset prep, cvt, fpgm?
+    // : subset prep, cvt, fpgm?
 
     Directory.encode(stream, {
       tables: {
@@ -73095,7 +73095,7 @@ function isStarColumn(column) {
 	return column.width === null || column.width === undefined || column.width === '*' || column.width === 'star';
 }
 
-//TODO: refactor and reuse in measureTable
+//: refactor and reuse in measureTable
 function measureMinMax(columns) {
 	var result = { min: 0, max: 0 };
 
@@ -73188,7 +73188,7 @@ DocMeasure.prototype.measureNode = function (node) {
 	var self = this;
 
 	return this.styleStack.auto(node, function () {
-		// TODO: refactor + rethink whether this is the proper way to handle margins
+		// : refactor + rethink whether this is the proper way to handle margins
 		node._margin = getNodeMargin(node);
 
 		if (node.columns) {
@@ -73447,7 +73447,7 @@ DocMeasure.prototype.gapSizeForList = function () {
 
 DocMeasure.prototype.buildUnorderedMarker = function (styleStack, gapSize, type) {
 	function buildDisc(gapSize, color) {
-		// TODO: ascender-based calculations
+		// : ascender-based calculations
 		var radius = gapSize.fontSize / 6;
 		return {
 			canvas: [{
@@ -73462,7 +73462,7 @@ DocMeasure.prototype.buildUnorderedMarker = function (styleStack, gapSize, type)
 	}
 
 	function buildSquare(gapSize, color) {
-		// TODO: ascender-based calculations
+		// : ascender-based calculations
 		var size = gapSize.fontSize / 3;
 		return {
 			canvas: [{
@@ -73477,7 +73477,7 @@ DocMeasure.prototype.buildUnorderedMarker = function (styleStack, gapSize, type)
 	}
 
 	function buildCircle(gapSize, color) {
-		// TODO: ascender-based calculations
+		// : ascender-based calculations
 		var radius = gapSize.fontSize / 6;
 		return {
 			canvas: [{
@@ -73652,7 +73652,7 @@ DocMeasure.prototype.measureOrderedList = function (node) {
 			if (item.listMarker._inlines) {
 				node._gapSize.width = Math.max(node._gapSize.width, item.listMarker._inlines[0].width);
 			}
-		}  // TODO: else - nested lists numbering
+		}  // : else - nested lists numbering
 
 		node._minWidth = Math.max(node._minWidth, items[i]._minWidth);
 		node._maxWidth = Math.max(node._maxWidth, items[i]._maxWidth);
@@ -75623,7 +75623,7 @@ LayoutBuilder.prototype.processVerticalContainer = function (node) {
 		self.processNode(item);
 		addAll(node.positions, item.positions);
 
-		//TODO: paragraph gap
+		//: paragraph gap
 	});
 };
 
@@ -75930,8 +75930,8 @@ LayoutBuilder.prototype.processCanvas = function (node) {
 	var height = node._minHeight;
 
 	if (node.absolutePosition === undefined && this.writer.context().availableHeight < height) {
-		// TODO: support for canvas larger than a page
-		// TODO: support for other overflow methods
+		// : support for canvas larger than a page
+		// : support for other overflow methods
 
 		this.writer.moveToNextPage();
 	}
@@ -76178,7 +76178,7 @@ PageElementWriter.prototype.commitUnbreakableBlock = function (forcedX, forcedY)
 			fragment.xOffset = forcedX;
 			fragment.yOffset = forcedY;
 
-			//TODO: vectors can influence height in some situations
+			//: vectors can influence height in some situations
 			if (nbPages > 1) {
 				// on out-of-context blocs (headers, footers, background) height should be the whole DocumentContext height
 				if (forcedX !== undefined || forcedY !== undefined) {
@@ -76212,7 +76212,7 @@ PageElementWriter.prototype.currentBlockToRepeatable = function () {
 
 	rep.xOffset = this.originalX;
 
-	//TODO: vectors can influence height in some situations
+	//: vectors can influence height in some situations
 	rep.height = unbreakableContext.y;
 
 	rep.insertedOnPages = [];
@@ -76489,7 +76489,7 @@ function calculatePageHeight(pages, margins) {
 		} else if (item.type === 'vector') {
 			return item.item.y1 > item.item.y2 ? item.item.y1 : item.item.y2;
 		} else {
-			// TODO: add support for next item types
+			// : add support for next item types
 			return 0;
 		}
 	}
@@ -76746,7 +76746,7 @@ function renderLine(line, x, y, patterns, pdfKitDoc) {
 
 	textDecorator.drawBackground(line, x, y, patterns, pdfKitDoc);
 
-	//TODO: line.optimizeInlines();
+	//: line.optimizeInlines();
 	for (var i = 0, l = line.inlines.length; i < l; i++) {
 		var inline = line.inlines[i];
 		var shiftToBaseline = lineHeight - ((inline.font.ascender / 1000) * inline.fontSize) - descent;
@@ -76819,7 +76819,7 @@ function renderWatermark(page, pdfKitDoc) {
 }
 
 function renderVector(vector, patterns, pdfKitDoc) {
-	//TODO: pdf optimization (there's no need to write all properties everytime)
+	//: pdf optimization (there's no need to write all properties everytime)
 	pdfKitDoc.lineWidth(vector.lineWidth || 1);
 	if (vector.dash) {
 		pdfKitDoc.dash(vector.dash.length, { space: vector.dash.space || vector.dash.length, phase: vector.dash.phase || 0 });
@@ -76829,7 +76829,7 @@ function renderVector(vector, patterns, pdfKitDoc) {
 	pdfKitDoc.lineJoin(vector.lineJoin || 'miter');
 	pdfKitDoc.lineCap(vector.lineCap || 'butt');
 
-	//TODO: clipping
+	//: clipping
 
 	var gradient = null;
 
@@ -78493,7 +78493,7 @@ TableProcessor.prototype.endRow = function (rowIndex, writer, pageBreaks) {
 		if (writer.context().page != ys[yi].page) {
 			writer.context().page = ys[yi].page;
 
-			//TODO: buggy, availableHeight should be updated on every pageChanged event
+			//: buggy, availableHeight should be updated on every pageChanged event
 			// TableProcessor should be pageChanged listener, instead of processRow
 			this.reservedAtBottom = 0;
 		}
@@ -78918,7 +78918,7 @@ TextTools.prototype.buildInlines = function (textArray, styleContextStack) {
 TextTools.prototype.sizeOfString = function (text, styleContextStack) {
 	text = text ? text.toString().replace(/\t/g, '    ') : '';
 
-	//TODO: refactor - extract from measure
+	//: refactor - extract from measure
 	var fontName = getStyleProperty({}, styleContextStack, 'font', 'Roboto');
 	var fontSize = getStyleProperty({}, styleContextStack, 'fontSize', 12);
 	var fontFeatures = getStyleProperty({}, styleContextStack, 'fontFeatures', null);
@@ -78991,7 +78991,7 @@ function splitWords(text, noWrap) {
 
 function copyStyle(source, destination) {
 	destination = destination || {};
-	source = source || {}; //TODO: default style
+	source = source || {}; //: default style
 
 	for (var key in source) {
 		if (key != 'text' && source.hasOwnProperty(key)) {
