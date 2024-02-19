@@ -42,7 +42,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <!-- Default box -->
                             <div class="card bg-financiera-success">
                                 <div class="card-header">
-                                    <h2 class="card-title"><i class="fas fa-credit-card"></i> <strong> Cat&aacute;logo de Cuentas Bancarias del Inversionista. </strong> </h2>
+                                    <h2 class="card-title"><i class="fas fa-credit-card"></i> <strong> Cat&aacute;logo de Beneficiarios Inversionista. </strong> </h2>
                                     <div class="card-tools float-right m-2">
                                         <button id="btnAddAccountBank" type="button" class="btn btn-success"><i class="nav-icon fas fa-money-bill-wave"></i>&nbsp; &nbsp;Agregar</button>
                                         <button id="btnReturnInvestor" type="button" class="btn btn-danger">&nbsp; &nbsp;Regresar</button>
@@ -234,7 +234,6 @@ include_once "dashboard/endTemplateDashboard.php";
 <script src="../utils/plugins/uplot/uPlot.iife.min.js"></script>
 <script src="../utils/plugins/chart.js/Chart.min.js"></script>
 <script src="../assets/conf.js"></script>
-<script text="text/javascript" type="module" src="../assets/Modules/AccountsBanks/modOpenAccountsBank.js"></script>
 <script text="text/javascript" type="module" src="../assets/mainAccountsBanks.js"></script>
 
 <!-- REQUIRED SCRIPTS -->

@@ -209,16 +209,3 @@ const setNewDataBank = async (fields) => {
 
 
 }
-
-
-
-const deleteAccountBank = (id) => {
-    //TODO: Implementar este métoodo
-
-
-
-}
-
-const updateAccountBank = (id) => {
-    console.log(`Hola el ID de la cuenta bancaria es: ${id}`);
-}

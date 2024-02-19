@@ -474,7 +474,10 @@ btnSeeBankData.addEventListener('click', function () {
 
 
 btnSeeBeneficiaries.addEventListener('click', function () {
-    $('#modalSeeBeneficiaries').modal('show');
+    let icveinvestor = document.getElementById('fieldicveinversionista').value;
+    const parametro = { icveinvestor: icveinvestor};
+    const paramEncrypt = CryptoJS.AES.encrypt(JSON.stringify(parametro),'financiera').toString();
+    window.location.href = `InvestorsBeneficiaries.php?cveinvestors=${encodeURIComponent(paramEncrypt)}`;
 });
 
 btnAddInversion.addEventListener('click', function () {
