@@ -29,7 +29,7 @@ include_once "dashboard/startTemplateDashboard.php";
         <div class="icon">
           <i class="ion ion-bag"></i>
         </div>
-        <a href="#" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="CustomerBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <div class="col-lg-3 col-6">

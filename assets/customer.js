@@ -210,15 +210,13 @@ const leerClientes = () => {
             new DataTable(tablaClientes, {
                 data: {
                     // headings: Object.keys(data[0]),
-                    headings: ['ID', 'Nombre', 'A. Paterno', 'A. Materno', 'Telefono', 'Edad', 'Tipo Cliente', 'Fec. Nacimiento', 'Fec. Registro', 'Status', 'Acciones'],
+                    headings: ['ID', 'Nombre',  'Telefono', 'Edad', 'Tipo Cliente', 'Fec. Nacimiento', 'Fec. Registro', 'Status', 'Acciones'],
                     data: data.map(function (item) {
                         // return Object.values(item);
                         var id = item['icvecliente'];
                         return [
                             id,
-                            item['cnombre'],
-                            item['capaterno'],
-                            item['camaterno'],
+                            `${item['cnombre']}  ${item['capaterno']} ${item['camaterno']}`,
                             item['ctelefono'],
                             item['iedad'],
                             item['cabreviiatipo'],
