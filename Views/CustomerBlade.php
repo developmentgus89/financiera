@@ -47,6 +47,16 @@ include_once "dashboard/startTemplateDashboard.php";
         <!-- /.card -->
     </div>
     <!-- /.container-fluid -->
+    <div id="panel" class="panel" style="display: none;">
+        <div class="panel-header">
+            Detalles del Cliente
+            <button id="cerrarPanel" class="btn-close" aria-label="Cerrar"></button>
+        </div>
+        <div class="panel-body">
+            <!-- Aquí puedes agregar los detalles del cliente -->
+            <p>Detalles del cliente aquí...</p>
+        </div>
+    </div>
 </div>
 <!-- /.content -->
 <!-- Modal Agregar -->

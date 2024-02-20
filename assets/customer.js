@@ -240,6 +240,27 @@ const leerClientes = () => {
     xhr.send('operation=read');
 };
 
+// Agrega un evento de clic a cada fila de la tabla
+tablaClientes.addEventListener('click', function(event) {
+    // Verifica si se hizo clic en una fila de la tabla
+    if (event.target.tagName === 'TD') {
+        // Obtén la fila en la que se hizo clic
+        var row = event.target.parentElement;
+        // Muestra u oculta el panel colapsable
+        var panel = document.getElementById('panel');
+        if (panel.style.display === "none") {
+            panel.style.display = "block";
+        } else {
+            panel.style.display = "none";
+        }
+    }
+});
+
+document.getElementById('cerrarPanel').addEventListener('click', function() {
+    document.getElementById('panel').classList.remove('show');
+});
+
+
 const leerRowCliente = (id) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
