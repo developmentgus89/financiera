@@ -1,10 +1,5 @@
 import * as moduleAccBanks from "./Modules/AccountsBanks/opBanksAccounts.js";
 
-//Constante de Declaracion para la base Url
-// const baseURL = '../Controllers/InvestorsController.php';
-
-// document.addEventListener('',);
-
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });

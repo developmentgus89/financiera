@@ -196,7 +196,12 @@ class Investor
         }
     }
 
-
+    
+    /**
+     * get_banks
+     *
+     * @return array
+     */
     public function get_banks(): array
     {
         try {
@@ -209,7 +214,12 @@ class Investor
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
-
+    
+    /**
+     * get_interest
+     *
+     * @return array
+     */
     public function get_interest() : array
     {
         try {
