@@ -1,13 +1,37 @@
 export const moduleBene = (() => {
     const baseURL = '../Controllers/BeneficiariesController.php';
 
+    /**
+     * 
+     * @param {number} icveinversionista 
+     * @returns Promise
+     */
     const getBeneficiaries = (icveinversionista) => {
         let params = 'operation=getBeneficiaries';
         params += '&icveinversionista=' + icveinversionista;
         return crudData(params);
     }
 
+    // TODO: Terminar esta funcion para mañana
+    const getStatics = (icveinversionista) => {
+        let params = 'operation=getBeneficiaries';
+        return crudData(params);
+    }
 
+    const setNewBeneficiaries = ( values ) => {
+        let params = 'operation=newBeneficiaries';
+        values.forEach(dataBeneficiaries => {
+            let value;
+            if(dataBeneficiaries.element.type === 'checkbox'){
+                value = dataBeneficiaries.element.checked ? '1': '0';
+            }else{
+                value = dataBeneficiaries.element.value;
+            }
+            params += '&' + dataBeneficiaries.element.id + '=' + value;
+        });
+
+        return crudData(params);
+    }
 
     const crudData = async (params) => {
         try{
@@ -32,6 +56,7 @@ export const moduleBene = (() => {
     }
 
     return {
-        obtenerBenef: getBeneficiaries
+        obtenerBenef: getBeneficiaries,
+        insertarBenef: setNewBeneficiaries
     };
 })();

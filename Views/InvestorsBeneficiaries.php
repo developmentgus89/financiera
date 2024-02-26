@@ -24,11 +24,34 @@ include_once "dashboard/startTemplateDashboard.php";
         <div class="col-md-12">
             <div class="card card-success">
                 <div class="card-header">
-                    <h2 class="card-title col-md-3"><strong><i class="fas fa-search-dollar"></i> &nbsp; &nbsp; Inversionista</strong></h2>
-                    <div class="card-tools col-md-9 float-left">
-                        <strong>
-                            <div id="idInvestor"></div>
+                    <h1 class="card-title col-md-4" style="font-size: 26px; margin:auto;">
+                        <strong><i class="fas fa-search-dollar"></i>
+                            &nbsp; &nbsp; Inversionista - Control de Beneficiairios y Porcentajes.
                         </strong>
+                    </h1>
+                    <div class="card-tools col-md-4 float-left">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>150</h3>
+
+                                <p><div id="pasignado"></div></p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-sort-amount-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-tools col-md-4 float-left">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3><div id="pnoasignado"></div></h3>
+
+                                <p>Porcentaje no Asignado</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-sort-amount-down"></i>
+                            </div>
+                        </div>
                     </div>
                     <input type="text" name="fieldicveinversionista" id="fieldicveinversionista" hidden>
                 </div>
@@ -111,7 +134,7 @@ include_once "dashboard/startTemplateDashboard.php";
     </div>
 </div>
 
-<div class="modal fade" id="modalEditDataBank" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade" id="modalEditBenefi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content fondo_cliente_edit_modal">
             <div class="modal-header">
