@@ -32,9 +32,9 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="card-tools col-md-4 float-left">
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3><div id="pasignado"></div></h3>
 
-                                <p><div id="pasignado"></div></p>
+                                <p>Porcentaje Asignado</p>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-sort-amount-up"></i>

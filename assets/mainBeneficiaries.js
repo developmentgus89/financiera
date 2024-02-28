@@ -90,8 +90,21 @@ btnSaveBenefi.addEventListener('click', () => {
 const getStaticsAmount = async () => {
     let icveinvestor = getParamsInvestor();
 
-    // const statics = await moduleBenefs.moduleBene.
+    const statics = await moduleBenefs.moduleBene.obtEstadisticas(icveinvestor);
 
+    console.table(statics);
+
+    let asignado     = document.getElementById('pasignado');
+    let noasignado   = document.getElementById('pnoasignado');
+
+    asignado.textContent   = `${statics[0].asignado} %`;
+    noasignado.textContent = `${statics[0].noasignado} %`;
+
+
+    if(statics[0].noasignado == 0){
+        document.getElementById('btnAddBenefs').disabled = true;
+
+    }
 }
 
 const getBeneficiaries = async () => {
@@ -118,7 +131,7 @@ const getBeneficiaries = async () => {
                     item['ctelefonobenef'],	
                     item['cdireccionbenef'],
                     `${item['porcentaje']} %`,
-                    `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Cuenta" onclick="editarCuenta(${item['icvecatctasbancoinv']})"><i class="fas fa-edit"></i></button>`,
+                    `<button class="btn bg-gradient-success btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Beneficiario" onclick="editarBeneficiario(${item['icvecatinvbenefi']})"><i class="fas fa-edit"></i></button>`,
                     `<button id="btnDeleteAccountBank" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desactivar Cuenta" onclick="desactivarCuenta(${item['icvecatctasbancoinv']})"><i class="fas fa-trash"></i></button>`
                 ]
             })
@@ -147,4 +160,5 @@ const addBeneficiaries = async (fields) => {
 }
 
 //* Window Events
+getStaticsAmount();
 getBeneficiaries();

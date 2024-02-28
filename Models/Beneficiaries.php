@@ -58,16 +58,18 @@ class Beneficiaries
         }
     }
 
+        
     /**
      * setNewBeneficiaries
      *
-     * @param  int $fieldicveinversionista
-     * @param  string $nameBenefi
-     * @param  string $teleBenefi
-     * @param  string $direcciBenefi
+     * @param  mixed $fieldicveinversionista
+     * @param  mixed $nameBenefi
+     * @param  mixed $teleBenefi
+     * @param  mixed $direcciBenefi
+     * @param  mixed $porcentaje
      * @return array
      */
-    public function setNewBeneficiaries($fieldicveinversionista, $nameBenefi, $teleBenefi, $direcciBenefi): array
+    public function setNewBeneficiaries(int $fieldicveinversionista, string $nameBenefi,string $teleBenefi, string $direcciBenefi, float $porcentaje): array
     {
         try {
             $sql = "INSERT INTO catinvbenefi (
@@ -80,6 +82,25 @@ class Beneficiaries
             $resp['msj'] = true;
             $resp['text'] = 'Se insertó los datos del beneficiario correctamente';
             return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error al insertar el beneficiario.' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * getStatics
+     *
+     * @param  mixed $icveinversionista
+     * @return array
+     */
+    public function getStatics(int $icveinversionista) : array{
+        try {
+            $sql = "select SUM(porcentaje) as asignado,
+            100 - SUM(porcentaje) as noasignado
+            from catinvbenefi where icveinversionista = ?";
+            $statement = $this->acceso->prepare($sql);
+            $statement->execute([$icveinversionista]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Error('Error al insertar el beneficiario.' . $e->getMessage());
         }

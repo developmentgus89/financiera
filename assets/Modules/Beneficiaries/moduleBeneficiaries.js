@@ -14,7 +14,8 @@ export const moduleBene = (() => {
 
     // TODO: Terminar esta funcion para mañana
     const getStatics = (icveinversionista) => {
-        let params = 'operation=getBeneficiaries';
+        let params = 'operation=getBeneficiariesStatics';
+        params += '&icveinversionista=' + icveinversionista;
         return crudData(params);
     }
 
@@ -56,7 +57,8 @@ export const moduleBene = (() => {
     }
 
     return {
-        obtenerBenef: getBeneficiaries,
-        insertarBenef: setNewBeneficiaries
+        obtenerBenef:    getBeneficiaries,
+        insertarBenef:   setNewBeneficiaries,
+        obtEstadisticas: getStatics
     };
 })();

@@ -22,8 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $fieldicveinversionista = $_POST['fieldicveinversionista'];
             $detbeneficiaries = $beneficiaries->setNewBeneficiaries(
-                $fieldicveinversionista, $nameBenefi, $teleBenefi, $direcciBenefi
+                $fieldicveinversionista, $nameBenefi, $teleBenefi, $direcciBenefi, $porcentaje
             );
+            echo json_encode($detbeneficiaries);
+            break;
+        case 'getBeneficiariesStatics':
+            $icveinversionista = $_POST['icveinversionista'];
+            $detbeneficiaries = $beneficiaries->getStatics($icveinversionista);
             echo json_encode($detbeneficiaries);
             break;
         default:
