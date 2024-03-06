@@ -74,7 +74,7 @@ export const moduleAccountsBanks = (() => {
     }
 
     /**
-     * Inserción de cuenta bancaria nueva
+     * Actualizacion de cuenta bancaria nueva
      * @param {Object} values 
      * @returns string
      */

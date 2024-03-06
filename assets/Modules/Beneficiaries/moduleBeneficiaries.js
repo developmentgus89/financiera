@@ -12,13 +12,33 @@ export const moduleBene = (() => {
         return crudData(params);
     }
 
-    // TODO: Terminar esta funcion para mañana
+    /**
+     * 
+     * @param {number} icvebeneficiario 
+     * @returns 
+     */
+    const getSingleBeneficiarie = (icvebeneficiario) => {
+        let params = 'operation=getSingleBenefi';
+        params += '&icvebeneficiario=' + icvebeneficiario;
+        return crudData(params);
+    }
+
+    /**
+     * 
+     * @param {number} icveinversionista 
+     * @returns 
+     */
     const getStatics = (icveinversionista) => {
         let params = 'operation=getBeneficiariesStatics';
         params += '&icveinversionista=' + icveinversionista;
         return crudData(params);
     }
 
+    /**
+     * 
+     * @param {Array} values 
+     * @returns Promise
+     */
     const setNewBeneficiaries = ( values ) => {
         let params = 'operation=newBeneficiaries';
         values.forEach(dataBeneficiaries => {
@@ -31,6 +51,37 @@ export const moduleBene = (() => {
             params += '&' + dataBeneficiaries.element.id + '=' + value;
         });
 
+        return crudData(params);
+    }
+
+    /**
+     * 
+     * @param {Array} values 
+     * @returns 
+     */
+    const setUpdateBenefi = ( values ) => {
+        let params = 'operation=updateDateBenefi';
+        values.forEach(dataBeneficiaries => {
+            let value;
+            if(dataBeneficiaries.element.type === 'checkbox'){
+                value = dataBeneficiaries.element.checked ? '1': '0';
+            }else{
+                value = dataBeneficiaries.element.value;
+            }
+            params += '&' + dataBeneficiaries.element.id + '=' + value;
+        });
+
+        return crudData(params);
+    }
+
+    /**
+     * 
+     * @param {number} icvebeneficiario 
+     * @returns 
+     */
+    const setDeleteBenefi = ( icvebeneficiario ) => {
+        let params = 'operation=setDeleteBenefi';
+        params += '&icvebeneficiario=' + icvebeneficiario;
         return crudData(params);
     }
 
@@ -57,8 +108,11 @@ export const moduleBene = (() => {
     }
 
     return {
-        obtenerBenef:    getBeneficiaries,
-        insertarBenef:   setNewBeneficiaries,
-        obtEstadisticas: getStatics
+        obtenerBenef:     getBeneficiaries,
+        insertarBenef:    setNewBeneficiaries,
+        obtEstadisticas:  getStatics,
+        beneficiariorow:  getSingleBeneficiarie,
+        actualizarBenefi: setUpdateBenefi,
+        eliminaBenefi:    setDeleteBenefi
     };
 })();

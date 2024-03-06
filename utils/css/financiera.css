@@ -87,3 +87,8 @@ table{
     color: white;
     background-color: white;
 } */
+
+.small-text{
+    line-height: normal;
+    width: 50px;
+}

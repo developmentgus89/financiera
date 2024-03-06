@@ -76,9 +76,10 @@ class Beneficiaries
                     icveinversionista,
                     cnombrebenef,
                     ctelefonobenef,
-                    cdireccionbenef) VALUES (?, ?, ?, ?)";
+                    cdireccionbenef,
+                    porcentaje) VALUES (?, ?, ?, ?, ?)";
             $statement = $this->acceso->prepare($sql);
-            $statement->execute([$fieldicveinversionista, $nameBenefi, $teleBenefi, $direcciBenefi]);
+            $statement->execute([$fieldicveinversionista, $nameBenefi, $teleBenefi, $direcciBenefi, $porcentaje]);
             $resp['msj'] = true;
             $resp['text'] = 'Se insertó los datos del beneficiario correctamente';
             return $resp;
@@ -103,6 +104,72 @@ class Beneficiaries
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Error('Error al insertar el beneficiario.' . $e->getMessage());
+        }
+    }
+
+    
+    /**
+     * getSingleBenefi
+     *
+     * @param  int $icvebeneficiario
+     * @return array
+     */
+    public function getSingleBenefi($icvebeneficiario) : array{
+        try {
+            $sql = "SELECT * FROM catinvbenefi WHERE icvecatinvbenefi = ?";
+            $statement = $this->acceso->prepare($sql);
+            $statement->execute([$icvebeneficiario]);
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error al insertar el beneficiario.' . $e->getMessage());
+        }
+    }
+
+    
+    /**
+     * setUpdateBenefi
+     *
+     * @param  array $datos
+     * @return array
+     */
+    public function setUpdateBenefi($datos) : array{
+        try {
+            $sql = "UPDATE catinvbenefi 
+                SET cnombrebenef = ?,
+                    ctelefonobenef = ?,
+                    cdireccionbenef = ?,
+                    porcentaje = ?
+                WHERE icvecatinvbenefi = ?";
+            $statement = $this->acceso->prepare($sql);
+            for ($i = 0; $i < count($datos); $i++) {
+                $statement->bindParam($i + 1, $datos[$i]);
+            }
+            $statement->execute();
+            $resp['msj'] = true;
+            $resp['text'] = 'Se actualizaron los datos del beneficiario correctamente';
+            return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error al actualizar el beneficiario.' . $e->getMessage());
+        }
+    }
+
+    
+    /**
+     * setDeleteBenefi
+     *
+     * @param  number $icvebeneficiario
+     * @return void
+     */
+    public function setDeleteBenefi($icvebeneficiario){
+        try {
+            $sql = "DELETE FROM catinvbenefi WHERE icvecatinvbenefi = ?";
+            $statement = $this->acceso->prepare($sql);
+            $statement->execute([$icvebeneficiario]);
+            $resp['msg'] = 'success';
+            $resp['text'] = 'Se eliminó el beneficiario correctamente';
+            return $resp;
+        } catch (PDOException $e) {
+            throw new Error('Error al eliminar el beneficiario.' . $e->getMessage());
         }
     }
 }

@@ -271,13 +271,13 @@ window.editarCuenta = async (id) => {
     let selectBanks = document.getElementById('udp-selCatIcveBanco');
     //? Se asigna el Banco de la cuenta.
     drawCatalogBanks(selectBanks, editAccountBank[0].icvebanco);
-    let cveinversionista = editAccountBank[0].icveinversionista;
-    document.getElementById('icvecuentacveinver').value = editAccountBank[0].icvecatctasbancoinv;
-    document.getElementById('udp-numberAccountBank').value = editAccountBank[0].cnumcuenta;
-    document.getElementById('udp-typeAccountBank').value = editAccountBank[0].itipocuenta;
-    document.getElementById('udp-statusAccountBank').value = editAccountBank[0].cstatus;
+    let cveinversionista                                         = editAccountBank[0].icveinversionista;
+    document.getElementById('icvecuentacveinver').value          = editAccountBank[0].icvecatctasbancoinv;
+    document.getElementById('udp-numberAccountBank').value       = editAccountBank[0].cnumcuenta;
+    document.getElementById('udp-typeAccountBank').value         = editAccountBank[0].itipocuenta;
+    document.getElementById('udp-statusAccountBank').value       = editAccountBank[0].cstatus;
     document.getElementById('udp-observationsAccountBank').value = editAccountBank[0].cobservaciones;
-    document.getElementById('udp-customSwitch3').checked = (editAccountBank[0].orden == 1) ? true : false; 
+    document.getElementById('udp-customSwitch3').checked         = (editAccountBank[0].orden == 1) ? true : false; 
     $('#modalEditDataBank').modal('show');
 }
 
@@ -307,7 +307,7 @@ window.desactivarCuenta = (id) => {
                     icon: "success"
                 }).then(result => {
                     if (result.isConfirmed) {
-                        location.reload();
+                        // location.reload();
                     }
                 });
             }

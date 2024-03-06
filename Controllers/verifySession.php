@@ -19,5 +19,5 @@ if (isset($_SESSION['username'])) {
 } else {
     // El usuario no ha iniciado sesión, puedes redirigirlo a la página de inicio de sesión
     header("Location: ../index.php"); // Reemplaza con la URL de la página de inicio de sesión
-    exit(); // Finaliza el script después de la redirección
+    // exit(); // Finaliza el script después de la redirección
 }
