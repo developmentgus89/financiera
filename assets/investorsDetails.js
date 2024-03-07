@@ -51,3 +51,30 @@ const openViewCapitalPayments = (icveinversionista, icveinvestor) => {
     window.location.href = `ViewCapitalPayments.php?params=${encodeURIComponent(paramsEncrypt)}`;
 }
 
+/**
+ * 
+ * @param {number} icveinversionista 
+ * @param {number} icveinvestor 
+ */
+const openEditionInvesment = async (icveinversionista, icveinvestor) =>{
+    let params = 'operation=EditInvestment';
+        params += '&icveinversionista=' + icveinversionista;
+        params += '&icveinvestor=' + icveinvestor;
+
+    try {
+        const response = await fetch('', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        const result = await response.json();
+    } catch (error) {
+        throw new Error(`Error en la solicitud para actualizar la inversion`);
+    }
+
+
+}
+

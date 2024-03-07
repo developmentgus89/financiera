@@ -264,12 +264,13 @@ window.editarBeneficiario = async (id) => {
     const editDataBenefi = await moduleBenefs.moduleBene.beneficiariorow(id);
     console.table(editDataBenefi);
     let udpvporcentaje = document.getElementById("udpvporcentaje");
-    document.getElementById('udpicvecatinvbenefi').value   = editDataBenefi[0].icvecatinvbenefi;
-    document.getElementById('udpnameBenefi').value         = editDataBenefi[0].cnombrebenef;
-    document.getElementById('udpteleBenefi').value         = editDataBenefi[0].ctelefonobenef;
-    document.getElementById('udpporcbenefi').value         = editDataBenefi[0].porcentaje;
-    document.getElementById('udpporcbenefi').max           = (editDataBenefi[0].porcentaje + await getStaticsAmount());
-    udpvporcentaje.textContent                             = `${editDataBenefi[0].porcentaje} %`;
+    document.getElementById('udpicvecatinvbenefi').value = editDataBenefi[0].icvecatinvbenefi;
+    document.getElementById('udpnameBenefi').value       = editDataBenefi[0].cnombrebenef;
+    document.getElementById('udpteleBenefi').value       = editDataBenefi[0].ctelefonobenef;
+    document.getElementById('udpdirecciBenefi').value    = editDataBenefi[0].cdireccionbenef;
+    document.getElementById('udpporcbenefi').value       = editDataBenefi[0].porcentaje;
+    document.getElementById('udpporcbenefi').max         = (editDataBenefi[0].porcentaje + await getStaticsAmount());
+    udpvporcentaje.textContent                           = `${editDataBenefi[0].porcentaje} %`;
     document.getElementById('udpporcbenefi').addEventListener('input', () => {
         udpvporcentaje.textContent = `${document.getElementById('udpporcbenefi').value} %`;
     });
