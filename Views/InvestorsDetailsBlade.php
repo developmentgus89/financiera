@@ -254,7 +254,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
                             <input type="number" class="form-control" name="udpcveinverdetalle" id="udpcveinverdetalle" hidden>
                             <input type="number" class="form-control" name="udpcveinversionista" id="udpcveinversionista" hidden>
-                            <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver">
+                            <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver" disabled>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -267,7 +267,7 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="inputMontoInver">CANTIDAD $:</label>
-                            <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver">
+                            <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver" disabled>
                         </div>
                     </div>
                 </div>

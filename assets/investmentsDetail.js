@@ -87,10 +87,6 @@ const descifra = () => {
         banks.getBanksCat();
     }
 
-    console.log(`Parametros son: ${queryParams}`);
-    console.log(`Parametros son: ${queryParams.has('cveinvestors')}`);
-    console.table(paramDescript);
-
 }
 
 const getInvestment = async (icveinversionista) => {
@@ -108,8 +104,6 @@ const getInvestment = async (icveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn(`Datos personales del inversionista`);
-        console.table(data);
 
         document.getElementById('fieldicveinversionista').value = data[0].icveinversionista;
 
@@ -138,9 +132,6 @@ const getInvestmentDetails = async (icveinversionista) => {
         }
 
         const data = await response.json();
-
-        console.warn(`Estadisticas del inversionista`);
-        console.table(data);
 
         let cantTotalInvertida = document.querySelector('#totalCapital');
         let cantTotInv = parseFloat(data[0].totalcapital);
@@ -175,9 +166,6 @@ const getSumCapitalPayment = async (icveinversionista) => {
 
         const data = await response.json();
 
-        console.warn(`Total de Pago de Intereses`);
-        console.table(data);
-
         let cantPaysInterests = document.querySelector('#interesTotalPagado');
         let cantTotInv = parseFloat(data[0].total);
         cantTotInv = cantTotInv.toLocaleString('es-MX', {
@@ -211,8 +199,6 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn('Inversiones registradas');
-        console.table(data);
 
         var tblInvestments = document.getElementById('tblInversiones');
 
@@ -266,7 +252,6 @@ const getInterests = async (op) => {
         }
 
         const interests = await response.json();
-        console.table(interests);
 
         selectInterest.innerHTML = ``;
         sInpuInterest.innerHTML = ``;
@@ -326,8 +311,6 @@ const openEditionInvesment = async (icveinversionista, icvedetalleinver) => {
 
         const data = await response.json();
 
-        console.warn('Detalle de la confirmación del pago a inversionista');
-        console.table(data);
         document.getElementById('udpcveinverdetalle').value = data[0].icvedetalleinver;
         document.getElementById('udpinputDateInver').value = data[0].dfecharegistro;
         document.getElementById('udpicveinteres').value = data[0].icvetasascomisiones;
@@ -358,27 +341,46 @@ const updateInvestmentData = async (
         '&udpinputMontoInver=' + udpinputMontoInver +
         '&udpinputObsInver=' + udpinputObsInver;
 
-    // console.error(params);
-    try {
-        const response = await fetch(baseURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+    try {      
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
             },
-            body: params
+            buttonsStyling: false
         });
-
-        const data = await response.json();
-        console.warn('Actualizacion de la inversion detalles');
-        console.table(data);
-        toastr.success('Se actualizaron los datos de la inversión correctamente');
-        setTimeout(() => {
-            $("#modalEditionInvesment").modal("hide");
-        }, 350);
-
-        setTimeout(() => {
-            location.reload();
-        }, 650);
+        swalWithBootstrapButtons.fire({
+            title: "¿Deseas actualizar esta inversión?",
+            text: "Este cambio afectará los pagos de inversión que se generen de manera mensual.",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, cancelar!",
+            confirmButtonText: "Si!",
+            reverseButtons: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const response = await fetch(baseURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+                const data = await response.json();
+                if (data.msg == 'success') {
+                    swalWithBootstrapButtons.fire({
+                        title: "Inversión Actualizada!",
+                        text: data.text,
+                        icon: "success"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                }
+    
+            }
+        });
 
     } catch (error) {
         throw new Error(`Error en la operacion: ${error.message}`);
@@ -404,8 +406,7 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
         '&InputMontoInver=' + InputMontoInver +
         '&InputInteres=' + InputInteres +
         '&InputObsInver=' + InputObsInver;
-    console.warn(`Esto sucede para cuando se guarda la nueva inversion`);
-    console.log(params);
+
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -421,7 +422,6 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
 
         const data = await response.json();
 
-        console.table(data);
 
         toastr.success('Se insertó la inversión correctamente');
         setTimeout(() => {
@@ -453,7 +453,7 @@ btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
     fields.forEach((field) => {
         values[field] = document.getElementById(field).value;
     });
-
+    
     updateInvestmentData(
         values['udpcveinversionista'],
         values['udpcveinverdetalle'],
@@ -528,7 +528,6 @@ btnSaveInvesments.addEventListener('click', function () {
 
 
 btnBackInvestments.addEventListener('click', function () {
-    console.log('Click en el boton regreso');
     window.location.href = 'InvestorsBlade.php';
 });
 
@@ -560,21 +559,21 @@ $(function () {
             'Octubre', 'Noviembre', 'Diciembre'],
         datasets: [
             {
-                label: 'Digital Goods',
+                label: 'Inversiones',
                 backgroundColor: 'rgba(60,141,188,0.9)',
                 borderColor: 'rgba(60,141,188,0.8)',
-                pointRadius: false,
+                pointRadius: true,
                 pointColor: '#3b8bba',
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [28, 48, 40, 19, 86, 27, 90]
+                data: [28, 48, 40, 19, 86, 27]
             },
             {
-                label: 'Electronics',
+                label: 'Intereses',
                 backgroundColor: 'rgba(210, 214, 222, 1)',
                 borderColor: 'rgba(210, 214, 222, 1)',
-                pointRadius: false,
+                pointRadius: true,
                 pointColor: 'rgba(210, 214, 222, 1)',
                 pointStrokeColor: '#c1c7d1',
                 pointHighlightFill: '#fff',
@@ -588,17 +587,22 @@ $(function () {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
-            display: false
+            display: true
         },
         scales: {
             xAxes: [{
                 gridLines: {
-                    display: false,
+                    display: true,
                 }
             }],
             yAxes: [{
+                ticks: {
+                    callback: function(value) {
+                        return `$ ${((value * 1000.00).toFixed(2)).toLocaleString('es-MX')}`;
+                    }
+                },
                 gridLines: {
-                    display: false,
+                    display: true,
                 }
             }]
         }
@@ -612,7 +616,7 @@ $(function () {
     var lineChartData = $.extend(true, {}, areaChartData)
     lineChartData.datasets[0].fill = false;
     lineChartData.datasets[1].fill = false;
-    lineChartOptions.datasetFill = false
+    lineChartOptions.datasetFill = true;
 
     var lineChart = new Chart(lineChartCanvas, {
         type: 'line',
@@ -623,67 +627,67 @@ $(function () {
     //-------------
     //- PIE CHART -
     //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData = donutData;
-    var pieOptions = {
-        maintainAspectRatio: false,
-        responsive: true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    new Chart(pieChartCanvas, {
-        type: 'pie',
-        data: pieData,
-        options: pieOptions
-    })
+    // // Get context with jQuery - using jQuery's .get() method.
+    // var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    // var pieData = donutData;
+    // var pieOptions = {
+    //     maintainAspectRatio: false,
+    //     responsive: true,
+    // }
+    // //Create pie or douhnut chart
+    // // You can switch between pie and douhnut using the method below.
+    // new Chart(pieChartCanvas, {
+    //     type: 'pie',
+    //     data: pieData,
+    //     options: pieOptions
+    // })
 
     //-------------
     //- BAR CHART -
     //-------------
-    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    var barChartData = $.extend(true, {}, areaChartData)
-    var temp0 = areaChartData.datasets[0]
-    var temp1 = areaChartData.datasets[1]
-    barChartData.datasets[0] = temp1
-    barChartData.datasets[1] = temp0
+    // var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    // var barChartData = $.extend(true, {}, areaChartData)
+    // var temp0 = areaChartData.datasets[0]
+    // var temp1 = areaChartData.datasets[1]
+    // barChartData.datasets[0] = temp1
+    // barChartData.datasets[1] = temp0
 
-    var barChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        datasetFill: false
-    }
+    // var barChartOptions = {
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     datasetFill: false
+    // }
 
-    new Chart(barChartCanvas, {
-        type: 'bar',
-        data: barChartData,
-        options: barChartOptions
-    })
+    // new Chart(barChartCanvas, {
+    //     type: 'bar',
+    //     data: barChartData,
+    //     options: barChartOptions
+    // })
 
     //---------------------
     //- STACKED BAR CHART -
     //---------------------
-    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-    var stackedBarChartData = $.extend(true, {}, barChartData)
+    // var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+    // var stackedBarChartData = $.extend(true, {}, barChartData)
 
-    var stackedBarChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            xAxes: [{
-                stacked: true,
-            }],
-            yAxes: [{
-                stacked: true
-            }]
-        }
-    }
+    // var stackedBarChartOptions = {
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     scales: {
+    //         xAxes: [{
+    //             stacked: true,
+    //         }],
+    //         yAxes: [{
+    //             stacked: true
+    //         }]
+    //     }
+    // }
 
-    new Chart(stackedBarChartCanvas, {
-        type: 'bar',
-        data: stackedBarChartData,
-        options: stackedBarChartOptions
-    })
+    // new Chart(stackedBarChartCanvas, {
+    //     type: 'bar',
+    //     data: stackedBarChartData,
+    //     options: stackedBarChartOptions
+    // })
 });
 
 

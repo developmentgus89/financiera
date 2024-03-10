@@ -34,8 +34,8 @@ include_once "dashboard/startTemplateDashboard.php";
 
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="tblImpuestos" class="table table-bordered table-dark">
+            <div class="card-body table-responsive p-2 bg-success">
+                <table id="tblImpuestos" class="table table table-hover text-nowrap">
                   
                 </table>
             </div>

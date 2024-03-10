@@ -463,12 +463,12 @@ class Investor
                         ";
             $statement2 = $this->acceso->prepare($query2);
             $statement2->execute([$udpcveinversionista, $udpcveinversionista]);
-
-            $resp['msj'] = "true";
-            $resp['text'] = "Se actualizo el inversionista correctamente";
+            
+            $resp['msg'] = "success";
+            $resp['text'] = "Se actualizo la inversión correctamente";
             return $resp;
         } catch (PDOException $e) {
-            echo 'Error al actualiar la inversion del inversionista' . $e->getMessage();
+            echo 'Error al actualizar la inversion del inversionista' . $e->getMessage();
         }
     }
 
@@ -563,6 +563,21 @@ class Investor
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Error('Error en la insercion del pago' . $e->getMessage());
+        }
+    }
+
+
+    public function getInvestorRow(array $datRowInvertion) : array{
+        try {
+            $sql = "SELECT * FROM inverdetalle WHERE icvedetalleinver = ? AND icveinversionista = ?";
+            $statement = $this->acceso->prepare($sql);
+            for ($i = 0; $i < count($datRowInvertion); $i++) {
+                $statement->bindParam($i + 1, $datRowInvertion[$i]);
+            }
+            $statement->execute();
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error en la lectura de la inversion' . $e->getMessage());
         }
     }
 }

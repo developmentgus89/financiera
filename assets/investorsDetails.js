@@ -26,8 +26,6 @@ const openViewPaysInvestment = (icveinversionista, icveinvestor, interes, dmonto
         interes: interes,
         dmonto: dmonto
     }
-    console.warn(`openViewPaysInvestment parametros`);
-    console.table(params);
 
     const paramsEncrypt = CryptoJS.AES.encrypt(JSON.stringify(params),'financiera').toString();
 
@@ -43,8 +41,6 @@ const openViewCapitalPayments = (icveinversionista, icveinvestor) => {
         icveinversionista: icveinversionista,
         icveinvestor: icveinvestor,
     }
-    console.warn(`openViewPaysInvestment parametros`);
-    console.table(params);
 
     const paramsEncrypt = CryptoJS.AES.encrypt(JSON.stringify(params),'financiera').toString();
 
@@ -57,12 +53,12 @@ const openViewCapitalPayments = (icveinversionista, icveinvestor) => {
  * @param {number} icveinvestor 
  */
 const openEditionInvesment = async (icveinversionista, icveinvestor) =>{
-    let params = 'operation=EditInvestment';
+    let params = 'operation=rowReadInvertion';
         params += '&icveinversionista=' + icveinversionista;
         params += '&icveinvestor=' + icveinvestor;
 
     try {
-        const response = await fetch('', {
+        const response = await fetch('../Controllers/InvestorsController.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -71,8 +67,16 @@ const openEditionInvesment = async (icveinversionista, icveinvestor) =>{
         });
 
         const result = await response.json();
+        console.table(result);
+        document.getElementById('udpcveinverdetalle').value  = result[0].icvedetalleinver;
+        document.getElementById('udpcveinversionista').value = result[0].icveinversionista;
+        document.getElementById('udpinputDateInver').value   = result[0].dfecharegistro;
+        document.getElementById('udpicveinteres').value      = result[0].icvetasascomisiones;
+        document.getElementById('udpinputMontoInver').value  = result[0].dmonto;
+        document.getElementById('udpinputObsInver').value    = result[0].invdetobservaciones;
+        $("#modalEditionInvesment").modal('show');
     } catch (error) {
-        throw new Error(`Error en la solicitud para actualizar la inversion`);
+        throw new Error(`Error en la solicitud para leer el detalle de la inversion ${error.message}`);
     }
 
 

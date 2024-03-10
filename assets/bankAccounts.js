@@ -17,7 +17,7 @@ const editAccountBank = (id) => {
     console.warn(`Le mando el ID para editar ${id}`);
 }
 
-export const getBanksAccounts = async (cveinversionista) => {
+const getBanksAccounts = async (cveinversionista) => {
     try {
         const response = await fetch(baseURL2, {
             method: 'POST',
@@ -32,8 +32,6 @@ export const getBanksAccounts = async (cveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn(`Control de Cuentas Bancarias`);
-        console.table(data);
 
         const tblBankAccounts = document.getElementById("tblBankAccounts");
 
@@ -80,9 +78,6 @@ export const getBanksCat = async () => {
     }
 
     const data = await response.json();
-    console.warn(`Control de Registros de Bancos desde catalogo`);
-    console.info(`Control de Registros de Bancos desde catalogo`);
-    console.table(data);
 
     selCatIcveBanco.innerHTML = ``;
 
@@ -110,9 +105,6 @@ btnSaveAccountBank.addEventListener('click', () => {
     let observationsAccountBank = document.getElementById('observationsAccountBank');
     let customSwitch3 = document.getElementById('customSwitch3');
 
-    console.warn(`Valor del input`);
-    console.info(customSwitch3.checked);
-
     const validDataAccountBank = () => {
         const fields = [
             { element: selCatIcveBanco, message: 'Seleccione el Banco.' },
@@ -134,7 +126,6 @@ btnSaveAccountBank.addEventListener('click', () => {
 
         if (!hasError) {
             removeError(typeAccountBank);
-            console.warn(`Informacion del arreglo`);
 
             fields.push(
                 { element: statusAccountBank, message: null },
@@ -169,9 +160,6 @@ const setNewDataBank = async (fields) => {
         params += '&' + dataBank.element.id + '=' + value;
     });
 
-    console.warn(`String de Params ${params}`);
-
-
     const response = await fetch(baseURL2, {
         method: 'POST',
         headers: {
@@ -185,8 +173,6 @@ const setNewDataBank = async (fields) => {
     }
 
     const data = await response.json();
-    console.warn(`Respueta desde el controlador al insertar la cuenta bancaria`);
-    console.table(data);
 
     if (data.msj) {
         toastr.success(data.text, 'Correcto');
