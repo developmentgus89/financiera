@@ -102,12 +102,12 @@ include_once "dashboard/startTemplateDashboard.php";
                                                 </div>
                                                 <div class="card-body text-title-cat">
                                                     <div class="chart">
-                                                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
+                                                        <canvas id="lineChart" style="min-height: 350px; height: 250px; max-height: 350px; max-width: 200%;">
                                                         </canvas>
                                                     </div>
                                                 </div>
                                                 <div class="card-footer bg-secondary text-muted">
-                                                    Solo se toma en cuenta el &uacute;ltimo a&ntilde;o.
+                                                    Solo se toma en cuenta los &uacute;ltimos 12 meses.
                                                 </div>
                                             </div>
                                         </div>

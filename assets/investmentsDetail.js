@@ -82,7 +82,7 @@ const descifra = () => {
         getInvestmentDetails(params.icveinvestor);
         getInvestmentsByInvestor(params.icveinvestor);
 
-        Graficos();
+        Graficos(params.icveinvestor);
 
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
 
@@ -442,7 +442,27 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
 }
 
 // ============ Manejo de Estadisticas para la grafica del Inversionista =========
+const readInvesments = async (icveinversionista, op) => {
+    try {
+        const response = await fetch(URL_g, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `operation=${op}&icveinversionista=${icveinversionista}`
+        });
 
+        if (!response.ok) {
+            throw new Error(`Error con el servidor, no se puede ejecutar la operacion de estadisticas`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        throw new Error(`No se pudo completar las estadisticas del inversionista ${error.message}`);
+    }
+}
 
 btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
     const fields = [
@@ -544,8 +564,11 @@ const Message = () => {
 
 //! Graficos
 
-const Graficos = () => {
-
+const Graficos = async (icveinversionista) => {
+    let inversiones   = await readInvesments(icveinversionista, 'readInvesments');
+    let totales       = inversiones.map(inversion => parseFloat(inversion.totalinv));
+    let paysInterests = await readInvesments(icveinversionista, 'readInterests');
+    let paysInts      = paysInterests.map(pays => parseFloat(pays.totalinv));
     var areaChartData = {
         labels: [
             'Enero', 'Febrero', 'Marzo',
@@ -562,7 +585,7 @@ const Graficos = () => {
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [28, 48, 40, 19, 86, 27]
+                data: totales
             },
             {
                 label: 'Intereses',
@@ -573,7 +596,7 @@ const Graficos = () => {
                 pointStrokeColor: '#c1c7d1',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(220,220,220,1)',
-                data: [65, 59, 80, 81, 56, 55, 40]
+                data: paysInts
             },
         ]
     }
@@ -593,13 +616,22 @@ const Graficos = () => {
             yAxes: [{
                 ticks: {
                     callback: function(value) {
-                        return `$ ${((value * 1000.00).toFixed(2)).toLocaleString('es-MX')}`;
-                    }
+                        return `$ ${((value).toFixed(2)).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                    },
+                    stepSize: 10000
                 },
                 gridLines: {
                     display: true,
                 }
             }]
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                    return datasetLabel + ': $' + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                }
+            }
         }
     }
 

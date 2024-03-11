@@ -3,21 +3,24 @@ require_once '../Models/StatisticalGraphs.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $operation = $_POST['operation'];
-    $investor = new Investor();
+    $statics = new StatisticalGraphs();
     global $investors;
 
     switch ($operation) {
-        case 'rowCount':
-            $invnombre   = $_POST['invnombre'];
-            $invapaterno = $_POST['invapaterno'];
-            $invamaterno = $_POST['invamaterno'];
-
-            $rowCountInv = $investor->rowsCount($invnombre, $invapaterno, $invamaterno);
-            echo json_encode($rowCountInv);
+        case 'readInterests':
+            $icveinversionista = $_POST['icveinversionista'];
+            $rowSatitiscsPays  = $statics->readRowPaysInterests($icveinversionista);
+            echo json_encode($rowSatitiscsPays);
             break;
 
+        case 'readInvesments':
+                $icveinversionista = $_POST['icveinversionista'];
+                $rowStatisticsInv  = $statics->readRowInvestments($icveinversionista);
+                echo json_encode($rowStatisticsInv);
+                break;
+
         default:
-            echo 'Operación no válida';
+            echo 'Operación no válida StatisticalGraphs';
             break;
     }
 }

@@ -17,7 +17,7 @@ const editAccountBank = (id) => {
     console.warn(`Le mando el ID para editar ${id}`);
 }
 
-const getBanksAccounts = async (cveinversionista) => {
+export const getBanksAccounts = async (cveinversionista) => {
     try {
         const response = await fetch(baseURL2, {
             method: 'POST',
