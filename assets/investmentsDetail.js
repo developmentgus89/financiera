@@ -3,6 +3,7 @@ import * as banks from "./bankAccounts.js";
 
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
+const URL_g = '../Controllers/StatisticalGraphsController.php'; // Graficas URL Controller
 
 // document.addEventListener('',);
 
@@ -75,10 +76,13 @@ const descifra = () => {
         var paramDescript = CryptoJS.AES.decrypt(paramEncriptado, 'financiera').toString(CryptoJS.enc.Utf8);
 
         const params = JSON.parse(paramDescript);
+
         getInterests();
         getInvestment(params.icveinvestor);
         getInvestmentDetails(params.icveinvestor);
         getInvestmentsByInvestor(params.icveinvestor);
+
+        Graficos();
 
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
 
@@ -378,7 +382,6 @@ const updateInvestmentData = async (
                         }
                     });
                 }
-    
             }
         });
 
@@ -437,6 +440,9 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
 
     }
 }
+
+// ============ Manejo de Estadisticas para la grafica del Inversionista =========
+
 
 btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
     const fields = [
@@ -538,18 +544,7 @@ const Message = () => {
 
 //! Graficos
 
-$(function () {
-    /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
-
-    //--------------
-    //- AREA CHART -
-    //--------------
-
-    // Get context with jQuery - using jQuery's .get() method.
-    // var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+const Graficos = () => {
 
     var areaChartData = {
         labels: [
@@ -622,73 +617,8 @@ $(function () {
         type: 'line',
         data: lineChartData,
         options: lineChartOptions
-    })
-
-    //-------------
-    //- PIE CHART -
-    //-------------
-    // // Get context with jQuery - using jQuery's .get() method.
-    // var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    // var pieData = donutData;
-    // var pieOptions = {
-    //     maintainAspectRatio: false,
-    //     responsive: true,
-    // }
-    // //Create pie or douhnut chart
-    // // You can switch between pie and douhnut using the method below.
-    // new Chart(pieChartCanvas, {
-    //     type: 'pie',
-    //     data: pieData,
-    //     options: pieOptions
-    // })
-
-    //-------------
-    //- BAR CHART -
-    //-------------
-    // var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    // var barChartData = $.extend(true, {}, areaChartData)
-    // var temp0 = areaChartData.datasets[0]
-    // var temp1 = areaChartData.datasets[1]
-    // barChartData.datasets[0] = temp1
-    // barChartData.datasets[1] = temp0
-
-    // var barChartOptions = {
-    //     responsive: true,
-    //     maintainAspectRatio: false,
-    //     datasetFill: false
-    // }
-
-    // new Chart(barChartCanvas, {
-    //     type: 'bar',
-    //     data: barChartData,
-    //     options: barChartOptions
-    // })
-
-    //---------------------
-    //- STACKED BAR CHART -
-    //---------------------
-    // var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-    // var stackedBarChartData = $.extend(true, {}, barChartData)
-
-    // var stackedBarChartOptions = {
-    //     responsive: true,
-    //     maintainAspectRatio: false,
-    //     scales: {
-    //         xAxes: [{
-    //             stacked: true,
-    //         }],
-    //         yAxes: [{
-    //             stacked: true
-    //         }]
-    //     }
-    // }
-
-    // new Chart(stackedBarChartCanvas, {
-    //     type: 'bar',
-    //     data: stackedBarChartData,
-    //     options: stackedBarChartOptions
-    // })
-});
+    });
+}
 
 
 window.addEventListener('load', descifra);
