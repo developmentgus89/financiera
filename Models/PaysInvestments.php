@@ -68,70 +68,21 @@ class PaysInvestments
      * @param  double $dmonto
      * @return Array[] String
      */
-    // public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto)
-    // {
-    //     $payInterest = round(($dmonto * $interes) / 100, 2);
-    //     try {
-    //         $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
-    //                                             fmonto_pagado, dfecharegistro, cstatuspago, 
-    //                                             dtfechapagconfirmado, comprobantepago) 
-    //                                 VALUES(?, ?, ?, ?,NOW(),'NP', null, null)";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest]);
-    //         $resp['msj'] = 'success';
-    //         $resp['text'] = 'Se inserto el pago correctamente';
-    //         return $resp;
-    //     } catch (PDOException $e) {
-    //         throw new Error('Error en la insercion del pago' . $e->getMessage());
-    //     }
-    // }
-
-    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto)
+    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto, $fecha)
     {
         $payInterest = round(($dmonto * $interes) / 100, 2);
         try {
-            // Obtener el primer registro existente para el inversionista
-            $queryFirstRecord = "SELECT MIN(MONTH(dfecharegistro)) AS first_month 
-                             FROM paginteresesinv 
-                             WHERE icveinversionista = ?";
-            $statementFirstRecord = $this->acceso->prepare($queryFirstRecord);
-            $statementFirstRecord->execute([$icveinversionista]);
-            $firstRecord = $statementFirstRecord->fetch(PDO::FETCH_ASSOC);
-            $firstMonth = intval($firstRecord['first_month']);
-
-            // Obtener el mes y año actual
-            $currentMonth = date('n');
-            $currentYear = date('Y');
-
-            // Insertar pagos faltantes por mes desde el primer registro hasta el mes actual
-            for ($i = $firstMonth; $i <= $currentMonth; $i++) {
-                $queryCheck = "SELECT COUNT(*) as count 
-                           FROM paginteresesinv 
-                           WHERE icveinversionista = ? 
-                           AND MONTH(dfecharegistro) = ? 
-                           AND YEAR(dfecharegistro) = ?";
-                $statementCheck = $this->acceso->prepare($queryCheck);
-                $statementCheck->execute([$icveinversionista, $i, $currentYear]);
-                $resultCheck = $statementCheck->fetch(PDO::FETCH_ASSOC);
-
-                if ($resultCheck['count'] == 0) { // Si no existe un registro para este mes
-                    $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
-                                                        fmonto_pagado, dfecharegistro, cstatuspago, 
-                                                        dtfechapagconfirmado, comprobantepago) 
-                                            VALUES (?, ?, ?, ?, ?, 'NP', null, null)";
-                    $statement = $this->acceso->prepare($query);
-                    $statement->execute([
-                        $icveinversionista, $icvedetalleinver, $dmonto, $payInterest,
-                        "$currentYear-$i-01"
-                    ]); // Fecha en formato 'YYYY-MM-DD'
-                }
-            }
-
-            $resp['msg'] = 'success';
-            $resp['text'] = 'Se insertaron los pagos correctamente';
+            $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
+                                                fmonto_pagado, dfecharegistro, cstatuspago, 
+                                                dtfechapagconfirmado, comprobantepago) 
+                                    VALUES(?, ?, ?, ?, ?,'NP', null, null)";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest, $fecha]);
+            $resp['msj'] = 'success';
+            $resp['text'] = 'Se inserto el pago correctamente';
             return $resp;
         } catch (PDOException $e) {
-            throw new Error('Error en la inserción de pagos: ' . $e->getMessage());
+            throw new Error('Error en la insercion del pago' . $e->getMessage());
         }
     }
 

@@ -14,7 +14,6 @@ const descifraParams = () => {
         getSumInterest(params.icveinvestor);
         getPaysInsterestsInvestment(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
         
-        // insertPaysInsterests(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
     }
 }
 
@@ -171,7 +170,6 @@ const insertPaysInsterests = async (icveinversionista, icvedetalleinver, interes
         console.table(data);
 
         if (data.msg === 'success') {
-            // TODO: Mete el Swal
             location.reload();
         }
 

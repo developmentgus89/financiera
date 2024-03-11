@@ -25,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $icvedetalleinver  = $_POST['icvedetalleinver'];
             $interes           = $_POST['interes'];
             $dmonto            = $_POST['dmonto'];
-            $insertPays = $pays->setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto);
-            echo json_encode($insertPays);
+            $fecha             = $_POST['fecha'];
+            $insertPays = $pays->setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto, $fecha);
+            // echo json_encode($insertPays);
             break;
 
         case 'uploadimage':

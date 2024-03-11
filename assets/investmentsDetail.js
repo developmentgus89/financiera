@@ -170,6 +170,9 @@ const getSumCapitalPayment = async (icveinversionista) => {
 
         const data = await response.json();
 
+        console.warn(`Total de Pago de Intereses`);
+        console.table(data);
+
         let cantPaysInterests = document.querySelector('#interesTotalPagado');
         let cantTotInv = parseFloat(data[0].total);
         cantTotInv = cantTotInv.toLocaleString('es-MX', {
