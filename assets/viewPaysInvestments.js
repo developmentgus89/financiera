@@ -170,7 +170,8 @@ const insertPaysInsterests = async (icveinversionista, icvedetalleinver, interes
         const data = await response.json();
         console.table(data);
 
-        if (data.msj === 'success') {
+        if (data.msg === 'success') {
+            // TODO: Mete el Swal
             location.reload();
         }
 
