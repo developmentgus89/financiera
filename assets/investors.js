@@ -23,8 +23,9 @@ $('#udp-invcantinvertida').inputmask('currency', {
 });
 
 $('#modalAgregar').on('shown.bs.modal', () => {
-    const invnombre = document.querySelector('#invnombre');
-    getBanks();
+    const invnombre       = document.querySelector('#invnombre');
+    const invinstbancaria = document.querySelector('#invinstbancaria');
+    getBanks(invinstbancaria);
     getInterestInvesment();
     invnombre.focus();
 });
@@ -40,14 +41,12 @@ $("#modalEditar").on('hidden.bs.modal', function () {
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
 const btnAgregar = document.querySelector('#agregar-inversionista');
-
 const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
 const btnInsertInvestor = document.querySelector('#btnInsertInvestor');
 const btnUpdateInvestor = document.querySelector('#btnUpdateInvestor');
 const selectTipoCliente = document.querySelector('#typeClient');
 const btnRegresaModal = document.querySelector('#btnRegresaModal');
 const btnIrAInv = document.querySelector('#btnIrAInv');
-const selectBanco = document.querySelector('#invinstbancaria');
 const selectBancoUDP = document.querySelector('#udp-invinstbancaria');
 const selectInterests = document.querySelector('#invinteres');
 
@@ -139,7 +138,6 @@ btnInsertInvestor.addEventListener('click', () => {
 
 btnUpdateInvestor.addEventListener('click', () => {
     let id = document.getElementById('udp-idcveinvestor').value;
-    console.log('Valor al dar click ' + id);
 
     const fields = [
         'udp-idcveinvestor',
@@ -204,7 +202,6 @@ const getInvestors = async () => {
         }
 
         const data = await response.json();
-        console.table(data);
 
         var tableInvestors = document.querySelector('#tableInvestors');
         new DataTable(tableInvestors, {
@@ -248,7 +245,6 @@ const readRowInvestor = (id) => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const inversionista = JSON.parse(xhr.responseText);
-            console.table(inversionista);
             document.getElementById('udp-idcveinvestor').value = inversionista[0].icveinversionista;
             document.getElementById('udp-invnombre').value = inversionista[0].cnombre;
             document.getElementById('udp-invapaterno').value = inversionista[0].capaterno;
@@ -327,15 +323,12 @@ const insertInvestor = (
         '&invctabancaria=' + invctabancaria +
         '&invemail=' + invemail +
         '&invDateRegister=' + invDateRegister;
-    console.log(params);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
             const inversionista = JSON.parse(xhr.responseText);
-            console.table(inversionista); //Cachamos el error
-            console.log(`Mensaje $$$ ${inversionista[0].msj}`);
         } else {
             console.error('Error al insertar el Inversionista');
         }
@@ -370,7 +363,6 @@ const verifInsInsvestor = (
             const inversionista = JSON.parse(xhr.responseText);
 
             if (!inversionista[0]) {
-                console.warn('No existe el inversionista');
                 insertInvestor(
                     invnombre, invapaterno, invamaterno,
                     invedad, invtelefono, invinteres, invcantinvertida,
@@ -437,13 +429,11 @@ const updateInvestor = (
         '&udpinvemail=' + udpinvemail +
         '&udpinvDateRegister=' + udpinvDateRegister;
 
-    console.log(`Listado de parametros con codigo simplificado ${params} `);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.table(xhr.responseText);
             toastr.success('Registro actualizado correctamente');
             setTimeout(() => {
                 getInvestors();
@@ -464,11 +454,9 @@ const totalInvestors = () => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            console.table(data);
 
             const tInversionistas = document.getElementById('totalInvestors');
             tInversionistas.innerHTML = data[0].total;
-            console.log(data.total);
         } else {
             console.error('Error al ejecutar el metodo total de inversionistas');
         }
@@ -483,7 +471,6 @@ const totalCapital = () => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            console.table(data);
 
             const totalCapitalInv = document.getElementById('totalInvestorsCapital');
             let totalCapital = parseFloat(data[0].capital);
@@ -493,7 +480,6 @@ const totalCapital = () => {
             });
 
             data[0].capital == null ? totalCapitalInv.innerHTML = `$ 0.00` : totalCapitalInv.innerHTML = cantidadFormateada;
-            console.log(data.capital);
         } else {
             console.error('Error al ejecutar el metodo total de inversionistas');
         }
@@ -501,55 +487,40 @@ const totalCapital = () => {
     xhr.send(`operation=totalCapital`);
 }
 
-//Funcion para poder llenar la lista de bancos
+
 /**
- * 
- * @param {number} op //* Operacion para cargar el catálogo de bancos
+ * @param {HTMLSelectElement} selectBanco //* Select que trae la lista de bancos HTML
+ * @param {boolean} op //* Operacion para cargar el catálogo de bancos
  * @param {number} idbank //* Clave del banco
  * @param {String} bankdesc //* Descripción larga del banco
  */
-const getBanks = (op, idbank, bankdesc) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const banks = JSON.parse(xhr.responseText);
-            console.log('listado de categorias');
-            console.table(banks);
+const getBanks = async (selectBanco, op = false , idbank = null, bankdesc = null) => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'operation=readbanks'
+        });
 
-            selectBanco.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'SELECCIONE BANCO';
-            selectBanco.appendChild(defaultOption);
-
-            banks.forEach(bank => {
-                const option = document.createElement('option');
-                option.value = bank.icvebanco;
-                option.textContent = bank.cnombrebanco;
-                selectBanco.append(option);
-
-            });
-
-            if (op) {
-
-                console.log('Carga listado de bancos para la actualización');
-                banks.forEach(bankUDP => {
-                    const option = document.createElement('option');
-                    option.value = bankUDP.icvebanco;
-                    option.textContent = bankUDP.cnombrebanco;
-                    selectBancoUDP.appendChild(option);
-                });
-            }
-
-        } else {
-            console.error('Error al leer las categorias');
+        if (!response.ok) {
+            throw new Error('Error al leer las categorías');
         }
-    };
-    xhr.send('operation=readbanks');
+
+        const banks = await response.json();
+
+        selectBanco.innerHTML = `<option value="">SELECCIONE BANCO</option>` +
+            banks.map(bank => `<option value="${bank.icvebanco}">${bank.cnombrebanco}</option>`).join('');
+
+        if (op) {
+            selectBanco.innerHTML += banks.map(bankUDP => `<option value="${bankUDP.icvebanco}">${bankUDP.cnombrebanco}</option>`).join('');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
+
 
 const getInterestInvesment = async () => {
     try {
@@ -566,8 +537,6 @@ const getInterestInvesment = async () => {
         }
 
         const dataInterest = await response.json();
-        console.table(dataInterest);
-
         selectInterests.innerHTML = ``;
 
         const defaultOption = document.createElement('option');
@@ -607,7 +576,7 @@ const abrirModalActualizarCliente = (id) => {
 const confirmarEliminarCliente = (id) => {
     // Lógica para mostrar confirmación de eliminar Inversionista
     $('#deleteCliente').val(id);
-    getBanks(true);
+    getBanks(true, selectBanco);
     $('#modalBorrarCliente').modal('show');
 };
 

@@ -166,7 +166,7 @@ const _eqRange = {
 };
 
 // this ensures that non-temporal/numeric y-axes get multiple-snapped padding added above/below
-// TODO: also account for incrs when snapping to ensure top of axis gets a tick & value
+// : also account for incrs when snapping to ensure top of axis gets a tick & value
 function rangeNum(_min, _max, mult, extra) {
 	if (isObj(mult))
 		return _rangeNum(_min, _max, mult);
@@ -274,7 +274,7 @@ const pow = M.pow;
 const sign = M.sign;
 const log10 = M.log10;
 const log2 = M.log2;
-// TODO: seems like this needs to match asinh impl if the passed v is tweaked?
+// : seems like this needs to match asinh impl if the passed v is tweaked?
 const sinh =  (v, linthresh = 1) => M.sinh(v) * linthresh;
 const asinh = (v, linthresh = 1) => M.asinh(v / linthresh);
 
@@ -866,7 +866,7 @@ function genTimeStuffs(ms) {
 		h * 6,
 		h * 8,
 		h * 12,
-		// month divisors TODO: need more?
+		// month divisors : need more?
 		d,
 		d * 2,
 		d * 3,
@@ -1026,7 +1026,7 @@ function timeAxisStamps(stampCfg, fmtDate) {
 	));
 }
 
-// TODO: will need to accept spaces[] and pull incr into the loop when grid will be non-uniform, eg for log scales.
+// : will need to accept spaces[] and pull incr into the loop when grid will be non-uniform, eg for log scales.
 // currently we ignore this for months since they're *nearly* uniform and the added complexity is not worth it
 function timeAxisVals(tzDate, stamps) {
 	return (self, splits, axisIdx, foundSpace, foundIncr) => {
@@ -1645,7 +1645,7 @@ function clipGaps(gaps, ori, plotLft, plotTop, plotWid, plotHgt) {
 function addGap(gaps, fromX, toX) {
 	let prevGap = gaps[gaps.length - 1];
 
-	if (prevGap && prevGap[0] == fromX)			// TODO: gaps must be encoded at stroke widths?
+	if (prevGap && prevGap[0] == fromX)			// : gaps must be encoded at stroke widths?
 		prevGap[1] = toX;
 	else
 		gaps.push([fromX, toX]);
@@ -1697,7 +1697,7 @@ const arcV = (p, y, x, r, startAngle, endAngle) => { p.arc(x, y, r, startAngle, 
 const bezierCurveToH = (p, bp1x, bp1y, bp2x, bp2y, p2x, p2y) => { p.bezierCurveTo(bp1x, bp1y, bp2x, bp2y, p2x, p2y); };
 const bezierCurveToV = (p, bp1y, bp1x, bp2y, bp2x, p2y, p2x) => { p.bezierCurveTo(bp1x, bp1y, bp2x, bp2y, p2x, p2y); };
 
-// TODO: drawWrap(seriesIdx, drawPoints) (save, restore, translate, clip)
+// : drawWrap(seriesIdx, drawPoints) (save, restore, translate, clip)
 function points(opts) {
 	return (u, seriesIdx, idx0, idx1, filtIdxs) => {
 	//	log("drawPoints()", arguments);
@@ -2146,7 +2146,7 @@ function bars(opts) {
 
 				let xVal = scaleX.distr != 2 || disp != null ? dataX[i] : i;
 
-				// TODO: all xPos can be pre-computed once for all series in aligned set
+				// : all xPos can be pre-computed once for all series in aligned set
 				let xPos = valToPosX(xVal, scaleX, xDim, xOff);
 				let yPos = valToPosY(ifNull(yVal, fillToY) , scaleY, yDim, yOff);
 
@@ -2385,7 +2385,7 @@ function setDefaults(d, xo, yo, initY) {
 }
 
 function setDefaults2(d, xyo) {
-	return d.map((o, i) => i == 0 ? null : assign({}, xyo, o));  // todo: assign() will not merge facet arrays
+	return d.map((o, i) => i == 0 ? null : assign({}, xyo, o));  // : assign() will not merge facet arrays
 }
 
 function setDefault(o, i, xo, yo) {
@@ -2399,7 +2399,7 @@ function snapNumX(self, dataMin, dataMax) {
 const snapTimeX = snapNumX;
 
 // this ensures that non-temporal/numeric y-axes get multiple-snapped padding added above/below
-// TODO: also account for incrs when snapping to ensure top of axis gets a tick & value
+// : also account for incrs when snapping to ensure top of axis gets a tick & value
 function snapNumY(self, dataMin, dataMax) {
 	return dataMin == null ? nullNullTuple : rangeNum(dataMin, dataMax, rangePad, true);
 }
@@ -2458,7 +2458,7 @@ function uPlot(opts, data, then) {
 
 	const mode = self.mode;
 
-	// TODO: cache denoms & mins scale.cache = {r, min, }
+	// : cache denoms & mins scale.cache = {r, min, }
 	function getValPct(val, scale) {
 		let _val = (
 			scale.distr == 3 ? log10(val > 0 ? val : scale.clamp(self, val, scale.min, scale.max, scale.key)) :
@@ -2611,7 +2611,7 @@ function uPlot(opts, data, then) {
 	initScale("x");
 	initScale("y");
 
-	// TODO: init scales from facets in mode: 2
+	// : init scales from facets in mode: 2
 	if (mode == 1) {
 		series.forEach(s => {
 			initScale(s.scale);
@@ -3122,7 +3122,7 @@ function uPlot(opts, data, then) {
 			cursorPts.length > 1 && cursorPts.splice(i, 1)[0].remove();
 		}
 
-		// TODO: de-init no-longer-needed scales?
+		// : de-init no-longer-needed scales?
 	}
 
 	self.delSeries = delSeries;
@@ -3411,7 +3411,7 @@ function uPlot(opts, data, then) {
 				else {
 					if (i > 0) {
 						if (s.show && s.auto) {
-							// TODO: only handles, assumes and requires facets[0] / 'x' scale, and facets[1] / 'y' scale
+							// : only handles, assumes and requires facets[0] / 'x' scale, and facets[1] / 'y' scale
 							let [ xFacet, yFacet ] = s.facets;
 							let xScaleKey = xFacet.scale;
 							let yScaleKey = yFacet.scale;
@@ -4109,7 +4109,7 @@ function uPlot(opts, data, then) {
 		}
 
 	//	if (shouldSetSelect) {
-		// TODO: update .u-select metrics (if visible)
+		// : update .u-select metrics (if visible)
 		//	setStylePx(selectDiv, TOP, select.top = 0);
 		//	setStylePx(selectDiv, LEFT, select.left = 0);
 		//	setStylePx(selectDiv, WIDTH, select.width = 0);
@@ -4514,7 +4514,7 @@ function uPlot(opts, data, then) {
 
 		closestDist = inf;
 
-		// TODO: extract
+		// : extract
 		let xDim = scaleX.ori == 0 ? plotWidCss : plotHgtCss;
 		let yDim = scaleX.ori == 1 ? plotWidCss : plotHgtCss;
 

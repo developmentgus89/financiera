@@ -182,7 +182,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 axis.labelWidth += axisLabel.width;
             });
 
-            // TODO - use the drawAxis hook
+            //  - use the drawAxis hook
             plot.hooks.draw.push(function(plot, ctx) {
                 $.each(plot.getAxes(), function(flotAxisName, axis) {
                     var opts = axis.options;

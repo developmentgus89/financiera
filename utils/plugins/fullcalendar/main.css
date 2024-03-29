@@ -1,12 +1,12 @@
 
 /* classes attached to <body> */
-/* TODO: make fc-event selector work when calender in shadow DOM */
+/* : make fc-event selector work when calender in shadow DOM */
 .fc-not-allowed,
 .fc-not-allowed .fc-event { /* override events' custom cursors */
   cursor: not-allowed;
 }
 
-/* TODO: not attached to body. attached to specific els. move */
+/* : not attached to body. attached to specific els. move */
 .fc-unselectable {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -62,7 +62,7 @@
   }
 /* for FF, which doesn't expand a 100% div within a table cell. use absolute positioning */
 /* inner-wrappers are responsible for being absolute */
-/* TODO: best place for this? */
+/* : best place for this? */
 .fc-liquid-hack td,
   .fc-liquid-hack th {
     position: relative;
@@ -324,7 +324,7 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
     overflow: hidden;
     direction: ltr;
       /* hack for chrome computing the scroller's right/left wrong for rtl. undone below... */
-      /* TODO: demonstrate in codepen */
+      /* : demonstrate in codepen */
   }
 .fc .fc-scroller-harness-liquid {
     height: 100%;
@@ -392,12 +392,12 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
     background: #fff;
     background: var(--fc-page-bg-color, #fff);
     position: sticky;
-    z-index: 3; /* TODO: var */
-    /* TODO: box-shadow when sticking */
+    z-index: 3; /* : var */
+    /* : box-shadow when sticking */
   }
 .fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > * {
     top: 0; /* because border-sharing causes a gap at the top */
-      /* TODO: give safari -1. has bug */
+      /* : give safari -1. has bug */
   }
 .fc .fc-scrollgrid-section-footer.fc-scrollgrid-section-sticky > * {
     bottom: 0; /* known bug: bottom-stickiness doesn't work in safari */
@@ -531,7 +531,7 @@ a.fc-event:hover {
     }
 /* selecting (always TOUCH) */
 /* OR, focused by tab-index */
-/* (TODO: maybe not the best focus-styling for .fc-daygrid-dot-event) */
+/* (: maybe not the best focus-styling for .fc-daygrid-dot-event) */
 /* ---------------------------------------------------------------------------------------------------- */
 .fc-event-selected,
 .fc-event:focus {
@@ -1048,7 +1048,7 @@ A VERTICAL event
       bottom: calc(var(--fc-event-resizer-dot-total-width, 8px) / -2);
     }
 .fc .fc-timegrid .fc-daygrid-body { /* the all-day daygrid within the timegrid view */
-    z-index: 2; /* put above the timegrid-body so that more-popover is above everything. TODO: better solution */
+    z-index: 2; /* put above the timegrid-body so that more-popover is above everything. : better solution */
   }
 .fc .fc-timegrid-divider {
     padding: 0 0 2px; /* browsers get confused when you set height. use padding instead */
@@ -1171,7 +1171,7 @@ A VERTICAL event
 
 }
 .fc .fc-timegrid-col-bg {
-    z-index: 2; /* TODO: kill */
+    z-index: 2; /* : kill */
   }
 .fc .fc-timegrid-col-bg .fc-non-business { z-index: 1 }
 .fc .fc-timegrid-col-bg .fc-bg-event { z-index: 2 }
@@ -1304,7 +1304,7 @@ A VERTICAL event
 .fc-direction-ltr .fc-timegrid-now-indicator-arrow {
     left: 0;
 
-    /* triangle pointing right. TODO: mixin */
+    /* triangle pointing right. : mixin */
     border-width: 5px 0 5px 6px;
     border-top-color: transparent;
     border-bottom-color: transparent;
@@ -1312,7 +1312,7 @@ A VERTICAL event
 .fc-direction-rtl .fc-timegrid-now-indicator-arrow {
     right: 0;
 
-    /* triangle pointing left. TODO: mixin */
+    /* triangle pointing left. : mixin */
     border-width: 5px 6px 5px 0;
     border-top-color: transparent;
     border-bottom-color: transparent;

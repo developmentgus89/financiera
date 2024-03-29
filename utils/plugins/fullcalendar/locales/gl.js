@@ -17,7 +17,7 @@ FullCalendar.globalLocales.push(function () {
       list: 'Axenda',
     },
     weekText: 'Sm',
-    allDayText: 'Todo o día',
+    allDayText: ' o día',
     moreLinkText: 'máis',
     noEventsText: 'Non hai eventos para amosar',
   };

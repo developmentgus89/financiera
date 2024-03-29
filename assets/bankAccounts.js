@@ -32,8 +32,6 @@ export const getBanksAccounts = async (cveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn(`Control de Cuentas Bancarias`);
-        console.table(data);
 
         const tblBankAccounts = document.getElementById("tblBankAccounts");
 
@@ -80,9 +78,6 @@ export const getBanksCat = async () => {
     }
 
     const data = await response.json();
-    console.warn(`Control de Registros de Bancos desde catalogo`);
-    console.info(`Control de Registros de Bancos desde catalogo`);
-    console.table(data);
 
     selCatIcveBanco.innerHTML = ``;
 
@@ -110,9 +105,6 @@ btnSaveAccountBank.addEventListener('click', () => {
     let observationsAccountBank = document.getElementById('observationsAccountBank');
     let customSwitch3 = document.getElementById('customSwitch3');
 
-    console.warn(`Valor del input`);
-    console.info(customSwitch3.checked);
-
     const validDataAccountBank = () => {
         const fields = [
             { element: selCatIcveBanco, message: 'Seleccione el Banco.' },
@@ -134,7 +126,6 @@ btnSaveAccountBank.addEventListener('click', () => {
 
         if (!hasError) {
             removeError(typeAccountBank);
-            console.warn(`Informacion del arreglo`);
 
             fields.push(
                 { element: statusAccountBank, message: null },
@@ -169,9 +160,6 @@ const setNewDataBank = async (fields) => {
         params += '&' + dataBank.element.id + '=' + value;
     });
 
-    console.warn(`String de Params ${params}`);
-
-    //TODO: Validar correctamente la entrada de los datos en el controlador y modelo
     const response = await fetch(baseURL2, {
         method: 'POST',
         headers: {
@@ -185,8 +173,6 @@ const setNewDataBank = async (fields) => {
     }
 
     const data = await response.json();
-    console.warn(`Respueta desde el controlador al insertar la cuenta bancaria`);
-    console.table(data);
 
     if (data.msj) {
         toastr.success(data.text, 'Correcto');
@@ -200,7 +186,6 @@ const setNewDataBank = async (fields) => {
             document.getElementById('typeAccountBank').value = '';
             document.getElementById('observationsAccountBank').value = '';
             document.getElementById('customSwitch3').checked = false;
-            //TODO: Verificar el limpiado del formulario
         }, 650);
         setTimeout(() => {
 
@@ -209,17 +194,4 @@ const setNewDataBank = async (fields) => {
     }
 
 
-}
-
-
-
-const deleteAccountBank = (id) => {
-    //TODO: Implementar este métoodo
-
-
-
-}
-
-const updateAccountBank = (id) => {
-    console.log(`Hola el ID de la cuenta bancaria es: ${id}`);
 }

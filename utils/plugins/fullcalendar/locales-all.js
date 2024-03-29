@@ -584,7 +584,7 @@
       list: 'Agenda',
     },
     weekText: 'Sm',
-    allDayText: 'Todo el día',
+    allDayText: ' el día',
     moreLinkText: 'más',
     noEventsText: 'No hay eventos para mostrar',
   };
@@ -617,7 +617,7 @@
     },
     weekText: 'Sm',
     weekTextLong: 'Semana',
-    allDayText: 'Todo el día',
+    allDayText: ' el día',
     moreLinkText: 'más',
     moreLinkHint(eventCnt) {
       return `Mostrar ${eventCnt} eventos más`
@@ -796,7 +796,7 @@
       list: 'Axenda',
     },
     weekText: 'Sm',
-    allDayText: 'Todo o día',
+    allDayText: ' o día',
     moreLinkText: 'máis',
     noEventsText: 'Non hai eventos para amosar',
   };
@@ -1358,7 +1358,7 @@
       list: 'Agenda',
     },
     weekText: 'Sem',
-    allDayText: 'Todo o dia',
+    allDayText: ' o dia',
     moreLinkText: 'mais',
     noEventsText: 'Não há eventos para mostrar',
   };

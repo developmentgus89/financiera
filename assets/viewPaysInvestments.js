@@ -8,13 +8,11 @@ const descifraParams = () => {
         const paramsEncriptado = decodeURIComponent(queryParams.get('params'));
         var paramsDescript = CryptoJS.AES.decrypt(paramsEncriptado, 'financiera').toString(CryptoJS.enc.Utf8);
         const params = JSON.parse(paramsDescript);
-        console.table(params);
 
         getDataInvestment(params.icveinvestor);
         getSumInterest(params.icveinvestor);
         getPaysInsterestsInvestment(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
         
-        // insertPaysInsterests(params.icveinversionista, params.icveinvestor, params.interes, params.dmonto);
     }
 }
 
@@ -33,7 +31,6 @@ const btnRegresaModal = document.getElementById('btnRegresaModal');
 btnRegresaModal.addEventListener('click', function () {
     $('#m-adddocument-pay').modal('hide');
     $('#m-confirm-pay').modal('show');
-    console.info("Cambio de modales");
 });
 
 
@@ -66,8 +63,6 @@ const getDataInvestment = async (icvedetalleinver) => {
         }
 
         const data = await response.json();
-
-        console.table(data);
 
         let monto = parseFloat(data[0].dmonto);
         let montoF = monto.toLocaleString('es-MX', {
@@ -115,20 +110,19 @@ const getSumInterest = async (icvedetalleinver) => {
         }
 
         const data = await response.json();
-        console.warn('Total de Intereses Pagados de esa inversion');
-        console.table(data);
 
         let totalPagInterest = data[0].totalpaginv;
 
         totalPagInterest = parseFloat(totalPagInterest);
-        totalPagInterest = totalPagInterest.toLocaleString('es-MX', {
-            style: 'currency',
-            currency: 'MXN'
-        });
-
-        if(isNaN(totalPagInterest) === 0 || totalPagInterest === null) totalPagInterest = '0.00';
-
-
+        if(totalPagInterest > 0){
+            totalPagInterest = totalPagInterest.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            });
+        }else{
+            totalPagInterest = '$ 0.00';
+        }
+        
 
         document.getElementById('totalInterestInvestment').innerHTML = totalPagInterest;
 
@@ -152,8 +146,6 @@ const insertPaysInsterests = async (icveinversionista, icvedetalleinver, interes
         '&interes=' + interes +
         '&dmonto=' + dmonto;
 
-    console.log(params);
-
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -168,9 +160,8 @@ const insertPaysInsterests = async (icveinversionista, icvedetalleinver, interes
         }
 
         const data = await response.json();
-        console.table(data);
 
-        if (data.msj === 'success') {
+        if (data.msg === 'success') {
             location.reload();
         }
 
@@ -215,14 +206,12 @@ const getPaysInsterestsInvestment = async (icveinversionista, icvedetalleinver, 
 
             const difMilisegundos = Math.abs(fechaActual - fechaAnterior);
             const diferenciaEnDias = Math.ceil(difMilisegundos / (1000 * 60 * 60 * 24));
-            console.error(`LA DIFERENCIA EN DIAS ES -> ${diferenciaEnDias}`);
 
             if (diferenciaEnDias >= 27) {
                 insertPaysInsterests(icveinversionista, icvedetalleinver, interes, dmonto);
             }
         }
 
-        console.table(data);
         var tblPaysInvestments = document.getElementById('tblPaysInvestments');
 
         new DataTable(tblPaysInvestments, {
@@ -282,10 +271,6 @@ const showDialogAddDocument = () => {
     document.getElementById('icvepaymentdoc').value = cvepays;
     $('#m-adddocument-pay').modal('show');
 
-
-    // console.info(params);
-
-    console.info(`CVE Pago ${cvepays}`);
 }
 
 /**
@@ -308,16 +293,12 @@ const uploadImage = () => {
     formData.append('operation', 'uploadimage');
     formData.append('idpay', idpay);
 
-    console.info(formData);
-    console.table(formData);
-
     fetch(baseURL, {
         method: 'POST',
         body: formData
     })
         .then(response => response.text())
         .then(data => {
-            console.info(data);
             setTimeout(progressBar, 1000);
 
         })
@@ -356,8 +337,6 @@ const progressBar = () => {
 
 
 const viewVoucher = async (idpay) => {
-    console.info(idpay);
-    console.info(`Hola mundo VOucher`);
 
     let params =
         'operation=getVoucherPay' +
@@ -376,8 +355,6 @@ const viewVoucher = async (idpay) => {
         }
 
         const data = await response.json();
-        console.table(data);
-        console.log(data[0].comprobantepago);
         let img = document.getElementById('voucher');
         img.src = data[0].comprobantepago;
         

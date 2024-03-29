@@ -2755,7 +2755,7 @@ var WrappedRange = /*#__PURE__*/function () {
     value: function nodes(pred, options) {
       pred = pred || func.ok;
       var includeAncestor = options && options.includeAncestor;
-      var fullyContains = options && options.fullyContains; // TODO compare points and sort
+      var fullyContains = options && options.fullyContains; //  compare points and sort
 
       var startPoint = this.getStartPoint();
       var endPoint = this.getEndPoint();
@@ -7340,7 +7340,7 @@ var Buttons = /*#__PURE__*/function () {
                 tooltip: _this.options.tooltip
               }).render());
             });
-            /* TODO: do we have to record recent custom colors within cookies? */
+            /* : do we have to record recent custom colors within cookies? */
 
             var customColors = [['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']];
             $dropdown.find('.note-holder-custom').each(function (idx, item) {
@@ -9763,12 +9763,12 @@ var HintPopover = /*#__PURE__*/function () {
     disableGrammar: false,
     placeholder: null,
     inheritPlaceholder: false,
-    // TODO: need to be documented
+    // : need to be documented
     recordEveryKeystroke: false,
     historyLimit: 200,
-    // TODO: need to be documented
+    // : need to be documented
     showDomainOnlyForAutolink: false,
-    // TODO: need to be documented
+    // : need to be documented
     hintMode: 'word',
     hintSelect: 'after',
     hintDirection: 'bottom',

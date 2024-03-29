@@ -29,7 +29,7 @@ FullCalendar.globalLocales.push(function () {
     },
     weekText: 'Sm',
     weekTextLong: 'Semana',
-    allDayText: 'Todo el día',
+    allDayText: ' el día',
     moreLinkText: 'más',
     moreLinkHint(eventCnt) {
       return `Mostrar ${eventCnt} eventos más`

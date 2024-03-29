@@ -78,7 +78,17 @@ table{
     background-color: black;
     color: white;
 }
+
+.bg-financiera-primary{
+    background-color: rgb(10, 86, 173);
+    color: white;
+}
 /* hr{
     color: white;
     background-color: white;
 } */
+
+.small-text{
+    line-height: normal;
+    width: 50px;
+}

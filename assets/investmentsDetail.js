@@ -3,6 +3,7 @@ import * as banks from "./bankAccounts.js";
 
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/InvestorsController.php';
+const URL_g = '../Controllers/StatisticalGraphsController.php'; // Graficas URL Controller
 
 // document.addEventListener('',);
 
@@ -75,10 +76,13 @@ const descifra = () => {
         var paramDescript = CryptoJS.AES.decrypt(paramEncriptado, 'financiera').toString(CryptoJS.enc.Utf8);
 
         const params = JSON.parse(paramDescript);
+
         getInterests();
         getInvestment(params.icveinvestor);
         getInvestmentDetails(params.icveinvestor);
         getInvestmentsByInvestor(params.icveinvestor);
+
+        Graficos(params.icveinvestor);
 
         document.getElementById('fieldicveinversionista').value = params.icveinvestor;
 
@@ -86,10 +90,6 @@ const descifra = () => {
         getSumCapitalPayment(params.icveinvestor);
         banks.getBanksCat();
     }
-
-    console.log(`Parametros son: ${queryParams}`);
-    console.log(`Parametros son: ${queryParams.has('cveinvestors')}`);
-    console.table(paramDescript);
 
 }
 
@@ -108,8 +108,6 @@ const getInvestment = async (icveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn(`Datos personales del inversionista`);
-        console.table(data);
 
         document.getElementById('fieldicveinversionista').value = data[0].icveinversionista;
 
@@ -138,9 +136,6 @@ const getInvestmentDetails = async (icveinversionista) => {
         }
 
         const data = await response.json();
-
-        console.warn(`Estadisticas del inversionista`);
-        console.table(data);
 
         let cantTotalInvertida = document.querySelector('#totalCapital');
         let cantTotInv = parseFloat(data[0].totalcapital);
@@ -175,15 +170,17 @@ const getSumCapitalPayment = async (icveinversionista) => {
 
         const data = await response.json();
 
-        console.warn(`Total de Pago de Intereses`);
-        console.table(data);
-
         let cantPaysInterests = document.querySelector('#interesTotalPagado');
         let cantTotInv = parseFloat(data[0].total);
-        cantTotInv = cantTotInv.toLocaleString('es-MX', {
-            style: 'currency',
-            currency: 'MXN'
-        });
+        if(cantTotInv > 0){
+            cantTotInv = cantTotInv.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            });
+        }else{
+            cantTotInv = '$ 0.00';
+        }
+       
 
         cantPaysInterests.innerHTML = cantTotInv;
 
@@ -211,8 +208,6 @@ const getInvestmentsByInvestor = async (icveinversionista) => {
         }
 
         const data = await response.json();
-        console.warn('Inversiones registradas');
-        console.table(data);
 
         var tblInvestments = document.getElementById('tblInversiones');
 
@@ -266,7 +261,6 @@ const getInterests = async (op) => {
         }
 
         const interests = await response.json();
-        console.table(interests);
 
         selectInterest.innerHTML = ``;
         sInpuInterest.innerHTML = ``;
@@ -326,8 +320,6 @@ const openEditionInvesment = async (icveinversionista, icvedetalleinver) => {
 
         const data = await response.json();
 
-        console.warn('Detalle de la confirmación del pago a inversionista');
-        console.table(data);
         document.getElementById('udpcveinverdetalle').value = data[0].icvedetalleinver;
         document.getElementById('udpinputDateInver').value = data[0].dfecharegistro;
         document.getElementById('udpicveinteres').value = data[0].icvetasascomisiones;
@@ -358,27 +350,45 @@ const updateInvestmentData = async (
         '&udpinputMontoInver=' + udpinputMontoInver +
         '&udpinputObsInver=' + udpinputObsInver;
 
-    // console.error(params);
-    try {
-        const response = await fetch(baseURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+    try {      
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
             },
-            body: params
+            buttonsStyling: false
         });
-
-        const data = await response.json();
-        console.warn('Actualizacion de la inversion detalles');
-        console.table(data);
-        toastr.success('Se actualizaron los datos de la inversión correctamente');
-        setTimeout(() => {
-            $("#modalEditionInvesment").modal("hide");
-        }, 350);
-
-        setTimeout(() => {
-            location.reload();
-        }, 650);
+        swalWithBootstrapButtons.fire({
+            title: "¿Deseas actualizar esta inversión?",
+            text: "Este cambio afectará los pagos de inversión que se generen de manera mensual.",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, cancelar!",
+            confirmButtonText: "Si!",
+            reverseButtons: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const response = await fetch(baseURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+                const data = await response.json();
+                if (data.msg == 'success') {
+                    swalWithBootstrapButtons.fire({
+                        title: "Inversión Actualizada!",
+                        text: data.text,
+                        icon: "success"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                }
+            }
+        });
 
     } catch (error) {
         throw new Error(`Error en la operacion: ${error.message}`);
@@ -404,8 +414,7 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
         '&InputMontoInver=' + InputMontoInver +
         '&InputInteres=' + InputInteres +
         '&InputObsInver=' + InputObsInver;
-    console.warn(`Esto sucede para cuando se guarda la nueva inversion`);
-    console.log(params);
+
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -421,7 +430,6 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
 
         const data = await response.json();
 
-        console.table(data);
 
         toastr.success('Se insertó la inversión correctamente');
         setTimeout(() => {
@@ -435,6 +443,29 @@ const setNewInvesmentDetail = async (icveinversionista, InputDateInver, InputMon
 
     } catch (error) {
 
+    }
+}
+
+// ============ Manejo de Estadisticas para la grafica del Inversionista =========
+const readInvesments = async (icveinversionista, op) => {
+    try {
+        const response = await fetch(URL_g, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `operation=${op}&icveinversionista=${icveinversionista}`
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error con el servidor, no se puede ejecutar la operacion de estadisticas`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        throw new Error(`No se pudo completar las estadisticas del inversionista ${error.message}`);
     }
 }
 
@@ -453,7 +484,7 @@ btnSaveUpdateInvesmentsDetail.addEventListener('click', function () {
     fields.forEach((field) => {
         values[field] = document.getElementById(field).value;
     });
-
+    
     updateInvestmentData(
         values['udpcveinversionista'],
         values['udpcveinverdetalle'],
@@ -474,7 +505,10 @@ btnSeeBankData.addEventListener('click', function () {
 
 
 btnSeeBeneficiaries.addEventListener('click', function () {
-    $('#modalSeeBeneficiaries').modal('show');
+    let icveinvestor = document.getElementById('fieldicveinversionista').value;
+    const parametro = { icveinvestor: icveinvestor};
+    const paramEncrypt = CryptoJS.AES.encrypt(JSON.stringify(parametro),'financiera').toString();
+    window.location.href = `InvestorsBeneficiaries.php?cveinvestors=${encodeURIComponent(paramEncrypt)}`;
 });
 
 btnAddInversion.addEventListener('click', function () {
@@ -525,7 +559,6 @@ btnSaveInvesments.addEventListener('click', function () {
 
 
 btnBackInvestments.addEventListener('click', function () {
-    console.log('Click en el boton regreso');
     window.location.href = 'InvestorsBlade.php';
 });
 
@@ -536,152 +569,144 @@ const Message = () => {
 
 //! Graficos
 
-$(function () {
-    /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
+const Graficos = async (icveinversionista) => {
+    let inversiones = await readInvesments(icveinversionista, 'readInvesments');
+    console.table(inversiones);
+    let paysInterests = await readInvesments(icveinversionista, 'readInterests');
+    console.table(paysInterests);
 
-    //--------------
-    //- AREA CHART -
-    //--------------
+    let dataMap = {};
 
-    // Get context with jQuery - using jQuery's .get() method.
-    // var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+    // Agrupar datos de inversiones
+    inversiones.forEach(inversion => {
+        const key = `${inversion.mes}-${inversion.año}`;
+        if (!dataMap[key]) {
+            dataMap[key] = { totalInversion: 0, totalIntereses: 0 };
+        }
+        dataMap[key].totalInversion += parseFloat(inversion.totalinv);
+    });
+
+    // Agrupar datos de pagos de intereses
+    paysInterests.forEach(pays => {
+        const key = `${pays.mes}-${pays.año}`;
+        if (!dataMap[key]) {
+            dataMap[key] = { totalInversion: 0, totalIntereses: 0 };
+        }
+        dataMap[key].totalIntereses += parseFloat(pays.totalpaysinterest);
+    });
+
+    // Convertir clave mes-año a objeto de fecha para ordenar
+    let dateLabels = Object.keys(dataMap).map(label => {
+        const [mes, año] = label.split('-').map(Number); // Convertir a números
+        return new Date(año, mes - 1); // Crear objeto de fecha
+    });
+
+    // Ordenar las fechas
+    dateLabels.sort((a, b) => a - b);
+
+    // Volver a mapear las etiquetas ordenadas al formato deseado
+    const sortedLabels = dateLabels.map(date => `${getMonthName(date.getMonth() + 1)} ${date.getFullYear()}`);
+
+    // Mapear totales y pagos de intereses con las etiquetas ordenadas
+    const totales = sortedLabels.map(label => {
+        const [monthName, year] = label.split(' ');
+        const key = `${getMonthIndex(monthName)}-${year}`;
+        return dataMap[key].totalInversion;
+    });
+    const paysInts = sortedLabels.map(label => {
+        const [monthName, year] = label.split(' ');
+        const key = `${getMonthIndex(monthName)}-${year}`;
+        return dataMap[key].totalIntereses;
+    });
 
     var areaChartData = {
-        labels: [
-            'Enero', 'Febrero', 'Marzo',
-            'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
+        labels: sortedLabels,
         datasets: [
             {
-                label: 'Digital Goods',
+                label: 'Inversiones',
                 backgroundColor: 'rgba(60,141,188,0.9)',
                 borderColor: 'rgba(60,141,188,0.8)',
-                pointRadius: false,
+                pointRadius: true,
                 pointColor: '#3b8bba',
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
-                data: [28, 48, 40, 19, 86, 27, 90]
+                fill: false,
+                data: totales
             },
             {
-                label: 'Electronics',
+                label: 'Intereses',
                 backgroundColor: 'rgba(210, 214, 222, 1)',
                 borderColor: 'rgba(210, 214, 222, 1)',
-                pointRadius: false,
-                pointColor: 'rgba(210, 214, 222, 1)',
+                pointRadius: true,
+                pointColor: 'rgba(210, 214, 222,1)',
                 pointStrokeColor: '#c1c7d1',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(220,220,220,1)',
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
+                fill: false,
+                data: paysInts
+            }
         ]
-    }
+    };
 
     var areaChartOptions = {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
-            display: false
+            display: true
         },
         scales: {
             xAxes: [{
                 gridLines: {
-                    display: false,
+                    display: true,
                 }
             }],
             yAxes: [{
                 gridLines: {
-                    display: false,
+                    display: true,
+                },
+                ticks: {
+                    beginAtZero: true,
+                    callback: function(value) {
+                        return `$ ${value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                    }
                 }
             }]
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                    return datasetLabel + ': $' + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                }
+            }
         }
-    }
+    };
 
-    //-------------
-    //- LINE CHART -
-    //--------------
-    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-    var lineChartOptions = $.extend(true, {}, areaChartOptions)
-    var lineChartData = $.extend(true, {}, areaChartData)
-    lineChartData.datasets[0].fill = false;
-    lineChartData.datasets[1].fill = false;
-    lineChartOptions.datasetFill = false
-
+    // Asumiendo que tienes un elemento canvas en tu HTML con el id 'lineChart'
+    var lineChartCanvas = document.getElementById('lineChart').getContext('2d');
     var lineChart = new Chart(lineChartCanvas, {
         type: 'line',
-        data: lineChartData,
-        options: lineChartOptions
-    })
+        data: areaChartData,
+        options: areaChartOptions
+    });
+};
 
-    //-------------
-    //- PIE CHART -
-    //-------------
-    // Get context with jQuery - using jQuery's .get() method.
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData = donutData;
-    var pieOptions = {
-        maintainAspectRatio: false,
-        responsive: true,
-    }
-    //Create pie or douhnut chart
-    // You can switch between pie and douhnut using the method below.
-    new Chart(pieChartCanvas, {
-        type: 'pie',
-        data: pieData,
-        options: pieOptions
-    })
+function getMonthName(monthIndex) {
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return monthNames[monthIndex - 1];
+}
 
-    //-------------
-    //- BAR CHART -
-    //-------------
-    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    var barChartData = $.extend(true, {}, areaChartData)
-    var temp0 = areaChartData.datasets[0]
-    var temp1 = areaChartData.datasets[1]
-    barChartData.datasets[0] = temp1
-    barChartData.datasets[1] = temp0
+function getMonthIndex(monthName) {
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return monthNames.indexOf(monthName) + 1;
+}
 
-    var barChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        datasetFill: false
-    }
+// Este código debe ejecutarse después de que la página haya cargado completamente y Chart.js esté disponible.
 
-    new Chart(barChartCanvas, {
-        type: 'bar',
-        data: barChartData,
-        options: barChartOptions
-    })
 
-    //---------------------
-    //- STACKED BAR CHART -
-    //---------------------
-    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-    var stackedBarChartData = $.extend(true, {}, barChartData)
 
-    var stackedBarChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            xAxes: [{
-                stacked: true,
-            }],
-            yAxes: [{
-                stacked: true
-            }]
-        }
-    }
 
-    new Chart(stackedBarChartCanvas, {
-        type: 'bar',
-        data: stackedBarChartData,
-        options: stackedBarChartOptions
-    })
-});
 
 
 window.addEventListener('load', descifra);

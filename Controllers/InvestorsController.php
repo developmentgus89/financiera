@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode($createInvestor);
             break;
         case 'rowCount':
-            $invnombre = $_POST['invnombre'];
+            $invnombre   = $_POST['invnombre'];
             $invapaterno = $_POST['invapaterno'];
             $invamaterno = $_POST['invamaterno'];
 
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'getPaysInterestsToInvestor':
             $icveinversion = $_POST['icveinversion'];
-            $pagos = $investor->get_paysinterestbyinver($icveinversion);
+            $pagos         = $investor->get_paysinterestbyinver($icveinversion);
             echo json_encode($pagos);
             break;
 
@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'readUDPPago':
             $icvedetalleinver = $_POST['icvedetalleinver'];
-            $invesmentsPays = $investor->get_paysinvesments($icvedetalleinver);
+            $invesmentsPays   = $investor->get_paysinvesments($icvedetalleinver);
             echo json_encode($invesmentsPays);
             break;
 
@@ -194,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $udpicveinteres      = $_POST['udpicveinteres'];
             $udpinputMontoInver  = $_POST['udpinputMontoInver'];
             $udpinputObsInver    = $_POST['udpinputObsInver'];
+
             $invesmentsDetail    = $investor->set_updateDetailInvesment(
                 $udpcveinversionista,
                 $udpcveinverdetalle,
@@ -212,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'insertDetailsPaysInvesment':
-            $icveinversionista = $_POST['icveinversionista'];
+            $icveinversionista  = $_POST['icveinversionista'];
             $insertPaysInterest = $investor->set_paysdetailsinterest($icveinversionista);
             echo json_encode($insertPaysInterest);
             break;
@@ -223,8 +224,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'confirmpay':
-            $icvepago = $_POST['icvepago'];
-            $comprobante = $_POST['comprobante'];
+            $icvepago           = $_POST['icvepago'];
+            $comprobante        = $_POST['comprobante'];
             $icvepaymentconfirm = $investor->set_confirmpayment($icvepago, $comprobante);
             echo json_encode($icvepaymentconfirm);
             break;
@@ -240,6 +241,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $icveinversionista = $_POST['icveinversionista'];
             $sumInterestsTotal = $investor->getSumCapitalPayment($icveinversionista);
             echo json_encode($sumInterestsTotal);
+            break;
+
+        case 'rowReadInvertion':
+            $datRowInvertion = [
+                $_POST['icveinvestor'],
+                $_POST['icveinversionista']
+            ];
+            $detalleInversion  = $investor->getInvestorRow($datRowInvertion);
+            echo json_encode($detalleInversion);
             break;
 
         default:

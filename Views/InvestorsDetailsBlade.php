@@ -102,12 +102,12 @@ include_once "dashboard/startTemplateDashboard.php";
                                                 </div>
                                                 <div class="card-body text-title-cat">
                                                     <div class="chart">
-                                                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;">
+                                                        <canvas id="lineChart" style="min-height: 350px; height: 250px; max-height: 350px; max-width: 200%;">
                                                         </canvas>
                                                     </div>
                                                 </div>
                                                 <div class="card-footer bg-secondary text-muted">
-                                                    Solo se toma en cuenta el &uacute;ltimo a&ntilde;o.
+                                                    Solo se toma en cuenta los &uacute;ltimos 12 meses.
                                                 </div>
                                             </div>
                                         </div>
@@ -254,7 +254,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <label for="inputDateInver">FECHA INVERSI&Oacute;N:</label>
                             <input type="number" class="form-control" name="udpcveinverdetalle" id="udpcveinverdetalle" hidden>
                             <input type="number" class="form-control" name="udpcveinversionista" id="udpcveinversionista" hidden>
-                            <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver">
+                            <input type="date" class="form-control" name="udpinputDateInver" id="udpinputDateInver" disabled>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -267,7 +267,7 @@ include_once "dashboard/startTemplateDashboard.php";
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="inputMontoInver">CANTIDAD $:</label>
-                            <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver">
+                            <input type="text" step="0.5" class="form-control" name="udpinputMontoInver" id="udpinputMontoInver" disabled>
                         </div>
                     </div>
                 </div>

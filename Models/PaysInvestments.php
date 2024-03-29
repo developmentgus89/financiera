@@ -68,16 +68,16 @@ class PaysInvestments
      * @param  double $dmonto
      * @return Array[] String
      */
-    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto)
+    public function setInsertPays($icveinversionista, $icvedetalleinver, $interes, $dmonto, $fecha)
     {
         $payInterest = round(($dmonto * $interes) / 100, 2);
         try {
             $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
                                                 fmonto_pagado, dfecharegistro, cstatuspago, 
                                                 dtfechapagconfirmado, comprobantepago) 
-                                    VALUES(?, ?, ?, ?,NOW(),'NP', null, null)";
+                                    VALUES(?, ?, ?, ?, ?,'NP', null, null)";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest]);
+            $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest, $fecha]);
             $resp['msj'] = 'success';
             $resp['text'] = 'Se inserto el pago correctamente';
             return $resp;
@@ -86,7 +86,7 @@ class PaysInvestments
         }
     }
 
-    
+
     /**
      * confirmPay
      *
@@ -94,12 +94,13 @@ class PaysInvestments
      * @param  String $comprobante
      * @return Array[] String
      */
-    public function confirmPay($idpay, $comprobante){
+    public function confirmPay($idpay, $comprobante)
+    {
         try {
             $query = "UPDATE paginteresesinv SET cstatuspago = 'P', dtfechapagconfirmado = NOW(), comprobantepago = CONCAT('../docs/',?) 
                     WHERE icvepago = ?";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$comprobante, $idpay ]);
+            $statement->execute([$comprobante, $idpay]);
             $resp['msj'] = 'success';
             $resp['text'] = 'Se confirmo el pago correctamente';
             return $resp;
@@ -108,32 +109,34 @@ class PaysInvestments
         }
     }
 
-    
+
     /**
      * getVoucher
      *
      * @param  number $idpay
      * @return Array[] String
      */
-    public function getVoucher($idpay){
+    public function getVoucher($idpay)
+    {
         try {
             $query = "SELECT * FROM paginteresesinv WHERE icvepago = ?";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$idpay ]);
+            $statement->execute([$idpay]);
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             throw new Error('Error en la insercion del pago' . $e->getMessage());
         }
     }
 
-    
+
     /**
      * getSumInterest
      *
      * @param  number $icvedetinversion
      * @return Array[] JSON | PDOException
      */
-    public function getSumInterest($icvedetinversion){
+    public function getSumInterest($icvedetinversion)
+    {
         try {
             $query = "SELECT SUM(fmonto_pagado) AS totalpaginv FROM paginteresesinv WHERE icvedetalleinver = ? AND cstatuspago = 'P'";
             $statement = $this->acceso->prepare($query);

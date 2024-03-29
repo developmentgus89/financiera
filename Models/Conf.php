@@ -4,4 +4,5 @@
     define('DB_NAME', 'inventario-basico');
     define('DB_USER', 'root');
     define('DB_PASSWORD', '');
+    define('URL', getenv(URL));
 ?>

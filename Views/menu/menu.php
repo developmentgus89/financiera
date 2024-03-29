@@ -88,6 +88,12 @@
                         <p>Tasas y Comisiones</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        &nbsp;&nbsp;<i class="nav-icon fas fa-money-check-alt" style="color: red;"></i>
+                        <p>Cat&aacute;logo de Bancos</p>
+                    </a>
+                </li>
             </ul>
         </li>
         

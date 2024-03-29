@@ -133,7 +133,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
     if (/[\[\]]/.test(ch) && stream.match(ch)) // check for [[..]]
       return 'brace';
 
-    if (ch == "@") {    // check for space link. TODO fix @@...@@ highlighting
+    if (ch == "@") {    // check for space link.  fix @@...@@ highlighting
       stream.eatWhile(isSpaceName);
       return "link";
     }
