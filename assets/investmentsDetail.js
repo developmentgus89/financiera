@@ -170,15 +170,17 @@ const getSumCapitalPayment = async (icveinversionista) => {
 
         const data = await response.json();
 
-        console.warn(`Total de Pago de Intereses`);
-        console.table(data);
-
         let cantPaysInterests = document.querySelector('#interesTotalPagado');
         let cantTotInv = parseFloat(data[0].total);
-        cantTotInv = cantTotInv.toLocaleString('es-MX', {
-            style: 'currency',
-            currency: 'MXN'
-        });
+        if(cantTotInv > 0){
+            cantTotInv = cantTotInv.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            });
+        }else{
+            cantTotInv = '$ 0.00';
+        }
+       
 
         cantPaysInterests.innerHTML = cantTotInv;
 
@@ -568,16 +570,57 @@ const Message = () => {
 //! Graficos
 
 const Graficos = async (icveinversionista) => {
-    let inversiones   = await readInvesments(icveinversionista, 'readInvesments');
-    let totales       = inversiones.map(inversion => parseFloat(inversion.totalinv));
+    let inversiones = await readInvesments(icveinversionista, 'readInvesments');
+    console.table(inversiones);
     let paysInterests = await readInvesments(icveinversionista, 'readInterests');
-    let paysInts      = paysInterests.map(pays => parseFloat(pays.totalinv));
+    console.table(paysInterests);
+
+    let dataMap = {};
+
+    // Agrupar datos de inversiones
+    inversiones.forEach(inversion => {
+        const key = `${inversion.mes}-${inversion.año}`;
+        if (!dataMap[key]) {
+            dataMap[key] = { totalInversion: 0, totalIntereses: 0 };
+        }
+        dataMap[key].totalInversion += parseFloat(inversion.totalinv);
+    });
+
+    // Agrupar datos de pagos de intereses
+    paysInterests.forEach(pays => {
+        const key = `${pays.mes}-${pays.año}`;
+        if (!dataMap[key]) {
+            dataMap[key] = { totalInversion: 0, totalIntereses: 0 };
+        }
+        dataMap[key].totalIntereses += parseFloat(pays.totalpaysinterest);
+    });
+
+    // Convertir clave mes-año a objeto de fecha para ordenar
+    let dateLabels = Object.keys(dataMap).map(label => {
+        const [mes, año] = label.split('-').map(Number); // Convertir a números
+        return new Date(año, mes - 1); // Crear objeto de fecha
+    });
+
+    // Ordenar las fechas
+    dateLabels.sort((a, b) => a - b);
+
+    // Volver a mapear las etiquetas ordenadas al formato deseado
+    const sortedLabels = dateLabels.map(date => `${getMonthName(date.getMonth() + 1)} ${date.getFullYear()}`);
+
+    // Mapear totales y pagos de intereses con las etiquetas ordenadas
+    const totales = sortedLabels.map(label => {
+        const [monthName, year] = label.split(' ');
+        const key = `${getMonthIndex(monthName)}-${year}`;
+        return dataMap[key].totalInversion;
+    });
+    const paysInts = sortedLabels.map(label => {
+        const [monthName, year] = label.split(' ');
+        const key = `${getMonthIndex(monthName)}-${year}`;
+        return dataMap[key].totalIntereses;
+    });
+
     var areaChartData = {
-        labels: [
-            'Enero', 'Febrero', 'Marzo',
-            'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
+        labels: sortedLabels,
         datasets: [
             {
                 label: 'Inversiones',
@@ -588,6 +631,7 @@ const Graficos = async (icveinversionista) => {
                 pointStrokeColor: 'rgba(60,141,188,1)',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(60,141,188,1)',
+                fill: false,
                 data: totales
             },
             {
@@ -595,14 +639,15 @@ const Graficos = async (icveinversionista) => {
                 backgroundColor: 'rgba(210, 214, 222, 1)',
                 borderColor: 'rgba(210, 214, 222, 1)',
                 pointRadius: true,
-                pointColor: 'rgba(210, 214, 222, 1)',
+                pointColor: 'rgba(210, 214, 222,1)',
                 pointStrokeColor: '#c1c7d1',
                 pointHighlightFill: '#fff',
                 pointHighlightStroke: 'rgba(220,220,220,1)',
+                fill: false,
                 data: paysInts
-            },
+            }
         ]
-    }
+    };
 
     var areaChartOptions = {
         maintainAspectRatio: false,
@@ -617,14 +662,14 @@ const Graficos = async (icveinversionista) => {
                 }
             }],
             yAxes: [{
-                ticks: {
-                    callback: function(value) {
-                        return `$ ${((value).toFixed(2)).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
-                    },
-                    stepSize: 10000
-                },
                 gridLines: {
                     display: true,
+                },
+                ticks: {
+                    beginAtZero: true,
+                    callback: function(value) {
+                        return `$ ${value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+                    }
                 }
             }]
         },
@@ -636,24 +681,32 @@ const Graficos = async (icveinversionista) => {
                 }
             }
         }
-    }
+    };
 
-    //-------------
-    //- LINE CHART -
-    //--------------
-    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-    var lineChartOptions = $.extend(true, {}, areaChartOptions)
-    var lineChartData = $.extend(true, {}, areaChartData)
-    lineChartData.datasets[0].fill = false;
-    lineChartData.datasets[1].fill = false;
-    lineChartOptions.datasetFill = true;
-
+    // Asumiendo que tienes un elemento canvas en tu HTML con el id 'lineChart'
+    var lineChartCanvas = document.getElementById('lineChart').getContext('2d');
     var lineChart = new Chart(lineChartCanvas, {
         type: 'line',
-        data: lineChartData,
-        options: lineChartOptions
+        data: areaChartData,
+        options: areaChartOptions
     });
+};
+
+function getMonthName(monthIndex) {
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return monthNames[monthIndex - 1];
 }
+
+function getMonthIndex(monthName) {
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return monthNames.indexOf(monthName) + 1;
+}
+
+// Este código debe ejecutarse después de que la página haya cargado completamente y Chart.js esté disponible.
+
+
+
+
 
 
 window.addEventListener('load', descifra);
