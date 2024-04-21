@@ -1,5 +1,6 @@
 <?php
-require_once 'Conexion.php';
+include_once('Conexion.php');
+include_once('Abstracts/OperationsCustomer.php');
 
 class Customer{
     private $conexion;

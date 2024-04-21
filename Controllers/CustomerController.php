@@ -1,9 +1,11 @@
 <?php
 require_once '../Models/Customer.php';
+require_once '../Models/CreditsClients.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $operation = $_POST['operation'];
     $customer = new Customer();
+    $credits  = new CreditsClients();
     global $clientes;
 
     switch ($operation) {
@@ -49,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'delete':
             // Eliminar cliente
             $id = $_POST['id'];
-
             // $customer->eliminarCliente($id);
             break;
 

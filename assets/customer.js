@@ -23,7 +23,7 @@ const actFecha = () => {
     fechaInput.value = fechaFormateada;
 }
 
-$('#modalAgregar').on('shown.bs.modal' , () => {
+$('#modalAgregar').on('shown.bs.modal', () => {
     leerTipoCliente();
 });
 
@@ -33,12 +33,12 @@ $("#modalAgregar").on('hidden.bs.modal', function () {
 });
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
-const btnAgregar           = document.querySelector('#agregar-cliente');
-const btnEditarCliente     = document.querySelector('#agregar-cliente');
-const btnEliminarCliente   = document.querySelector('#btnEliminarCliente');
-const btnInsertarCliente   = document.querySelector('#btnInsertarCliente');
+const btnAgregar = document.querySelector('#agregar-cliente');
+const btnEditarCliente = document.querySelector('#agregar-cliente');
+const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
+const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
-const selectTipoCliente    = document.querySelector('#typeClient');
+const selectTipoCliente = document.querySelector('#typeClient');
 
 
 
@@ -206,33 +206,269 @@ const leerClientes = () => {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
             console.table(data);
-            var tablaClientes = document.querySelector('#tablaClientes');
-            new DataTable(tablaClientes, {
-                data: {
-                    // headings: Object.keys(data[0]),
-                    headings: ['ID', 'Nombre',  'Telefono', 'Edad', 'Tipo Cliente', 'Fec. Nacimiento', 'Fec. Registro', 'Status', 'Acciones'],
+            $(document).ready(function () {
+                var table = $('#tablaClientes').DataTable({
                     data: data.map(function (item) {
-                        // return Object.values(item);
                         var id = item['icvecliente'];
                         return [
+                            "",
                             id,
-                            `${item['cnombre']}  ${item['capaterno']} ${item['camaterno']}`,
+                            `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
                             item['ctelefono'],
-                            item['iedad'],
                             item['cabreviiatipo'],
-                            item['dfechanaciemiento'],
-                            item['dfechaalta'],
                             item['cestatus'],
                             `
-                            <button class="btn bg-gradient-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Cr&eacute;ditos" onclick=""><i class="fas fa-money-check"></i></button> 
-                            <button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick=""><i class="fas fa-edit"></i></button>
-                            <button class="btn bg-gradient-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Domicilio y Referencias" onclick=""><i class="fas fa-file-signature"></i></button>
+                            <button class="btn bg-gradient-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Cr&eacute;ditos"><i class="fas fa-money-check"></i></button> 
+                            <button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>
+                            <button class="btn bg-gradient-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Domicilio y Referencias"><i class="fas fa-file-signature"></i></button>
                             `
+                        ];
+                    }),
+                    columns: [
+                        {
+                            className: 'details-control',
+                            orderable: false,
+                            data: null,
+                            defaultContent: '',
+                            render: function () {
+                                return '<i class="fa fa-plus-square" aria-hidden="true" style="cursor: pointer"></i>';
+                            },
+                            width: "15px"
+                        },
+                        { title: "ID" },
+                        { title: "Nombre" },
+                        { title: "Telefono" },
+                        { title: "Tipo Cliente" },
+                        { title: "Status" },
+                        { title: "Acciones", orderable: false }
+                    ],
+                    "language": {
+                        "url": "../assets/language/spanish.json"
+                    }
+                });
 
-                        ]
-                    })
+                $('#tablaClientes tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
+
+                    if (row.child.isShown()) {
+                        // Esta fila ya está abierta - cerrarla
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    } else {
+                        // Abrir esta fila
+                        row.child(format(row.data())).show(); // Aquí debes definir cómo quieres que se vea la información adicional, `format` es una función que debes crear
+                        tr.addClass('shown');
+                    }
+                });
+
+                function format(rowData) {
+                    // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
+                    console.log(rowData);
+                    return `
+                    <div class="row">
+                        <div class="col-sm-12" style="color: black;">
+                            <div class="card card-success card-tabs">
+                            <div class="card-header p-0 pt-1">
+                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
+                                </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="tab-pane fade show active " id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                <table border="1"> <!-- Añadido el atributo border para visualizar los bordes de la tabla -->
+                                <tr>
+                                    <th>Columna 1</th>
+                                    <th>Columna 2</th>
+                                    <th>Columna 3</th>
+                                    <th>Columna 4</th>
+                                    <th>Columna 5</th>
+                                    <th>Columna 6</th>
+                                    <th>Columna 7</th>
+                                </tr>
+                                <tr>
+                                    <td>Fila 1, Col 1</td>
+                                    <td>Fila 1, Col 2</td>
+                                    <td>Fila 1, Col 3</td>
+                                    <td>Fila 1, Col 4</td>
+                                    <td>Fila 1, Col 5</td>
+                                    <td>Fila 1, Col 6</td>
+                                    <td>Fila 1, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 2, Col 1</td>
+                                    <td>Fila 2, Col 2</td>
+                                    <td>Fila 2, Col 3</td>
+                                    <td>Fila 2, Col 4</td>
+                                    <td>Fila 2, Col 5</td>
+                                    <td>Fila 2, Col 6</td>
+                                    <td>Fila 2, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 3, Col 1</td>
+                                    <td>Fila 3, Col 2</td>
+                                    <td>Fila 3, Col 3</td>
+                                    <td>Fila 3, Col 4</td>
+                                    <td>Fila 3, Col 5</td>
+                                    <td>Fila 3, Col 6</td>
+                                    <td>Fila 3, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 4, Col 1</td>
+                                    <td>Fila 4, Col 2</td>
+                                    <td>Fila 4, Col 3</td>
+                                    <td>Fila 4, Col 4</td>
+                                    <td>Fila 4, Col 5</td>
+                                    <td>Fila 4, Col 6</td>
+                                    <td>Fila 4, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 5, Col 1</td>
+                                    <td>Fila 5, Col 2</td>
+                                    <td>Fila 5, Col 3</td>
+                                    <td>Fila 5, Col 4</td>
+                                    <td>Fila 5, Col 5</td>
+                                    <td>Fila 5, Col 6</td>
+                                    <td>Fila 5, Col 7</td>
+                                </tr>
+                            </table>
+                            
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                <table border="1">
+                                <tr>
+                                    <th>Columna 1</th>
+                                    <th>Fecha y Hora</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2022-06-08 21:07:43</td>
+                                    <td>En perfecto estado</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2022-08-19 01:06:10</td>
+                                    <td>Nada que reportar</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>2022-10-20 09:05:16</td>
+                                    <td>Se observaron variaciones menores</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>2023-05-16 06:01:39</td>
+                                    <td>Se observaron variaciones menores</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>2022-08-30 00:01:51</td>
+                                    <td>Revisión completa, sin hallazgos</td>
+                                </tr>
+                            </table>
+                            
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                <div class="card card-info">
+                                <div class="card-header">
+                                  <h3 class="card-title">Files</h3>
+                    
+                                  <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                      <i class="fas fa-minus"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                                <div class="card-body p-0">
+                                  <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th>File Name</th>
+                                        <th>File Size</th>
+                                        <th></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                    
+                                      <tr>
+                                        <td>Functional-requirements.docx</td>
+                                        <td>49.8005 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>UAT.pdf</td>
+                                        <td>28.4883 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Email-from-flatbal.mln</td>
+                                        <td>57.9003 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Logo.png</td>
+                                        <td>50.5190 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Contract-10_12_2014.docx</td>
+                                        <td>44.9715 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                    
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!-- /.card-body -->
+                              </div>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- /.card -->
+                            </div>
+                        </div>
+                    </div>
+                  `;
                 }
             });
+
+
         } else {
             console.error('Error al leer los clientes');
         }
@@ -240,25 +476,6 @@ const leerClientes = () => {
     xhr.send('operation=read');
 };
 
-// Agrega un evento de clic a cada fila de la tabla
-tablaClientes.addEventListener('click', function(event) {
-    // Verifica si se hizo clic en una fila de la tabla
-    if (event.target.tagName === 'TD') {
-        // Obtén la fila en la que se hizo clic
-        var row = event.target.parentElement;
-        // Muestra u oculta el panel colapsable
-        var panel = document.getElementById('panel');
-        if (panel.style.display === "none") {
-            panel.style.display = "block";
-        } else {
-            panel.style.display = "none";
-        }
-    }
-});
-
-document.getElementById('cerrarPanel').addEventListener('click', function() {
-    document.getElementById('panel').classList.remove('show');
-});
 
 
 const leerRowCliente = (id) => {
@@ -306,13 +523,13 @@ const insertarCliente = (
     cedad, ctelefono, typeClient, cdatebirthday,
     clientDateRegister, clienteStatus) => {
 
-    let params = 
-        'operation=create'+ 
-        '&cnombre='+ cnombre +
-        '&capelpat='+ capelpat +
-        '&capelmat='+ capelmat +
-        '&cedad='+ cedad +
-        '&ctelefono='+ ctelefono + 
+    let params =
+        'operation=create' +
+        '&cnombre=' + cnombre +
+        '&capelpat=' + capelpat +
+        '&capelmat=' + capelmat +
+        '&cedad=' + cedad +
+        '&ctelefono=' + ctelefono +
         '&typeClient=' + typeClient +
         '&cdatebirthday=' + cdatebirthday +
         '&clientDateRegister=' + clientDateRegister +
