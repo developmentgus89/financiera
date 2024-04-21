@@ -87,7 +87,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true" style="color:black;">Datos Personales</a>
                             <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false" style="color:black;">Documentaci&oacute;n</a>
                             <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false" style="color:black;">Cr&eacute;ditos</a>
-                            <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false" style="color:black;">Settings</a>
+                            <a class="nav-link" id="vert-tabs-settings-tab" data-toggle="pill" href="#vert-tabs-settings" role="tab" aria-controls="vert-tabs-settings" aria-selected="false" style="color:black;">Cuenta Bancaria</a>
                         </div>
                     </div>
                     <div class="col-7 col-sm-9">
@@ -169,81 +169,44 @@ include_once "dashboard/startTemplateDashboard.php";
                             <div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
                                 <div class="card card-success">
                                     <div class="card-header">
-                                        <h3 class="card-title">Dropzone.js <small><em>jQuery File Upload</em> like look</small></h3>
+                                        <h3 class="card-title">Documentaci&oacute;n <small> que es solicitada al cliente. </small></h3>
                                     </div>
-                                    <div class="card-body">
-                                        <div id="actions" class="row">
-                                            <div class="col-lg-6">
-                                                <div class="btn-group w-100">
-                                                    <span class="btn btn-success col fileinput-button">
-                                                        <i class="fas fa-plus"></i>
-                                                        <span>Add files</span>
-                                                    </span>
-                                                    <button type="submit" class="btn btn-primary col start">
-                                                        <i class="fas fa-upload"></i>
-                                                        <span>Start upload</span>
-                                                    </button>
-                                                    <button type="reset" class="btn btn-warning col cancel">
-                                                        <i class="fas fa-times-circle"></i>
-                                                        <span>Cancel upload</span>
-                                                    </button>
+                                    <div class="card-body" style="color:black">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="cli-cdomicilio">Comprobante de Domicilio</label>
+                                                    <input type="file" class="form-control-file" name="cli-cdomicilio" id="cli-cdomicilio" placeholder="" aria-describedby="fileHelpId">
+                                                    <small id="fileHelpId" class="form-text text-muted">Cargue el comprobante de Domicilio</small>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 d-flex align-items-center">
-                                                <div class="fileupload-process w-100">
-                                                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                                    </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="cli-cdomicilio">Comprobante de Domicilio</label>
+                                                    <input type="file" class="form-control-file" name="cli-cdomicilio" id="cli-cdomicilio" placeholder="" aria-describedby="fileHelpId">
+                                                    <small id="fileHelpId" class="form-text text-muted">Cargue el comprobante de Domicilio</small>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="table table-striped files" id="previews">
-                                            <div id="template" class="row mt-2">
-                                                <div class="col-auto">
-                                                    <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
-                                                </div>
-                                                <div class="col d-flex align-items-center">
-                                                    <p class="mb-0">
-                                                        <span class="lead" data-dz-name></span>
-                                                        (<span data-dz-size></span>)
-                                                    </p>
-                                                    <strong class="error text-danger" data-dz-errormessage></strong>
-                                                </div>
-                                                <div class="col-4 d-flex align-items-center">
-                                                    <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto d-flex align-items-center">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-primary start">
-                                                            <i class="fas fa-upload"></i>
-                                                            <span>Start</span>
-                                                        </button>
-                                                        <button data-dz-remove class="btn btn-warning cancel">
-                                                            <i class="fas fa-times-circle"></i>
-                                                            <span>Cancel</span>
-                                                        </button>
-                                                        <button data-dz-remove class="btn btn-danger delete">
-                                                            <i class="fas fa-trash"></i>
-                                                            <span>Delete</span>
-                                                        </button>
-                                                    </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="cli-cdomicilio">Comprobante de Domicilio</label>
+                                                    <input type="file" class="form-control-file" name="cli-cdomicilio" id="cli-cdomicilio" placeholder="" aria-describedby="fileHelpId">
+                                                    <small id="fileHelpId" class="form-text text-muted">Cargue el comprobante de Domicilio</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
-                                        Visit <a href="https://www.dropzonejs.com">dropzone.js documentation</a> for more examples and information about the plugin.
+
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
-                                Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+                                Aqui iria la solicitud de cr&eacute;ditos.
                             </div>
                             <div class="tab-pane fade" id="vert-tabs-settings" role="tabpanel" aria-labelledby="vert-tabs-settings-tab">
-                                Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                Aqui los datos de la cuenta bancaria.
                             </div>
                         </div>
                     </div>

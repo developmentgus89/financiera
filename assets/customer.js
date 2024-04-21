@@ -272,16 +272,16 @@ const leerClientes = () => {
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Home</a>
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Profile</a>
+                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Messages</a>
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Settings</a>
+                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
                                 </li>
                                 </ul>
                             </div>
@@ -291,13 +291,172 @@ const leerClientes = () => {
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                <table border="1"> <!-- Añadido el atributo border para visualizar los bordes de la tabla -->
+                                <tr>
+                                    <th>Columna 1</th>
+                                    <th>Columna 2</th>
+                                    <th>Columna 3</th>
+                                    <th>Columna 4</th>
+                                    <th>Columna 5</th>
+                                    <th>Columna 6</th>
+                                    <th>Columna 7</th>
+                                </tr>
+                                <tr>
+                                    <td>Fila 1, Col 1</td>
+                                    <td>Fila 1, Col 2</td>
+                                    <td>Fila 1, Col 3</td>
+                                    <td>Fila 1, Col 4</td>
+                                    <td>Fila 1, Col 5</td>
+                                    <td>Fila 1, Col 6</td>
+                                    <td>Fila 1, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 2, Col 1</td>
+                                    <td>Fila 2, Col 2</td>
+                                    <td>Fila 2, Col 3</td>
+                                    <td>Fila 2, Col 4</td>
+                                    <td>Fila 2, Col 5</td>
+                                    <td>Fila 2, Col 6</td>
+                                    <td>Fila 2, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 3, Col 1</td>
+                                    <td>Fila 3, Col 2</td>
+                                    <td>Fila 3, Col 3</td>
+                                    <td>Fila 3, Col 4</td>
+                                    <td>Fila 3, Col 5</td>
+                                    <td>Fila 3, Col 6</td>
+                                    <td>Fila 3, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 4, Col 1</td>
+                                    <td>Fila 4, Col 2</td>
+                                    <td>Fila 4, Col 3</td>
+                                    <td>Fila 4, Col 4</td>
+                                    <td>Fila 4, Col 5</td>
+                                    <td>Fila 4, Col 6</td>
+                                    <td>Fila 4, Col 7</td>
+                                </tr>
+                                <tr>
+                                    <td>Fila 5, Col 1</td>
+                                    <td>Fila 5, Col 2</td>
+                                    <td>Fila 5, Col 3</td>
+                                    <td>Fila 5, Col 4</td>
+                                    <td>Fila 5, Col 5</td>
+                                    <td>Fila 5, Col 6</td>
+                                    <td>Fila 5, Col 7</td>
+                                </tr>
+                            </table>
+                            
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                    Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+                                <table border="1">
+                                <tr>
+                                    <th>Columna 1</th>
+                                    <th>Fecha y Hora</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2022-06-08 21:07:43</td>
+                                    <td>En perfecto estado</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2022-08-19 01:06:10</td>
+                                    <td>Nada que reportar</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>2022-10-20 09:05:16</td>
+                                    <td>Se observaron variaciones menores</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>2023-05-16 06:01:39</td>
+                                    <td>Se observaron variaciones menores</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>2022-08-30 00:01:51</td>
+                                    <td>Revisión completa, sin hallazgos</td>
+                                </tr>
+                            </table>
+                            
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                    Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                <div class="card card-info">
+                                <div class="card-header">
+                                  <h3 class="card-title">Files</h3>
+                    
+                                  <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                      <i class="fas fa-minus"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                                <div class="card-body p-0">
+                                  <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th>File Name</th>
+                                        <th>File Size</th>
+                                        <th></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                    
+                                      <tr>
+                                        <td>Functional-requirements.docx</td>
+                                        <td>49.8005 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>UAT.pdf</td>
+                                        <td>28.4883 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Email-from-flatbal.mln</td>
+                                        <td>57.9003 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Logo.png</td>
+                                        <td>50.5190 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                                      <tr>
+                                        <td>Contract-10_12_2014.docx</td>
+                                        <td>44.9715 kb</td>
+                                        <td class="text-right py-0 align-middle">
+                                          <div class="btn-group btn-group-sm">
+                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                          </div>
+                                        </td>
+                    
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!-- /.card-body -->
+                              </div>
                                 </div>
                                 </div>
                             </div>
