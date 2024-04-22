@@ -66,6 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tiposCliente = $customer->obtenerTiposClientes();
             echo json_encode($tiposCliente);
             break;
+        case 'readCreditsByCustomer':
+            $icvecliente = $_POST['icvecliente'];
+            $rowCredits = $credits->getRowsCreditsByClient($icvecliente);
+            echo json_encode($rowCredits);
+            break;
         default:
             echo 'Operación no válida';
             break;

@@ -1,6 +1,26 @@
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/CustomerController.php';
 
+$('#imontoprestamo').inputmask('currency', {
+    radixPoint: '.',
+    groupSeparator: ',',
+    allowMinus: false,
+    autoGroup: true,
+    prefix: 'MXN ',
+    digits: 2,
+    rightAlign: false
+});
+
+$('#interesfijo').inputmask('currency', {
+    alias: 'percentage',  // Utiliza el alias de porcentaje
+    radixPoint: ".",      // Define el punto decimal, si es necesario
+    digits: 2,            // Número de decimales permitidos
+    autoGroup: true,      // Agrupación automática de los dígitos
+    suffix: ' %',         // Añade el símbolo de porcentaje al final
+    rightAlign: false,    // Alinea el texto a la izquierda
+    clearMaskOnLostFocus: false // Mantiene la máscara visible incluso cuando el input pierde el foco
+});
+
 const textInputs = document.querySelectorAll('input[type="text"]');
 
 textInputs.forEach(input => {
@@ -48,15 +68,15 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre = document.getElementById('clinombre');
-    let capelpat = document.getElementById('cliapaterno');
-    let capelmat = document.getElementById('cliamaterno');
-    let ctelefono = document.getElementById('ctelefono');
-    let cedad = document.getElementById('cliEdad');
-    let typeClient = document.getElementById('typeClient');
-    let cdatebirthday = document.getElementById('clientDate');
+    let cnombre            = document.getElementById('clinombre');
+    let capelpat           = document.getElementById('cliapaterno');
+    let capelmat           = document.getElementById('cliamaterno');
+    let ctelefono          = document.getElementById('ctelefono');
+    let cedad              = document.getElementById('cliEdad');
+    let typeClient         = document.getElementById('typeClient');
+    let cdatebirthday      = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus = document.getElementById('clienteStatus');
+    let clienteStatus      = document.getElementById('clienteStatus');
 
     /**
      * 
@@ -214,6 +234,7 @@ const leerClientes = () => {
                             "",
                             id,
                             `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
+                            `<span class="badge bg-warning"> 4 </span>`,
                             item['ctelefono'],
                             item['cabreviiatipo'],
                             item['cestatus'],
@@ -237,6 +258,7 @@ const leerClientes = () => {
                         },
                         { title: "ID" },
                         { title: "Nombre" },
+                        { title: "No. de Prestamos" },
                         { title: "Telefono" },
                         { title: "Tipo Cliente" },
                         { title: "Status" },
@@ -250,7 +272,6 @@ const leerClientes = () => {
                 $('#tablaClientes tbody').on('click', 'td.details-control', function () {
                     var tr = $(this).closest('tr');
                     var row = table.row(tr);
-
                     if (row.child.isShown()) {
                         // Esta fila ya está abierta - cerrarla
                         row.child.hide();
@@ -265,6 +286,9 @@ const leerClientes = () => {
                 function format(rowData) {
                     // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
                     console.log(rowData);
+                    console.table(rowData);
+                    console.log(rowData[1]);
+                    leerCreditosPorCliente(rowData[1]);
                     return `
                     <div class="row">
                         <div class="col-sm-12" style="color: black;">
@@ -272,84 +296,30 @@ const leerClientes = () => {
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
+                                    <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
+                                    <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
                                 </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                                <div class="tab-pane fade show active " id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                <table border="1"> <!-- Añadido el atributo border para visualizar los bordes de la tabla -->
-                                <tr>
-                                    <th>Columna 1</th>
-                                    <th>Columna 2</th>
-                                    <th>Columna 3</th>
-                                    <th>Columna 4</th>
-                                    <th>Columna 5</th>
-                                    <th>Columna 6</th>
-                                    <th>Columna 7</th>
-                                </tr>
-                                <tr>
-                                    <td>Fila 1, Col 1</td>
-                                    <td>Fila 1, Col 2</td>
-                                    <td>Fila 1, Col 3</td>
-                                    <td>Fila 1, Col 4</td>
-                                    <td>Fila 1, Col 5</td>
-                                    <td>Fila 1, Col 6</td>
-                                    <td>Fila 1, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 2, Col 1</td>
-                                    <td>Fila 2, Col 2</td>
-                                    <td>Fila 2, Col 3</td>
-                                    <td>Fila 2, Col 4</td>
-                                    <td>Fila 2, Col 5</td>
-                                    <td>Fila 2, Col 6</td>
-                                    <td>Fila 2, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 3, Col 1</td>
-                                    <td>Fila 3, Col 2</td>
-                                    <td>Fila 3, Col 3</td>
-                                    <td>Fila 3, Col 4</td>
-                                    <td>Fila 3, Col 5</td>
-                                    <td>Fila 3, Col 6</td>
-                                    <td>Fila 3, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 4, Col 1</td>
-                                    <td>Fila 4, Col 2</td>
-                                    <td>Fila 4, Col 3</td>
-                                    <td>Fila 4, Col 4</td>
-                                    <td>Fila 4, Col 5</td>
-                                    <td>Fila 4, Col 6</td>
-                                    <td>Fila 4, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 5, Col 1</td>
-                                    <td>Fila 5, Col 2</td>
-                                    <td>Fila 5, Col 3</td>
-                                    <td>Fila 5, Col 4</td>
-                                    <td>Fila 5, Col 5</td>
-                                    <td>Fila 5, Col 6</td>
-                                    <td>Fila 5, Col 7</td>
-                                </tr>
-                            </table>
+                                <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                <table class="table table-hover text-wrap" id="tblcredits${rowData[1]}">
+                                </table>
                             
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                 <table border="1">
                                 <tr>
                                     <th>Columna 1</th>
@@ -384,7 +354,7 @@ const leerClientes = () => {
                             </table>
                             
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
                                 <div class="card card-info">
                                 <div class="card-header">
                                   <h3 class="card-title">Files</h3>
@@ -475,6 +445,61 @@ const leerClientes = () => {
     };
     xhr.send('operation=read');
 };
+
+const leerCreditosPorCliente = async (icvecliente) => {
+    let params =
+        'operation=readCreditsByCustomer' +
+        '&icvecliente=' + icvecliente;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+        console.table(data);
+
+        var tblCreditsCustomer = document.getElementById(`tblcredits${icvecliente}}`);
+
+        new DataTable(tblCreditsCustomer, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Monto Pagado', 'Fecha y Hora de Registro', 'Estatus Pago', 'CONSULTA / VER'],
+                data: data.map(function (item) {
+                    // return Object.values(item);
+                    var id = item['icvepagocapitalinv'];
+                    var comprobante = item['comprobantepago'];
+                    let montoPagado = parseFloat(item['fmontopagado']);
+                    let montoFormateado = montoPagado.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    return [
+                        id,
+                        montoFormateado,
+                        item['dfecha_pago'],
+                        item['statuspago'] == 'NP' ? `<span class="badge badge-danger">No Pagado</span>` : `<span class="badge badge-success">Pagado</span>`,
+                        item['cstatuspago'] == 'NP' ?
+                            `<button class="btn bg-gradient-danger btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-check-circle"></i></button>`
+                            : `<button class="btn bg-gradient-success btn-sx" onclick="viewVoucherCapitalPayment(${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-receipt"></i></button>`
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
+}
 
 
 
