@@ -707,6 +707,51 @@ const drawCatalogBanks = async (element, icvebanco = null) => {
     element.innerHTML = `<option value="">SELECCIONE BANCO</option>` + optionsHTML;
 }
 
+const readCodigosPostal = async (zipcode) => {
+    let params =
+        'operation=readZipCode' +
+        '&zipcode=' + zipcode;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los codigos postales`);
+        }
+
+        const data = await response.json();
+
+        console.table(data);
+        console.table(data[0].cnombreestprovincia);
+        console.table(data[0].cnomlocmun);
+        let colonias = document.getElementById('coloniadir');
+        document.getElementById('entidaddir').value = data[0].cnombreestprovincia;
+        document.getElementById('municipiodir').value = data[0].cnomlocmun;
+        
+        const optionsHTML = data.map(col => {
+            return `<option value="${col.icvecatcolonia}">${col.cnombre}</option>`;
+        }).join('');
+
+        colonias.innerHTML = `<option value="">SELECCIONE COLONIA</option>` + optionsHTML;
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los codigos postales: ${error.message}`);
+    } 
+}
+
+const varCP = document.getElementById('cp');
+
+varCP.addEventListener('blur', ()=>{
+    let cp = document.getElementById('cp').value;
+
+    readCodigosPostal(cp);
+});
+
 
 actFecha();
 leerClientes();

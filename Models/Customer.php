@@ -79,13 +79,13 @@ class Customer{
      * @param  string $zipCode
      * @return void
      */
-    public function get_AsentamientosByZipCode($zipCode):string{
+    public function get_AsentamientosByZipCode($zipCode):array{
         try{
             $query = "SELECT * FROM dir_catcolasen 
                         INNER JOIN dir_catlocmun ON dir_catlocmun.icvecatlocmun = dir_catcolasen.icvecatlocmun
                         INNER JOIN dir_catestados ON dir_catlocmun.icvecatestprovincia = dir_catestados.icvecatestprovincia
                         INNER JOIN dir_catpaises ON dir_catestados.iddircatpais = dir_catpaises.iddircatpais 
-                        where codpostal like '$zipCode'";
+                        WHERE codpostal like '%$zipCode%'";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 

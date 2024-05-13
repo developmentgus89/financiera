@@ -74,8 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         //Obetener las colonias de acuerdo al codigo postal
         case 'readZipCode':
-            $zipcode = $_POST['cp'];
+            $zipcode = $_POST['zipcode'];
             $rowsZipCode = $customer->get_AsentamientosByZipCode($zipcode);
+            echo json_encode($rowsZipCode);
             break;
         default:
             echo 'Operación no válida';

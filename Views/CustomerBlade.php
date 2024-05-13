@@ -406,8 +406,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="coloniadir">Asentamiento o Colonia</label>
-                                                                    <input type="text" class="form-control" name="coloniadir" id="coloniadir" readonly>
+                                                                  <label for="coloniadir">Asentamiento o Colonia</label>
+                                                                  <select class="form-control" name="coloniadir" id="coloniadir">
+                                                                  </select>
                                                                 </div>
                                                             </div>
                                                         </div>
