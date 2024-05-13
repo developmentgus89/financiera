@@ -71,6 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rowCredits = $credits->getRowsCreditsByClient($icvecliente);
             echo json_encode($rowCredits);
             break;
+
+        //Obetener las colonias de acuerdo al codigo postal
+        case 'readZipCode':
+            $zipcode = $_POST['cp'];
+            $rowsZipCode = $customer->get_AsentamientosByZipCode($zipcode);
+            break;
         default:
             echo 'Operación no válida';
             break;

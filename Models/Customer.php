@@ -1,6 +1,5 @@
 <?php
 include_once('Conexion.php');
-include_once('Abstracts/OperationsCustomer.php');
 
 class Customer{
     private $conexion;
@@ -48,31 +47,6 @@ class Customer{
         }
     }
 
-    // public function eliminarCliente($id) {
-    //     try {
-    //         $query = "DELETE FROM ims_customer WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$id]);
-
-    //         echo 'Cliente eliminado correctamente';
-    //     } catch (PDOException $e) {
-    //         echo 'Error al eliminar el cliente: ' . $e->getMessage();
-    //     }
-    // }
-
-    // public function actualizarCliente($id, $icvegrado, $name, $address, $mobile) {
-    //     try {
-            
-    //         $query = "UPDATE ims_customer SET icvegrado = ?, name = ?, address = ?, mobile = ? WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$icvegrado, $name, $address, $mobile, $id]);
-
-    //         echo 'Cliente actualizado correctamente';
-    //     } catch (PDOException $e) {
-    //         echo 'Error al actualizar el cliente: ' . $e->getMessage();
-    //     }
-    // }
-
     public function obtenerClientes() {
         try {
             $query = "SELECT * FROM clientes 
@@ -98,19 +72,26 @@ class Customer{
             echo 'Error en la consulta: ' . $e->getMessage();
         }
     }
+    
+    /**
+     * get_AsentamientosByZipCode
+     *
+     * @param  string $zipCode
+     * @return void
+     */
+    public function get_AsentamientosByZipCode($zipCode):string{
+        try{
+            $query = "SELECT * FROM dir_catcolasen 
+                        INNER JOIN dir_catlocmun ON dir_catlocmun.icvecatlocmun = dir_catcolasen.icvecatlocmun
+                        INNER JOIN dir_catestados ON dir_catlocmun.icvecatestprovincia = dir_catestados.icvecatestprovincia
+                        INNER JOIN dir_catpaises ON dir_catestados.iddircatpais = dir_catpaises.iddircatpais 
+                        where codpostal like '$zipCode'";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute();
 
-    // public function rowCustomer($id){
-    //     try {
-    //         $query = "SELECT elemento.id, grado.cgradoabrevia, grado.icvegrado, elemento.name, elemento.address, elemento.mobile 
-    //         FROM ims_customer as elemento
-    //         inner join cat_grados as grado on elemento.icvegrado = grado.icvegrado
-    //         WHERE id = ?";
-    //         $statement = $this->acceso->prepare($query);
-    //         $statement->execute([$id]);
-
-    //         return $statement->fetchAll(PDO::FETCH_ASSOC);
-    //     } catch (PDOException $e) {
-    //         echo 'Error en la consulta: ' . $e->getMessage();
-    //     }
-    // }
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e) {
+            echo 'Error en la consulta para códigos postales: ' . $e->getMessage();
+        }
+    }
 }

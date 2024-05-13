@@ -29,7 +29,7 @@ include_once "dashboard/startTemplateDashboard.php";
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-3 fondo-tabs">
+            <div class="card-body table-responsive p-3 login-body">
                 <table id="tablaClientes" class="table table-hover text-wrap">
                 </table>
             </div>
@@ -60,29 +60,47 @@ include_once "dashboard/startTemplateDashboard.php";
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="height: 550px; overflow-y: scroll;">
+            <div class="modal-body" style="height: 420px; overflow-y: scroll;">
                 <div class="row" style="color:black;">
                     <div class="col-12 col-sm-12">
                         <div class="card card-success card-tabs">
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
+                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                                            Datos Personales <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Solicitud de Cr&eacute;dito</a>
+                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                            Solicitud de Cr&eacute;dito <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-direccion" data-toggle="pill" href="#direccion" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Direcci&oacute;n</a>
+                                        <a class="nav-link" id="custom-tabs-cuentasbancarias-tab" data-toggle="pill" href="#custom-tabs-cuentasbancarias" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                            Cuentas Bancarias <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Documentaci&oacute;n</a>
+                                        <a class="nav-link" id="custom-tabs-direccion" data-toggle="pill" href="#direccion" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
+                                            Direcci&oacute;n <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
+                                            Documentaci&oacute;n <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-referidos-tab" data-toggle="pill" href="#custom-tabs-one-referidos" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
+                                            Referido Por ... <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                    <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="card card-success">
@@ -93,21 +111,21 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="clinombre">Nombre:</label>
+                                                                    <label for="clinombre">Nombre <span style="color: red">*</span>:</label>
                                                                     <input type="text" class="form-control" name="clinombre" id="clinombre" aria-describedby="hclinombre" placeholder="">
                                                                     <small id="hclinombre" class="form-text">Capture el nombre del cliente</small>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="cliapaterno">Apellido Paterno:</label>
+                                                                    <label for="cliapaterno">Apellido Paterno <span style="color: red">*</span>:</label>
                                                                     <input type="text" class="form-control" name="cliapaterno" id="cliapaterno" aria-describedby="hcliapaterno" placeholder="">
                                                                     <small id="hcliapaterno" class="form-text">Capture el apellido paterno del cliente</small>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="cliamaterno">Apellido Materno:</label>
+                                                                    <label for="cliamaterno">Apellido Materno <span style="color: red">*</span>:</label>
                                                                     <input type="text" class="form-control" name="cliamaterno" id="cliamaterno" aria-describedby="hcliamaterno" placeholder="">
                                                                     <small id="hcliamaterno" class="form-text">Capture el Apellido Materno del cliente</small>
                                                                 </div>
@@ -116,21 +134,21 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="cliEdad">Edad:</label>
+                                                                    <label for="cliEdad">Edad <span style="color: red">*</span>:</label>
                                                                     <input type="number" step="1" min="18" value="18" class="form-control" name="cliEdad" id="cliEdad" aria-describedby="hcliEdad" placeholder="">
                                                                     <small id="hcliEdad" class="form-text">Cliente debe ser mayor de edad.</small>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="typeClient">Tipo de cliente</label>
+                                                                    <label for="typeClient">Tipo de cliente <span style="color: red">*</span>:</label>
                                                                     <select class="form-control" name="typeClient" id="typeClient">
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="clienteStatus">Estatus del Cliente</label>
+                                                                    <label for="clienteStatus">Estatus del Cliente <span style="color: red">*</span>:</label>
                                                                     <select class="form-control" name="clienteStatus" id="clienteStatus">
                                                                         <option value="">SELECCIONE UN ESTATUS</option>
                                                                         <option value="A">ACTIVO</option>
@@ -142,21 +160,21 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="clientDate">Fecha de Nacimiento:</label>
+                                                                    <label for="clientDate">Fecha de Nacimiento <span style="color: red">*</span>:</label>
                                                                     <input type="date" class="form-control" name="clientDate" id="clientDate" aria-describedby="hclientDate" placeholder="">
                                                                     <small id="hclientDate" class="form-text">dd/mm/aaaa</small>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="clientDateRegister">Fecha de Registro:</label>
+                                                                    <label for="clientDateRegister">Fecha de Registro <span style="color: red">*</span>:</label>
                                                                     <input type="date" class="form-control" name="clientDateRegister" id="clientDateRegister" aria-describedby="hclientDateRegister" placeholder="">
                                                                     <small id="hclientDateRegister" class="form-text">dd/mm/aaaa</small>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="ctelefono">Tel&eacute;fono:</label>
+                                                                    <label for="ctelefono">Tel&eacute;fono <span style="color: red">*</span>:</label>
                                                                     <input type="number" class="form-control" name="ctelefono" id="ctelefono" aria-describedby="hctelefono">
                                                                     <small id="hctelefono" class="form-text">N&aacute;mero fijo d de celular</small>
                                                                 </div>
@@ -165,13 +183,13 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     </div>
                                                     <!-- /.card-body -->
                                                     <div class="card-footer">
-
+                                                        <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                    <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="card card-success">
@@ -182,13 +200,13 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="imontoprestamo">Monto del Pr&eacute;stamo Solicitado:</label>
+                                                                    <label for="imontoprestamo">Monto del Pr&eacute;stamo Solicitado <span style="color: red">*</span>:</label>
                                                                     <input type="text" name="imontoprestamo" id="imontoprestamo" class="form-control" placeholder="" aria-describedby="helpId">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="numpagos">Número de Pagos Calculado</label>
+                                                                    <label for="numpagos">Número de Pagos Calculado <span style="color: red">*</span></label>
                                                                     <input type="text" name="numpagos" id="numpagos" class="form-control" placeholder="" aria-describedby="helpId">
                                                                 </div>
                                                             </div>
@@ -196,7 +214,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="periodicidad">Periodicidad o Frecuecia de Pago</label>
+                                                                    <label for="periodicidad">Periodicidad o Frecuecia de Pago <span style="color: red">*</span></label>
                                                                     <select class="form-control" name="periodicidad" id="periodicidad">
                                                                         <option value="7">SEMANAL</option>
                                                                         <option value="15">QUINCENAL</option>
@@ -222,17 +240,108 @@ include_once "dashboard/startTemplateDashboard.php";
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- Widget: user widget style 1 -->
+                                                                <div class="card card-widget widget-user fondo_cliente_edit_modal">
+                                                                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                                                                    <div class="widget-user-header text-white" style="background: url('../utils/img/billCredit.jpg') center center;">
+                                                                        <h1 class="widget-user-username text-right"><strong>Cálculos</strong></h1>
+                                                                        <h3 class="widget-user-desc text-right"><strong> de la solicitud de credito</strong></h3>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-4 border-right">
+                                                                                <div class="description-block">
+                                                                                    <h1 class="description-header" style="font-size: 36px;">3,200</h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                </div>
+                                                                                <!-- /.description-block -->
+                                                                            </div>
+                                                                            <!-- /.col -->
+                                                                            <div class="col-sm-4 border-right">
+                                                                                <div class="description-block">
+                                                                                <h1 class="description-header" style="font-size: 36px;">3,200</h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                </div>
+                                                                                <!-- /.description-block -->
+                                                                            </div>
+                                                                            <!-- /.col -->
+                                                                            <div class="col-sm-4">
+                                                                                <div class="description-block">
+                                                                                <h1 class="description-header" style="font-size: 36px;">3,200</h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                </div>
+                                                                                <!-- /.description-block -->
+                                                                            </div>
+                                                                            <!-- /.col -->
+                                                                        </div>
+                                                                        <!-- /.row -->
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.widget-user -->
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
                                                     </div>
                                                     <!-- /.card-body -->
                                                     <div class="card-footer">
-
+                                                        <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
                                                     </div>
                                                 </div>
                                                 <!-- /.card -->
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="direccion" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                    <div class="tab-pane fade" id="custom-tabs-cuentasbancarias" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card card-success">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Datos para la Captura de Cuentas Bancarias</h3>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="ctabancariacli">Cuenta Bancaria <span style="color: red">*</span>:</label>
+                                                                    <input type="text" name="ctabancariacli" id="ctabancariacli" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="typeAccountBankCli">Tipo de Cuenta Bancaria <span style="color: red">*</span>: </label>
+                                                                    <select class="form-control" name="typeAccountBankCli" id="typeAccountBankCli">
+                                                                        <option value="">SELECCIONE</option>
+                                                                        <option value="1">CLABE</option>
+                                                                        <option value="2">TARJETA D&Eacute;BITO</option>
+                                                                        <option value="3">CTA BANCARIA</option>
+                                                                    </select>
+                                                                    <small id="helpId" class="form-text">N&uacute;m. de Cta, CLABE, N&uacute;m. Tarjeta .</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="selCatIcveBancoCli">Institución Bancaria <span style="color: red">*</span>:</label>
+                                                                    <select class="form-control" name="selCatIcveBancoCli" id="selCatIcveBancoCli">
+                                                                    </select>
+                                                                    <small id="helpId" class="form-text">Instituci&oacute;n Bancaria.</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                    <div class="card-footer">
+                                                        <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
+                                                    </div>
+                                                </div>
+                                                <!-- /.card -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="direccion" role="tabpanel">
                                         <div class="card card-success">
                                             <div class="card-header">
                                                 <h3 class="card-title">Datos de la Dirección y Geolocalizazción</h3>
@@ -243,13 +352,13 @@ include_once "dashboard/startTemplateDashboard.php";
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="ccalle">Calle</label>
+                                                                    <label for="ccalle">Calle <span style="color: red">*</span>:</label>
                                                                     <input type="text" class="form-control" name="ccalle" id="ccalle">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="numexterior">Número Exterior</label>
+                                                                    <label for="numexterior">Número Exterior <span style="color: red">*</span>:</label>
                                                                     <input type="text" class="form-control" name="numexterior" id="numexterior">
                                                                 </div>
                                                             </div>
@@ -277,7 +386,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="cp">Código Postal (CP)</label>
+                                                                    <label for="cp">Código Postal (CP)<span style="color: red">*</span>: </label>
                                                                     <input type="text" class="form-control" name="cp" id="cp">
                                                                 </div>
                                                             </div>
@@ -286,20 +395,38 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="entidaddir">Entidad:</label>
-                                                                    <input type="text" class="form-control" name="entidaddir" id="entidaddir">
+                                                                    <input type="text" class="form-control" name="entidaddir" id="entidaddir" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="municipiodir">Alcaldía o Municipio</label>
-                                                                    <input type="text" class="form-control" name="municipiodir" id="municipiodir">
+                                                                    <input type="text" class="form-control" name="municipiodir" id="municipiodir" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="coloniadir">Asentamiento o Colonia</label>
-                                                                    <input type="text" class="form-control" name="coloniadir" id="coloniadir">
+                                                                    <input type="text" class="form-control" name="coloniadir" id="coloniadir" readonly>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="latitud">Latitud:</label>
+                                                                    <input type="text" class="form-control" name="latitud" id="latitud" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="longitud">Longitud</label>
+                                                                    <input type="text" class="form-control" name="longitud" id="longitud" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -314,7 +441,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                    <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel">
                                         <div class="card card-success">
                                             <div class="card-header">
                                                 <h3 class="card-title">Dropzone.js <small><em>jQuery File Upload</em> like look</small></h3>
@@ -378,6 +505,52 @@ include_once "dashboard/startTemplateDashboard.php";
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card-body -->
+                                            <div class="card-footer">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-one-referidos" role="tabpanel">
+                                        <div class="card card-success">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Referido</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                Aqui irian los referidos o la persona que recomendo
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Nombre</label>
+                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                                                            <small id="helpId" class="form-text text-muted">Help text</small>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Telefono</label>
+                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                                                            <small id="helpId" class="form-text text-muted">Help text</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-md-2">
+
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="">Notas y/o observaciones:</label>
+                                                            <textarea class="form-control" name="" id="" rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -480,8 +653,11 @@ include_once "dashboard/footerDashBoard.php";
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     });
 </script> -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4WQMsVbk-lm1IFuhwfPGJAkQ2EQmf5e4&callback=initMap" async defer></script>
+<?php
+require_once('../utils/settings/config.financiera.php');
+?>
 <script src="../assets/Modules/Clients/GoogleMaps/maps.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap" async defer></script>
 <script src="../assets/Modules/Clients/DropFile/dropfilezone.js"></script>
-<script src="../assets/customer.js"></script>
+<script type="module" src="../assets/customer.js"></script>
 <script src="../assets/conf.js"></script>

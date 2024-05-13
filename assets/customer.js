@@ -1,3 +1,5 @@
+import * as moduleAccBanks from "./Modules/AccountsBanks/opBanksAccounts.js";
+
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/CustomerController.php';
 
@@ -19,6 +21,12 @@ $('#interesfijo').inputmask('currency', {
     suffix: ' %',         // Añade el símbolo de porcentaje al final
     rightAlign: false,    // Alinea el texto a la izquierda
     clearMaskOnLostFocus: false // Mantiene la máscara visible incluso cuando el input pierde el foco
+});
+
+$("#modalAgregar").on('shown.bs.modal', () => {
+    const selectBanks = document.getElementById('selCatIcveBancoCli');
+    drawCatalogBanks(selectBanks);
+    // getBanks(selectBanks);
 });
 
 const textInputs = document.querySelectorAll('input[type="text"]');
@@ -68,15 +76,15 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre            = document.getElementById('clinombre');
-    let capelpat           = document.getElementById('cliapaterno');
-    let capelmat           = document.getElementById('cliamaterno');
-    let ctelefono          = document.getElementById('ctelefono');
-    let cedad              = document.getElementById('cliEdad');
-    let typeClient         = document.getElementById('typeClient');
-    let cdatebirthday      = document.getElementById('clientDate');
+    let cnombre = document.getElementById('clinombre');
+    let capelpat = document.getElementById('cliapaterno');
+    let capelmat = document.getElementById('cliamaterno');
+    let ctelefono = document.getElementById('ctelefono');
+    let cedad = document.getElementById('cliEdad');
+    let typeClient = document.getElementById('typeClient');
+    let cdatebirthday = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus      = document.getElementById('clienteStatus');
+    let clienteStatus = document.getElementById('clienteStatus');
 
     /**
      * 
@@ -234,15 +242,10 @@ const leerClientes = () => {
                             "",
                             id,
                             `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
-                            `<span class="badge bg-warning"> 4 </span>`,
+                            `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`,
                             item['ctelefono'],
                             item['cabreviiatipo'],
-                            item['cestatus'],
-                            `
-                            <button class="btn bg-gradient-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Cr&eacute;ditos"><i class="fas fa-money-check"></i></button> 
-                            <button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>
-                            <button class="btn bg-gradient-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Domicilio y Referencias"><i class="fas fa-file-signature"></i></button>
-                            `
+                            item['cestatus']
                         ];
                     }),
                     columns: [
@@ -261,8 +264,7 @@ const leerClientes = () => {
                         { title: "No. de Prestamos" },
                         { title: "Telefono" },
                         { title: "Tipo Cliente" },
-                        { title: "Status" },
-                        { title: "Acciones", orderable: false }
+                        { title: "Status" }
                     ],
                     "language": {
                         "url": "../assets/language/spanish.json"
@@ -311,60 +313,90 @@ const leerClientes = () => {
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                                <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
-                                </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                <table class="table table-hover text-wrap" id="tblcredits${rowData[1]}">
-                                </table>
-                            
-                                </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                <table border="1">
-                                <tr>
-                                    <th>Columna 1</th>
-                                    <th>Fecha y Hora</th>
-                                    <th>Observaciones</th>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2022-06-08 21:07:43</td>
-                                    <td>En perfecto estado</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2022-08-19 01:06:10</td>
-                                    <td>Nada que reportar</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>2022-10-20 09:05:16</td>
-                                    <td>Se observaron variaciones menores</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>2023-05-16 06:01:39</td>
-                                    <td>Se observaron variaciones menores</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>2022-08-30 00:01:51</td>
-                                    <td>Revisión completa, sin hallazgos</td>
-                                </tr>
-                            </table>
-                            
-                                </div>
+                                    <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                        <table border="1">
+                                            <tr>
+                                                <th>Columna 1</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Observaciones</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2022-06-08 21:07:43</td>
+                                                <td>En perfecto estado</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2022-08-19 01:06:10</td>
+                                                <td>Nada que reportar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2022-10-20 09:05:16</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023-05-16 06:01:39</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2022-08-30 00:01:51</td>
+                                                <td>Revisión completa, sin hallazgos</td>
+                                            </tr>
+                                        </table>
+                                
+                                    </div>
+                                    <!-- Notas de Creditos -->
+                                    <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                        <table border="1">
+                                            <tr>
+                                                <th>Columna 1</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Observaciones de algo</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2022-06-08 21:07:43</td>
+                                                <td>En perfecto estado</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2022-08-19 01:06:10</td>
+                                                <td>Nada que reportar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2022-10-20 09:05:16</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023-05-16 06:01:39</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2022-08-30 00:01:51</td>
+                                                <td>Revisión completa, sin hallazgos</td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                <div class="card card-info">
-                                <div class="card-header">
-                                  <h3 class="card-title">Files</h3>
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Files</h3>
                     
-                                  <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                  </div>
-                                </div>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 <div class="card-body p-0">
                                   <table class="table">
                                     <thead>
@@ -659,6 +691,22 @@ const confirmarEliminarCliente = (id) => {
     $('#deleteCliente').val(id);
     $('#modalBorrarCliente').modal('show');
 };
+
+
+const drawCatalogBanks = async (element, icvebanco = null) => {
+    const banks = await moduleAccBanks.moduleAccountsBanks.obtenerBancos();
+    element.innerHTML = ``;
+    const optionsHTML = banks.map(bank => {
+        if (bank.icvebanco === icvebanco) {
+            return `<option value="${bank.icvebanco}" selected>${bank.cnombrebanco}</option>`;
+        } else {
+            return `<option value="${bank.icvebanco}">${bank.cnombrebanco}</option>`;
+        }
+    }).join('');
+
+    element.innerHTML = `<option value="">SELECCIONE BANCO</option>` + optionsHTML;
+}
+
 
 actFecha();
 leerClientes();
