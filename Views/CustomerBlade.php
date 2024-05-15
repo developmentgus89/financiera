@@ -68,32 +68,32 @@ include_once "dashboard/startTemplateDashboard.php";
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
-                                            Datos Personales <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Datos Personales <span id="tabDatos" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
-                                            Solicitud de Cr&eacute;dito <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Solicitud de Cr&eacute;dito <span id="solCredito" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-cuentasbancarias-tab" data-toggle="pill" href="#custom-tabs-cuentasbancarias" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
-                                            Cuentas Bancarias <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Cuentas Bancarias <span id="ctasBancarias" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-direccion" data-toggle="pill" href="#direccion" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
-                                            Direcci&oacute;n <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Direcci&oacute;n <span id="tabDireccion" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
-                                            Documentaci&oacute;n <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Documentaci&oacute;n <span id="tabDocumentos" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-one-referidos-tab" data-toggle="pill" href="#custom-tabs-one-referidos" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">
-                                            Referido Por ... <span id="tabDatos" style="color: #FC8804"><i class="fas fa-exclamation-triangle"></i></span>
+                                            Referido Por ... <span id="tabReferido" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -198,42 +198,39 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="imontoprestamo">Monto del Pr&eacute;stamo Solicitado <span style="color: red">*</span>:</label>
                                                                     <input type="text" name="imontoprestamo" id="imontoprestamo" class="form-control" placeholder="" aria-describedby="helpId">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="numpagos">Número de Pagos Calculado <span style="color: red">*</span></label>
                                                                     <input type="text" name="numpagos" id="numpagos" class="form-control" placeholder="" aria-describedby="helpId">
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="periodicidad">Periodicidad o Frecuecia de Pago <span style="color: red">*</span></label>
                                                                     <select class="form-control" name="periodicidad" id="periodicidad">
+                                                                        <option value="">SELECCIONE</option>
                                                                         <option value="7">SEMANAL</option>
                                                                         <option value="15">QUINCENAL</option>
                                                                         <option value="30">MENSUAL</option>
-                                                                        <option value="60">BIMESTRAL</option>
-                                                                        <option value="90">TRIMESTRAL</option>
-                                                                        <option value="120">CUATRIMESTRAL</option>
-                                                                        <option value="180">SEMESTRAL</option>
-                                                                        <option value="360">ANUAL</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                        </div>
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="interesfijo">Interes Fijo</label>
-                                                                    <input type="text" name="interesfijo" id="interesfijo" class="form-control" readonly>
+                                                                    <input type="text" name="interesfijo" id="interesfijo" class="form-control" value="10.00" readonly>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="dtfechaestliquidacion">Fecha estimada de liquidaci&oacute;n:</label>
                                                                     <input type="date" name="dtfechaestliquidacion" id="dtfechaestliquidacion" class="form-control" readonly>
@@ -254,24 +251,24 @@ include_once "dashboard/startTemplateDashboard.php";
                                                                         <div class="row">
                                                                             <div class="col-sm-4 border-right">
                                                                                 <div class="description-block">
-                                                                                    <h1 class="description-header" style="font-size: 36px;">3,200</h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                    <h1 class="description-header" style="font-size: 36px;"><div id="pagoPeriodo"></div></h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h5>PAGO <div id="descPeriodicidad"></div></h5></span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>
                                                                             <!-- /.col -->
                                                                             <div class="col-sm-4 border-right">
                                                                                 <div class="description-block">
-                                                                                <h1 class="description-header" style="font-size: 36px;">3,200</h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                <h1 class="description-header" style="font-size: 36px;"><div id="interesTotal"></div></h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h5>INTERESES</h5></span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>
                                                                             <!-- /.col -->
                                                                             <div class="col-sm-4">
                                                                                 <div class="description-block">
-                                                                                <h1 class="description-header" style="font-size: 36px;">3,200</h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h3>SALES</h3></span>
+                                                                                <h1 class="description-header" style="font-size: 36px;"><div id="totalPrestamo"></div></h1>
+                                                                                    <span class="description-text" style="font-size: 24px;"><h5>MONTO TOTAL</h5></span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>

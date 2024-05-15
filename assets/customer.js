@@ -45,8 +45,6 @@ const actFecha = () => {
     const mm = String(fechaActual.getMonth() + 1).padStart(2, '0');
     const dd = String(fechaActual.getDate()).padStart(2, '0');
     const fechaFormateada = `${dd} / ${mm} / ${yyyy}`;
-    console.log(`Esta es la fecha: ${fechaFormateada}`);
-    console.log(`Esta es la fecha: ${fechaActual}`);
 
     fechaInput.value = fechaFormateada;
 }
@@ -68,6 +66,119 @@ const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
 const selectTipoCliente = document.querySelector('#typeClient');
 
+const selPeriodicidad = document.getElementById('periodicidad');
+
+selPeriodicidad.addEventListener('change', () => {
+    let periodicidadPago = document.getElementById('periodicidad').value;
+    let cantidadPagos    = document.getElementById('numpagos').value;
+    let montoPrestamo    = document.getElementById('imontoprestamo').value;
+
+    console.log(`Periodicidad de Pago ${cantidadPagos}`);
+
+    if(montoPrestamo == 0 || montoPrestamo == null || montoPrestamo == ''){
+        Swal.fire({
+            title: "Advertencia",
+            html: `Capture el monto del cr\u00E9dito.`,
+            icon: "warning"
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.getElementById('imontoprestamo').focus();
+            }
+        });
+        throw new Error('Monto de credito nulo');
+    }
+    
+    if(cantidadPagos == 0 || cantidadPagos == null || cantidadPagos == ''){
+        Swal.fire({
+            title: "Advertencia",
+            html: `Capture la periodicidad de los pagos del cr\u00E9dito.`,
+            icon: "warning"
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.getElementById('numpagos').focus();
+            }
+        });
+        throw new Error('Periodicidad de pago nula');
+    }
+
+
+    let diasPeriodicidad = 0;
+    console.log(periodicidadPago);
+    switch(parseInt(periodicidadPago)){
+        //Semanal  
+        case 7:
+            diasPeriodicidad = 7;
+            document.getElementById('descPeriodicidad').innerHTML = `SEMANAL`;
+            
+            let interes = document.getElementById('interesfijo').value;
+            interes = interes.replace(' %','');
+            console.log(interes);
+
+            montoPrestamo = montoPrestamo.replace('MXN ', '').replace(',','');
+            console.log(montoPrestamo);
+            let pago = montoPrestamo / cantidadPagos;
+            console.log(pago);
+
+           
+
+            let pagoPeriodo        = ((pago * interes) / 100) + pago;
+            let interesPeriodo     = ((pago * interes) / 100) * cantidadPagos;
+            let total              = pagoPeriodo * cantidadPagos;
+            let for_pagoPeriodo    = parseFloat(pagoPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_interesPeriodo = parseFloat(interesPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_total          = parseFloat(total).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+            document.getElementById('pagoPeriodo').innerHTML   = `MXN ${for_pagoPeriodo}`;
+            document.getElementById('interesTotal').innerHTML  = `MXN ${for_interesPeriodo}`;
+            document.getElementById('totalPrestamo').innerHTML = `MXN ${for_total}`;
+
+
+            
+            break;
+
+        //Quincenal
+        case 15:
+            diasPeriodicidad = 15;
+            document.getElementById('descPeriodicidad').innerHTML = `QUINCENAL`;
+
+            
+            break;
+
+        //Mensual
+        case 30:
+            diasPeriodicidad = 30;
+            document.getElementById('descPeriodicidad').innerHTML = `MENSUAL`;
+            break;
+        
+        default:
+            throw new Error('La periodicidad seleccionada no es valida');
+            return;
+   }
+
+   let hoy = new Date();
+   let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * diasPeriodicidad * 24 * 60 * 60 * 1000));
+   let fechaFormateada = formatDate(fechaAproxLiquidacion);
+
+   document.getElementById('dtfechaestliquidacion').value = fechaFormateada;
+
+});
+
+
+const formatDate = (fecha) =>{
+    let dia  = fecha.getDate();
+    let mes  = fecha.getMonth() + 1;
+    let year = fecha.getFullYear();
+
+    if(dia < 10){
+        dia = '0' + dia;
+    }
+
+    if(mes < 10){
+        mes = '0' + mes;
+    }
+
+    return year + '-' + mes + '-' + dia;
+}
 
 
 //Funcion para abrir el modal al hacer click
@@ -76,124 +187,114 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre = document.getElementById('clinombre');
-    let capelpat = document.getElementById('cliapaterno');
-    let capelmat = document.getElementById('cliamaterno');
-    let ctelefono = document.getElementById('ctelefono');
-    let cedad = document.getElementById('cliEdad');
-    let typeClient = document.getElementById('typeClient');
-    let cdatebirthday = document.getElementById('clientDate');
+    let cnombre            = document.getElementById('clinombre');
+    let capelpat           = document.getElementById('cliapaterno');
+    let capelmat           = document.getElementById('cliamaterno');
+    let ctelefono          = document.getElementById('ctelefono');
+    let cedad              = document.getElementById('cliEdad');
+    let typeClient         = document.getElementById('typeClient');
+    let cdatebirthday      = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus = document.getElementById('clienteStatus');
+    let clienteStatus      = document.getElementById('clienteStatus');
+    
+    let imontoprestamo = document.getElementById('imontoprestamo');
+    let numpagos       = document.getElementById('numpagos');
+    let periodicidad   = document.getElementById('periodicidad');
 
-    /**
-     * 
-     * @param {HTMLInputElement} input 
-     * @param {String} message 
-     */
-    const showError = (input, message) => {
-        console.log('Valor de la variable input' + input);
-        console.log('Valor de la variable message' + message);
-        const errorSpan = document.createElement('span');
-        errorSpan.className = 'error-message';
-        errorSpan.textContent = message;
-        errorSpan.style.color = 'red';
-        errorSpan.style.fontSize = '10px';
-
-        const parent = input.parentElement;
-        parent.appendChild(errorSpan);
-        input.style.border = '2px solid red';
-    }
-
-    /**
-     * 
-     * @param {HTMLInputElement} input 
-     */
-    const removeError = (input) => {
-        console.log('El valor del input es: ' + input);
-        const parent = input.parentElement;
-        const errorSpan = parent.querySelector('.error-message');
-        if (errorSpan) {
-            parent.removeChild(errorSpan);
-        }
-
-        input.style.border = '2px solid #ccc';
-    }
 
     const validateFormCliente = () => {
-        removeError(cnombre);
 
-        if (cnombre.value == '' || cnombre.value == null) {
-            showError(cnombre, 'Ingrese el nombre del cliente');
-            cnombre.focus();
-        } else if (capelpat.value == '' || capelpat.value == null) {
-            removeError(cnombre);
-            showError(capelpat, 'Ingrese el apellido paterno del cliente');
-            capelpat.focus();
-        } else if (capelmat.value == '' || capelmat.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            showError(capelmat, 'Ingrese el apellido materno del cliente');
-            capelmat.focus();
-        } else if (cedad.value == '' || cedad.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            showError(cedad, 'Ingrese la edad del cliente');
-        } else if (typeClient.value == '' || typeClient.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            showError(typeClient, 'Ingrese el tipo de cliente');
-        } else if (cdatebirthday.value == '' || cdatebirthday.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            showError(cdatebirthday, 'Ingrese la fecha del cliente');
-        } else if (clientDateRegister.value == '' || clientDateRegister.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            showError(clientDateRegister, 'Ingrese la fecha de registro del cliente');
-        } else if (clienteStatus.value == '' || clienteStatus.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            removeError(clientDateRegister);
-            showError(clienteStatus, 'Seleccione el estatus del cliente');
-        } else if (ctelefono.value == '' || ctelefono.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            removeError(clientDateRegister);
-            removeError(clienteStatus);
-            showError(ctelefono, 'Capture el n\u00famero de tel\u00e9fono');
-        } else {
-            removeError(ctelefono);
-            insertarCliente(
-                cnombre.value,
-                capelpat.value,
-                capelmat.value,
-                cedad.value,
-                ctelefono.value,
-                typeClient.value,
-                cdatebirthday.value,
-                clientDateRegister.value,
-                clienteStatus.value
-            );
+        const fieldsDatos = [
+            {element: cnombre, message: 'Ingrese el nombre del cliente'},
+            {element: capelpat, message: 'Ingrese el apellido paterno del cliente'},
+            {element: capelmat, message: 'Ingrese el apellido materno del cliente'},
+            {element: cedad, message: 'Ingrese la edad del cliente'},
+            {element: typeClient, message: 'Ingrese el tipo de cliente'},
+            {element: clienteStatus, message: 'Seleccione el estatus del cliente'},
+            {element: cdatebirthday, message: 'Ingrese la fecha de nacimiento del cliente'},
+            {element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente'},
+            {element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono'},
+        ];
+
+        const fieldsSolCredito = [
+            {element: imontoprestamo, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.'},
+            {element: numpagos, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.'},
+            {element: periodicidad, message: 'Ingrese los periodos de pago.'},
+        ]
+
+        //validadores de error
+        let hasErrorDatos      = false;
+        let hasErrorSolCredito = false;
+
+        //contadores por tab
+        let tabDatosCount     = 0;
+        let tabDatosSolCredit = 0;
+
+        for (const fieldDatos of fieldsDatos) {
+            removeError(fieldDatos.element);
+            if (fieldDatos.element.value === '' || fieldDatos.element.value === null) {
+                showError(fieldDatos.element, fieldDatos.message);
+                fieldDatos.element.focus();
+                hasErrorDatos = true;
+                document.getElementById('tabDatos').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosCount ++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                  });
+                break;
+            }
         }
+
+        if(!hasErrorDatos){
+            removeError(ctelefono);
+            document.getElementById('tabDatos').innerHTML = ``;
+            tabDatosCount --;
+        }
+
+        for (const fieldSolCredito of fieldsSolCredito) {
+            removeError(fieldSolCredito.element);
+            if (fieldSolCredito.element.value === '' || fieldSolCredito.element.value === null) {
+                showError(fieldSolCredito.element, fieldSolCredito.message);
+                fieldSolCredito.element.focus();
+                hasErrorSolCredito = true;
+                document.getElementById('solCredito').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosSolCredit ++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                  });
+                break;
+            }
+        }
+
+        if(!hasErrorSolCredito){
+            removeError(periodicidad);
+            document.getElementById('solCredito').innerHTML = ``;
+            tabDatosSolCredit --;
+        }
+
+        
+
+        // insertarCliente(
+        //     cnombre.value,
+        //     capelpat.value,
+        //     capelmat.value,
+        //     cedad.value,
+        //     ctelefono.value,
+        //     typeClient.value,
+        //     cdatebirthday.value,
+        //     clientDateRegister.value,
+        //     clienteStatus.value
+        // );
     }
 
     validateFormCliente();
@@ -233,7 +334,6 @@ const leerClientes = () => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            console.table(data);
             $(document).ready(function () {
                 var table = $('#tablaClientes').DataTable({
                     data: data.map(function (item) {

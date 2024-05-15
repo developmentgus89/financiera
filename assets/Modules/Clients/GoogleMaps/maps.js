@@ -7,13 +7,25 @@ function initMap() {
     var geocoder = new google.maps.Geocoder();
     var marker = null; // Inicializa la variable marcador
 
-    document.getElementById('cp').addEventListener('change', function () {
-        geocodePostalCode(geocoder, map, this.value, marker);
+    document.getElementById('coloniadir').addEventListener('change', function () {
+        
+        let calle = document.getElementById('ccalle').value;
+        let numexterior  = document.getElementById('numexterior').value;
+        let numinterior  = document.getElementById('numinterior').value;
+        let cp           = document.getElementById('cp').value;
+        let entidaddir   = document.getElementById('entidaddir').value;
+        let municipiodir = document.getElementById('municipiodir').value;
+        let coloniadir   = document.getElementById('coloniadir').value;
+        geocodeAddress(geocoder, map, calle, numexterior, 
+            numinterior, coloniadir, municipiodir,entidaddir, cp, marker);
     });
 }
 
-function geocodePostalCode(geocoder, map, postalCode, marker) {
-    geocoder.geocode({ 'address': postalCode }, function (results, status) {
+function geocodeAddress(geocoder, map, calle, numexterior, numinterior, 
+        coloniadir, municipiodir, entidaddir, cp, marker) {
+    let address = `${calle} ${numexterior} ${numinterior} ${coloniadir} 
+        ${municipiodir} ${entidaddir} ${cp}`;
+    geocoder.geocode({ 'address': address}, function (results, status) {
         if (status === 'OK') {
             map.setCenter(results[0].geometry.location);
             map.setZoom(17); // Ajusta el zoom para un enfoque más cercano
@@ -21,7 +33,7 @@ function geocodePostalCode(geocoder, map, postalCode, marker) {
             // Verifica si el marcador ya existe
             if (marker && marker.setMap) {
                 // Mueve el marcador existente
-                marker.setPosition(results[0].geometry.location);
+                marker.setPosition(null);
             } else {
                 // Crea un nuevo marcador si no existe uno
                 marker = new google.maps.Marker({
