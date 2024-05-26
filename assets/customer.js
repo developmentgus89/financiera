@@ -103,7 +103,6 @@ selPeriodicidad.addEventListener('change', () => {
 
 
     let diasPeriodicidad = 0;
-    console.log(periodicidadPago);
     switch(parseInt(periodicidadPago)){
         //Semanal  
         case 7:
@@ -112,24 +111,19 @@ selPeriodicidad.addEventListener('change', () => {
             
             let interes = document.getElementById('interesfijo').value;
             interes = interes.replace(' %','');
-            console.log(interes);
 
-            montoPrestamo = montoPrestamo.replace('MXN ', '').replace(',','');
-            console.log(montoPrestamo);
-            let pago = montoPrestamo / cantidadPagos;
-            console.log(pago);
+            montoPrestamo    = montoPrestamo.replace('MXN ', '').replace(',','');
+            let preInteres   = (montoPrestamo * interes) / 100;
+            let totalInteres = preInteres * cantidadPagos;
+            let granTotal    = parseFloat(montoPrestamo) + parseFloat(totalInteres);
+            let pagoPeriodo  = granTotal / cantidadPagos;
 
-           
-
-            let pagoPeriodo        = ((pago * interes) / 100) + pago;
-            let interesPeriodo     = ((pago * interes) / 100) * cantidadPagos;
-            let total              = pagoPeriodo * cantidadPagos;
-            let for_pagoPeriodo    = parseFloat(pagoPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-            let for_interesPeriodo = parseFloat(interesPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-            let for_total          = parseFloat(total).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_pagoPeriodo     = parseFloat(pagoPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_interesPrestamo = parseFloat(totalInteres).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_total           = parseFloat(granTotal).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
             document.getElementById('pagoPeriodo').innerHTML   = `MXN ${for_pagoPeriodo}`;
-            document.getElementById('interesTotal').innerHTML  = `MXN ${for_interesPeriodo}`;
+            document.getElementById('interesTotal').innerHTML  = `MXN ${for_interesPrestamo}`;
             document.getElementById('totalPrestamo').innerHTML = `MXN ${for_total}`;
 
 
@@ -155,13 +149,26 @@ selPeriodicidad.addEventListener('change', () => {
             return;
    }
 
-   let hoy = new Date();
-   let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * diasPeriodicidad * 24 * 60 * 60 * 1000));
-   let fechaFormateada = formatDate(fechaAproxLiquidacion);
-
-   document.getElementById('dtfechaestliquidacion').value = fechaFormateada;
+   calculoFecha(cantidadPagos, diasPeriodicidad);
 
 });
+
+const calculaCantidadPrestamo = () => {
+
+}
+
+/**
+ * 
+ * @param {number} cantidadPagos 
+ * @param {number} diasPeriodicidad 
+ */
+const calculoFecha = (cantidadPagos, diasPeriodicidad) => {
+    let hoy = new Date();
+    let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * diasPeriodicidad * 24 * 60 * 60 * 1000));
+    let fechaFormateada = formatDate(fechaAproxLiquidacion);
+
+    document.getElementById('dtfechaestliquidacion').value = fechaFormateada;
+}
 
 
 const formatDate = (fecha) =>{

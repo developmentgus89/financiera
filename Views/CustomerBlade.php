@@ -60,7 +60,7 @@ include_once "dashboard/startTemplateDashboard.php";
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="height: 420px; overflow-y: scroll;">
+            <div class="modal-body">
                 <div class="row" style="color:black;">
                     <div class="col-12 col-sm-12">
                         <div class="card card-success card-tabs">
@@ -227,7 +227,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="interesfijo">Interes Fijo</label>
-                                                                    <input type="text" name="interesfijo" id="interesfijo" class="form-control" value="10.00" readonly>
+                                                                    <input type="text" name="interesfijo" id="interesfijo" class="form-control" value="8.00" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
