@@ -1,5 +1,33 @@
+import * as moduleAccBanks from "./Modules/AccountsBanks/opBanksAccounts.js";
+
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/CustomerController.php';
+
+$('#imontoprestamo').inputmask('currency', {
+    radixPoint: '.',
+    groupSeparator: ',',
+    allowMinus: false,
+    autoGroup: true,
+    prefix: 'MXN ',
+    digits: 2,
+    rightAlign: false
+});
+
+$('#interesfijo').inputmask('currency', {
+    alias: 'percentage',  // Utiliza el alias de porcentaje
+    radixPoint: ".",      // Define el punto decimal, si es necesario
+    digits: 2,            // Número de decimales permitidos
+    autoGroup: true,      // Agrupación automática de los dígitos
+    suffix: ' %',         // Añade el símbolo de porcentaje al final
+    rightAlign: false,    // Alinea el texto a la izquierda
+    clearMaskOnLostFocus: false // Mantiene la máscara visible incluso cuando el input pierde el foco
+});
+
+$("#modalAgregar").on('shown.bs.modal', () => {
+    const selectBanks = document.getElementById('selCatIcveBancoCli');
+    drawCatalogBanks(selectBanks);
+    // getBanks(selectBanks);
+});
 
 const textInputs = document.querySelectorAll('input[type="text"]');
 
@@ -17,8 +45,6 @@ const actFecha = () => {
     const mm = String(fechaActual.getMonth() + 1).padStart(2, '0');
     const dd = String(fechaActual.getDate()).padStart(2, '0');
     const fechaFormateada = `${dd} / ${mm} / ${yyyy}`;
-    console.log(`Esta es la fecha: ${fechaFormateada}`);
-    console.log(`Esta es la fecha: ${fechaActual}`);
 
     fechaInput.value = fechaFormateada;
 }
@@ -40,6 +66,126 @@ const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
 const selectTipoCliente = document.querySelector('#typeClient');
 
+const selPeriodicidad = document.getElementById('periodicidad');
+
+selPeriodicidad.addEventListener('change', () => {
+    let periodicidadPago = document.getElementById('periodicidad').value;
+    let cantidadPagos    = document.getElementById('numpagos').value;
+    let montoPrestamo    = document.getElementById('imontoprestamo').value;
+
+    console.log(`Periodicidad de Pago ${cantidadPagos}`);
+
+    if(montoPrestamo == 0 || montoPrestamo == null || montoPrestamo == ''){
+        Swal.fire({
+            title: "Advertencia",
+            html: `Capture el monto del cr\u00E9dito.`,
+            icon: "warning"
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.getElementById('imontoprestamo').focus();
+            }
+        });
+        throw new Error('Monto de credito nulo');
+    }
+    
+    if(cantidadPagos == 0 || cantidadPagos == null || cantidadPagos == ''){
+        Swal.fire({
+            title: "Advertencia",
+            html: `Capture la periodicidad de los pagos del cr\u00E9dito.`,
+            icon: "warning"
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.getElementById('numpagos').focus();
+            }
+        });
+        throw new Error('Periodicidad de pago nula');
+    }
+
+
+    let diasPeriodicidad = 0;
+    switch(parseInt(periodicidadPago)){
+        //Semanal  
+        case 7:
+            diasPeriodicidad = 7;
+            document.getElementById('descPeriodicidad').innerHTML = `SEMANAL`;
+            
+            let interes = document.getElementById('interesfijo').value;
+            interes = interes.replace(' %','');
+
+            montoPrestamo    = montoPrestamo.replace('MXN ', '').replace(',','');
+            let preInteres   = (montoPrestamo * interes) / 100;
+            let totalInteres = preInteres * cantidadPagos;
+            let granTotal    = parseFloat(montoPrestamo) + parseFloat(totalInteres);
+            let pagoPeriodo  = granTotal / cantidadPagos;
+
+            let for_pagoPeriodo     = parseFloat(pagoPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_interesPrestamo = parseFloat(totalInteres).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+            let for_total           = parseFloat(granTotal).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+            document.getElementById('pagoPeriodo').innerHTML   = `MXN ${for_pagoPeriodo}`;
+            document.getElementById('interesTotal').innerHTML  = `MXN ${for_interesPrestamo}`;
+            document.getElementById('totalPrestamo').innerHTML = `MXN ${for_total}`;
+
+
+            
+            break;
+
+        //Quincenal
+        case 15:
+            diasPeriodicidad = 15;
+            document.getElementById('descPeriodicidad').innerHTML = `QUINCENAL`;
+
+            
+            break;
+
+        //Mensual
+        case 30:
+            diasPeriodicidad = 30;
+            document.getElementById('descPeriodicidad').innerHTML = `MENSUAL`;
+            break;
+        
+        default:
+            throw new Error('La periodicidad seleccionada no es valida');
+            return;
+   }
+
+   calculoFecha(cantidadPagos, diasPeriodicidad);
+
+});
+
+const calculaCantidadPrestamo = () => {
+
+}
+
+/**
+ * 
+ * @param {number} cantidadPagos 
+ * @param {number} diasPeriodicidad 
+ */
+const calculoFecha = (cantidadPagos, diasPeriodicidad) => {
+    let hoy = new Date();
+    let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * diasPeriodicidad * 24 * 60 * 60 * 1000));
+    let fechaFormateada = formatDate(fechaAproxLiquidacion);
+
+    document.getElementById('dtfechaestliquidacion').value = fechaFormateada;
+}
+
+
+const formatDate = (fecha) =>{
+    let dia  = fecha.getDate();
+    let mes  = fecha.getMonth() + 1;
+    let year = fecha.getFullYear();
+
+    if(dia < 10){
+        dia = '0' + dia;
+    }
+
+    if(mes < 10){
+        mes = '0' + mes;
+    }
+
+    return year + '-' + mes + '-' + dia;
+}
 
 
 //Funcion para abrir el modal al hacer click
@@ -48,124 +194,114 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre = document.getElementById('clinombre');
-    let capelpat = document.getElementById('cliapaterno');
-    let capelmat = document.getElementById('cliamaterno');
-    let ctelefono = document.getElementById('ctelefono');
-    let cedad = document.getElementById('cliEdad');
-    let typeClient = document.getElementById('typeClient');
-    let cdatebirthday = document.getElementById('clientDate');
+    let cnombre            = document.getElementById('clinombre');
+    let capelpat           = document.getElementById('cliapaterno');
+    let capelmat           = document.getElementById('cliamaterno');
+    let ctelefono          = document.getElementById('ctelefono');
+    let cedad              = document.getElementById('cliEdad');
+    let typeClient         = document.getElementById('typeClient');
+    let cdatebirthday      = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus = document.getElementById('clienteStatus');
+    let clienteStatus      = document.getElementById('clienteStatus');
+    
+    let imontoprestamo = document.getElementById('imontoprestamo');
+    let numpagos       = document.getElementById('numpagos');
+    let periodicidad   = document.getElementById('periodicidad');
 
-    /**
-     * 
-     * @param {HTMLInputElement} input 
-     * @param {String} message 
-     */
-    const showError = (input, message) => {
-        console.log('Valor de la variable input' + input);
-        console.log('Valor de la variable message' + message);
-        const errorSpan = document.createElement('span');
-        errorSpan.className = 'error-message';
-        errorSpan.textContent = message;
-        errorSpan.style.color = 'red';
-        errorSpan.style.fontSize = '10px';
-
-        const parent = input.parentElement;
-        parent.appendChild(errorSpan);
-        input.style.border = '2px solid red';
-    }
-
-    /**
-     * 
-     * @param {HTMLInputElement} input 
-     */
-    const removeError = (input) => {
-        console.log('El valor del input es: ' + input);
-        const parent = input.parentElement;
-        const errorSpan = parent.querySelector('.error-message');
-        if (errorSpan) {
-            parent.removeChild(errorSpan);
-        }
-
-        input.style.border = '2px solid #ccc';
-    }
 
     const validateFormCliente = () => {
-        removeError(cnombre);
 
-        if (cnombre.value == '' || cnombre.value == null) {
-            showError(cnombre, 'Ingrese el nombre del cliente');
-            cnombre.focus();
-        } else if (capelpat.value == '' || capelpat.value == null) {
-            removeError(cnombre);
-            showError(capelpat, 'Ingrese el apellido paterno del cliente');
-            capelpat.focus();
-        } else if (capelmat.value == '' || capelmat.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            showError(capelmat, 'Ingrese el apellido materno del cliente');
-            capelmat.focus();
-        } else if (cedad.value == '' || cedad.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            showError(cedad, 'Ingrese la edad del cliente');
-        } else if (typeClient.value == '' || typeClient.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            showError(typeClient, 'Ingrese el tipo de cliente');
-        } else if (cdatebirthday.value == '' || cdatebirthday.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            showError(cdatebirthday, 'Ingrese la fecha del cliente');
-        } else if (clientDateRegister.value == '' || clientDateRegister.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            showError(clientDateRegister, 'Ingrese la fecha de registro del cliente');
-        } else if (clienteStatus.value == '' || clienteStatus.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            removeError(clientDateRegister);
-            showError(clienteStatus, 'Seleccione el estatus del cliente');
-        } else if (ctelefono.value == '' || ctelefono.value == null) {
-            removeError(cnombre);
-            removeError(capelpat);
-            removeError(capelmat);
-            removeError(cedad);
-            removeError(typeClient);
-            removeError(cdatebirthday);
-            removeError(clientDateRegister);
-            removeError(clienteStatus);
-            showError(ctelefono, 'Capture el n\u00famero de tel\u00e9fono');
-        } else {
-            removeError(ctelefono);
-            insertarCliente(
-                cnombre.value,
-                capelpat.value,
-                capelmat.value,
-                cedad.value,
-                ctelefono.value,
-                typeClient.value,
-                cdatebirthday.value,
-                clientDateRegister.value,
-                clienteStatus.value
-            );
+        const fieldsDatos = [
+            {element: cnombre, message: 'Ingrese el nombre del cliente'},
+            {element: capelpat, message: 'Ingrese el apellido paterno del cliente'},
+            {element: capelmat, message: 'Ingrese el apellido materno del cliente'},
+            {element: cedad, message: 'Ingrese la edad del cliente'},
+            {element: typeClient, message: 'Ingrese el tipo de cliente'},
+            {element: clienteStatus, message: 'Seleccione el estatus del cliente'},
+            {element: cdatebirthday, message: 'Ingrese la fecha de nacimiento del cliente'},
+            {element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente'},
+            {element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono'},
+        ];
+
+        const fieldsSolCredito = [
+            {element: imontoprestamo, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.'},
+            {element: numpagos, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.'},
+            {element: periodicidad, message: 'Ingrese los periodos de pago.'},
+        ]
+
+        //validadores de error
+        let hasErrorDatos      = false;
+        let hasErrorSolCredito = false;
+
+        //contadores por tab
+        let tabDatosCount     = 0;
+        let tabDatosSolCredit = 0;
+
+        for (const fieldDatos of fieldsDatos) {
+            removeError(fieldDatos.element);
+            if (fieldDatos.element.value === '' || fieldDatos.element.value === null) {
+                showError(fieldDatos.element, fieldDatos.message);
+                fieldDatos.element.focus();
+                hasErrorDatos = true;
+                document.getElementById('tabDatos').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosCount ++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                  });
+                break;
+            }
         }
+
+        if(!hasErrorDatos){
+            removeError(ctelefono);
+            document.getElementById('tabDatos').innerHTML = ``;
+            tabDatosCount --;
+        }
+
+        for (const fieldSolCredito of fieldsSolCredito) {
+            removeError(fieldSolCredito.element);
+            if (fieldSolCredito.element.value === '' || fieldSolCredito.element.value === null) {
+                showError(fieldSolCredito.element, fieldSolCredito.message);
+                fieldSolCredito.element.focus();
+                hasErrorSolCredito = true;
+                document.getElementById('solCredito').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosSolCredit ++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                  });
+                break;
+            }
+        }
+
+        if(!hasErrorSolCredito){
+            removeError(periodicidad);
+            document.getElementById('solCredito').innerHTML = ``;
+            tabDatosSolCredit --;
+        }
+
+        
+
+        // insertarCliente(
+        //     cnombre.value,
+        //     capelpat.value,
+        //     capelmat.value,
+        //     cedad.value,
+        //     ctelefono.value,
+        //     typeClient.value,
+        //     cdatebirthday.value,
+        //     clientDateRegister.value,
+        //     clienteStatus.value
+        // );
     }
 
     validateFormCliente();
@@ -205,7 +341,6 @@ const leerClientes = () => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            console.table(data);
             $(document).ready(function () {
                 var table = $('#tablaClientes').DataTable({
                     data: data.map(function (item) {
@@ -214,14 +349,10 @@ const leerClientes = () => {
                             "",
                             id,
                             `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
+                            `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`,
                             item['ctelefono'],
                             item['cabreviiatipo'],
-                            item['cestatus'],
-                            `
-                            <button class="btn bg-gradient-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Cr&eacute;ditos"><i class="fas fa-money-check"></i></button> 
-                            <button class="btn bg-gradient-info btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-edit"></i></button>
-                            <button class="btn bg-gradient-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Domicilio y Referencias"><i class="fas fa-file-signature"></i></button>
-                            `
+                            item['cestatus']
                         ];
                     }),
                     columns: [
@@ -237,10 +368,10 @@ const leerClientes = () => {
                         },
                         { title: "ID" },
                         { title: "Nombre" },
+                        { title: "No. de Prestamos" },
                         { title: "Telefono" },
                         { title: "Tipo Cliente" },
-                        { title: "Status" },
-                        { title: "Acciones", orderable: false }
+                        { title: "Status" }
                     ],
                     "language": {
                         "url": "../assets/language/spanish.json"
@@ -250,7 +381,6 @@ const leerClientes = () => {
                 $('#tablaClientes tbody').on('click', 'td.details-control', function () {
                     var tr = $(this).closest('tr');
                     var row = table.row(tr);
-
                     if (row.child.isShown()) {
                         // Esta fila ya está abierta - cerrarla
                         row.child.hide();
@@ -265,6 +395,9 @@ const leerClientes = () => {
                 function format(rowData) {
                     // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
                     console.log(rowData);
+                    console.table(rowData);
+                    console.log(rowData[1]);
+                    leerCreditosPorCliente(rowData[1]);
                     return `
                     <div class="row">
                         <div class="col-sm-12" style="color: black;">
@@ -272,129 +405,105 @@ const leerClientes = () => {
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
+                                    <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
+                                    <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
                                 </li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                                <div class="tab-pane fade show active " id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
-                                </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                <table border="1"> <!-- Añadido el atributo border para visualizar los bordes de la tabla -->
-                                <tr>
-                                    <th>Columna 1</th>
-                                    <th>Columna 2</th>
-                                    <th>Columna 3</th>
-                                    <th>Columna 4</th>
-                                    <th>Columna 5</th>
-                                    <th>Columna 6</th>
-                                    <th>Columna 7</th>
-                                </tr>
-                                <tr>
-                                    <td>Fila 1, Col 1</td>
-                                    <td>Fila 1, Col 2</td>
-                                    <td>Fila 1, Col 3</td>
-                                    <td>Fila 1, Col 4</td>
-                                    <td>Fila 1, Col 5</td>
-                                    <td>Fila 1, Col 6</td>
-                                    <td>Fila 1, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 2, Col 1</td>
-                                    <td>Fila 2, Col 2</td>
-                                    <td>Fila 2, Col 3</td>
-                                    <td>Fila 2, Col 4</td>
-                                    <td>Fila 2, Col 5</td>
-                                    <td>Fila 2, Col 6</td>
-                                    <td>Fila 2, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 3, Col 1</td>
-                                    <td>Fila 3, Col 2</td>
-                                    <td>Fila 3, Col 3</td>
-                                    <td>Fila 3, Col 4</td>
-                                    <td>Fila 3, Col 5</td>
-                                    <td>Fila 3, Col 6</td>
-                                    <td>Fila 3, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 4, Col 1</td>
-                                    <td>Fila 4, Col 2</td>
-                                    <td>Fila 4, Col 3</td>
-                                    <td>Fila 4, Col 4</td>
-                                    <td>Fila 4, Col 5</td>
-                                    <td>Fila 4, Col 6</td>
-                                    <td>Fila 4, Col 7</td>
-                                </tr>
-                                <tr>
-                                    <td>Fila 5, Col 1</td>
-                                    <td>Fila 5, Col 2</td>
-                                    <td>Fila 5, Col 3</td>
-                                    <td>Fila 5, Col 4</td>
-                                    <td>Fila 5, Col 5</td>
-                                    <td>Fila 5, Col 6</td>
-                                    <td>Fila 5, Col 7</td>
-                                </tr>
-                            </table>
-                            
-                                </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                <table border="1">
-                                <tr>
-                                    <th>Columna 1</th>
-                                    <th>Fecha y Hora</th>
-                                    <th>Observaciones</th>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2022-06-08 21:07:43</td>
-                                    <td>En perfecto estado</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>2022-08-19 01:06:10</td>
-                                    <td>Nada que reportar</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>2022-10-20 09:05:16</td>
-                                    <td>Se observaron variaciones menores</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>2023-05-16 06:01:39</td>
-                                    <td>Se observaron variaciones menores</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>2022-08-30 00:01:51</td>
-                                    <td>Revisión completa, sin hallazgos</td>
-                                </tr>
-                            </table>
-                            
-                                </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                <div class="card card-info">
-                                <div class="card-header">
-                                  <h3 class="card-title">Files</h3>
+                                    <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                        <table border="1">
+                                            <tr>
+                                                <th>Columna 1</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Observaciones</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2022-06-08 21:07:43</td>
+                                                <td>En perfecto estado</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2022-08-19 01:06:10</td>
+                                                <td>Nada que reportar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2022-10-20 09:05:16</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023-05-16 06:01:39</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2022-08-30 00:01:51</td>
+                                                <td>Revisión completa, sin hallazgos</td>
+                                            </tr>
+                                        </table>
+                                
+                                    </div>
+                                    <!-- Notas de Creditos -->
+                                    <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                        <table border="1">
+                                            <tr>
+                                                <th>Columna 1</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Observaciones de algo</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2022-06-08 21:07:43</td>
+                                                <td>En perfecto estado</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2022-08-19 01:06:10</td>
+                                                <td>Nada que reportar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2022-10-20 09:05:16</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023-05-16 06:01:39</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2022-08-30 00:01:51</td>
+                                                <td>Revisión completa, sin hallazgos</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Files</h3>
                     
-                                  <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                  </div>
-                                </div>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 <div class="card-body p-0">
                                   <table class="table">
                                     <thead>
@@ -475,6 +584,61 @@ const leerClientes = () => {
     };
     xhr.send('operation=read');
 };
+
+const leerCreditosPorCliente = async (icvecliente) => {
+    let params =
+        'operation=readCreditsByCustomer' +
+        '&icvecliente=' + icvecliente;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+        console.table(data);
+
+        var tblCreditsCustomer = document.getElementById(`tblcredits${icvecliente}}`);
+
+        new DataTable(tblCreditsCustomer, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Monto Pagado', 'Fecha y Hora de Registro', 'Estatus Pago', 'CONSULTA / VER'],
+                data: data.map(function (item) {
+                    // return Object.values(item);
+                    var id = item['icvepagocapitalinv'];
+                    var comprobante = item['comprobantepago'];
+                    let montoPagado = parseFloat(item['fmontopagado']);
+                    let montoFormateado = montoPagado.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    return [
+                        id,
+                        montoFormateado,
+                        item['dfecha_pago'],
+                        item['statuspago'] == 'NP' ? `<span class="badge badge-danger">No Pagado</span>` : `<span class="badge badge-success">Pagado</span>`,
+                        item['cstatuspago'] == 'NP' ?
+                            `<button class="btn bg-gradient-danger btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-check-circle"></i></button>`
+                            : `<button class="btn bg-gradient-success btn-sx" onclick="viewVoucherCapitalPayment(${id})" data-toggle="tooltip" data-placement="top" title="Editar Datos"><i class="fas fa-receipt"></i></button>`
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
+}
 
 
 
@@ -634,6 +798,67 @@ const confirmarEliminarCliente = (id) => {
     $('#deleteCliente').val(id);
     $('#modalBorrarCliente').modal('show');
 };
+
+
+const drawCatalogBanks = async (element, icvebanco = null) => {
+    const banks = await moduleAccBanks.moduleAccountsBanks.obtenerBancos();
+    element.innerHTML = ``;
+    const optionsHTML = banks.map(bank => {
+        if (bank.icvebanco === icvebanco) {
+            return `<option value="${bank.icvebanco}" selected>${bank.cnombrebanco}</option>`;
+        } else {
+            return `<option value="${bank.icvebanco}">${bank.cnombrebanco}</option>`;
+        }
+    }).join('');
+
+    element.innerHTML = `<option value="">SELECCIONE BANCO</option>` + optionsHTML;
+}
+
+const readCodigosPostal = async (zipcode) => {
+    let params =
+        'operation=readZipCode' +
+        '&zipcode=' + zipcode;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los codigos postales`);
+        }
+
+        const data = await response.json();
+
+        console.table(data);
+        console.table(data[0].cnombreestprovincia);
+        console.table(data[0].cnomlocmun);
+        let colonias = document.getElementById('coloniadir');
+        document.getElementById('entidaddir').value = data[0].cnombreestprovincia;
+        document.getElementById('municipiodir').value = data[0].cnomlocmun;
+        
+        const optionsHTML = data.map(col => {
+            return `<option value="${col.icvecatcolonia}">${col.cnombre}</option>`;
+        }).join('');
+
+        colonias.innerHTML = `<option value="">SELECCIONE COLONIA</option>` + optionsHTML;
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los codigos postales: ${error.message}`);
+    } 
+}
+
+const varCP = document.getElementById('cp');
+
+varCP.addEventListener('blur', ()=>{
+    let cp = document.getElementById('cp').value;
+
+    readCodigosPostal(cp);
+});
+
 
 actFecha();
 leerClientes();

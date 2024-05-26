@@ -66,6 +66,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tiposCliente = $customer->obtenerTiposClientes();
             echo json_encode($tiposCliente);
             break;
+        case 'readCreditsByCustomer':
+            $icvecliente = $_POST['icvecliente'];
+            $rowCredits = $credits->getRowsCreditsByClient($icvecliente);
+            echo json_encode($rowCredits);
+            break;
+
+        //Obetener las colonias de acuerdo al codigo postal
+        case 'readZipCode':
+            $zipcode = $_POST['zipcode'];
+            $rowsZipCode = $customer->get_AsentamientosByZipCode($zipcode);
+            echo json_encode($rowsZipCode);
+            break;
         default:
             echo 'Operación no válida';
             break;
