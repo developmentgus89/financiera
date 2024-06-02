@@ -46,8 +46,22 @@ include_once "dashboard/startTemplateDashboard.php";
         <a href="InvestorsBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3>5</h3>
+
+          <p>C&aacute;lculo R&aacute;pido de un Pr&eacute;stamo</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="QuickCalcBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
   </div>
- 
+
   <!-- /.container-fluid -->
 </div>
 <!-- /.content -->

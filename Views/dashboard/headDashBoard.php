@@ -21,6 +21,11 @@
 
   <!-- DataTables -->
   <link rel="stylesheet" href="../utils/css/vanilla-datatable.css">
+
+  <!-- Ion Slider -->
+  <link rel="stylesheet" href="../utils/plugins/ion-rangeslider/css/ion.rangeSlider.min.css">
+  <!-- bootstrap slider -->
+  <link rel="stylesheet" href="../utils/plugins/bootstrap-slider/css/bootstrap-slider.min.css">
   
 
   <!-- jquery-validation -->
