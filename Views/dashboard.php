@@ -50,7 +50,7 @@ include_once "dashboard/startTemplateDashboard.php";
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <h3>5</h3>
+          <h3><i class="fas fa-money-bill-alt"></i></h3>
 
           <p>C&aacute;lculo R&aacute;pido de un Pr&eacute;stamo</p>
         </div>
