@@ -1,4 +1,8 @@
 //Manejo de Notificaciones en el Dash Board
+$(function (){
+    $('.slider').bootstrapSlider();
+    $('#range_2').ionRangeSlider();
+});
 
 
 // toastr.options.onclick = function () { alert('Hola mundo'); }

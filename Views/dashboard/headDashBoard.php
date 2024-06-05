@@ -10,7 +10,6 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../utils/css/adminlte.min.css">
   <link rel="stylesheet" href="../utils/css/financiera-dash.css">
-  <link rel="stylesheet" href="../utils/css/financiera.css">
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="../utils/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
   <link rel="stylesheet" href="../utils/plugins/sweetalert2/sweetalert2.css">
@@ -18,9 +17,17 @@
   <link rel="stylesheet" href="../utils/plugins/toastr/toastr.min.css">
   <!-- Toastify JS -->
   <link rel="stylesheet" href="../utils/css/toastify.min.css">
-
+  
   <!-- DataTables -->
   <link rel="stylesheet" href="../utils/css/vanilla-datatable.css">
+  
+  <!-- Ion Slider -->
+  <link rel="stylesheet" href="../utils/plugins/ion-rangeslider/css/ion.rangeSlider.min.css">
+  <link rel="stylesheet" href="../utils/css/financiera.css">
+  <!-- bootstrap slider -->
+  <link rel="stylesheet" href="../utils/plugins/bootstrap-slider/css/bootstrap-slider.min.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="../utils/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   
 
   <!-- jquery-validation -->

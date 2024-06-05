@@ -435,7 +435,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                             </div>
                                             <!-- /.card-body -->
                                             <div class="card-footer">
-
+                                                <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
                                             </div>
                                         </div>
                                     </div>
