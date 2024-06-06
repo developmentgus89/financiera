@@ -56,3 +56,9 @@ textInputs.forEach(input => {
         this.value = this.value.toUpperCase();
     });
 });
+
+const formatter = new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+    minimumFractionDigits: 2
+});

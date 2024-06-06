@@ -198,32 +198,48 @@ include_once "dashboard/startTemplateDashboard.php";
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="imontoprestamo">Monto del Pr&eacute;stamo Solicitado <span style="color: red">*</span>:</label>
-                                                                    <input type="text" name="imontoprestamo" id="imontoprestamo" class="form-control" placeholder="" aria-describedby="helpId">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="numpagos">Número de Pagos Calculado <span style="color: red">*</span></label>
-                                                                    <input type="text" name="numpagos" id="numpagos" class="form-control" placeholder="" aria-describedby="helpId">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="periodicidad">Periodicidad o Frecuecia de Pago <span style="color: red">*</span></label>
-                                                                    <select class="form-control" name="periodicidad" id="periodicidad">
-                                                                        <option value="">SELECCIONE</option>
-                                                                        <option value="7">SEMANAL</option>
-                                                                        <option value="15">QUINCENAL</option>
-                                                                        <option value="30">MENSUAL</option>
+                                                                    <label for="">Seleccione la cantidad de semanas:</label>
+                                                                    <select class="form-control" name="cantseman" id="cantseman">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="4">4 semanas</option>
+                                                                        <option value="5">5 semanas</option>
+                                                                        <option value="6">6 semanas</option>
+                                                                        <option value="7">7 semanas</option>
+                                                                        <option value="8">8 semanas</option>
+                                                                        <option value="9">9 semanas</option>
+                                                                        <option value="10">10 semanas</option>
+                                                                        <option value="11">11 semanas</option>
+                                                                        <option value="12">12 semanas</option>
+                                                                        <option value="13">13 semanas</option>
+                                                                        <option value="14">14 semanas</option>
+                                                                        <option value="15">15 semanas</option>
+                                                                        <option value="16">16 semanas</option>
+                                                                        <option value="17">17 semanas</option>
+                                                                        <option value="18">18 semanas</option>
+                                                                        <option value="19">19 semanas</option>
+                                                                        <option value="20">20 semanas</option>
+                                                                        <option value="21">21 semanas</option>
+                                                                        <option value="22">22 semanas</option>
+                                                                        <option value="23">23 semanas</option>
+                                                                        <option value="24">24 semanas</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+                                                                    <label for="customRange1">Pr&eacute;stamo Solicitado:</label>
+                                                                    <input type="range" class="custom-range" id="barprestamosoli" min="0" max="100000" step="500">
+                                                                    <h2>
+                                                                        <div id="sol_cantprestamo">$ 0.00 MXN</div>
+                                                                    </h2>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                        <hr>
                                                         <div class="row">
-                                                            
+
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="interesfijo">Interes Fijo</label>
@@ -251,24 +267,37 @@ include_once "dashboard/startTemplateDashboard.php";
                                                                         <div class="row">
                                                                             <div class="col-sm-4 border-right">
                                                                                 <div class="description-block">
-                                                                                    <h1 class="description-header" style="font-size: 36px;"><div id="pagoPeriodo"></div></h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h5>PAGO <div id="descPeriodicidad"></div></h5></span>
+                                                                                    <h1 class="description-header" style="font-size: 36px;">
+                                                                                        <div id="pagoPeriodo"></div>
+                                                                                    </h1>
+                                                                                    <span class="description-text" style="font-size: 24px;">
+                                                                                        <h5>PAGO <div id="descPeriodicidad"></div>
+                                                                                        </h5>
+                                                                                    </span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>
                                                                             <!-- /.col -->
                                                                             <div class="col-sm-4 border-right">
                                                                                 <div class="description-block">
-                                                                                <h1 class="description-header" style="font-size: 36px;"><div id="interesTotal"></div></h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h5>INTERESES</h5></span>
+                                                                                    <h1 class="description-header" style="font-size: 36px;">
+                                                                                        <div id="interesTotal"></div>
+                                                                                    </h1>
+                                                                                    <span class="description-text" style="font-size: 24px;">
+                                                                                        <h5>INTERESES</h5>
+                                                                                    </span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>
                                                                             <!-- /.col -->
                                                                             <div class="col-sm-4">
                                                                                 <div class="description-block">
-                                                                                <h1 class="description-header" style="font-size: 36px;"><div id="totalPrestamo"></div></h1>
-                                                                                    <span class="description-text" style="font-size: 24px;"><h5>MONTO TOTAL</h5></span>
+                                                                                    <h1 class="description-header" style="font-size: 36px;">
+                                                                                        <div id="totalPrestamo"></div>
+                                                                                    </h1>
+                                                                                    <span class="description-text" style="font-size: 24px;">
+                                                                                        <h5>MONTO TOTAL</h5>
+                                                                                    </span>
                                                                                 </div>
                                                                                 <!-- /.description-block -->
                                                                             </div>
@@ -403,9 +432,9 @@ include_once "dashboard/startTemplateDashboard.php";
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                  <label for="coloniadir">Asentamiento o Colonia</label>
-                                                                  <select class="form-control" name="coloniadir" id="coloniadir">
-                                                                  </select>
+                                                                    <label for="coloniadir">Asentamiento o Colonia</label>
+                                                                    <select class="form-control" name="coloniadir" id="coloniadir">
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>

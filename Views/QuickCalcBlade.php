@@ -112,73 +112,68 @@ include_once "dashboard/startTemplateDashboard.php";
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-3 bg-financiera-success">
                     <div class="row">
-                        <div class="form-group">
-                            <label for="">Seleccione la cantidad de semanas:</label>
-                            <select class="form-control" name="cantseman" id="cantseman">
-                                <option value="0">Seleccione</option>
-                                <option value="1">1 semanas</option>
-                                <option value="2">2 semanas</option>
-                                <option value="3">3 semanas</option>
-                                <option value="4">4 semanas</option>
-                                <option value="5">5 semanas</option>
-                                <option value="6">6 semanas</option>
-                                <option value="7">7 semanas</option>
-                                <option value="8">8 semanas</option>
-                                <option value="9">9 semanas</option>
-                                <option value="10">10 semanas</option>
-                                <option value="11">11 semanas</option>
-                                <option value="12">12 semanas</option>
-                                <option value="13">13 semanas</option>
-                                <option value="14">14 semanas</option>
-                                <option value="15">15 semanas</option>
-                                <option value="16">16 semanas</option>
-                                <option value="17">17 semanas</option>
-                                <option value="18">18 semanas</option>
-                                <option value="19">19 semanas</option>
-                                <option value="20">20 semanas</option>
-                                <option value="21">21 semanas</option>
-                                <option value="22">22 semanas</option>
-                                <option value="23">23 semanas</option>
-                                <option value="24">24 semanas</option>
-                                <option value="25">25 semanas</option>
-                                <option value="26">26 semanas</option>
-                                <option value="27">27 semanas</option>
-                                <option value="28">28 semanas</option>
-                                <option value="29">29 semanas</option>
-                                <option value="30">30 semanas</option>
-                                <option value="31">31 semanas</option>
-                                <option value="32">32 semanas</option>
-                                <option value="33">33 semanas</option>
-                                <option value="34">34 semanas</option>
-                                <option value="35">35 semanas</option>
-                                <option value="36">36 semanas</option>
-                                <option value="37">37 semanas</option>
-                                <option value="38">38 semanas</option>
-                                <option value="39">39 semanas</option>
-                                <option value="40">40 semanas</option>
-                                <option value="41">41 semanas</option>
-                                <option value="42">42 semanas</option>
-                                <option value="43">43 semanas</option>
-                                <option value="44">44 semanas</option>
-                                <option value="45">45 semanas</option>
-                                <option value="46">46 semanas</option>
-                                <option value="47">47 semanas</option>
-                                <option value="48">48 semanas</option>
-                                <option value="49">49 semanas</option>
-                                <option value="50">50 semanas</option>
-                            </select>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="">Seleccione la cantidad de semanas:</label>
+                                <select class="form-control" name="cantseman" id="cantseman">
+                                    <option value="0">Seleccione</option>
+                                    <option value="4">4 semanas</option>
+                                    <option value="5">5 semanas</option>
+                                    <option value="6">6 semanas</option>
+                                    <option value="7">7 semanas</option>
+                                    <option value="8">8 semanas</option>
+                                    <option value="9">9 semanas</option>
+                                    <option value="10">10 semanas</option>
+                                    <option value="11">11 semanas</option>
+                                    <option value="12">12 semanas</option>
+                                    <option value="13">13 semanas</option>
+                                    <option value="14">14 semanas</option>
+                                    <option value="15">15 semanas</option>
+                                    <option value="16">16 semanas</option>
+                                    <option value="17">17 semanas</option>
+                                    <option value="18">18 semanas</option>
+                                    <option value="19">19 semanas</option>
+                                    <option value="20">20 semanas</option>
+                                    <option value="21">21 semanas</option>
+                                    <option value="22">22 semanas</option>
+                                    <option value="23">23 semanas</option>
+                                    <option value="24">24 semanas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                        <div class="col-md-3">
+                           
+                        </div>
+                        <div class="col-md-3">
+                            
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="customRange1">Pr&eacute;stmo Solicitado:</label>
-                                <input type="range" class="custom-range" id="barprestamos" min="0" max="200000" step="100">
-                                <h2>
+                                <h2 class="mb-5">
                                     <div id="vcantprestamo">$ 0.00 MXN</div>
                                 </h2>
+                                
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customRange1">Porcentaje del pr&eacute;stamo:</label>
+                                <h2 class="mb-5">
+                                    <div id="vcantporcentaje"> 0.00 %</div>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="range" class="custom-range" id="barprestamos" min="0" max="15000" step="500">
                         </div>
                     </div>
                     <hr>

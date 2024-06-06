@@ -68,14 +68,22 @@ const selectTipoCliente = document.querySelector('#typeClient');
 
 const selPeriodicidad = document.getElementById('periodicidad');
 
-selPeriodicidad.addEventListener('change', () => {
+/* Se empieza a ver el tema de calculo de solicitud de prestamo */
+
+const barprestamosoli  = document.getElementById('barprestamosoli');
+const sol_cantprestamo = document.getElementById('sol_cantprestamo');
+
+barprestamosoli.value = 0;
+
+barprestamosoli.addEventListener('input', () => {
+    sol_cantprestamo.innerText = `${formatter.format(barprestamosoli.value)} MXN`;
     let periodicidadPago = document.getElementById('periodicidad').value;
-    let cantidadPagos    = document.getElementById('numpagos').value;
+    let cantseman        = document.getElementById('cantseman').value;
     let montoPrestamo    = document.getElementById('imontoprestamo').value;
 
     console.log(`Periodicidad de Pago ${cantidadPagos}`);
 
-    if(montoPrestamo == 0 || montoPrestamo == null || montoPrestamo == ''){
+    if(barprestamosoli.value == 0 || barprestamosoli.value == null || barprestamosoli.value == ''){
         Swal.fire({
             title: "Advertencia",
             html: `Capture el monto del cr\u00E9dito.`,
@@ -85,21 +93,21 @@ selPeriodicidad.addEventListener('change', () => {
                 document.getElementById('imontoprestamo').focus();
             }
         });
-        throw new Error('Monto de credito nulo');
+        return;
     }
     
-    if(cantidadPagos == 0 || cantidadPagos == null || cantidadPagos == ''){
-        Swal.fire({
-            title: "Advertencia",
-            html: `Capture la periodicidad de los pagos del cr\u00E9dito.`,
-            icon: "warning"
-        }).then((result) => {
-            if(result.isConfirmed){
-                document.getElementById('numpagos').focus();
-            }
-        });
-        throw new Error('Periodicidad de pago nula');
-    }
+    // if(cantidadPagos == 0 || cantidadPagos == null || cantidadPagos == ''){
+    //     Swal.fire({
+    //         title: "Advertencia",
+    //         html: `Capture la periodicidad de los pagos del cr\u00E9dito.`,
+    //         icon: "warning"
+    //     }).then((result) => {
+    //         if(result.isConfirmed){
+    //             document.getElementById('numpagos').focus();
+    //         }
+    //     });
+    //     throw new Error('Periodicidad de pago nula');
+    // }
 
 
     let diasPeriodicidad = 0;
