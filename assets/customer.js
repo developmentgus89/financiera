@@ -66,90 +66,40 @@ const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
 const selectTipoCliente = document.querySelector('#typeClient');
 
-const selPeriodicidad = document.getElementById('periodicidad');
 
-selPeriodicidad.addEventListener('change', () => {
-    let periodicidadPago = document.getElementById('periodicidad').value;
-    let cantidadPagos    = document.getElementById('numpagos').value;
-    let montoPrestamo    = document.getElementById('imontoprestamo').value;
+/* Se empieza a ver el tema de calculo de solicitud de prestamo */
+const cantsemanSelect = document.getElementById('cantseman');
 
-    console.log(`Periodicidad de Pago ${cantidadPagos}`);
+cantsemanSelect.addEventListener('change', () => {
+    let cantseman = document.getElementById('cantseman').value;
+    let sol_porceinteres = document.getElementById('sol_porceinteres');
+    let sol_cantprestamo = document.getElementById('sol_cantprestamo');
 
-    if(montoPrestamo == 0 || montoPrestamo == null || montoPrestamo == ''){
+    const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
+    const interesCalculado = rango ? rango.interes : 0;
+
+    if(cantseman != 0){
+        sol_porceinteres.textContent = `${interesCalculado} %`;
+        sol_cantprestamo.textContent = ``;
+        calculoFecha(cantseman);
+    }else{
+        barprestamo.value = 0;
         Swal.fire({
             title: "Advertencia",
-            html: `Capture el monto del cr\u00E9dito.`,
+            html: `Seleccion la cantidad de semanas para la simulaci\u00F3n de pr\u00E9stamo.`,
             icon: "warning"
-        }).then((result) => {
-            if(result.isConfirmed){
-                document.getElementById('imontoprestamo').focus();
-            }
         });
-        throw new Error('Monto de credito nulo');
     }
-    
-    if(cantidadPagos == 0 || cantidadPagos == null || cantidadPagos == ''){
-        Swal.fire({
-            title: "Advertencia",
-            html: `Capture la periodicidad de los pagos del cr\u00E9dito.`,
-            icon: "warning"
-        }).then((result) => {
-            if(result.isConfirmed){
-                document.getElementById('numpagos').focus();
-            }
-        });
-        throw new Error('Periodicidad de pago nula');
-    }
+    calculoFecha(cantseman);
 
 
-    let diasPeriodicidad = 0;
-    switch(parseInt(periodicidadPago)){
-        //Semanal  
-        case 7:
-            diasPeriodicidad = 7;
-            document.getElementById('descPeriodicidad').innerHTML = `SEMANAL`;
-            
-            let interes = document.getElementById('interesfijo').value;
-            interes = interes.replace(' %','');
 
-            montoPrestamo    = montoPrestamo.replace('MXN ', '').replace(',','');
-            let preInteres   = (montoPrestamo * interes) / 100;
-            let totalInteres = preInteres * cantidadPagos;
-            let granTotal    = parseFloat(montoPrestamo) + parseFloat(totalInteres);
-            let pagoPeriodo  = granTotal / cantidadPagos;
-
-            let for_pagoPeriodo     = parseFloat(pagoPeriodo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-            let for_interesPrestamo = parseFloat(totalInteres).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-            let for_total           = parseFloat(granTotal).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-
-            document.getElementById('pagoPeriodo').innerHTML   = `MXN ${for_pagoPeriodo}`;
-            document.getElementById('interesTotal').innerHTML  = `MXN ${for_interesPrestamo}`;
-            document.getElementById('totalPrestamo').innerHTML = `MXN ${for_total}`;
+});
 
 
-            
-            break;
-
-        //Quincenal
-        case 15:
-            diasPeriodicidad = 15;
-            document.getElementById('descPeriodicidad').innerHTML = `QUINCENAL`;
-
-            
-            break;
-
-        //Mensual
-        case 30:
-            diasPeriodicidad = 30;
-            document.getElementById('descPeriodicidad').innerHTML = `MENSUAL`;
-            break;
-        
-        default:
-            throw new Error('La periodicidad seleccionada no es valida');
-            return;
-   }
-
-   calculoFecha(cantidadPagos, diasPeriodicidad);
+barprestamosoli.addEventListener('input', () => {
+   
+   calculoFecha(cantidadPagos);
 
 });
 
@@ -162,12 +112,13 @@ const calculaCantidadPrestamo = () => {
  * @param {number} cantidadPagos 
  * @param {number} diasPeriodicidad 
  */
-const calculoFecha = (cantidadPagos, diasPeriodicidad) => {
+const calculoFecha = (cantidadPagos) => {
+    console.log(cantidadPagos);
     let hoy = new Date();
-    let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * diasPeriodicidad * 24 * 60 * 60 * 1000));
+    let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * 7 * 24 * 60 * 60 * 1000));
     let fechaFormateada = formatDate(fechaAproxLiquidacion);
 
-    document.getElementById('dtfechaestliquidacion').value = fechaFormateada;
+    document.getElementById('dtFechaLiquid').value = fechaFormateada;
 }
 
 
@@ -204,9 +155,8 @@ btnInsertarCliente.addEventListener('click', () => {
     let clientDateRegister = document.getElementById('clientDateRegister');
     let clienteStatus      = document.getElementById('clienteStatus');
     
-    let imontoprestamo = document.getElementById('imontoprestamo');
-    let numpagos       = document.getElementById('numpagos');
-    let periodicidad   = document.getElementById('periodicidad');
+    let cantseman = document.getElementById('cantseman');
+    let barprestamosoli       = document.getElementById('barprestamosoli');
 
 
     const validateFormCliente = () => {
@@ -224,10 +174,9 @@ btnInsertarCliente.addEventListener('click', () => {
         ];
 
         const fieldsSolCredito = [
-            {element: imontoprestamo, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.'},
-            {element: numpagos, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.'},
-            {element: periodicidad, message: 'Ingrese los periodos de pago.'},
-        ]
+            {element: cantseman, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.'},
+            {element: barprestamosoli, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.'},
+        ];
 
         //validadores de error
         let hasErrorDatos      = false;
@@ -265,7 +214,7 @@ btnInsertarCliente.addEventListener('click', () => {
 
         for (const fieldSolCredito of fieldsSolCredito) {
             removeError(fieldSolCredito.element);
-            if (fieldSolCredito.element.value === '' || fieldSolCredito.element.value === null) {
+            if (fieldSolCredito.element.value === '' || fieldSolCredito.element.value === null || fieldSolCredito.element.value === '0') {
                 showError(fieldSolCredito.element, fieldSolCredito.message);
                 fieldSolCredito.element.focus();
                 hasErrorSolCredito = true;
