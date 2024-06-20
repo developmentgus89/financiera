@@ -62,3 +62,16 @@ const formatter = new Intl.NumberFormat('es-MX', {
     currency: 'MXN',
     minimumFractionDigits: 2
 });
+
+// Clasificacion de rangos de interes para los creditos
+const  rangosInteres = [
+    { min: 1, max: 8, interes: 5.12 },
+    { min: 9, max: 10, interes: 5.76 },
+    { min: 11, max: 12, interes: 6.38 },
+    { min: 13, max: 14, interes: 7.04 },
+    { min: 15, max: 16, interes: 7.76 },
+    { min: 17, max: 18, interes: 8.4 },
+    { min: 19, max: 20, interes: 9.04 },
+    { min: 21, max: 22, interes: 9.68 },
+    { min: 23, max: 24, interes: 10.32 }
+];

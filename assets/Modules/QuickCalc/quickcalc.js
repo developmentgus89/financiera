@@ -12,35 +12,9 @@ barprestamo.value = 0;
 
 barprestamo.addEventListener('input', () => {
     let cantseman = document.getElementById("cantseman").value;
-    let interesCalculado = 0;
 
-    if(cantseman > 0 && cantseman <= 8){
-        interesCalculado = 5.12;
-    }
-    if(cantseman >= 9 && cantseman <= 10){
-        interesCalculado = 5.76;
-    }
-    if(cantseman >= 11 && cantseman <= 12){
-        interesCalculado = 6.38;
-    }
-    if(cantseman >= 13 && cantseman <= 14){
-        interesCalculado = 7.04;
-    }
-    if(cantseman >= 14 && cantseman <= 16){
-        interesCalculado = 7.76;
-    }
-    if(cantseman >= 16 && cantseman <= 18){
-        interesCalculado = 8.4;
-    }
-    if(cantseman >= 18 && cantseman <= 20){
-        interesCalculado = 9.04;
-    }
-    if(cantseman >= 20 && cantseman <= 22){
-        interesCalculado = 9.68;
-    }
-    if(cantseman >= 22 && cantseman <= 24){
-        interesCalculado = 10.32;
-    }
+    const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
+    const interesCalculado = rango ? rango.interes : 0;
 
     if(cantseman != 0){
         let preinteres = (barprestamo.value * interesCalculado) / 100;
@@ -66,35 +40,9 @@ barprestamo.addEventListener('input', () => {
 
 cantsemanSelect.addEventListener('change', () => {
     let cantseman = document.getElementById("cantseman").value;
-    let interesCalculado = 0;
-
-    if(cantseman > 0 && cantseman <= 8){
-        interesCalculado = 5.12;
-    }
-    if(cantseman >= 9 && cantseman <= 10){
-        interesCalculado = 5.76;
-    }
-    if(cantseman >= 11 && cantseman <= 12){
-        interesCalculado = 6.38;
-    }
-    if(cantseman >= 13 && cantseman <= 14){
-        interesCalculado = 7.04;
-    }
-    if(cantseman >= 14 && cantseman <= 16){
-        interesCalculado = 7.76;
-    }
-    if(cantseman >= 16 && cantseman <= 18){
-        interesCalculado = 8.4;
-    }
-    if(cantseman >= 18 && cantseman <= 20){
-        interesCalculado = 9.04;
-    }
-    if(cantseman >= 20 && cantseman <= 22){
-        interesCalculado = 9.68;
-    }
-    if(cantseman >= 22 && cantseman <= 24){
-        interesCalculado = 10.32;
-    }
+    
+    const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
+    const interesCalculado = rango ? rango.interes : 0;
 
     if(cantseman != 0){
         let preinteres = (barprestamo.value * interesCalculado) / 100;
