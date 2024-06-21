@@ -205,7 +205,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                     </div>
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="">Seleccione la cantidad de semanas:</label>
                                                                     <select class="form-control" name="cantseman" id="cantseman">
@@ -234,6 +234,14 @@ $fecha_actual = $formatter->format(new DateTime());
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                            <div class="col-md-6" style="text-align: center;">
+                                                                <div class="form-group">
+                                                                    <label for="customRange1">Porcentaje de inter&eacute;s del pr&eacute;stamo:</label>
+                                                                    <h2 class="mb-5">
+                                                                        <div id="sol_porcentajeinteres"> 0.00 %</div>
+                                                                    </h2>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <hr>
                                                         <div class="row">
@@ -249,28 +257,43 @@ $fecha_actual = $formatter->format(new DateTime());
                                                                 <div class="row">
                                                                     <div class="col-md-3">
                                                                         <div class="callout callout-success">
-                                                                            <h5>Pr&eacute;stamo Solicitado:</h5>
-                                                                            <h2>
+                                                                            <h5>Pr&eacute;stamo Solicitado</h5>
+                                                                            <h4>
                                                                                 <div id="sol_cantprestamo">$ 0.00 MXN</div>
-                                                                            </h2>
+                                                                            </h4>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-3">
                                                                         <div class="callout callout-success">
-                                                                            <h5>Porcentaje de Inter&eacute;s:</h5>
-                                                                            <h2>
-                                                                                <div id="sol_porceinteres">0.00 %</div>
-                                                                            </h2>
+                                                                            <h5>Total de Intereses</h5>
+                                                                            <h4>
+                                                                                <div id="sol_totalInteres">$ 0.00 MXN</div>
+                                                                            </h4>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-3">
                                                                         <div class="callout callout-success">
-                                                                            <h5>Fecha estimada de liquidaci&oacute;n:</h5>
-                                                                            <div class="form-group">
-                                                                                <input type="text"
-                                                                                    class="form-control" name="dtFechaLiquid" id="dtFechaLiquid" aria-describedby="helpId" readonly>
-                                                                                <small id="helpdtFechaLiquid" class="form-text text-muted"> AAAA/MM/DD</small>
-                                                                            </div>
+                                                                            <h5>Pago por semana</h5>
+                                                                            <h4>
+                                                                                <div id="sol_pagosemanal">$ 0.00 MXN</div>
+                                                                            </h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="callout callout-success">
+                                                                            <h5>Total</h5>
+                                                                            <h4>
+                                                                                <div id="sol_totalPrestamo">$ 0.00 MXN</div>
+                                                                            </h4>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label for="dtFechaLiquid">Fecha estimada de liquidaci&oacute;n:</label>
+                                                                            <input type="text" class="form-control mb-2" name="dtFechaLiquid" id="dtFechaLiquid" aria-describedby="helpId" placeholder="AAAA / MM / DD" readonly>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -653,5 +676,5 @@ require_once('../utils/settings/config.financiera.php');
 <script src="../assets/Modules/Clients/GoogleMaps/maps.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap" async defer></script>
 <script src="../assets/Modules/Clients/DropFile/dropfilezone.js"></script>
-<script type="module" src="../assets/customer.js"></script>
 <script src="../assets/conf.js"></script>
+<script type="module" src="../assets/customer.js"></script>

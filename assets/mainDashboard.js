@@ -4,6 +4,58 @@ $(function (){
     $('#range_2').ionRangeSlider();
 });
 
+const baseURL = '../Controllers/DashBoardController.php';
+
+const getCountClients = async () => {
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'operation=countClients'
+        });
+
+        if (!response.ok) {
+            throw new Error(`No se puede alcanzar el controlador`);
+        }
+
+        const data = await response.json();
+        
+        document.getElementById('totalClientes').textContent = `${ data[0].total}`;
+
+    } catch (error) {
+        throw new Error(`No se puede obtener el conteo de clientes: ${error.message}`);
+    }
+}
+
+const getCountInvestors = async () => {
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'operation=countInvestors'
+        });
+
+        if (!response.ok) {
+            throw new Error(`No se puede alcanzar el controlador`);
+        }
+
+        const data = await response.json();
+        
+        document.getElementById('totalInversionistas').textContent = `${ data[0].total}`;
+
+    } catch (error) {
+        throw new Error(`No se puede obtener el conteo de clientes: ${error.message}`);
+    }
+}
+
+getCountClients();
+getCountInvestors();
 
 // toastr.options.onclick = function () { alert('Hola mundo'); }
 // toastr.options.timeOut = 0;
