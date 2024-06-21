@@ -65,6 +65,9 @@ const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
 const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
 const selectTipoCliente = document.querySelector('#typeClient');
+const barprestamosoli = document.getElementById('barprestamosoli');
+
+barprestamosoli.value = 0;
 
 
 /* Se empieza a ver el tema de calculo de solicitud de prestamo */
@@ -72,18 +75,32 @@ const cantsemanSelect = document.getElementById('cantseman');
 
 cantsemanSelect.addEventListener('change', () => {
     let cantseman = document.getElementById('cantseman').value;
-    let sol_porceinteres = document.getElementById('sol_porceinteres');
-    let sol_cantprestamo = document.getElementById('sol_cantprestamo');
+    let barprestamosoli       = document.getElementById('barprestamosoli');
+    let sol_porcentajeinteres = document.getElementById('sol_porcentajeinteres');
+    let sol_totalInteres      = document.getElementById('sol_totalInteres');
+    let sol_cantprestamo      = document.getElementById('sol_cantprestamo');
+    let sol_totalPrestamo     = document.getElementById('sol_totalPrestamo');
+    let sol_pagosemanal       = document.getElementById('sol_pagosemanal');
 
     const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
     const interesCalculado = rango ? rango.interes : 0;
 
-    if(cantseman != 0){
-        sol_porceinteres.textContent = `${interesCalculado} %`;
-        sol_cantprestamo.textContent = ``;
+    if (cantseman != 0) {
+
+        let preinteres = (barprestamosoli.value * interesCalculado) / 100;
+        let totalInteres = preinteres * cantseman;
+        let granTotal = parseFloat(barprestamosoli.value) + parseFloat(totalInteres);
+        let pagoPeriodo = granTotal / cantseman;
+
+        sol_porcentajeinteres.textContent = `${interesCalculado} %`;
+        sol_totalInteres.textContent      = `${formatter.format(totalInteres)} MXN`;
+        sol_cantprestamo.textContent      = `${formatter.format(barprestamosoli.value)} MXN`;
+        sol_totalPrestamo.textContent     = `${formatter.format(granTotal)} MXN`;
+        sol_pagosemanal.textContent       = `${formatter.format(pagoPeriodo)} MXN`;
+
         calculoFecha(cantseman);
-    }else{
-        barprestamo.value = 0;
+    } else {
+        barprestamosoli.value = 0;
         Swal.fire({
             title: "Advertencia",
             html: `Seleccion la cantidad de semanas para la simulaci\u00F3n de pr\u00E9stamo.`,
@@ -92,14 +109,44 @@ cantsemanSelect.addEventListener('change', () => {
     }
     calculoFecha(cantseman);
 
-
-
 });
 
 
 barprestamosoli.addEventListener('input', () => {
-   
-   calculoFecha(cantidadPagos);
+
+    let cantseman = document.getElementById('cantseman').value;
+    let barprestamosoli       = document.getElementById('barprestamosoli');
+    let sol_porcentajeinteres = document.getElementById('sol_porcentajeinteres');
+    let sol_totalInteres      = document.getElementById('sol_totalInteres');
+    let sol_cantprestamo      = document.getElementById('sol_cantprestamo');
+    let sol_totalPrestamo     = document.getElementById('sol_totalPrestamo');
+    let sol_pagosemanal       = document.getElementById('sol_pagosemanal');
+
+    const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
+    const interesCalculado = rango ? rango.interes : 0;
+
+    if (cantseman != 0) {
+        let preinteres = (barprestamosoli.value * interesCalculado) / 100;
+        let totalInteres = preinteres * cantseman;
+        let granTotal = parseFloat(barprestamosoli.value) + parseFloat(totalInteres);
+        let pagoPeriodo = granTotal / cantseman;
+
+        sol_porcentajeinteres.textContent = `${interesCalculado} %`;
+        sol_totalInteres.textContent      = `${formatter.format(totalInteres)} MXN`;
+        sol_cantprestamo.textContent      = `${formatter.format(barprestamosoli.value)} MXN`;
+        sol_totalPrestamo.textContent     = `${formatter.format(granTotal)} MXN`;
+        sol_pagosemanal.textContent       = `${formatter.format(pagoPeriodo)} MXN`;
+
+        calculoFecha(cantseman);
+    } else {
+        barprestamosoli.value = 0;
+        Swal.fire({
+            title: "Advertencia",
+            html: `Seleccion la cantidad de semanas para la simulaci\u00F3n de pr\u00E9stamo.`,
+            icon: "warning"
+        });
+    }
+    calculoFecha(cantseman);
 
 });
 
@@ -122,16 +169,16 @@ const calculoFecha = (cantidadPagos) => {
 }
 
 
-const formatDate = (fecha) =>{
-    let dia  = fecha.getDate();
-    let mes  = fecha.getMonth() + 1;
+const formatDate = (fecha) => {
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth() + 1;
     let year = fecha.getFullYear();
 
-    if(dia < 10){
+    if (dia < 10) {
         dia = '0' + dia;
     }
 
-    if(mes < 10){
+    if (mes < 10) {
         mes = '0' + mes;
     }
 
@@ -145,45 +192,45 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre            = document.getElementById('clinombre');
-    let capelpat           = document.getElementById('cliapaterno');
-    let capelmat           = document.getElementById('cliamaterno');
-    let ctelefono          = document.getElementById('ctelefono');
-    let cedad              = document.getElementById('cliEdad');
-    let typeClient         = document.getElementById('typeClient');
-    let cdatebirthday      = document.getElementById('clientDate');
+    let cnombre = document.getElementById('clinombre');
+    let capelpat = document.getElementById('cliapaterno');
+    let capelmat = document.getElementById('cliamaterno');
+    let ctelefono = document.getElementById('ctelefono');
+    let cedad = document.getElementById('cliEdad');
+    let typeClient = document.getElementById('typeClient');
+    let cdatebirthday = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus      = document.getElementById('clienteStatus');
-    
+    let clienteStatus = document.getElementById('clienteStatus');
+
     let cantseman = document.getElementById('cantseman');
-    let barprestamosoli       = document.getElementById('barprestamosoli');
+    let barprestamosoli = document.getElementById('barprestamosoli');
 
 
     const validateFormCliente = () => {
 
         const fieldsDatos = [
-            {element: cnombre, message: 'Ingrese el nombre del cliente'},
-            {element: capelpat, message: 'Ingrese el apellido paterno del cliente'},
-            {element: capelmat, message: 'Ingrese el apellido materno del cliente'},
-            {element: cedad, message: 'Ingrese la edad del cliente'},
-            {element: typeClient, message: 'Ingrese el tipo de cliente'},
-            {element: clienteStatus, message: 'Seleccione el estatus del cliente'},
-            {element: cdatebirthday, message: 'Ingrese la fecha de nacimiento del cliente'},
-            {element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente'},
-            {element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono'},
+            { element: cnombre, message: 'Ingrese el nombre del cliente' },
+            { element: capelpat, message: 'Ingrese el apellido paterno del cliente' },
+            { element: capelmat, message: 'Ingrese el apellido materno del cliente' },
+            { element: cedad, message: 'Ingrese la edad del cliente' },
+            { element: typeClient, message: 'Ingrese el tipo de cliente' },
+            { element: clienteStatus, message: 'Seleccione el estatus del cliente' },
+            { element: cdatebirthday, message: 'Ingrese la fecha de nacimiento del cliente' },
+            { element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente' },
+            { element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono' },
         ];
 
         const fieldsSolCredito = [
-            {element: cantseman, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.'},
-            {element: barprestamosoli, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.'},
+            { element: cantseman, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.' },
+            { element: barprestamosoli, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.' },
         ];
 
         //validadores de error
-        let hasErrorDatos      = false;
+        let hasErrorDatos = false;
         let hasErrorSolCredito = false;
 
         //contadores por tab
-        let tabDatosCount     = 0;
+        let tabDatosCount = 0;
         let tabDatosSolCredit = 0;
 
         for (const fieldDatos of fieldsDatos) {
@@ -193,7 +240,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 fieldDatos.element.focus();
                 hasErrorDatos = true;
                 document.getElementById('tabDatos').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
-                tabDatosCount ++;
+                tabDatosCount++;
                 Swal.fire({
                     title: "Advertencia",
                     html: `Tienes campos necesarios en los tabs con este icono: 
@@ -201,15 +248,15 @@ btnInsertarCliente.addEventListener('click', () => {
                             <i class="fas fa-exclamation-triangle"></i>
                         </span>.`,
                     icon: "warning"
-                  });
+                });
                 break;
             }
         }
 
-        if(!hasErrorDatos){
+        if (!hasErrorDatos) {
             removeError(ctelefono);
             document.getElementById('tabDatos').innerHTML = ``;
-            tabDatosCount --;
+            tabDatosCount--;
         }
 
         for (const fieldSolCredito of fieldsSolCredito) {
@@ -219,7 +266,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 fieldSolCredito.element.focus();
                 hasErrorSolCredito = true;
                 document.getElementById('solCredito').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
-                tabDatosSolCredit ++;
+                tabDatosSolCredit++;
                 Swal.fire({
                     title: "Advertencia",
                     html: `Tienes campos necesarios en los tabs con este icono: 
@@ -227,18 +274,18 @@ btnInsertarCliente.addEventListener('click', () => {
                             <i class="fas fa-exclamation-triangle"></i>
                         </span>.`,
                     icon: "warning"
-                  });
+                });
                 break;
             }
         }
 
-        if(!hasErrorSolCredito){
-            removeError(periodicidad);
+        if (!hasErrorSolCredito) {
+            removeError(barprestamosoli);
             document.getElementById('solCredito').innerHTML = ``;
-            tabDatosSolCredit --;
+            tabDatosSolCredit--;
         }
 
-        
+
 
         // insertarCliente(
         //     cnombre.value,
@@ -788,7 +835,7 @@ const readCodigosPostal = async (zipcode) => {
         let colonias = document.getElementById('coloniadir');
         document.getElementById('entidaddir').value = data[0].cnombreestprovincia;
         document.getElementById('municipiodir').value = data[0].cnomlocmun;
-        
+
         const optionsHTML = data.map(col => {
             return `<option value="${col.icvecatcolonia}">${col.cnombre}</option>`;
         }).join('');
@@ -797,12 +844,12 @@ const readCodigosPostal = async (zipcode) => {
 
     } catch (error) {
         throw new Error(`No se pueden obtener los codigos postales: ${error.message}`);
-    } 
+    }
 }
 
 const varCP = document.getElementById('cp');
 
-varCP.addEventListener('blur', ()=>{
+varCP.addEventListener('blur', () => {
     let cp = document.getElementById('cp').value;
 
     readCodigosPostal(cp);
