@@ -229,6 +229,8 @@ btnInsertarCliente.addEventListener('click', () => {
     let numexterior = document.getElementById('numexterior');
     let pricalle    = document.getElementById('pricalle');
     let segcalle    = document.getElementById('segcalle');
+    let cp          = document.getElementById('cp');
+    let coloniadir  = document.getElementById('coloniadir');
 
 
     const validateFormCliente = () => {
@@ -264,17 +266,21 @@ btnInsertarCliente.addEventListener('click', () => {
             {element: numexterior, message: 'Ingrese el n\u00famero exterior.'},
             {element: pricalle, message: 'Ingrese la primer entre calle.'},
             {element: segcalle, message: 'Ingrese la segunda entre calle.'},
+            {element: cp, message: 'Ingrese el c\u00F3digo postal.'},
+            {element: coloniadir, message: 'Seleccione una colonia.'},
         ]
 
         //validadores de error
-        let hasErrorDatos = false;
-        let hasErrorSolCredito = false;
+        let hasErrorDatos       = false;
+        let hasErrorSolCredito  = false;
         let hasErrorCtaBancaria = false;
+        let hasErrorDomicilio   = false;
 
         //contadores para los tabs
         let tabDatosCount       = 0;
         let tabDatosSolCredit   = 0;
         let tabDatosCtaBancaria = 0;
+        let tabDatosDomicilio   = 0;
 
         // Verificacion de los campos de los datos del cliente
         for (const fieldDatos of fieldsDatos) {
@@ -356,6 +362,34 @@ btnInsertarCliente.addEventListener('click', () => {
             removeError(selCatIcveBancoCli);
             document.getElementById('tabCtasBancarias').innerHTML = ``;
             tabDatosCtaBancaria--;
+        }
+
+        // Datos del domicilio del cliente
+
+        for( const fieldDatosDomicilio of fieldsDomicilio){
+            removeError(fieldDatosDomicilio.element);
+            if(fieldDatosDomicilio.element.value === '' || fieldDatosDomicilio.element.value === null || fieldDatosDomicilio.element.value === '0'){
+                showError(fieldDatosDomicilio.element, fieldDatosDomicilio.message);
+                fieldDatosDomicilio.element.focus();
+                hasErrorDomicilio = true;
+                document.getElementById('tabDireccion').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosDomicilio++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                });
+                break;
+            }
+        }
+
+        if (!hasErrorDomicilio) {
+            removeError(selCatIcveBancoCli);
+            document.getElementById('tabDireccion').innerHTML = ``;
+            tabDatosDomicilio--;
         }
 
 
@@ -882,7 +916,7 @@ const drawCatalogBanks = async (element, icvebanco = null) => {
         }
     }).join('');
 
-    element.innerHTML = `<option value="">SELECCIONE BANCO</option>` + optionsHTML;
+    element.innerHTML = `<option value="0">SELECCIONE BANCO</option>` + optionsHTML;
 }
 
 const readCodigosPostal = async (zipcode) => {

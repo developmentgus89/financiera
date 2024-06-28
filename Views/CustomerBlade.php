@@ -388,7 +388,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="pricalle">Primer entre calle</label>
+                                                                    <label for="pricalle">Primer entre calle <span style="color: red">*</span></label>
                                                                     <input type="text" class="form-control" name="pricalle" id="pricalle">
                                                                 </div>
                                                             </div>
@@ -396,14 +396,14 @@ $fecha_actual = $formatter->format(new DateTime());
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="segcalle">Segunda entre calle</label>
+                                                                    <label for="segcalle">Segunda entre calle <span style="color: red">*</span></label>
                                                                     <input type="text" class="form-control" name="segcalle" id="segcalle">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="cp">Código Postal (CP)<span style="color: red">*</span>: </label>
-                                                                    <input type="text" class="form-control" name="cp" id="cp">
+                                                                    <input type="text" class="form-control" name="cp" id="cp" minlength="5" maxlength="5">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -422,7 +422,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="coloniadir">Asentamiento o Colonia</label>
+                                                                    <label for="coloniadir">Asentamiento o Colonia <span style="color: red">*</span>:</label>
                                                                     <select class="form-control" name="coloniadir" id="coloniadir">
                                                                     </select>
                                                                 </div>
