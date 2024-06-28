@@ -106,6 +106,12 @@ cantsemanSelect.addEventListener('change', () => {
             html: `Seleccion la cantidad de semanas para la simulaci\u00F3n de pr\u00E9stamo.`,
             icon: "warning"
         });
+
+        sol_porcentajeinteres.textContent = `0.00 %`;
+        sol_totalInteres.textContent      = `$ 0.00 MXN`;
+        sol_cantprestamo.textContent      = `$ 0.00 MXN`;
+        sol_totalPrestamo.textContent     = `$ 0.00 MXN`;
+        sol_pagosemanal.textContent       = `$ 0.00 MXN`;
     }
     calculoFecha(cantseman);
 
@@ -145,6 +151,12 @@ barprestamosoli.addEventListener('input', () => {
             html: `Seleccion la cantidad de semanas para la simulaci\u00F3n de pr\u00E9stamo.`,
             icon: "warning"
         });
+
+        sol_porcentajeinteres.textContent = `0.00 %`;
+        sol_totalInteres.textContent      = `$ 0.00 MXN`;
+        sol_cantprestamo.textContent      = `$ 0.00 MXN`;
+        sol_totalPrestamo.textContent     = `$ 0.00 MXN`;
+        sol_pagosemanal.textContent       = `$ 0.00 MXN`;
     }
     calculoFecha(cantseman);
 
@@ -192,22 +204,35 @@ btnAgregar.addEventListener('click', () => {
 });
 
 btnInsertarCliente.addEventListener('click', () => {
-    let cnombre = document.getElementById('clinombre');
-    let capelpat = document.getElementById('cliapaterno');
-    let capelmat = document.getElementById('cliamaterno');
-    let ctelefono = document.getElementById('ctelefono');
-    let cedad = document.getElementById('cliEdad');
-    let typeClient = document.getElementById('typeClient');
-    let cdatebirthday = document.getElementById('clientDate');
+    // Datos personales del cliente
+    let cnombre            = document.getElementById('clinombre');
+    let capelpat           = document.getElementById('cliapaterno');
+    let capelmat           = document.getElementById('cliamaterno');
+    let ctelefono          = document.getElementById('ctelefono');
+    let cedad              = document.getElementById('cliEdad');
+    let typeClient         = document.getElementById('typeClient');
+    let cdatebirthday      = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus = document.getElementById('clienteStatus');
+    let clienteStatus      = document.getElementById('clienteStatus');
 
-    let cantseman = document.getElementById('cantseman');
+    // Solicitud de credito
+    let cantseman       = document.getElementById('cantseman');
     let barprestamosoli = document.getElementById('barprestamosoli');
+
+    // Datos de la cuenta bancarias
+    let ctabancariacli     = document.getElementById('ctabancariacli');
+    let typeAccountBankCli = document.getElementById('typeAccountBankCli');
+    let selCatIcveBancoCli = document.getElementById('selCatIcveBancoCli');
+
+    // Datos del domicilio del cliente
+    let ccalle      = document.getElementById('ccalle');
+    let numexterior = document.getElementById('numexterior');
+    let pricalle    = document.getElementById('pricalle');
+    let segcalle    = document.getElementById('segcalle');
 
 
     const validateFormCliente = () => {
-
+        // mensajes de validacion para el Tab Datos Personales
         const fieldsDatos = [
             { element: cnombre, message: 'Ingrese el nombre del cliente' },
             { element: capelpat, message: 'Ingrese el apellido paterno del cliente' },
@@ -219,20 +244,39 @@ btnInsertarCliente.addEventListener('click', () => {
             { element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente' },
             { element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono' },
         ];
-
+        
+        // Mensajes de validacion para el Tab Solicitud de credito
         const fieldsSolCredito = [
             { element: cantseman, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.' },
             { element: barprestamosoli, message: 'Ingrese un monto para el cr\u00E9dito que se solicita.' },
         ];
 
+        // Mensajes de validacion para el Tab de Cuentas Bancarias
+        const fieldsCuentaBancaria = [
+            {element: ctabancariacli , message: 'Ingrese el n\u00famero de tarjeta, cuenta o CLABE bancaria.'},
+            {element: typeAccountBankCli, message: 'Seleccione el tipo de cuenta bancaria.'},
+            {element: selCatIcveBancoCli, message: 'Seleccione la instituci[on bancaria.'}
+        ]
+
+        // Mensaje de validacion para el tab de Direccion del Cliente
+        const fieldsDomicilio = [
+            {element: ccalle, message: 'Ingrese el nombre de la calle'},
+            {element: numexterior, message: 'Ingrese el n\u00famero exterior.'},
+            {element: pricalle, message: 'Ingrese la primer entre calle.'},
+            {element: segcalle, message: 'Ingrese la segunda entre calle.'},
+        ]
+
         //validadores de error
         let hasErrorDatos = false;
         let hasErrorSolCredito = false;
+        let hasErrorCtaBancaria = false;
 
-        //contadores por tab
-        let tabDatosCount = 0;
-        let tabDatosSolCredit = 0;
+        //contadores para los tabs
+        let tabDatosCount       = 0;
+        let tabDatosSolCredit   = 0;
+        let tabDatosCtaBancaria = 0;
 
+        // Verificacion de los campos de los datos del cliente
         for (const fieldDatos of fieldsDatos) {
             removeError(fieldDatos.element);
             if (fieldDatos.element.value === '' || fieldDatos.element.value === null) {
@@ -259,6 +303,7 @@ btnInsertarCliente.addEventListener('click', () => {
             tabDatosCount--;
         }
 
+        // Datos de la solicitud de credito del cliente
         for (const fieldSolCredito of fieldsSolCredito) {
             removeError(fieldSolCredito.element);
             if (fieldSolCredito.element.value === '' || fieldSolCredito.element.value === null || fieldSolCredito.element.value === '0') {
@@ -284,6 +329,36 @@ btnInsertarCliente.addEventListener('click', () => {
             document.getElementById('solCredito').innerHTML = ``;
             tabDatosSolCredit--;
         }
+
+        // Datos de la cuenta bancaria del cliente
+
+        for(const fieldCtaBancaria of fieldsCuentaBancaria){
+            removeError(fieldCtaBancaria.element);
+            if(fieldCtaBancaria.element.value === '' || fieldCtaBancaria.element.value === null || fieldCtaBancaria.element.value === '0'){
+                showError(fieldCtaBancaria.element, fieldCtaBancaria.message);
+                fieldCtaBancaria.element.focus();
+                hasErrorCtaBancaria = true;
+                document.getElementById('tabCtasBancarias').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosCtaBancaria++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                });
+                break;
+            }
+        }
+
+        if (!hasErrorCtaBancaria) {
+            removeError(selCatIcveBancoCli);
+            document.getElementById('tabCtasBancarias').innerHTML = ``;
+            tabDatosCtaBancaria--;
+        }
+
+
 
 
 

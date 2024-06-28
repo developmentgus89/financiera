@@ -15,12 +15,13 @@ var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
   previewTemplate: previewTemplate,
   autoQueue: false, // Make sure the files aren't queued until manually added
   previewsContainer: "#previews", // Define the container to display the previews
-  clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+  clickable: ".fileinput-button", // Define the element that should be used as click trigger to select files.
+  acceptedFiles: 'application/pdf' 
 })
 
 myDropzone.on("addedfile", function (file) {
   // Hookup the start button
-  file.previewElement.querySelector(".start").onclick = function () { 
+  file.previewElement.querySelector(".start").onclick = function () {
     myDropzone.enqueueFile(file);
   }
 })

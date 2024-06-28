@@ -361,7 +361,7 @@ const verifInsInsvestor = (
     xhr.onload = function () {
         if (xhr.status === 200) {
             const inversionista = JSON.parse(xhr.responseText);
-
+            console.table(inversionista);
             if (!inversionista[0]) {
                 insertInvestor(
                     invnombre, invapaterno, invamaterno,
