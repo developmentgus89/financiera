@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+// FIXME: Cambia el tiempo de sesion ahorita son solo para pruebas
 $sessionLifetime = 180000;
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $sessionLifetime) {
