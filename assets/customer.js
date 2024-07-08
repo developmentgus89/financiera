@@ -232,6 +232,12 @@ btnInsertarCliente.addEventListener('click', () => {
     let cp          = document.getElementById('cp');
     let coloniadir  = document.getElementById('coloniadir');
 
+    // Datos de los documentos del cliente
+    let idComprobanteDom = document.getElementById('idComprobanteDom');
+    let idINEidentif     = document.getElementById('idINEidentif');
+    let idCompIngresos   = document.getElementById('idCompIngresos');
+
+
 
     const validateFormCliente = () => {
         // mensajes de validacion para el Tab Datos Personales
@@ -258,7 +264,7 @@ btnInsertarCliente.addEventListener('click', () => {
             {element: ctabancariacli , message: 'Ingrese el n\u00famero de tarjeta, cuenta o CLABE bancaria.'},
             {element: typeAccountBankCli, message: 'Seleccione el tipo de cuenta bancaria.'},
             {element: selCatIcveBancoCli, message: 'Seleccione la instituci[on bancaria.'}
-        ]
+        ];
 
         // Mensaje de validacion para el tab de Direccion del Cliente
         const fieldsDomicilio = [
@@ -268,19 +274,28 @@ btnInsertarCliente.addEventListener('click', () => {
             {element: segcalle, message: 'Ingrese la segunda entre calle.'},
             {element: cp, message: 'Ingrese el c\u00F3digo postal.'},
             {element: coloniadir, message: 'Seleccione una colonia.'},
+        ];
+
+        // Mensajes de validacion para el tab de los documentos del cliente
+
+        const fieldsDocumentos = [
+            {element: idComprobanteDom, message: 'Cargue el comprobante de domicilio.'},
+            {element: idINEidentif, message: 'Cargue el documento que corresponde a la INE.'}
         ]
 
         //validadores de error
-        let hasErrorDatos       = false;
-        let hasErrorSolCredito  = false;
-        let hasErrorCtaBancaria = false;
-        let hasErrorDomicilio   = false;
+        let hasErrorDatos         = false;
+        let hasErrorSolCredito    = false;
+        let hasErrorCtaBancaria   = false;
+        let hasErrorDomicilio     = false;
+        let hasErrorDocumentacion = false;
 
         //contadores para los tabs
         let tabDatosCount       = 0;
         let tabDatosSolCredit   = 0;
         let tabDatosCtaBancaria = 0;
         let tabDatosDomicilio   = 0;
+        let tabDatosDocumentos  = 0;
 
         // Verificacion de los campos de los datos del cliente
         for (const fieldDatos of fieldsDatos) {
@@ -306,7 +321,7 @@ btnInsertarCliente.addEventListener('click', () => {
         if (!hasErrorDatos) {
             removeError(ctelefono);
             document.getElementById('tabDatos').innerHTML = ``;
-            tabDatosCount--;
+            // tabDatosCount--;
         }
 
         // Datos de la solicitud de credito del cliente
@@ -333,7 +348,7 @@ btnInsertarCliente.addEventListener('click', () => {
         if (!hasErrorSolCredito) {
             removeError(barprestamosoli);
             document.getElementById('solCredito').innerHTML = ``;
-            tabDatosSolCredit--;
+            // tabDatosSolCredit--;
         }
 
         // Datos de la cuenta bancaria del cliente
@@ -361,7 +376,7 @@ btnInsertarCliente.addEventListener('click', () => {
         if (!hasErrorCtaBancaria) {
             removeError(selCatIcveBancoCli);
             document.getElementById('tabCtasBancarias').innerHTML = ``;
-            tabDatosCtaBancaria--;
+            // tabDatosCtaBancaria--;
         }
 
         // Datos del domicilio del cliente
@@ -389,24 +404,65 @@ btnInsertarCliente.addEventListener('click', () => {
         if (!hasErrorDomicilio) {
             removeError(selCatIcveBancoCli);
             document.getElementById('tabDireccion').innerHTML = ``;
-            tabDatosDomicilio--;
+            // tabDatosDomicilio--;
         }
 
+        for(const fieldDatosDocu of fieldsDocumentos){
+            removeError(fieldDatosDocu.element);
+            if(fieldDatosDocu.element.value === '' || fieldDatosDocu.element.value === null || fieldDatosDocu.element.value === '0'){
+                showError(fieldDatosDocu.element, fieldDatosDocu.message);
+                fieldDatosDocu.element.focus();
+                hasErrorDocumentacion = true;
+                document.getElementById('tabDocumentos').innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+                tabDatosDocumentos++;
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Tienes campos necesarios en los tabs con este icono: 
+                        <span id="tabDatos" style="color: #FC8804">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>.`,
+                    icon: "warning"
+                });
+                break;
+            }
+        }
 
+        if (!hasErrorDocumentacion) {
+            removeError(idINEidentif);
+            document.getElementById('tabDocumentos').innerHTML = ``;
+            // tabDatosDocumentos--;
+        }
 
+        console.log(tabDatosCount); 
+        console.log(tabDatosSolCredit);
+        console.log(tabDatosCtaBancaria);
+        console.log(tabDatosDomicilio);
+        console.log(tabDatosDocumentos); 
 
-
-        // insertarCliente(
-        //     cnombre.value,
-        //     capelpat.value,
-        //     capelmat.value,
-        //     cedad.value,
-        //     ctelefono.value,
-        //     typeClient.value,
-        //     cdatebirthday.value,
-        //     clientDateRegister.value,
-        //     clienteStatus.value
-        // );
+        if(tabDatosCount == 0 && tabDatosSolCredit == 0 && tabDatosCtaBancaria == 0 && tabDatosDomicilio == 0 && tabDatosDocumentos == 0){
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "¿Desea agregar los datos del cliente?",
+                text: "Recuerde que puede capturar los datos de referido.",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "No.",
+                confirmButtonText: "Si.",
+                reverseButtons: true
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    insertarCliente();
+                }else{
+                    $('#custom-tabs-one-referidos-tab').tab('show');
+                }
+            });
+        }
     }
 
     validateFormCliente();
@@ -819,6 +875,30 @@ const insertarCliente = (
     };
     xhr.send(params);
 };
+
+// TODO: Veriifcar el dia de mañana la inserción del cliente.
+const insertCustomer = async ( cnombre, capelpat, capelmat,
+    cedad, ctelefono, typeClient, cdatebirthday,
+    clientDateRegister, clienteStatus) => {
+        try{
+            const response = await fetch(baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error con la comunicacion con el servidor');
+            }
+    
+            const data = await response.json();
+
+        }catch(error){
+            throw new Error(`Error en el servidor ${error}`);
+        }
+}
 
 const leerTipoCliente = () => {
     const xhr = new XMLHttpRequest();

@@ -637,6 +637,5 @@ require_once('../utils/settings/config.financiera.php');
 ?>
 <script src="../assets/Modules/Clients/GoogleMaps/maps.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap" async defer></script>
-<script src="../assets/Modules/Clients/DropFile/dropfilezone.js"></script>
 <script src="../assets/conf.js"></script>
 <script type="module" src="../assets/customer.js"></script>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$sessionLifetime = 1800;
+$sessionLifetime = 180000;
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $sessionLifetime) {
     // Si la sesión ha expirado, destruirla

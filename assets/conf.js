@@ -20,6 +20,11 @@ function formatoDecimal(input) {
     input.value = valorFormateado;
 }
 
+/**
+ * 
+ * @param {HTMLElement} input 
+ * @param {String} message 
+ */
 const showError = (input, message) => {
     console.log('Valor de la variable input' + input);
     console.log('Valor de la variable message' + message);
@@ -39,7 +44,6 @@ const showError = (input, message) => {
  * @param {HTMLInputElement} input 
  */
 const removeError = (input) => {
-    console.log('El valor del input es: ' + input);
     const parent = input.parentElement;
     const errorSpan = parent.querySelector('.error-message');
     if (errorSpan) {
