@@ -85,7 +85,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-cuentasbancarias-tab" data-toggle="pill" href="#custom-tabs-cuentasbancarias" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
-                                            Cuentas Bancarias <span id="ctasBancarias" style="color: #FC8804"></span>
+                                            Cuentas Bancarias <span id="tabCtasBancarias" style="color: #FC8804"></span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -388,7 +388,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="pricalle">Primer entre calle</label>
+                                                                    <label for="pricalle">Primer entre calle <span style="color: red">*</span></label>
                                                                     <input type="text" class="form-control" name="pricalle" id="pricalle">
                                                                 </div>
                                                             </div>
@@ -396,14 +396,14 @@ $fecha_actual = $formatter->format(new DateTime());
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="segcalle">Segunda entre calle</label>
+                                                                    <label for="segcalle">Segunda entre calle <span style="color: red">*</span></label>
                                                                     <input type="text" class="form-control" name="segcalle" id="segcalle">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="cp">Código Postal (CP)<span style="color: red">*</span>: </label>
-                                                                    <input type="text" class="form-control" name="cp" id="cp">
+                                                                    <input type="text" class="form-control" name="cp" id="cp" minlength="5" maxlength="5">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -422,7 +422,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label for="coloniadir">Asentamiento o Colonia</label>
+                                                                    <label for="coloniadir">Asentamiento o Colonia <span style="color: red">*</span>:</label>
                                                                     <select class="form-control" name="coloniadir" id="coloniadir">
                                                                     </select>
                                                                 </div>
@@ -461,97 +461,59 @@ $fecha_actual = $formatter->format(new DateTime());
                                     <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel">
                                         <div class="card card-success">
                                             <div class="card-header">
-                                                <h3 class="card-title">Dropzone.js <small><em>jQuery File Upload</em> like look</small></h3>
+                                                <h3 class="card-title">Documentos de comprobaci&oacute;n del cliente</h3>
                                             </div>
                                             <div class="card-body">
-                                                <div id="actions" class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="btn-group w-100">
-                                                            <span class="btn btn-success col fileinput-button">
-                                                                <i class="fas fa-plus"></i>
-                                                                <span>Agregar Archivos</span>
-                                                            </span>
-                                                            <button type="submit" class="btn btn-primary col start">
-                                                                <i class="fas fa-upload"></i>
-                                                                <span>Cargar Archivos</span>
-                                                            </button>
-                                                            <button type="reset" class="btn btn-warning col cancel">
-                                                                <i class="fas fa-times-circle"></i>
-                                                                <span>Cancelar Archivos</span>
-                                                            </button>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                          <label for="idComprobanteDom">Comprobante de domicilio<span style="color: red">*</span>:</label>
+                                                          <input type="file" class="form-control-file" name="idComprobanteDom" id="idComprobanteDom" accept=".pdf, .jpg, .jpeg, .png">
+                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de domicilio es un documento obligatorio.</small>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6 d-flex align-items-center">
-                                                        <div class="fileupload-process w-100">
-                                                            <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                                            </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                          <label for="idINEidentif">INE identificaci&oacute;n<span style="color: red">*</span>:</label>
+                                                          <input type="file" class="form-control-file" name="idINEidentif" id="idINEidentif" accept=".pdf, .jpg, .jpeg, .png">
+                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">La INE o identificaci&oacute;n es un documento obligatorio.</small>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="table table-striped files" id="previews">
-                                                    <div id="template" class="row mt-2">
-                                                        <div class="col-auto">
-                                                            <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
-                                                        </div>
-                                                        <div class="col d-flex align-items-center">
-                                                            <p class="mb-0">
-                                                                <span class="lead" data-dz-name></span>
-                                                                (<span data-dz-size></span>)
-                                                            </p>
-                                                            <strong class="error text-danger" data-dz-errormessage></strong>
-                                                        </div>
-                                                        <div class="col-4 d-flex align-items-center">
-                                                            <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-auto d-flex align-items-center">
-                                                            <div class="btn-group">
-                                                                <button class="btn btn-primary start">
-                                                                    <i class="fas fa-upload"></i>
-                                                                    <span>Iniciar</span>
-                                                                </button>
-                                                                <button data-dz-remove class="btn btn-warning cancel">
-                                                                    <i class="fas fa-times-circle"></i>
-                                                                    <span>Cancelar</span>
-                                                                </button>
-                                                                <button data-dz-remove class="btn btn-danger delete">
-                                                                    <i class="fas fa-trash"></i>
-                                                                    <span>Eliminar</span>
-                                                                </button>
-                                                            </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                          <label for="idCompIngresos">Comprobante de Ingresos:</label>
+                                                          <input type="file" class="form-control-file" name="idCompIngresos" id="idCompIngresos" accept=".pdf, .jpg, .jpeg, .png">
+                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de ingresos es un documento opcional.</small>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>      
                                             </div>
                                             <!-- /.card-body -->
                                             <div class="card-footer">
-
+                                                <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-referidos" role="tabpanel">
                                         <div class="card card-success">
                                             <div class="card-header">
-                                                <h3 class="card-title">Referido</h3>
+                                                <h3 class="card-title">Datos del cliente que ha sido referido.</h3>
                                             </div>
                                             <div class="card-body">
-                                                Aqui irian los referidos o la persona que recomendo
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">Nombre</label>
-                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                                            <small id="helpId" class="form-text text-muted">Help text</small>
+                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId">
+                                                            <small id="helpId" class="form-text text-muted">Nombre completo del cliente que refiri&oacute;</small>
                                                         </div>
 
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="">Telefono</label>
+                                                            <label for="">Tel&eacute;fono</label>
                                                             <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
-                                                            <small id="helpId" class="form-text text-muted">Help text</small>
+                                                            <small id="helpId" class="form-text text-muted">N&uacute;mero fijo o m&oacute;vil.</small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -573,7 +535,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                             </div>
                                             <!-- /.card-body -->
                                             <div class="card-footer">
-
+                                                <strong> La informaci&oacute;n de referido es meramente opcional. </strong>
                                             </div>
                                         </div>
                                     </div>
@@ -675,6 +637,5 @@ require_once('../utils/settings/config.financiera.php');
 ?>
 <script src="../assets/Modules/Clients/GoogleMaps/maps.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap" async defer></script>
-<script src="../assets/Modules/Clients/DropFile/dropfilezone.js"></script>
 <script src="../assets/conf.js"></script>
 <script type="module" src="../assets/customer.js"></script>

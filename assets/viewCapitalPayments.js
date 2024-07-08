@@ -277,9 +277,6 @@ const uploadVoucherCapital = () => {
     formData.append('cveinversion', cveinversion);
     formData.append('amountCapPay', amountCapPay);
 
-    console.info(formData);
-    console.table(formData);
-
     fetch(baseURL, {method: 'POST', body: formData
     }).then(response => response.text()).then(data => {
             console.info(data);
@@ -310,7 +307,7 @@ const progressBar = () => {
             setTimeout(updateProgressBar, 100); // Ajusta el tiempo según sea necesario
         } else {
             document.getElementById("statusMessage").style.display = 'block';
-            // location.reload(); //? Para que la tia no le de F5
+            location.reload(); //? Para que la tia no le de F5
         }
     }
 

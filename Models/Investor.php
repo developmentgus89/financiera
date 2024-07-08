@@ -13,7 +13,7 @@ class Investor
     }
 
     
-    public function rowsCount($invnombre, $invapaterno, $invamaterno) : int
+    public function rowsCount($invnombre, $invapaterno, $invamaterno) : array
     {
         try {
             $query = "SELECT (

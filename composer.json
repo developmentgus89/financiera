@@ -1,0 +1,17 @@
+{
+    "name": "lenovo/financiera",
+    "autoload": {
+        "psr-4": {
+            "Lenovo\\Financiera\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "developmentgus89",
+            "email": "gusangulomele89@gmail.com"
+        }
+    ],
+    "require": {
+        "smalot/pdfparser": "^2.10"
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 session_start();
-
-$sessionLifetime = 1800;
+// FIXME: Cambia el tiempo de sesion ahorita son solo para pruebas
+$sessionLifetime = 180000;
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $sessionLifetime) {
     // Si la sesión ha expirado, destruirla
