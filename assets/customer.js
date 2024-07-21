@@ -75,12 +75,13 @@ const cantsemanSelect = document.getElementById('cantseman');
 
 cantsemanSelect.addEventListener('change', () => {
     let cantseman = document.getElementById('cantseman').value;
-    let barprestamosoli       = document.getElementById('barprestamosoli');
+    let barprestamosoli = document.getElementById('barprestamosoli');
     let sol_porcentajeinteres = document.getElementById('sol_porcentajeinteres');
-    let sol_totalInteres      = document.getElementById('sol_totalInteres');
-    let sol_cantprestamo      = document.getElementById('sol_cantprestamo');
-    let sol_totalPrestamo     = document.getElementById('sol_totalPrestamo');
-    let sol_pagosemanal       = document.getElementById('sol_pagosemanal');
+    let sol_totalInteres = document.getElementById('sol_totalInteres');
+    let sol_cantprestamo = document.getElementById('sol_cantprestamo');
+    let sol_totalPrestamo = document.getElementById('sol_totalPrestamo');
+    let sol_pagosemanal = document.getElementById('sol_pagosemanal');
+    let interesCredit = document.getElementById('interesCredit');
 
     const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
     const interesCalculado = rango ? rango.interes : 0;
@@ -93,10 +94,11 @@ cantsemanSelect.addEventListener('change', () => {
         let pagoPeriodo = granTotal / cantseman;
 
         sol_porcentajeinteres.textContent = `${interesCalculado} %`;
-        sol_totalInteres.textContent      = `${formatter.format(totalInteres)} MXN`;
-        sol_cantprestamo.textContent      = `${formatter.format(barprestamosoli.value)} MXN`;
-        sol_totalPrestamo.textContent     = `${formatter.format(granTotal)} MXN`;
-        sol_pagosemanal.textContent       = `${formatter.format(pagoPeriodo)} MXN`;
+        interesCredit.value = interesCalculado;
+        sol_totalInteres.textContent = `${formatter.format(totalInteres)} MXN`;
+        sol_cantprestamo.textContent = `${formatter.format(barprestamosoli.value)} MXN`;
+        sol_totalPrestamo.textContent = `${formatter.format(granTotal)} MXN`;
+        sol_pagosemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
 
         calculoFecha(cantseman);
     } else {
@@ -108,10 +110,10 @@ cantsemanSelect.addEventListener('change', () => {
         });
 
         sol_porcentajeinteres.textContent = `0.00 %`;
-        sol_totalInteres.textContent      = `$ 0.00 MXN`;
-        sol_cantprestamo.textContent      = `$ 0.00 MXN`;
-        sol_totalPrestamo.textContent     = `$ 0.00 MXN`;
-        sol_pagosemanal.textContent       = `$ 0.00 MXN`;
+        sol_totalInteres.textContent = `$ 0.00 MXN`;
+        sol_cantprestamo.textContent = `$ 0.00 MXN`;
+        sol_totalPrestamo.textContent = `$ 0.00 MXN`;
+        sol_pagosemanal.textContent = `$ 0.00 MXN`;
     }
     calculoFecha(cantseman);
 
@@ -121,12 +123,13 @@ cantsemanSelect.addEventListener('change', () => {
 barprestamosoli.addEventListener('input', () => {
 
     let cantseman = document.getElementById('cantseman').value;
-    let barprestamosoli       = document.getElementById('barprestamosoli');
+    let barprestamosoli = document.getElementById('barprestamosoli');
     let sol_porcentajeinteres = document.getElementById('sol_porcentajeinteres');
-    let sol_totalInteres      = document.getElementById('sol_totalInteres');
-    let sol_cantprestamo      = document.getElementById('sol_cantprestamo');
-    let sol_totalPrestamo     = document.getElementById('sol_totalPrestamo');
-    let sol_pagosemanal       = document.getElementById('sol_pagosemanal');
+    let sol_totalInteres = document.getElementById('sol_totalInteres');
+    let sol_cantprestamo = document.getElementById('sol_cantprestamo');
+    let sol_totalPrestamo = document.getElementById('sol_totalPrestamo');
+    let sol_pagosemanal = document.getElementById('sol_pagosemanal');
+    let interesCredit = document.getElementById('interesCredit');
 
     const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
     const interesCalculado = rango ? rango.interes : 0;
@@ -138,10 +141,11 @@ barprestamosoli.addEventListener('input', () => {
         let pagoPeriodo = granTotal / cantseman;
 
         sol_porcentajeinteres.textContent = `${interesCalculado} %`;
-        sol_totalInteres.textContent      = `${formatter.format(totalInteres)} MXN`;
-        sol_cantprestamo.textContent      = `${formatter.format(barprestamosoli.value)} MXN`;
-        sol_totalPrestamo.textContent     = `${formatter.format(granTotal)} MXN`;
-        sol_pagosemanal.textContent       = `${formatter.format(pagoPeriodo)} MXN`;
+        interesCredit.value = interesCalculado;
+        sol_totalInteres.textContent = `${formatter.format(totalInteres)} MXN`;
+        sol_cantprestamo.textContent = `${formatter.format(barprestamosoli.value)} MXN`;
+        sol_totalPrestamo.textContent = `${formatter.format(granTotal)} MXN`;
+        sol_pagosemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
 
         calculoFecha(cantseman);
     } else {
@@ -153,10 +157,10 @@ barprestamosoli.addEventListener('input', () => {
         });
 
         sol_porcentajeinteres.textContent = `0.00 %`;
-        sol_totalInteres.textContent      = `$ 0.00 MXN`;
-        sol_cantprestamo.textContent      = `$ 0.00 MXN`;
-        sol_totalPrestamo.textContent     = `$ 0.00 MXN`;
-        sol_pagosemanal.textContent       = `$ 0.00 MXN`;
+        sol_totalInteres.textContent = `$ 0.00 MXN`;
+        sol_cantprestamo.textContent = `$ 0.00 MXN`;
+        sol_totalPrestamo.textContent = `$ 0.00 MXN`;
+        sol_pagosemanal.textContent = `$ 0.00 MXN`;
     }
     calculoFecha(cantseman);
 
@@ -205,37 +209,49 @@ btnAgregar.addEventListener('click', () => {
 
 btnInsertarCliente.addEventListener('click', () => {
     // Datos personales del cliente
-    let cnombre            = document.getElementById('clinombre');
-    let capelpat           = document.getElementById('cliapaterno');
-    let capelmat           = document.getElementById('cliamaterno');
-    let ctelefono          = document.getElementById('ctelefono');
-    let cedad              = document.getElementById('cliEdad');
-    let typeClient         = document.getElementById('typeClient');
-    let cdatebirthday      = document.getElementById('clientDate');
+    let cnombre = document.getElementById('clinombre');
+    let capelpat = document.getElementById('cliapaterno');
+    let capelmat = document.getElementById('cliamaterno');
+    let ctelefono = document.getElementById('ctelefono');
+    let cedad = document.getElementById('cliEdad');
+    let typeClient = document.getElementById('typeClient');
+    let cdatebirthday = document.getElementById('clientDate');
     let clientDateRegister = document.getElementById('clientDateRegister');
-    let clienteStatus      = document.getElementById('clienteStatus');
+    let clienteStatus = document.getElementById('clienteStatus');
 
     // Solicitud de credito
-    let cantseman       = document.getElementById('cantseman');
+    let cantseman = document.getElementById('cantseman');
     let barprestamosoli = document.getElementById('barprestamosoli');
+    let dtFechaLiquid = document.getElementById('dtFechaLiquid');
+    let interesCredit = document.getElementById('interesCredit');
 
     // Datos de la cuenta bancarias
-    let ctabancariacli     = document.getElementById('ctabancariacli');
+    let ctabancariacli = document.getElementById('ctabancariacli');
     let typeAccountBankCli = document.getElementById('typeAccountBankCli');
     let selCatIcveBancoCli = document.getElementById('selCatIcveBancoCli');
 
     // Datos del domicilio del cliente
-    let ccalle      = document.getElementById('ccalle');
+    let ccalle = document.getElementById('ccalle');
+    let numinterior = document.getElementById('numinterior');
     let numexterior = document.getElementById('numexterior');
-    let pricalle    = document.getElementById('pricalle');
-    let segcalle    = document.getElementById('segcalle');
-    let cp          = document.getElementById('cp');
-    let coloniadir  = document.getElementById('coloniadir');
+    let pricalle = document.getElementById('pricalle');
+    let segcalle = document.getElementById('segcalle');
+    let cp = document.getElementById('cp');
+    let entidaddir = document.getElementById('entidaddir');
+    let municipiodir = document.getElementById('municipiodir');
+    let coloniadir = document.getElementById('coloniadir');
+    let latitud = document.getElementById('latitud');
+    let longitud = document.getElementById('longitud');
 
     // Datos de los documentos del cliente
     let idComprobanteDom = document.getElementById('idComprobanteDom');
-    let idINEidentif     = document.getElementById('idINEidentif');
-    let idCompIngresos   = document.getElementById('idCompIngresos');
+    let idINEidentif = document.getElementById('idINEidentif');
+    let idCompIngresos = document.getElementById('idCompIngresos');
+
+    // Datos de la persona que referida
+    let nombreReferido = document.getElementById("nombreReferido");
+    let telefonoReferido = document.getElementById("telefonoReferido");
+    let observacionesReferido = document.getElementById("referidoObservaciones");
 
 
 
@@ -252,7 +268,7 @@ btnInsertarCliente.addEventListener('click', () => {
             { element: clientDateRegister, message: 'Ingrese la fecha de registro del cliente' },
             { element: ctelefono, message: 'Capture el n\u00famero de tel\u00e9fono' },
         ];
-        
+
         // Mensajes de validacion para el Tab Solicitud de credito
         const fieldsSolCredito = [
             { element: cantseman, message: 'Ingrese la cantidad de pagos para liquidar el cr\u00E9dito.' },
@@ -261,41 +277,41 @@ btnInsertarCliente.addEventListener('click', () => {
 
         // Mensajes de validacion para el Tab de Cuentas Bancarias
         const fieldsCuentaBancaria = [
-            {element: ctabancariacli , message: 'Ingrese el n\u00famero de tarjeta, cuenta o CLABE bancaria.'},
-            {element: typeAccountBankCli, message: 'Seleccione el tipo de cuenta bancaria.'},
-            {element: selCatIcveBancoCli, message: 'Seleccione la instituci[on bancaria.'}
+            { element: ctabancariacli, message: 'Ingrese el n\u00famero de tarjeta, cuenta o CLABE bancaria.' },
+            { element: typeAccountBankCli, message: 'Seleccione el tipo de cuenta bancaria.' },
+            { element: selCatIcveBancoCli, message: 'Seleccione la instituci[on bancaria.' }
         ];
 
         // Mensaje de validacion para el tab de Direccion del Cliente
         const fieldsDomicilio = [
-            {element: ccalle, message: 'Ingrese el nombre de la calle'},
-            {element: numexterior, message: 'Ingrese el n\u00famero exterior.'},
-            {element: pricalle, message: 'Ingrese la primer entre calle.'},
-            {element: segcalle, message: 'Ingrese la segunda entre calle.'},
-            {element: cp, message: 'Ingrese el c\u00F3digo postal.'},
-            {element: coloniadir, message: 'Seleccione una colonia.'},
+            { element: ccalle, message: 'Ingrese el nombre de la calle' },
+            { element: numexterior, message: 'Ingrese el n\u00famero exterior.' },
+            { element: pricalle, message: 'Ingrese la primer entre calle.' },
+            { element: segcalle, message: 'Ingrese la segunda entre calle.' },
+            { element: cp, message: 'Ingrese el c\u00F3digo postal.' },
+            { element: coloniadir, message: 'Seleccione una colonia.' },
         ];
 
         // Mensajes de validacion para el tab de los documentos del cliente
 
         const fieldsDocumentos = [
-            {element: idComprobanteDom, message: 'Cargue el comprobante de domicilio.'},
-            {element: idINEidentif, message: 'Cargue el documento que corresponde a la INE.'}
+            { element: idComprobanteDom, message: 'Cargue el comprobante de domicilio.' },
+            { element: idINEidentif, message: 'Cargue el documento que corresponde a la INE.' }
         ]
 
         //validadores de error
-        let hasErrorDatos         = false;
-        let hasErrorSolCredito    = false;
-        let hasErrorCtaBancaria   = false;
-        let hasErrorDomicilio     = false;
+        let hasErrorDatos = false;
+        let hasErrorSolCredito = false;
+        let hasErrorCtaBancaria = false;
+        let hasErrorDomicilio = false;
         let hasErrorDocumentacion = false;
 
         //contadores para los tabs
-        let tabDatosCount       = 0;
-        let tabDatosSolCredit   = 0;
+        let tabDatosCount = 0;
+        let tabDatosSolCredit = 0;
         let tabDatosCtaBancaria = 0;
-        let tabDatosDomicilio   = 0;
-        let tabDatosDocumentos  = 0;
+        let tabDatosDomicilio = 0;
+        let tabDatosDocumentos = 0;
 
         // Verificacion de los campos de los datos del cliente
         for (const fieldDatos of fieldsDatos) {
@@ -353,9 +369,9 @@ btnInsertarCliente.addEventListener('click', () => {
 
         // Datos de la cuenta bancaria del cliente
 
-        for(const fieldCtaBancaria of fieldsCuentaBancaria){
+        for (const fieldCtaBancaria of fieldsCuentaBancaria) {
             removeError(fieldCtaBancaria.element);
-            if(fieldCtaBancaria.element.value === '' || fieldCtaBancaria.element.value === null || fieldCtaBancaria.element.value === '0'){
+            if (fieldCtaBancaria.element.value === '' || fieldCtaBancaria.element.value === null || fieldCtaBancaria.element.value === '0') {
                 showError(fieldCtaBancaria.element, fieldCtaBancaria.message);
                 fieldCtaBancaria.element.focus();
                 hasErrorCtaBancaria = true;
@@ -381,9 +397,9 @@ btnInsertarCliente.addEventListener('click', () => {
 
         // Datos del domicilio del cliente
 
-        for( const fieldDatosDomicilio of fieldsDomicilio){
+        for (const fieldDatosDomicilio of fieldsDomicilio) {
             removeError(fieldDatosDomicilio.element);
-            if(fieldDatosDomicilio.element.value === '' || fieldDatosDomicilio.element.value === null || fieldDatosDomicilio.element.value === '0'){
+            if (fieldDatosDomicilio.element.value === '' || fieldDatosDomicilio.element.value === null || fieldDatosDomicilio.element.value === '0') {
                 showError(fieldDatosDomicilio.element, fieldDatosDomicilio.message);
                 fieldDatosDomicilio.element.focus();
                 hasErrorDomicilio = true;
@@ -407,9 +423,9 @@ btnInsertarCliente.addEventListener('click', () => {
             // tabDatosDomicilio--;
         }
 
-        for(const fieldDatosDocu of fieldsDocumentos){
+        for (const fieldDatosDocu of fieldsDocumentos) {
             removeError(fieldDatosDocu.element);
-            if(fieldDatosDocu.element.value === '' || fieldDatosDocu.element.value === null || fieldDatosDocu.element.value === '0'){
+            if (fieldDatosDocu.element.value === '' || fieldDatosDocu.element.value === null || fieldDatosDocu.element.value === '0') {
                 showError(fieldDatosDocu.element, fieldDatosDocu.message);
                 fieldDatosDocu.element.focus();
                 hasErrorDocumentacion = true;
@@ -433,13 +449,62 @@ btnInsertarCliente.addEventListener('click', () => {
             // tabDatosDocumentos--;
         }
 
-        console.log(tabDatosCount); 
+        console.log(tabDatosCount);
         console.log(tabDatosSolCredit);
         console.log(tabDatosCtaBancaria);
         console.log(tabDatosDomicilio);
-        console.log(tabDatosDocumentos); 
+        console.log(tabDatosDocumentos);
 
-        if(tabDatosCount == 0 && tabDatosSolCredit == 0 && tabDatosCtaBancaria == 0 && tabDatosDomicilio == 0 && tabDatosDocumentos == 0){
+        if (tabDatosCount == 0 && tabDatosSolCredit == 0 && tabDatosCtaBancaria == 0 && tabDatosDomicilio == 0 && tabDatosDocumentos == 0) {
+
+            //--- Generacion del objeto JS para Datos Personales
+            const CustomerPersonalData = [{
+                cnombre:            cnombre.value,
+                capelpat:           capelpat.value,
+                capelmat:           capelmat.value,
+                ctelefono:          ctelefono.value,
+                cedad:              cedad.value,
+                typeClient:         typeClient.value,
+                cdatebirthday:      cdatebirthday.value,
+                clientDateRegister: clientDateRegister.value,
+                clienteStatus:      clienteStatus.value,
+            },
+            {
+                cantseman:       cantseman.value,
+                barprestamosoli: barprestamosoli.value,
+                interesCredit:   interesCredit.value,
+                dtFechaLiquid:   dtFechaLiquid.value,
+
+            },
+            {
+                ctabancariacli:     ctabancariacli.value,
+                typeAccountBankCli: typeAccountBankCli.value,
+                selCatIcveBancoCli: selCatIcveBancoCli.value,
+            },
+            {   
+                ccalle:       ccalle.value,
+                numexterior:  numexterior.value,
+                numinterior:  numinterior.value,
+                pricalle:     pricalle.value,
+                segcalle:     segcalle.value,
+                cp:           cp.value,
+                entidaddir:   entidaddir.value,
+                municipiodir: municipiodir.value,
+                coloniadir:   coloniadir.value,
+                latitud:      latitud.value,
+                longitud:     longitud.value,
+            },
+            {
+                idComprobanteDom: idComprobanteDom.value,
+                idINEidentif:     idINEidentif.value,
+                idCompIngresos:   idCompIngresos.value,
+            },
+            {
+                nombreReferido:        nombreReferido.value,
+                telefonoReferido:      telefonoReferido.value,
+                observacionesReferido: observacionesReferido.value,
+            }
+        ];
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: "btn btn-success",
@@ -457,8 +522,10 @@ btnInsertarCliente.addEventListener('click', () => {
                 reverseButtons: true
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    insertarCliente();
-                }else{
+                    let idCliente = await insertCustomer(CustomerPersonalData);
+                    console.table(idCliente);
+                    //location.reload();
+                } else {
                     $('#custom-tabs-one-referidos-tab').tab('show');
                 }
             });
@@ -494,8 +561,7 @@ btnEliminarCliente.addEventListener('click', () => {
 });
 // Función para leer los clientes
 
-
-const leerClientes = () => {
+const leerClientes = async () => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -509,7 +575,7 @@ const leerClientes = () => {
                         return [
                             "",
                             id,
-                            `${item['cnombre']} ${item['capaterno']} ${item['camaterno']}`,
+                            `${item['cclinombre']} ${item['capaterno']} ${item['camaterno']}`,
                             `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`,
                             item['ctelefono'],
                             item['cabreviiatipo'],
@@ -539,7 +605,7 @@ const leerClientes = () => {
                     }
                 });
 
-                $('#tablaClientes tbody').on('click', 'td.details-control', function () {
+                $('#tablaClientes tbody').on('click', 'td.details-control', async function () {
                     var tr = $(this).closest('tr');
                     var row = table.row(tr);
                     if (row.child.isShown()) {
@@ -548,17 +614,25 @@ const leerClientes = () => {
                         tr.removeClass('shown');
                     } else {
                         // Abrir esta fila
-                        row.child(format(row.data())).show(); // Aquí debes definir cómo quieres que se vea la información adicional, `format` es una función que debes crear
+                        row.child(await format(row.data())).show(); // Aquí debes definir cómo quieres que se vea la información adicional, `format` es una función que debes crear
                         tr.addClass('shown');
                     }
                 });
 
-                function format(rowData) {
+                async function format (rowData) {
                     // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
-                    console.log(rowData);
-                    console.table(rowData);
-                    console.log(rowData[1]);
-                    leerCreditosPorCliente(rowData[1]);
+                    //console.log(rowData);
+                    //console.table(rowData);
+                    // console.log(rowData[1]);
+                    // leerCreditosPorCliente(rowData[1]);
+                    let dataCustomer = await readRowCustomer(rowData[1]);
+                    console.log(`Table del array`);
+                    console.table(dataCustomer[0]);
+                    console.log(`Nombre`);
+                    console.table(dataCustomer[0].cnombre);
+                    setTimeout(() => {
+                        setCustomerMap(dataCustomer[0].latitud, dataCustomer[0].longitud, rowData[1]);
+                    }, 100);
                     return `
                     <div class="row">
                         <div class="col-sm-12" style="color: black;">
@@ -566,13 +640,16 @@ const leerClientes = () => {
                             <div class="card-header p-0 pt-1">
                                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales</a>
+                                    <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales y Dirección</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Notas</a>
+                                    <a class="nav-link" id="custom-tabs-one-banks-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-banks${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Cuentas bancarias</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Cobranza</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
@@ -582,7 +659,85 @@ const leerClientes = () => {
                             <div class="card-body">
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
                                     <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare, sem enim sollicitudin eros, at commodo leo est vitae lacus. Etiam ut porta sem. Proin porttitor porta nisl, id tempor risus rhoncus quis. In in quam a nibh cursus pulvinar non consequat neque. Mauris lacus elit, condimentum ac condimentum at, semper vitae lectus. Cras lacinia erat eget sapien porta consectetur.
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="card card-success card-outline">
+                                                    <div class="card-body box-profile">
+                                                        <h3 class="profile-username text-center"><div id="nameCustomer-${rowData[1]}">${dataCustomer[0].cclinombre}</div></h3>
+                                                        <p class="text-muted text-center">${dataCustomer[0].capaterno} ${dataCustomer[0].camaterno}</p>
+                                                        <ul class="list-group list-group-unbordered mb-3">
+                                                            <li class="list-group-item">
+                                                                <b>Tel&eacute;fono:</b> <b><span class="float-right" style="font-size: 24px">${dataCustomer[0].ctelefono}</span></b>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Edad</b> <b><span class="float-right">${dataCustomer[0].iedad} años</span></b>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Tipo de Cliente</b> <b><span class="float-right">${dataCustomer[0].cabreviiatipo} </span></b>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card card-success card-outline">
+                                                    <div class="card-body box-profile">
+                                                        <h3 class="profile-username text-center">DIRECCIÓN POSTAL</h3>
+                                                        <p class="text-muted text-center">Y DATOS DE UBICACIÓN</p>
+                                                        <ul class="list-group list-group-unbordered mb-3">
+                                                            <li class="list-group-item">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td><b>Direcci&oacute;n:</b></td>
+                                                                        <td>${dataCustomer[0].ccalle} ${dataCustomer[0].cnumexterior} ${dataCustomer[0].cnuminterior}  ${dataCustomer[0].ccolonia}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td>Municipio o Delegaci&oacute;n ${dataCustomer[0].cdelegmunicipio} ${dataCustomer[0].centfederativa} ${dataCustomer[0].cpais} C.P. ${dataCustomer[0].ccodpostal}</td>
+                                                                    </tr>
+                                                                    <tr class="text-center">
+                                                                        <td colspan="2"><b>Coordenadas de Geolocalizaci&oacute;n</b></td>
+                                                                    </tr>
+                                                                    <tr class="text-center">
+                                                                        <td><b>Latitud</b></td>        
+                                                                        <td><b>Longtud</b></td>        
+                                                                    </tr>
+                                                                    <tr class="text-center">
+                                                                        <td>${dataCustomer[0].latitud}</td>        
+                                                                        <td>${dataCustomer[0].longitud}</td>        
+                                                                    </tr>
+                                                                </table>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="card card-success card-outline">
+                                                    <div class="card-body box-profile">
+                                                        <h3 class="profile-username text-center">MAPA DE UBICACI&Oacute;N</h3>
+                                                        <p class="text-muted text-center">del cliente/p>
+                                                        <ul class="list-group list-group-unbordered mb-3">
+                                                            <li class="list-group-item">
+                                                            <div id="mapCustomer${rowData[1]}" style="width:100%;height:250px;"></div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                                         <table border="1">
@@ -618,6 +773,41 @@ const leerClientes = () => {
                                             </tr>
                                         </table>
                                 
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-one-banks${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                        <table border="1">
+                                            <tr>
+                                                <th>Cuentas Bancarias</th>
+                                                <th>Fecha y Hora</th>
+                                                <th>Observaciones</th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2022-06-08 21:07:43</td>
+                                                <td>En perfecto estado</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2022-08-19 01:06:10</td>
+                                                <td>Nada que reportar</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2022-10-20 09:05:16</td>    
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023-05-16 06:01:39</td>
+                                                <td>Se observaron variaciones menores</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2022-08-30 00:01:51</td>    
+                                                <td>Revisión completa, sin hallazgos</td>
+                                            </tr>
+                                        </table>
+
                                     </div>
                                     <!-- Notas de Creditos -->
                                     <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
@@ -801,6 +991,32 @@ const leerCreditosPorCliente = async (icvecliente) => {
     }
 }
 
+const readRowCustomer = async (id) =>{
+    let params =
+        'operation=row' +
+        '&idCliente=' + id;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        
+        return data;
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
+}
+
 
 
 const leerRowCliente = (id) => {
@@ -830,74 +1046,38 @@ const leerRowCliente = (id) => {
     xhr.send(`operation=row&id=${id}`);
 };
 
-// Función para insertar un cliente
-/**
- * 
- * @param {String} cnombre 
- * @param {String} capelpat 
- * @param {String} capelmat 
- * @param {number} cedad 
- * @param {String} ctelefono
- * @param {number} typeClient 
- * @param {date} cdatebirthd 
- * @param {date} clientDateRegister 
- * @param {number} clienteStatus 
- */
-const insertarCliente = (
-    cnombre, capelpat, capelmat,
-    cedad, ctelefono, typeClient, cdatebirthday,
-    clientDateRegister, clienteStatus) => {
 
-    let params =
-        'operation=create' +
-        '&cnombre=' + cnombre +
-        '&capelpat=' + capelpat +
-        '&capelmat=' + capelmat +
-        '&cedad=' + cedad +
-        '&ctelefono=' + ctelefono +
-        '&typeClient=' + typeClient +
-        '&cdatebirthday=' + cdatebirthday +
-        '&clientDateRegister=' + clientDateRegister +
-        '&clienteStatus=' + clienteStatus;
-    console.log(params);
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', baseURL, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            leerClientes();
-            setTimeout(() => {
-                location.reload();
-            }, 500);
-        } else {
-            console.error('Error al insertar el cliente');
-        }
-    };
-    xhr.send(params);
-};
-
-// TODO: Veriifcar el dia de mañana la inserción del cliente.
-const insertCustomer = async ( cnombre, capelpat, capelmat,
-    cedad, ctelefono, typeClient, cdatebirthday,
-    clientDateRegister, clienteStatus) => {
-        try{
-            const response = await fetch(baseURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params
-            });
+const insertCustomer = async (CustomerPersonalData) => {
+    // Se de
+    const params = new URLSearchParams({
+        operation: 'create',
+        cutomers: JSON.stringify(CustomerPersonalData)
+    }).toString();
     
-            if (!response.ok) {
-                throw new Error('Error con la comunicacion con el servidor');
-            }
-    
-            const data = await response.json();
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
-        }catch(error){
-            throw new Error(`Error en el servidor ${error}`);
+        if (!response.ok) {
+            throw new Error('Error con la comunicacion con el servidor');
         }
+
+        const data = await response.json();
+
+        return data;
+
+    } catch (error) {
+        throw new Error(`Error en el servidor ${error}`);
+    }
+}
+
+const insertCreditCustomer = () => {
+
 }
 
 const leerTipoCliente = () => {
@@ -1018,9 +1198,6 @@ const readCodigosPostal = async (zipcode) => {
 
         const data = await response.json();
 
-        console.table(data);
-        console.table(data[0].cnombreestprovincia);
-        console.table(data[0].cnomlocmun);
         let colonias = document.getElementById('coloniadir');
         document.getElementById('entidaddir').value = data[0].cnombreestprovincia;
         document.getElementById('municipiodir').value = data[0].cnomlocmun;
@@ -1047,6 +1224,6 @@ varCP.addEventListener('blur', () => {
 
 actFecha();
 leerClientes();
-
+initMap();
 
 

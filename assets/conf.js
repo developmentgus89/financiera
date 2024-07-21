@@ -79,3 +79,17 @@ const  rangosInteres = [
     { min: 21, max: 22, interes: 9.68 },
     { min: 23, max: 24, interes: 10.32 }
 ];
+
+function formatDateBirthday(dateString) {
+    const months = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day} de ${month} de ${year}`;
+}

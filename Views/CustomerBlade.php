@@ -239,6 +239,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                                     <label for="customRange1">Porcentaje de inter&eacute;s del pr&eacute;stamo:</label>
                                                                     <h2 class="mb-5">
                                                                         <div id="sol_porcentajeinteres"> 0.00 %</div>
+                                                                        <input type="hidden" class="form-control mb-2" name="interesCredit" id="interesCredit" readonly>
                                                                     </h2>
                                                                 </div>
                                                             </div>
@@ -504,7 +505,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">Nombre</label>
-                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId">
+                                                            <input type="text" class="form-control" name="nombreReferido" id="nombreReferido" aria-describedby="helpId">
                                                             <small id="helpId" class="form-text text-muted">Nombre completo del cliente que refiri&oacute;</small>
                                                         </div>
 
@@ -512,7 +513,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">Tel&eacute;fono</label>
-                                                            <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+                                                            <input type="text" class="form-control" name="telefonoReferido" id="telefonoReferido" aria-describedby="helpId" placeholder="">
                                                             <small id="helpId" class="form-text text-muted">N&uacute;mero fijo o m&oacute;vil.</small>
                                                         </div>
                                                     </div>
@@ -525,7 +526,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                     <div class="col-md-8">
                                                         <div class="form-group">
                                                             <label for="">Notas y/o observaciones:</label>
-                                                            <textarea class="form-control" name="" id="" rows="3"></textarea>
+                                                            <textarea class="form-control" name="referidoObservaciones" id="referidoObservaciones" rows="3"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">

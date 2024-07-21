@@ -10,29 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     switch ($operation) {
         case 'create':
+            $customerData = json_decode($_POST['cutomers'], true);
+            
             // Crear cliente
-            $cnombre = $_POST['cnombre'];
-            $capelpat = $_POST['capelpat'];
-            $capelmat = $_POST['capelmat'];
-            $ctelefono = $_POST['ctelefono'];
-            $cedad = $_POST['cedad'];
-            $typeClient = $_POST['typeClient'];
-            $cdatebirthday = $_POST['cdatebirthday'];
-            $clientDateRegister = $_POST['clientDateRegister'];
-            $clienteStatus = $_POST['clienteStatus'];
-
-            $customer->insertarCliente(
-                $cnombre,
-                $capelpat,
-                $capelmat,
-                $cedad,
-                $typeClient,
-                $cdatebirthday,
-                $clientDateRegister,
-                $clienteStatus,
-                $ctelefono
-            );
+            $resp = $customer->insertarCliente($customerData);            
+            echo json_encode($resp);
             break;
+
         case 'read':
             // Leer clientes
             $clientes = $customer->obtenerClientes();
@@ -56,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'row':
             // Eliminar cliente
-            $id = $_POST['id'];
+            $id = $_POST['idCliente'];
 
-            // $cliente = $customer->rowCustomer($id);
+            $cliente = $customer->rowReadCustomer($id);
             echo json_encode($cliente);
             break;
         case 'readtypesclients':

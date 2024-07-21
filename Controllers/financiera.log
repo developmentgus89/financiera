@@ -1,0 +1,3 @@
+Clientes --- Error al insertar el cliente: Error al insertar los datos del crédito. === 2024-07-15 01:38:49
+Clientes --- Error al insertar la cuenta bancaria del cliente:SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens === 2024-07-17 03:07:58
+Clientes --- Error al insertar la direccion del cliente:SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens === 2024-07-17 03:09:03
