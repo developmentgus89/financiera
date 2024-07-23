@@ -28,7 +28,7 @@ class Customer
             
             $this->acceso->beginTransaction();
             $personalData = $customerPersonalData[0];
-            $query = "INSERT INTO clientes (cnombre, capaterno, camaterno, iedad,
+            $query = "INSERT INTO clientes (cclinombre, capaterno, camaterno, iedad,
                         icvetipocliente, dfechanaciemiento, dfechaalta, cestatus, ctelefono) 
                         VALUES (
                             ?, ?, ?, ?, ?, ?, ?, ?, ?
@@ -68,8 +68,10 @@ class Customer
                                     $ctaBankCustomer['typeAccountBankCli']
             );
 
-            $dataAddress = $customerPersonalData[3];
-            $respDataAddress = $this->insertAddressCustomer($lastInsertId, $dataAddress);
+            $respDataAddress = $this->insertAddressCustomer($lastInsertId, $customerPersonalData[3]);
+
+            // $respDataDocs = $this->uploadDocuments($lastInsertId, $customerPersonalData[4]);
+            
 
 
             if (!$respCredit) {
@@ -86,6 +88,8 @@ class Customer
             $resp['opDataCredit']    = $respCredit;
             $resp['opDataCtaBank']   = $respCtaBank;
             $resp['opDataAddress']   = $respDataAddress;
+            // $resp['opDataDocsCli']   = $respDataDocs;
+
             return $resp;
         } catch (PDOException $e) {
             if ($this->acceso->inTransaction()) {
@@ -190,12 +194,34 @@ class Customer
             return false;
         }
     }
-
-
-    //
-    private function insertDocumentsCustomer() : bool{
-        return false;
+        
+    /**
+     * insertDocument
+     *
+     * @param  int $customerId
+     * @param  int $tipoDocumento
+     * @param  mixed $rutaDocumento
+     * @param  mixed $cnombreDocto
+     * @param  mixed $documentExtension
+     * @return bool
+     */
+    private function insertDocument($customerId, $tipoDocumento, $rutaDocumento, $cnombreDocto, $documentExtension) : bool {
+        try{
+            $query = "INSERT INTO cli_documents (icvecliente, itipodocto, crutadocto, cnombredocot, cextensiondocto) 
+                        VALUES (?, ?, ?, ?, ?)";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$customerId, $tipoDocumento, $rutaDocumento, $cnombreDocto, $documentExtension]);
+            return true;
+        }catch(PDOException $e){
+            $err = 'Error al insertar los registros de los documentos del cliente:' . $e->getMessage();
+            echo $err;
+            $this->error->setLog('Clientes', $err);
+            return false;
+        }
     }
+    
+    
+    
     
     /**
      * obtenerClientes

@@ -282,7 +282,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     if (!trackScope) return
     if (state.context) {
       if (state.lexical.info == "var" && state.context && state.context.block) {
-        // FIXME function decls are also not block scoped
+        // function decls are also not block scoped
         var newContext = registerVarScoped(varname, state.context)
         if (newContext != null) {
           state.context = newContext

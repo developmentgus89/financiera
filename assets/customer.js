@@ -629,7 +629,7 @@ const leerClientes = async () => {
                     console.log(`Table del array`);
                     console.table(dataCustomer[0]);
                     console.log(`Nombre`);
-                    console.table(dataCustomer[0].cnombre);
+                    //Este setTimeOut es el que carga el mapa
                     setTimeout(() => {
                         setCustomerMap(dataCustomer[0].latitud, dataCustomer[0].longitud, rowData[1]);
                     }, 100);
@@ -660,7 +660,7 @@ const leerClientes = async () => {
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
                                     <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="card card-success card-outline">
                                                     <div class="card-body box-profile">
                                                         <h3 class="profile-username text-center"><div id="nameCustomer-${rowData[1]}">${dataCustomer[0].cclinombre}</div></h3>
@@ -677,9 +677,6 @@ const leerClientes = async () => {
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <b>Tipo de Cliente</b> <b><span class="float-right">${dataCustomer[0].cabreviiatipo} </span></b>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
                                                             </li>
                                                             <li class="list-group-item">
                                                                 <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
@@ -710,7 +707,7 @@ const leerClientes = async () => {
                                                                     </tr>
                                                                     <tr class="text-center">
                                                                         <td><b>Latitud</b></td>        
-                                                                        <td><b>Longtud</b></td>        
+                                                                        <td><b>Longitud</b></td>        
                                                                     </tr>
                                                                     <tr class="text-center">
                                                                         <td>${dataCustomer[0].latitud}</td>        
@@ -727,7 +724,7 @@ const leerClientes = async () => {
                                                 <div class="card card-success card-outline">
                                                     <div class="card-body box-profile">
                                                         <h3 class="profile-username text-center">MAPA DE UBICACI&Oacute;N</h3>
-                                                        <p class="text-muted text-center">del cliente/p>
+                                                        <p class="text-muted text-center">del cliente</p>
                                                         <ul class="list-group list-group-unbordered mb-3">
                                                             <li class="list-group-item">
                                                             <div id="mapCustomer${rowData[1]}" style="width:100%;height:250px;"></div>
