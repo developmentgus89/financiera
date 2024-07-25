@@ -165,7 +165,7 @@ class Customer
      */
     private function insertAddressCustomer(int $idCliente, array $dataAddressCustomer) : bool{
         try {
-            $sqlCredit = "INSERT INTO financiera.domicilio
+            $sqlCredit = "INSERT INTO domicilio
                                     (icvecliente, ccalle, cnuminterior, cnumexterior, 
                                     ccolonia, cdelegmunicipio, centfederativa, cpais, 
                                     ccodpostal, cfotofrente, longitud, latitud)
