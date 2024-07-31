@@ -35,6 +35,16 @@ function setCustomerMap(lat, long, idCliente) {
         map: map,
         title: 'Ubicación del cliente'
     });
+
+     // Crea un InfoWindow para mostrar información adicional al hacer clic en el marcador
+     var infoWindow = new google.maps.InfoWindow({
+        content: '<strong>Ubicación del Cliente</strong><br>Latitud: ' + lat + '<br>Longitud: ' + long
+    });
+
+    // Añade un evento de clic al marcador para abrir el InfoWindow
+    marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+    });
 }
 
 function geocodeAddress(geocoder, map, calle, numexterior, numinterior, 

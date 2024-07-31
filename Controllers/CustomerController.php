@@ -10,12 +10,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     switch ($operation) {
         case 'create':
-            $customerData = json_decode($_POST['cutomers'], true);
-            
+            $customerData = array();
+            // Datos Personales del cliente
+            $customerData[0]['cnombre']            = $_POST['cnombre'];
+            $customerData[0]['capelpat']           = $_POST['capelpat'];
+            $customerData[0]['capelmat']           = $_POST['capelmat'];
+            $customerData[0]['ctelefono']          = $_POST['ctelefono'];
+            $customerData[0]['cedad']              = $_POST['cedad'];
+            $customerData[0]['typeClient']         = $_POST['typeClient'];
+            $customerData[0]['cdatebirthday']      = $_POST['cdatebirthday'];
+            $customerData[0]['clientDateRegister'] = $_POST['clientDateRegister'];
+            $customerData[0]['clienteStatus']      = $_POST['clienteStatus'];
+
+            // Datos del prestamo
+            $customerData[1]['cantseman']       = $_POST['cantseman'];
+            $customerData[1]['barprestamosoli'] = $_POST['barprestamosoli'];
+            $customerData[1]['interesCredit']   = $_POST['interesCredit'];
+            $customerData[1]['dtFechaLiquid']   = $_POST['dtFechaLiquid'];
+
+            // Datos de la cuenta bancaria
+            $customerData[2]['ctabancariacli']     = $_POST['ctabancariacli'];
+            $customerData[2]['typeAccountBankCli'] = $_POST['typeAccountBankCli'];
+            $customerData[2]['selCatIcveBancoCli'] = $_POST['selCatIcveBancoCli'];
+
+            // Datos del domicilio
+            $customerData[3]['ccalle']       = $_POST['ccalle'];
+            $customerData[3]['numexterior']  = $_POST['numexterior'];
+            $customerData[3]['numinterior']  = $_POST['numinterior'];
+            $customerData[3]['pricalle']     = $_POST['pricalle'];
+            $customerData[3]['segcalle']     = $_POST['segcalle'];
+            $customerData[3]['cp']           = $_POST['cp'];
+            $customerData[3]['entidaddir']   = $_POST['entidaddir'];
+            $customerData[3]['municipiodir'] = $_POST['municipiodir'];
+            $customerData[3]['coloniadir']   = $_POST['coloniadir'];
+            $customerData[3]['latitud']      = $_POST['latitud'];
+            $customerData[3]['longitud']     = $_POST['longitud'];
+
+            // Datos de la documentación comprobatoria
+            $customerData[4]['fileidComprobanteDom'] = $_FILES['fileidComprobanteDom'];
+            $customerData[4]['fileidINEidentif']     = $_FILES['fileidINEidentif'];
+            $customerData[4]['fileidCompIngresos'] = (
+                    isset($_FILES['fileidCompIngresos']) && $_FILES['fileidCompIngresos']['error'] == 0) 
+                    ? $_FILES['fileidCompIngresos'] 
+                    : null;
+
+            // Datos de la persona que refirió a la persona
+            $customerData[5]['nombreReferido']        = $_POST['nombreReferido'];
+            $customerData[5]['telefonoReferido']      = $_POST['telefonoReferido'];
+            $customerData[5]['observacionesReferido'] = $_POST['observacionesReferido'];
+
+            // var_dump($customerData);
+            // exit();
+
+            // $dir = "../docs/docCliAddress/";
+
+            // $imageFileType = strtolower(pathinfo($_FILES["fileidComprobanteDom"]["name"], PATHINFO_EXTENSION));
+            // //Cambio de nombre del documento add id
+            // $originalFileName = pathinfo($_FILES["fileidComprobanteDom"]["name"], PATHINFO_FILENAME);
+            // $newFileName = $originalFileName . "__2024." . $imageFileType;
+            // $target_file = $dir . $newFileName;
+
+            // if (isset($_FILES["fileidComprobanteDom"])) {
+            //     if (move_uploaded_file($_FILES["fileidComprobanteDom"]["tmp_name"], $target_file)) {
+            //         echo "El archivo " . htmlspecialchars($newFileName) . " ha sido subido.";
+            //         $resp = true;
+            //     } else {
+            //         echo "Hubo un error al subir al archivo";
+            //     }
+            // }
+
+
+
             // Crear cliente
-            $resp = $customer->insertarCliente($customerData);            
+            $resp = $customer->insertarCliente($customerData);
             echo json_encode($resp);
             break;
+
 
         case 'read':
             // Leer clientes
@@ -50,13 +120,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tiposCliente = $customer->obtenerTiposClientes();
             echo json_encode($tiposCliente);
             break;
-        case 'readCreditsByCustomer':
+        case 'rowCreditsCustomer':
             $icvecliente = $_POST['icvecliente'];
             $rowCredits = $credits->getRowsCreditsByClient($icvecliente);
             echo json_encode($rowCredits);
             break;
 
-        //Obetener las colonias de acuerdo al codigo postal
+        case 'rowCreditCusDetail':
+            $idcreditCustomer = $_POST['idcreditCustomer'];
+            $rowCreditDetails = $credits->getRowSingleCredit($idcreditCustomer);
+            echo json_encode($rowCreditDetails);
+            break;
+            //Obetener las colonias de acuerdo al codigo postal
         case 'readZipCode':
             $zipcode = $_POST['zipcode'];
             $rowsZipCode = $customer->get_AsentamientosByZipCode($zipcode);
@@ -67,4 +142,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 }
-?>

@@ -14,7 +14,7 @@ abstract class OperationsPaysClient{
      * @param  int $id
      * @return array
      */
-    abstract public function getRowSingleCredit(int $id, int $icvecliente): ?array;
+    abstract public function getRowSingleCredit(int $idcreditCustomer): ?array;
     
     /**
      * insertRow

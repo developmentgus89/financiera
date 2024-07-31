@@ -468,26 +468,26 @@ $fecha_actual = $formatter->format(new DateTime());
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                          <label for="idComprobanteDom">Comprobante de domicilio<span style="color: red">*</span>:</label>
-                                                          <input type="file" class="form-control-file" name="idComprobanteDom" id="idComprobanteDom" accept=".pdf, .jpg, .jpeg, .png">
-                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de domicilio es un documento obligatorio.</small>
+                                                            <label for="idComprobanteDom">Comprobante de domicilio<span style="color: red">*</span>:</label>
+                                                            <input type="file" class="form-control-file" name="idComprobanteDom" id="idComprobanteDom" accept=".pdf, .jpg, .jpeg, .png">
+                                                            <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de domicilio es un documento obligatorio.</small>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                          <label for="idINEidentif">INE identificaci&oacute;n<span style="color: red">*</span>:</label>
-                                                          <input type="file" class="form-control-file" name="idINEidentif" id="idINEidentif" accept=".pdf, .jpg, .jpeg, .png">
-                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">La INE o identificaci&oacute;n es un documento obligatorio.</small>
+                                                            <label for="idINEidentif">INE identificaci&oacute;n<span style="color: red">*</span>:</label>
+                                                            <input type="file" class="form-control-file" name="idINEidentif" id="idINEidentif" accept=".pdf, .jpg, .jpeg, .png">
+                                                            <small id="HelpidComprobanteDom" class="form-text text-muted">La INE o identificaci&oacute;n es un documento obligatorio.</small>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                          <label for="idCompIngresos">Comprobante de Ingresos:</label>
-                                                          <input type="file" class="form-control-file" name="idCompIngresos" id="idCompIngresos" accept=".pdf, .jpg, .jpeg, .png">
-                                                          <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de ingresos es un documento opcional.</small>
+                                                            <label for="idCompIngresos">Comprobante de Ingresos:</label>
+                                                            <input type="file" class="form-control-file" name="idCompIngresos" id="idCompIngresos" accept=".pdf, .jpg, .jpeg, .png">
+                                                            <small id="HelpidComprobanteDom" class="form-text text-muted">El comprobante de ingresos es un documento opcional.</small>
                                                         </div>
                                                     </div>
-                                                </div>      
+                                                </div>
                                             </div>
                                             <!-- /.card-body -->
                                             <div class="card-footer">

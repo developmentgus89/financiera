@@ -9,13 +9,13 @@ class Log
         $this->fileName = 'financiera.log';
     }
 
-    public function setLog(string $modulo, string $error): void
+    public function setLog(string $modulo, string $message): void
     {
         try {
-            $fileW = fopen($this->fileName, 'a+'); // Use 'a' to append to the file
+            $fileW = fopen($this->fileName, 'w+'); // Use 'a' to append to the file
             if ($fileW) {
                 $fechaActual = (new DateTime())->format('Y-m-d H:i:s');
-                $contenido = $modulo . " --- " . $error . " === " . $fechaActual . PHP_EOL;
+                $contenido = $modulo . " --- " . $message . " === " . $fechaActual . PHP_EOL;
                 fwrite($fileW, $contenido);
                 fclose($fileW);
             } else {

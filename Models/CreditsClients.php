@@ -44,11 +44,11 @@ class CreditsClients extends OperationsPaysClient{
      * @param  int $id
      * @return array
      */
-    public function getRowSingleCredit(int $id, int $icvecliente): ?array {
+    public function getRowSingleCredit(int $idcreditCustomer): ?array {
         try{
-            $sql = "SELECT * FROM catcreditos WHERE icvecredito = ? AND icvecliente = ?";
+            $sql = "SELECT * FROM catcreditctlpagcust WHERE icvecredito = ?";
             $statement = $this->acceso->prepare($sql);
-            $statement->execute([$id, $icvecliente]);
+            $statement->execute([$idcreditCustomer]);
     
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){

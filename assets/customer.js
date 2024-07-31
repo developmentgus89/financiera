@@ -449,62 +449,48 @@ btnInsertarCliente.addEventListener('click', () => {
             // tabDatosDocumentos--;
         }
 
-        console.log(tabDatosCount);
-        console.log(tabDatosSolCredit);
-        console.log(tabDatosCtaBancaria);
-        console.log(tabDatosDomicilio);
-        console.log(tabDatosDocumentos);
+
 
         if (tabDatosCount == 0 && tabDatosSolCredit == 0 && tabDatosCtaBancaria == 0 && tabDatosDomicilio == 0 && tabDatosDocumentos == 0) {
 
             //--- Generacion del objeto JS para Datos Personales
-            const CustomerPersonalData = [{
-                cnombre:            cnombre.value,
-                capelpat:           capelpat.value,
-                capelmat:           capelmat.value,
-                ctelefono:          ctelefono.value,
-                cedad:              cedad.value,
-                typeClient:         typeClient.value,
-                cdatebirthday:      cdatebirthday.value,
-                clientDateRegister: clientDateRegister.value,
-                clienteStatus:      clienteStatus.value,
-            },
-            {
-                cantseman:       cantseman.value,
-                barprestamosoli: barprestamosoli.value,
-                interesCredit:   interesCredit.value,
-                dtFechaLiquid:   dtFechaLiquid.value,
+            var formDataCustomer = new FormData();
+            formDataCustomer.append('operation', 'create');
+            formDataCustomer.append('cnombre', cnombre.value);
+            formDataCustomer.append('capelpat', capelpat.value);
+            formDataCustomer.append('capelmat', capelmat.value);
+            formDataCustomer.append('ctelefono', ctelefono.value);
+            formDataCustomer.append('cedad', cedad.value);
+            formDataCustomer.append('typeClient', typeClient.value);
+            formDataCustomer.append('cdatebirthday', cdatebirthday.value);
+            formDataCustomer.append('clientDateRegister', clientDateRegister.value);
+            formDataCustomer.append('clienteStatus', clienteStatus.value);
+            formDataCustomer.append('cantseman', cantseman.value);
+            formDataCustomer.append('barprestamosoli', barprestamosoli.value);
+            formDataCustomer.append('interesCredit', interesCredit.value);
+            formDataCustomer.append('dtFechaLiquid', dtFechaLiquid.value);
+            formDataCustomer.append('ctabancariacli', ctabancariacli.value);
+            formDataCustomer.append('typeAccountBankCli', typeAccountBankCli.value);
+            formDataCustomer.append('selCatIcveBancoCli', selCatIcveBancoCli.value);
+            formDataCustomer.append('ccalle', ccalle.value);
+            formDataCustomer.append('numexterior', numexterior.value);
+            formDataCustomer.append('numinterior', numinterior.value);
+            formDataCustomer.append('pricalle', pricalle.value);
+            formDataCustomer.append('segcalle', segcalle.value);
+            formDataCustomer.append('cp', cp.value);
+            formDataCustomer.append('entidaddir', entidaddir.value);
+            formDataCustomer.append('municipiodir', municipiodir.value);
+            formDataCustomer.append('coloniadir', coloniadir.value);
+            formDataCustomer.append('latitud', latitud.value);
+            formDataCustomer.append('longitud', longitud.value);
+            formDataCustomer.append('nombreReferido', nombreReferido.value);
+            formDataCustomer.append('telefonoReferido', telefonoReferido.value);
+            formDataCustomer.append('observacionesReferido', observacionesReferido.value);
+            formDataCustomer.append('fileidComprobanteDom', document.getElementById('idComprobanteDom').files[0]);
+            formDataCustomer.append('fileidINEidentif', document.getElementById('idINEidentif').files[0]);
+            formDataCustomer.append('fileidCompIngresos', document.getElementById('idCompIngresos').files[0]);
 
-            },
-            {
-                ctabancariacli:     ctabancariacli.value,
-                typeAccountBankCli: typeAccountBankCli.value,
-                selCatIcveBancoCli: selCatIcveBancoCli.value,
-            },
-            {   
-                ccalle:       ccalle.value,
-                numexterior:  numexterior.value,
-                numinterior:  numinterior.value,
-                pricalle:     pricalle.value,
-                segcalle:     segcalle.value,
-                cp:           cp.value,
-                entidaddir:   entidaddir.value,
-                municipiodir: municipiodir.value,
-                coloniadir:   coloniadir.value,
-                latitud:      latitud.value,
-                longitud:     longitud.value,
-            },
-            {
-                idComprobanteDom: idComprobanteDom.value,
-                idINEidentif:     idINEidentif.value,
-                idCompIngresos:   idCompIngresos.value,
-            },
-            {
-                nombreReferido:        nombreReferido.value,
-                telefonoReferido:      telefonoReferido.value,
-                observacionesReferido: observacionesReferido.value,
-            }
-        ];
+
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: "btn btn-success",
@@ -522,7 +508,8 @@ btnInsertarCliente.addEventListener('click', () => {
                 reverseButtons: true
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    let idCliente = await insertCustomer(CustomerPersonalData);
+
+                    let idCliente = await insertCustomer(formDataCustomer);
                     console.table(idCliente);
                     //location.reload();
                 } else {
@@ -619,7 +606,7 @@ const leerClientes = async () => {
                     }
                 });
 
-                async function format (rowData) {
+                async function format(rowData) {
                     // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
                     //console.log(rowData);
                     //console.table(rowData);
@@ -631,293 +618,80 @@ const leerClientes = async () => {
                     console.log(`Nombre`);
                     //Este setTimeOut es el que carga el mapa
                     setTimeout(() => {
+                        readCreditsCustomer(rowData[1]);
+                        readAddressMap(rowData[1], dataCustomer[0]);
                         setCustomerMap(dataCustomer[0].latitud, dataCustomer[0].longitud, rowData[1]);
-                    }, 100);
+                        readAccountsBanksCustomer(rowData[1]);
+                        readCollectionFinanceCustomer(rowData[1]);
+                        readFilesCustomer(rowData[1]);
+                    }, 50);
                     return `
                     <div class="row">
                         <div class="col-sm-12" style="color: black;">
                             <div class="card card-success card-tabs">
-                            <div class="card-header p-0 pt-1">
-                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos Personales y Dirección</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Creditos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-banks-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-banks${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Cuentas bancarias</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Cobranza</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
-                                </li>
-                                </ul>
-                            </div>
-                            <div class="card-body">
-                                <div class="tab-content" id="custom-tabs-one-tabContent">
-                                    <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="card card-success card-outline">
-                                                    <div class="card-body box-profile">
-                                                        <h3 class="profile-username text-center"><div id="nameCustomer-${rowData[1]}">${dataCustomer[0].cclinombre}</div></h3>
-                                                        <p class="text-muted text-center">${dataCustomer[0].capaterno} ${dataCustomer[0].camaterno}</p>
-                                                        <ul class="list-group list-group-unbordered mb-3">
-                                                            <li class="list-group-item">
-                                                                <b>Tel&eacute;fono:</b> <b><span class="float-right" style="font-size: 24px">${dataCustomer[0].ctelefono}</span></b>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>Edad</b> <b><span class="float-right">${dataCustomer[0].iedad} años</span></b>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>Tipo de Cliente</b> <b><span class="float-right">${dataCustomer[0].cabreviiatipo} </span></b>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer[0].dfechanaciemiento)} </span></b>
-                                                            </li>
-                                                        </ul>
+                                <div class="card-header p-0 pt-1">
+                                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Creditos</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Datos Personales y Dirección</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-one-banks-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-banks${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Cuentas bancarias</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Cobranza</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                                        <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="card card-success card-outline">
+                                                        <div class="card-body box-profile">
+                                                            <h3 class="profile-username text-center">
+                                                                <div id="nameCustomer-${rowData[1]}">CR&Eacute;DITOS DEL CLIENTE ACTIVOS</div>
+                                                            </h3>
+                                                            <div id="credits${rowData[1]}">
+                                                                <table id="tblcredits${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <!-- /.card-body -->
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="card card-success card-outline">
-                                                    <div class="card-body box-profile">
-                                                        <h3 class="profile-username text-center">DIRECCIÓN POSTAL</h3>
-                                                        <p class="text-muted text-center">Y DATOS DE UBICACIÓN</p>
-                                                        <ul class="list-group list-group-unbordered mb-3">
-                                                            <li class="list-group-item">
-                                                                <table>
-                                                                    <tr>
-                                                                        <td><b>Direcci&oacute;n:</b></td>
-                                                                        <td>${dataCustomer[0].ccalle} ${dataCustomer[0].cnumexterior} ${dataCustomer[0].cnuminterior}  ${dataCustomer[0].ccolonia}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td>Municipio o Delegaci&oacute;n ${dataCustomer[0].cdelegmunicipio} ${dataCustomer[0].centfederativa} ${dataCustomer[0].cpais} C.P. ${dataCustomer[0].ccodpostal}</td>
-                                                                    </tr>
-                                                                    <tr class="text-center">
-                                                                        <td colspan="2"><b>Coordenadas de Geolocalizaci&oacute;n</b></td>
-                                                                    </tr>
-                                                                    <tr class="text-center">
-                                                                        <td><b>Latitud</b></td>        
-                                                                        <td><b>Longitud</b></td>        
-                                                                    </tr>
-                                                                    <tr class="text-center">
-                                                                        <td>${dataCustomer[0].latitud}</td>        
-                                                                        <td>${dataCustomer[0].longitud}</td>        
-                                                                    </tr>
-                                                                </table>
-                                                            </li>
-                                                        </ul>
+                                                <div class="col-md-6">
+                                                    <div class="card card-success card-outline">
+                                                        <div class="card-body box-profile">
+                                                            <h3 class="profile-username text-center">
+                                                                <div id="nameCustomerDet-${rowData[1]}">DETALLE DEL CR&Eacute;DITO SELECCIONADO</div>
+                                                            </h3>
+                                                            <div id="creditsPays${rowData[1]}">
+                                                                <table id="tblcreditspays${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <!-- /.card-body -->
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="card card-success card-outline">
-                                                    <div class="card-body box-profile">
-                                                        <h3 class="profile-username text-center">MAPA DE UBICACI&Oacute;N</h3>
-                                                        <p class="text-muted text-center">del cliente</p>
-                                                        <ul class="list-group list-group-unbordered mb-3">
-                                                            <li class="list-group-item">
-                                                            <div id="mapCustomer${rowData[1]}" style="width:100%;height:250px;"></div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <!-- /.card-body -->
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                        <table border="1">
-                                            <tr>
-                                                <th>Columna 1</th>
-                                                <th>Fecha y Hora</th>
-                                                <th>Observaciones</th>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2022-06-08 21:07:43</td>
-                                                <td>En perfecto estado</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>2022-08-19 01:06:10</td>
-                                                <td>Nada que reportar</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>2022-10-20 09:05:16</td>
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>2023-05-16 06:01:39</td>
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>2022-08-30 00:01:51</td>
-                                                <td>Revisión completa, sin hallazgos</td>
-                                            </tr>
-                                        </table>
-                                
-                                    </div>
-                                    <div class="tab-pane fade" id="custom-tabs-one-banks${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                        <table border="1">
-                                            <tr>
-                                                <th>Cuentas Bancarias</th>
-                                                <th>Fecha y Hora</th>
-                                                <th>Observaciones</th>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2022-06-08 21:07:43</td>
-                                                <td>En perfecto estado</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>2022-08-19 01:06:10</td>
-                                                <td>Nada que reportar</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>2022-10-20 09:05:16</td>    
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>2023-05-16 06:01:39</td>
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>2022-08-30 00:01:51</td>    
-                                                <td>Revisión completa, sin hallazgos</td>
-                                            </tr>
-                                        </table>
-
-                                    </div>
-                                    <!-- Notas de Creditos -->
-                                    <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                        <table border="1">
-                                            <tr>
-                                                <th>Columna 1</th>
-                                                <th>Fecha y Hora</th>
-                                                <th>Observaciones de algo</th>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2022-06-08 21:07:43</td>
-                                                <td>En perfecto estado</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>2022-08-19 01:06:10</td>
-                                                <td>Nada que reportar</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>2022-10-20 09:05:16</td>
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>2023-05-16 06:01:39</td>
-                                                <td>Se observaron variaciones menores</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>2022-08-30 00:01:51</td>
-                                                <td>Revisión completa, sin hallazgos</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                    <div class="card card-info">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Files</h3>
-                    
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                            <i class="fas fa-minus"></i>
-                                            </button>
+                                        <div class="tab-pane fade" id="custom-tabs-one-profile${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                            <div id="address-map${rowData[1]}"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-banks${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                            <div id="accountsBanks${rowData[1]}"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                            <div id="financeCollection${rowData[1]}"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                            <div id="filesCustomer${rowData[1]}"></div>
                                         </div>
                                     </div>
-                                <div class="card-body p-0">
-                                  <table class="table">
-                                    <thead>
-                                      <tr>
-                                        <th>File Name</th>
-                                        <th>File Size</th>
-                                        <th></th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                    
-                                      <tr>
-                                        <td>Functional-requirements.docx</td>
-                                        <td>49.8005 kb</td>
-                                        <td class="text-right py-0 align-middle">
-                                          <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                          </div>
-                                        </td>
-                                      <tr>
-                                        <td>UAT.pdf</td>
-                                        <td>28.4883 kb</td>
-                                        <td class="text-right py-0 align-middle">
-                                          <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                          </div>
-                                        </td>
-                                      <tr>
-                                        <td>Email-from-flatbal.mln</td>
-                                        <td>57.9003 kb</td>
-                                        <td class="text-right py-0 align-middle">
-                                          <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                          </div>
-                                        </td>
-                                      <tr>
-                                        <td>Logo.png</td>
-                                        <td>50.5190 kb</td>
-                                        <td class="text-right py-0 align-middle">
-                                          <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                          </div>
-                                        </td>
-                                      <tr>
-                                        <td>Contract-10_12_2014.docx</td>
-                                        <td>44.9715 kb</td>
-                                        <td class="text-right py-0 align-middle">
-                                          <div class="btn-group btn-group-sm">
-                                            <a href="#" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                          </div>
-                                        </td>
-                    
-                                    </tbody>
-                                  </table>
                                 </div>
-                                <!-- /.card-body -->
-                              </div>
-                                </div>
-                                </div>
-                            </div>
-                            <!-- /.card -->
                             </div>
                         </div>
                     </div>
@@ -932,6 +706,319 @@ const leerClientes = async () => {
     };
     xhr.send('operation=read');
 };
+
+/**
+ * 
+ * @param {number} idcustomer 
+ */
+const readCreditsCustomer = async (idcustomer) => {
+    // let credits = document.getElementById(`credits${idcustomer}`);
+    console.log(`ID del Cliente ${idcustomer}`);
+    var tblCreditsCustomer = document.getElementById(`tblcredits${idcustomer}`);
+    
+    console.log(tblCreditsCustomer);
+    let params =
+        'operation=rowCreditsCustomer' +
+        '&icvecliente=' + idcustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+
+        new DataTable(tblCreditsCustomer, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n','Acciones'],
+                data: data.map(function (item) {
+                    var id = item['icvecredito'];
+                    let monto = parseFloat(item['dmonto']);
+                    
+                    let montoFormateado = monto.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    let interes = parseFloat(item['dinteres']);
+                    return [
+                        id,
+                        montoFormateado,
+                        `${interes} %`,
+                        item['dtfechasolicitud'],
+                        item['dtfechafiniquito'],
+                        `<button class="btn bg-gradient-warning btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick=""><i class="fas fa-check-circle"></i></button>
+                        <button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Detalle del Cr&eacute;dito" onclick="detailCreditsCustomer(${idcustomer}, ${id} )"><i class="fa fa-list"></i></button>`
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
+    }
+}
+
+const readAddressMap = (idcostumer, dataCustomer) => {
+    let address = document.getElementById(`address-map${idcostumer}`);
+
+    address.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-success card-outline">
+                            <div class="card-body box-profile">
+                                    <h3 class="profile-username text-center">
+                                        <div id="nameCustomer-${idcostumer}">${dataCustomer.cclinombre}</div>
+                                    </h3>
+                                <p class="text-muted text-center">${dataCustomer.capaterno} ${dataCustomer.camaterno}</p>
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    <li class="list-group-item">
+                                        <b>Tel&eacute;fono:</b> <b><span class="float-right" style="font-size: 24px">${dataCustomer.ctelefono}</span></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Edad</b> <b><span class="float-right">${dataCustomer.iedad} años</span></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer.dfechanaciemiento)} </span></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Tipo de Cliente</b> <b><span class="float-right">${dataCustomer.cabreviiatipo} </span></b>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer.dfechanaciemiento)} </span></b>
+                                    </li>
+                                </ul>
+                            </div><!-- /.card-body -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-success card-outline">
+                            <div class="card-body box-profile">
+                                <h3 class="profile-username text-center">DIRECCIÓN POSTAL</h3>
+                                <p class="text-muted text-center">Y DATOS DE UBICACIÓN</p>
+                                    <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <table>
+                            <tr>
+                                <td><b>Direcci&oacute;n:</b></td>
+                                <td>${dataCustomer.ccalle} ${dataCustomer.cnumexterior} ${dataCustomer.cnuminterior} ${dataCustomer.ccolonia}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Municipio o Delegaci&oacute;n ${dataCustomer.cdelegmunicipio} ${dataCustomer.centfederativa} ${dataCustomer.cpais} C.P. ${dataCustomer.ccodpostal}</td>
+                            </tr>
+                            <tr class="text-center">
+                                <td colspan="2"><b>Coordenadas de Geolocalizaci&oacute;n</b></td>
+                            </tr>
+                            <tr class="text-center">
+                                <td><b>Latitud</b></td>
+                                <td><b>Longitud</b></td>
+                            </tr>
+                            <tr class="text-center">
+                                <td>${dataCustomer.latitud}</td>
+                                <td>${dataCustomer.longitud}</td>
+                            </tr>
+                        </table>
+                    </li>
+                </ul>
+            </div><!-- /.card-body -->
+        </div><!-- /.card-success -->
+    </div><!-- /.end-col-md-4 -->
+    <div class="col-md-4">
+        <div class="card card-success card-outline">
+            <div class="card-body box-profile">
+                <h3 class="profile-username text-center">MAPA DE UBICACI&Oacute;N</h3>
+                <p class="text-muted text-center">del cliente</p>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <div id="mapCustomer${idcostumer}" style="width:100%;height:250px;"></div>
+                    </li>
+                </ul>
+            </div><!-- /.card-body -->
+        </div><!-- /.card-success -->
+    </div><!-- /.end-col-md-4 -->
+</div><!-- /.end-row -->
+    `;
+    return address;
+}
+
+const readAccountsBanksCustomer = (idcustomer) => {
+    let accountsBanks = document.getElementById(`accountsBanks${idcustomer}`);
+
+    accountsBanks.innerHTML = `
+                <table border="1">
+                    <tr>
+                        <th>Cuentas Bancarias</th>
+                        <th>Fecha y Hora</th>
+                        <th>Observaciones</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2022-06-08 21:07:43</td>
+                        <td>En perfecto estado</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2022-08-19 01:06:10</td>
+                        <td>Nada que reportar</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2022-10-20 09:05:16</td>
+                        <td>Se observaron variaciones menores</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>2023-05-16 06:01:39</td>
+                        <td>Se observaron variaciones menores</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2022-08-30 00:01:51</td>
+                        <td>Revisión completa, sin hallazgos</td>
+                    </tr>
+                </table>
+                `;
+    return accountsBanks;
+}
+
+const readCollectionFinanceCustomer = (idcustomer) => {
+    let collectionFinance = document.getElementById(`financeCollection${idcustomer}`);
+
+    collectionFinance.innerHTML = `
+            <table border="1">
+                <tr>
+                    <th>Columna 1</th>
+                    <th>Fecha y Hora</th>
+                    <th>Observaciones de algo</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2022-06-08 21:07:43</td>
+                    <td>En perfecto estado</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2022-08-19 01:06:10</td>
+                    <td>Nada que reportar</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2022-10-20 09:05:16</td>
+                    <td>Se observaron variaciones menores</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2023-05-16 06:01:39</td>
+                    <td>Se observaron variaciones menores</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>2022-08-30 00:01:51</td>
+                    <td>Revisión completa, sin hallazgos</td>
+                </tr>
+            </table>
+    `;
+
+    return collectionFinance;
+}
+
+const readFilesCustomer = (idcustumer) => {
+    let tableFiles = document.getElementById(`filesCustomer${idcustumer}`);
+
+    tableFiles.innerHTML = `
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Archivos de comprobaci&oacute;n</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Descripción de Arvhivo</th>
+                                <th>Nombre de Archivo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Functional-requirements.docx</td>
+                                <td>49.8005 kb</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
+                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>UAT.pdf</td>
+                                <td>28.4883 kb</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
+                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email-from-flatbal.mln</td>
+                                <td>57.9003 kb</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
+                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Logo.png</td>
+                                <td>50.5190 kb</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
+                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Contract-10_12_2014.docx</td>
+                                <td>44.9715 kb</td>
+                                <td class="text-right py-0 align-middle">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
+                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card-success -->
+    `;
+
+    return tableFiles;
+}
+
 
 const leerCreditosPorCliente = async (icvecliente) => {
     let params =
@@ -988,7 +1075,7 @@ const leerCreditosPorCliente = async (icvecliente) => {
     }
 }
 
-const readRowCustomer = async (id) =>{
+const readRowCustomer = async (id) => {
     let params =
         'operation=row' +
         '&idCliente=' + id;
@@ -1006,11 +1093,79 @@ const readRowCustomer = async (id) =>{
         }
 
         const data = await response.json();
-        
+
         return data;
 
     } catch (error) {
         throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
+}
+
+window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
+    // let credits = document.getElementById(`credits${idcustomer}`);
+    console.log(`ID del Cliente ${idcreditCustomer}`);
+    
+    var tblCreditDetail = document.getElementById(`tblcreditspays${idcliente}`);
+    
+    console.log(`Es la tabla ${tblCreditDetail}`);
+    let params =
+        'operation=rowCreditCusDetail' +
+        '&idcreditCustomer=' + idcreditCustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+        console.table(data);
+
+        new DataTable(tblCreditDetail, {
+            perPage: 10,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Pag a Capital', 'Pago Interes', 'Total', 'Fecha Pago', 'Estado'],
+                data: data.map(function (item) {
+                    var id = item['icvedetallepago'];
+                    let dpaycapital = parseFloat(item['dpaycapital']);
+                    let dpayinteres = parseFloat(item['dpayinteres']);
+                    let dpaycapitalFormateado = dpaycapital.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    let dpayinteresFormateado = dpayinteres.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    let total = parseFloat(item['dpaycapital']) + parseFloat(item['dpayinteres']) ;
+                    let totalFormateado = total.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    return [
+                        id,
+                        dpaycapitalFormateado,
+                        dpayinteresFormateado,
+                        totalFormateado,
+                        item['dfechapago'],
+                        item['cestatuspago'] = '0' 
+                            ? `<i class="fas fa-check-circle" style="color:red;"></i>` 
+                            : `<i class="fas fa-check-circle" style="color:green;"></i>`
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos del credito solicitado: ${error.message}`);
     }
 }
 
@@ -1044,34 +1199,25 @@ const leerRowCliente = (id) => {
 };
 
 
-const insertCustomer = async (CustomerPersonalData) => {
-    // Se de
-    const params = new URLSearchParams({
-        operation: 'create',
-        cutomers: JSON.stringify(CustomerPersonalData)
-    }).toString();
-    
+const insertCustomer = async (formDataCustomer) => {
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params
+            body: formDataCustomer // Usando FormData directamente
         });
 
         if (!response.ok) {
-            throw new Error('Error con la comunicacion con el servidor');
+            throw new Error('Error con la comunicación con el servidor');
         }
 
         const data = await response.json();
-
         return data;
 
     } catch (error) {
-        throw new Error(`Error en el servidor ${error}`);
+        throw new Error(`Error en el servidor: ${error.message}`);
     }
-}
+};
+
 
 const insertCreditCustomer = () => {
 
