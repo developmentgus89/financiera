@@ -120,6 +120,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tiposCliente = $customer->obtenerTiposClientes();
             echo json_encode($tiposCliente);
             break;
+
+        case 'readRowaAccountsBanks':
+            $icvecliente   = $_POST['icvecliente'];
+            $accountsBanks = $customer->getAccountsBanksCustomer($icvecliente);
+            echo json_encode($accountsBanks);
+            break;
         case 'rowCreditsCustomer':
             $icvecliente = $_POST['icvecliente'];
             $rowCredits = $credits->getRowsCreditsByClient($icvecliente);

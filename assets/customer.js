@@ -682,7 +682,9 @@ const leerClientes = async () => {
                                             <div id="address-map${rowData[1]}"></div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-banks${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                            <div id="accountsBanks${rowData[1]}"></div>
+                                            <div id="accountsBanks${rowData[1]}">
+                                                <table id="tblaccountsBanks${rowData[1]}" class="table"></table>
+                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                             <div id="financeCollection${rowData[1]}"></div>
@@ -851,43 +853,50 @@ const readAddressMap = (idcostumer, dataCustomer) => {
     return address;
 }
 
-const readAccountsBanksCustomer = (idcustomer) => {
-    let accountsBanks = document.getElementById(`accountsBanks${idcustomer}`);
+const readAccountsBanksCustomer = async (idcustomer) => {
+    let tblaccountsBanks = document.getElementById(`tblaccountsBanks${idcustomer}`);
 
-    accountsBanks.innerHTML = `
-                <table border="1">
-                    <tr>
-                        <th>Cuentas Bancarias</th>
-                        <th>Fecha y Hora</th>
-                        <th>Observaciones</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2022-06-08 21:07:43</td>
-                        <td>En perfecto estado</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2022-08-19 01:06:10</td>
-                        <td>Nada que reportar</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>2022-10-20 09:05:16</td>
-                        <td>Se observaron variaciones menores</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>2023-05-16 06:01:39</td>
-                        <td>Se observaron variaciones menores</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>2022-08-30 00:01:51</td>
-                        <td>Revisión completa, sin hallazgos</td>
-                    </tr>
-                </table>
-                `;
+    let params =
+        'operation=readRowaAccountsBanks' +
+        '&icvecliente=' + idcustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+        
+        new DataTable(tblaccountsBanks, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'N\u00FCmero de Cuenta/Tarjeta', 'Banco', 'Tipo de Cuenta'],
+                data: data.map(function (item) {
+                   
+                    return [
+                        item['icvectabankcli'],
+                        item['cnumctabancaria'],
+                        item['cnombrebanco'],
+                        item['tipo_cuenta_desc']
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
+    }
+
+   
     return accountsBanks;
 }
 
@@ -1156,7 +1165,7 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                         dpayinteresFormateado,
                         totalFormateado,
                         item['dfechapago'],
-                        item['cestatuspago'] = '0' 
+                        item['cestatuspago'] == '0' 
                             ? `<i class="fas fa-check-circle" style="color:red;"></i>` 
                             : `<i class="fas fa-check-circle" style="color:green;"></i>`
                     ]

@@ -417,6 +417,32 @@ class Customer
         }
     }
 
+    public function getAccountsBanksCustomer(int $idcliente) : array{
+        try {
+            $query = "SELECT 
+                            ctascus.*, 
+                            banco.*, 
+                            CASE 
+                                WHEN ctascus.itipocuenta = 1 THEN 'Cuenta de CLABE'
+                            WHEN ctascus.itipocuenta = 2 THEN 'Tarjeta de Débito'
+                                WHEN ctascus.itipocuenta = 3 THEN 'Cuenta Bancaria'
+                                ELSE 'Tipo de cuenta desconocido'
+                            END AS tipo_cuenta_desc
+                        FROM 
+                            catctasbankscli AS ctascus
+                        INNER JOIN 
+                            catbancos AS banco ON ctascus.icvebanco = banco.icvebanco
+                        WHERE 
+                            ctascus.icvecliente = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$idcliente]);
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta de las cuentas bancarias: ' . $e->getMessage();
+        }
+    }
+
     public function obtenerTiposClientes()
     {
         try {
