@@ -74,6 +74,19 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
+
+    public function getReferedCustomer(int $icvecliente): ?array{
+        try {
+            $sql = "SELECT * FROM catclireferidos WHERE icvecliente = ?";
+            $statement = $this->acceso->prepare($sql);
+            $statement->execute([$icvecliente]);
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error al buscar los referidos del cliente.' . $e->getMessage());
+        }
+    }
+
     /**
      * insertRow
      *

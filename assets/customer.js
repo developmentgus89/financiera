@@ -645,7 +645,7 @@ const leerClientes = async () => {
                         readAddressMap(rowData[1], dataCustomer[0]);
                         setCustomerMap(dataCustomer[0].latitud, dataCustomer[0].longitud, rowData[1]);
                         readAccountsBanksCustomer(rowData[1]);
-                        readCollectionFinanceCustomer(rowData[1]);
+                        readReferedCustomer(rowData[1]);
                         readFilesCustomer(rowData[1]);
                     }, 50);
                     return `
@@ -664,7 +664,7 @@ const leerClientes = async () => {
                                             <a class="nav-link" id="custom-tabs-one-banks-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-banks${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Cuentas bancarias</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Cobranza</a>
+                                            <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Referido</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
@@ -738,13 +738,37 @@ const leerClientes = async () => {
                                             <div id="accountsBanks${rowData[1]}">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <table id="tblaccountsBanks${rowData[1]}" class="table"></table>
+                                                        <div class="card card-success card-outline">
+                                                            <div class="card-body box-profile">
+                                                                <h3 class="profile-username text-center">
+                                                                    <div id="nameCustomer-${rowData[1]}">CUENTAS BANCARIAS</div>
+                                                                </h3>
+                                                                <hr>
+                                                                <div id="referedCustomer${rowData[1]}">
+                                                                    <table id="tblaccountsBanks${rowData[1]}" class="table"></table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                            <div id="financeCollection${rowData[1]}"></div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="card card-success card-outline">
+                                                        <div class="card-body box-profile">
+                                                            <h3 class="profile-username text-center">
+                                                                <div id="nameCustomer-${rowData[1]}">DATOS DE REFERIDO</div>
+                                                            </h3>
+                                                            <hr>
+                                                            <div id="referedCustomer${rowData[1]}">
+                                                                <table id="tblReferedCustomer${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
                                             <div id="filesCustomer${rowData[1]}"></div>
@@ -767,7 +791,7 @@ const leerClientes = async () => {
 };
 
 /**
- * 
+ * Funcion para leer creditos del cliente
  * @param {number} idcustomer 
  */
 const readCreditsCustomer = async (idcustomer) => {
@@ -830,6 +854,13 @@ const readCreditsCustomer = async (idcustomer) => {
     }
 }
 
+/**
+ * Lee la direccion del cliente y coloca la datos de
+ * geolocalizacion con Google Maps
+ * @param {number} idcostumer 
+ * @param {Array} dataCustomer 
+ * @returns 
+ */
 const readAddressMap = (idcostumer, dataCustomer) => {
     let address = document.getElementById(`address-map${idcostumer}`);
 
@@ -913,6 +944,10 @@ const readAddressMap = (idcostumer, dataCustomer) => {
     return address;
 }
 
+/**
+ * Esta funcion permite leer las cuentas bancarias del cliente
+ * @param {number} idcustomer 
+ */
 const readAccountsBanksCustomer = async (idcustomer) => {
     let tblaccountsBanks = document.getElementById(`tblaccountsBanks${idcustomer}`);
 
@@ -955,9 +990,6 @@ const readAccountsBanksCustomer = async (idcustomer) => {
     } catch (error) {
         throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
     }
-
-
-    return accountsBanks;
 }
 
 /**
@@ -965,45 +997,47 @@ const readAccountsBanksCustomer = async (idcustomer) => {
  * @param {number} idcustomer 
  * @returns 
  */
-const readCollectionFinanceCustomer = (idcustomer) => {
-    let collectionFinance = document.getElementById(`financeCollection${idcustomer}`);
+const readReferedCustomer = async (idcustomer) => {
+    let tblReferedCustomer = document.getElementById(`tblReferedCustomer${idcustomer}`);
 
-    collectionFinance.innerHTML = `
-            <table border="1">
-                <tr>
-                    <th>Columna 1</th>
-                    <th>Fecha y Hora</th>
-                    <th>Observaciones de algo</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2022-06-08 21:07:43</td>
-                    <td>En perfecto estado</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2022-08-19 01:06:10</td>
-                    <td>Nada que reportar</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>2022-10-20 09:05:16</td>
-                    <td>Se observaron variaciones menores</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>2023-05-16 06:01:39</td>
-                    <td>Se observaron variaciones menores</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>2022-08-30 00:01:51</td>
-                    <td>Revisión completa, sin hallazgos</td>
-                </tr>
-            </table>
-    `;
+    let params =
+        'operation=readReferedCustomer' +
+        '&icvecliente=' + idcustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
-    return collectionFinance;
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+
+        new DataTable(tblReferedCustomer, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['Nombre', 'Telefono', 'Observaciones'],
+                data: data.map(function (item) {
+
+                    return [
+                        item['cnombreref'],
+                        item['ctelefonoref'],
+                        item['cobsnotref']
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
+    }
 }
 
 const readFilesCustomer = (idcustumer) => {
