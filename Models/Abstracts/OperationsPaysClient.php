@@ -40,5 +40,14 @@ abstract class OperationsPaysClient{
      * @return bool
      */
     abstract public function delete(int $id, int $icvecliente): ?array;
+
+    
+    /**
+     * updatePaysStatusCustomer
+     * Este metodo va a retornar un bool, para el tema del estatus de pago
+     * @return bool
+     */
+    abstract public function updatePaysStatusCustomer(): ?array;
+    
     
 }

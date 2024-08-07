@@ -168,10 +168,11 @@ class Customer
 
     public function insertCreditPaysCustomer(int $idCredit, array $creditDataPaysCustomer)
     {
-        $prestamo = $creditDataPaysCustomer['barprestamosoli'];
-        $interesBase = ($prestamo * $creditDataPaysCustomer['interesCredit']) / 100;
+        $prestamo     = $creditDataPaysCustomer['barprestamosoli'];
+        $interesBase  = ($prestamo * $creditDataPaysCustomer['interesCredit']) / 100;
         $prestamoBase = $creditDataPaysCustomer['barprestamosoli'] / $creditDataPaysCustomer['cantseman'];
-        $interes = $interesBase * $creditDataPaysCustomer['cantseman'];
+        $interes      = $interesBase * $creditDataPaysCustomer['cantseman'];
+        $totalBase    = $prestamoBase + $interesBase;
 
         $fechaActual = new DateTime();
         $fechasPago = []; // Array para almacenar fechas como strings
@@ -183,13 +184,14 @@ class Customer
 
             try {
                 $sqlDetCredit = "INSERT INTO catcreditctlpagcust
-                        (icvecredito, dpaycapital, dpayinteres, dfechapago, cestatuspago) 
-                        VALUES (?, ?, ?, ?, ?)";
+                        (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago) 
+                        VALUES (?, ?, ?, ?, ?, ?)";
                 $statement = $this->acceso->prepare($sqlDetCredit);
                 $statement->execute([
                     $idCredit,
                     $prestamoBase,
                     $interesBase,
+                    $totalBase,
                     $fechasPago[$i - 1], // Uso correcto del array
                     '0'
                 ]);
@@ -388,9 +390,19 @@ class Customer
     public function obtenerClientes(): array
     {
         try {
-            $query = "SELECT * FROM clientes 
-                    inner join cattipocliente 
-                    on clientes.icvetipocliente = cattipocliente.icvetipocliente";
+            $query = "SELECT clientes.*, cattipocliente.*, catcreditos.*, pagos.*
+                        FROM clientes
+                    INNER JOIN cattipocliente ON clientes.icvetipocliente = cattipocliente.icvetipocliente
+                    INNER JOIN catcreditos ON catcreditos.icvecliente = clientes.icvecliente
+                    INNER JOIN (
+                        SELECT icvecredito, MIN(dfechapago) as prox_vencimiento
+                            FROM catcreditctlpagcust
+                        WHERE cestatuspago = '0'
+                        GROUP BY icvecredito
+                    ) as prox_pagos ON catcreditos.icvecredito = prox_pagos.icvecredito
+                    INNER JOIN catcreditctlpagcust as pagos
+                    ON prox_pagos.icvecredito = pagos.icvecredito AND prox_pagos.prox_vencimiento = pagos.dfechapago
+                    ORDER BY prox_pagos.prox_vencimiento";
             $statement = $this->acceso->prepare($query);
             $statement->execute();
 

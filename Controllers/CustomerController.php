@@ -3,6 +3,7 @@ require_once '../Models/Customer.php';
 require_once '../Models/CreditsClients.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $operation = $_POST['operation'];
     $customer = new Customer();
     $credits  = new CreditsClients();
@@ -50,36 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $customerData[4]['fileidComprobanteDom'] = $_FILES['fileidComprobanteDom'];
             $customerData[4]['fileidINEidentif']     = $_FILES['fileidINEidentif'];
             $customerData[4]['fileidCompIngresos'] = (
-                    isset($_FILES['fileidCompIngresos']) && $_FILES['fileidCompIngresos']['error'] == 0) 
-                    ? $_FILES['fileidCompIngresos'] 
-                    : null;
+                isset($_FILES['fileidCompIngresos']) && $_FILES['fileidCompIngresos']['error'] == 0)
+                ? $_FILES['fileidCompIngresos']
+                : null;
 
             // Datos de la persona que refirió a la persona
             $customerData[5]['nombreReferido']        = $_POST['nombreReferido'];
             $customerData[5]['telefonoReferido']      = $_POST['telefonoReferido'];
             $customerData[5]['observacionesReferido'] = $_POST['observacionesReferido'];
-
-            // var_dump($customerData);
-            // exit();
-
-            // $dir = "../docs/docCliAddress/";
-
-            // $imageFileType = strtolower(pathinfo($_FILES["fileidComprobanteDom"]["name"], PATHINFO_EXTENSION));
-            // //Cambio de nombre del documento add id
-            // $originalFileName = pathinfo($_FILES["fileidComprobanteDom"]["name"], PATHINFO_FILENAME);
-            // $newFileName = $originalFileName . "__2024." . $imageFileType;
-            // $target_file = $dir . $newFileName;
-
-            // if (isset($_FILES["fileidComprobanteDom"])) {
-            //     if (move_uploaded_file($_FILES["fileidComprobanteDom"]["tmp_name"], $target_file)) {
-            //         echo "El archivo " . htmlspecialchars($newFileName) . " ha sido subido.";
-            //         $resp = true;
-            //     } else {
-            //         echo "Hubo un error al subir al archivo";
-            //     }
-            // }
-
-
 
             // Crear cliente
             $resp = $customer->insertarCliente($customerData);
@@ -142,6 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $zipcode = $_POST['zipcode'];
             $rowsZipCode = $customer->get_AsentamientosByZipCode($zipcode);
             echo json_encode($rowsZipCode);
+            break;
+
+        case 'updatePaysStatusCustomer':
+            $resp = $credits->updatePaysStatusCustomer();
+            echo json_encode($resp);
             break;
         default:
             echo 'Operación no válida';

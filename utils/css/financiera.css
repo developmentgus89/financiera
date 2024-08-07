@@ -96,3 +96,15 @@ table{
     line-height: normal;
     width: 50px;
 }
+
+.centerColumn{
+    text-align: center;
+}
+
+.dataTable-table{
+    text-align: center;
+}
+
+td, tr, th, thead{
+    text-align: center;
+}

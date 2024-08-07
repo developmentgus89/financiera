@@ -3,6 +3,10 @@ import * as moduleAccBanks from "./Modules/AccountsBanks/opBanksAccounts.js";
 //Constante de Declaracion para la base Url
 const baseURL = '../Controllers/CustomerController.php';
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+
 $('#imontoprestamo').inputmask('currency', {
     radixPoint: '.',
     groupSeparator: ',',
@@ -176,7 +180,6 @@ const calculaCantidadPrestamo = () => {
  * @param {number} diasPeriodicidad 
  */
 const calculoFecha = (cantidadPagos) => {
-    console.log(cantidadPagos);
     let hoy = new Date();
     let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * 7 * 24 * 60 * 60 * 1000));
     let fechaFormateada = formatDate(fechaAproxLiquidacion);
@@ -455,7 +458,7 @@ btnInsertarCliente.addEventListener('click', () => {
 
             //--- Generacion del objeto JS para Datos Personales
             var formDataCustomer = new FormData();
-            formDataCustomer.append('operation', 'create');
+            formDataCustomer.append('operation', "create");
             formDataCustomer.append('cnombre', cnombre.value);
             formDataCustomer.append('capelpat', capelpat.value);
             formDataCustomer.append('capelmat', capelmat.value);
@@ -510,7 +513,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 if (result.isConfirmed) {
 
                     let idCliente = await insertCustomer(formDataCustomer);
-                    console.table(idCliente);
+                    console.table(idCliente); //TODO: Pendiente quitar este console.log
                     //location.reload();
                 } else {
                     $('#custom-tabs-one-referidos-tab').tab('show');
@@ -525,7 +528,6 @@ btnInsertarCliente.addEventListener('click', () => {
 btnActualizarCliente.addEventListener('click', () => {
     let id = $('#udp-idcustomer').val();
 
-    console.log('Valor al dar click ' + id);
     leerRowCliente(id);
     let udpcvegrado = document.getElementById('udp-icvegrado').value;
     let udpname = document.getElementById('udp-namecustomer').value;
@@ -546,8 +548,33 @@ btnEliminarCliente.addEventListener('click', () => {
     $('#modalBorrarCliente').modal('hide');
     location.reload();
 });
-// Función para leer los clientes
 
+const updatePaysStatusCustomer = async () => {
+    let params = 'operation=updatePaysStatusCustomer';
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+
+
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
+    }
+}
+// Función para leer los clientes
 const leerClientes = async () => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', baseURL, true);
@@ -563,6 +590,8 @@ const leerClientes = async () => {
                             "",
                             id,
                             `${item['cclinombre']} ${item['capaterno']} ${item['camaterno']}`,
+                            item['dfechapago'],
+                            parseFloat(item['total']).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }),
                             `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`,
                             item['ctelefono'],
                             item['cabreviiatipo'],
@@ -582,6 +611,8 @@ const leerClientes = async () => {
                         },
                         { title: "ID" },
                         { title: "Nombre" },
+                        { title: "Fecha Pago" },
+                        { title: "Monto Pago" },
                         { title: "No. de Prestamos" },
                         { title: "Telefono" },
                         { title: "Tipo Cliente" },
@@ -607,15 +638,7 @@ const leerClientes = async () => {
                 });
 
                 async function format(rowData) {
-                    // Aquí puedes definir la estructura HTML de tu información adicional basada en rowData
-                    //console.log(rowData);
-                    //console.table(rowData);
-                    // console.log(rowData[1]);
-                    // leerCreditosPorCliente(rowData[1]);
                     let dataCustomer = await readRowCustomer(rowData[1]);
-                    console.log(`Table del array`);
-                    console.table(dataCustomer[0]);
-                    console.log(`Nombre`);
                     //Este setTimeOut es el que carga el mapa
                     setTimeout(() => {
                         readCreditsCustomer(rowData[1]);
@@ -652,26 +675,56 @@ const leerClientes = async () => {
                                     <div class="tab-content" id="custom-tabs-one-tabContent">
                                         <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-5">
                                                     <div class="card card-success card-outline">
                                                         <div class="card-body box-profile">
                                                             <h3 class="profile-username text-center">
                                                                 <div id="nameCustomer-${rowData[1]}">CR&Eacute;DITOS DEL CLIENTE ACTIVOS</div>
                                                             </h3>
+                                                            <hr>
                                                             <div id="credits${rowData[1]}">
                                                                 <table id="tblcredits${rowData[1]}" class="table table-hover text-wrap"></table>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="card card-success card-outline">
+                                                <div class="col-md-7">
+                                                    <div class="card card-success card-outline" id="rowDetailLoan${rowData[1]}" style="display:none;">
                                                         <div class="card-body box-profile">
-                                                            <h3 class="profile-username text-center">
-                                                                <div id="nameCustomerDet-${rowData[1]}">DETALLE DEL CR&Eacute;DITO SELECCIONADO</div>
-                                                            </h3>
-                                                            <div id="creditsPays${rowData[1]}">
-                                                                <table id="tblcreditspays${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h3 class="profile-username text-center">
+                                                                        <div id="nameCustomerDet-${rowData[1]}">DETALLE DEL CR&Eacute;DITO SELECCIONADO</div>
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="description-block border-right">
+                                                                        <h4><div id="tprestamo-${rowData[1]}"></div></h4>
+                                                                        <span class="description-text">TOTAL PR&Eacute;STAMO</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="description-block border-right">
+                                                                        <h4><div id="tinteres-${rowData[1]}"></div></h4>
+                                                                        <span class="description-text">TOTAL INTERESES</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="description-block border-right">
+                                                                        <h4><div id="tapagar-${rowData[1]}"></div></h4>
+                                                                        <span class="description-text">TOTAL A PAGAR</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div id="creditsPays${rowData[1]}">
+                                                                        <table id="tblcreditspays${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -683,7 +736,11 @@ const leerClientes = async () => {
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-banks${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                                             <div id="accountsBanks${rowData[1]}">
-                                                <table id="tblaccountsBanks${rowData[1]}" class="table"></table>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <table id="tblaccountsBanks${rowData[1]}" class="table"></table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-messages${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
@@ -715,10 +772,8 @@ const leerClientes = async () => {
  */
 const readCreditsCustomer = async (idcustomer) => {
     // let credits = document.getElementById(`credits${idcustomer}`);
-    console.log(`ID del Cliente ${idcustomer}`);
     var tblCreditsCustomer = document.getElementById(`tblcredits${idcustomer}`);
-    
-    console.log(tblCreditsCustomer);
+
     let params =
         'operation=rowCreditsCustomer' +
         '&icvecliente=' + idcustomer;
@@ -737,29 +792,34 @@ const readCreditsCustomer = async (idcustomer) => {
 
         const data = await response.json();
 
-
+       
+        // console.log(data[0].);
         new DataTable(tblCreditsCustomer, {
             perPage: 5,
             data: {
                 // headings: Object.keys(data[0]),
-                headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n','Acciones'],
+                headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n', 'Cambio de Esquema', 'Pagos'],
                 data: data.map(function (item) {
                     var id = item['icvecredito'];
                     let monto = parseFloat(item['dmonto']);
-                    
+
                     let montoFormateado = monto.toLocaleString('es-MX', {
                         style: 'currency',
                         currency: 'MXN'
                     });
                     let interes = parseFloat(item['dinteres']);
+                    
                     return [
                         id,
                         montoFormateado,
                         `${interes} %`,
                         item['dtfechasolicitud'],
                         item['dtfechafiniquito'],
-                        `<button class="btn bg-gradient-warning btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick=""><i class="fas fa-check-circle"></i></button>
-                        <button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Detalle del Cr&eacute;dito" onclick="detailCreditsCustomer(${idcustomer}, ${id} )"><i class="fa fa-list"></i></button>`
+                        item['status_2'] >= 1 
+                            ?  `<button class="btn bg-gradient-warning btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
+                            :  `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="changeLoanScheme(${id}, 2)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
+                       ,
+                        `<button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Detalle del Cr&eacute;dito" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
                     ]
                 })
             }
@@ -783,19 +843,19 @@ const readAddressMap = (idcostumer, dataCustomer) => {
                                     </h3>
                                 <p class="text-muted text-center">${dataCustomer.capaterno} ${dataCustomer.camaterno}</p>
                                 <ul class="list-group list-group-unbordered mb-3">
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" style="text-align: left">
                                         <b>Tel&eacute;fono:</b> <b><span class="float-right" style="font-size: 24px">${dataCustomer.ctelefono}</span></b>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" style="text-align: left">
                                         <b>Edad</b> <b><span class="float-right">${dataCustomer.iedad} años</span></b>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" style="text-align: left">
                                         <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer.dfechanaciemiento)} </span></b>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" style="text-align: left">
                                         <b>Tipo de Cliente</b> <b><span class="float-right">${dataCustomer.cabreviiatipo} </span></b>
                                     </li>
-                                    <li class="list-group-item">
+                                    <li class="list-group-item" style="text-align: left">
                                         <b>Cumpleaños</b> <b><span class="float-right">${formatDateBirthday(dataCustomer.dfechanaciemiento)} </span></b>
                                     </li>
                                 </ul>
@@ -874,14 +934,14 @@ const readAccountsBanksCustomer = async (idcustomer) => {
 
         const data = await response.json();
 
-        
+
         new DataTable(tblaccountsBanks, {
             perPage: 5,
             data: {
                 // headings: Object.keys(data[0]),
                 headings: ['ID', 'N\u00FCmero de Cuenta/Tarjeta', 'Banco', 'Tipo de Cuenta'],
                 data: data.map(function (item) {
-                   
+
                     return [
                         item['icvectabankcli'],
                         item['cnumctabancaria'],
@@ -896,10 +956,15 @@ const readAccountsBanksCustomer = async (idcustomer) => {
         throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
     }
 
-   
+
     return accountsBanks;
 }
 
+/**
+ * Esta funcion esta disegnada para traer todas las notas de cobranza en el tab
+ * @param {number} idcustomer 
+ * @returns 
+ */
 const readCollectionFinanceCustomer = (idcustomer) => {
     let collectionFinance = document.getElementById(`financeCollection${idcustomer}`);
 
@@ -1048,8 +1113,6 @@ const leerCreditosPorCliente = async (icvecliente) => {
 
         const data = await response.json();
 
-        console.table(data);
-
         var tblCreditsCustomer = document.getElementById(`tblcredits${icvecliente}}`);
 
         new DataTable(tblCreditsCustomer, {
@@ -1111,15 +1174,14 @@ const readRowCustomer = async (id) => {
 }
 
 window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
-    // let credits = document.getElementById(`credits${idcustomer}`);
-    console.log(`ID del Cliente ${idcreditCustomer}`);
-    
     var tblCreditDetail = document.getElementById(`tblcreditspays${idcliente}`);
+
+    if (tblCreditDetail.dataTableInstance) {
+        tblCreditDetail.dataTableInstance.destroy();
+        tblCreditDetail.innerHTML = ''; // Limpiar el contenido de la tabla
+    }
+    let params = 'operation=rowCreditCusDetail' + '&idcreditCustomer=' + idcreditCustomer;
     
-    console.log(`Es la tabla ${tblCreditDetail}`);
-    let params =
-        'operation=rowCreditCusDetail' +
-        '&idcreditCustomer=' + idcreditCustomer;
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -1134,13 +1196,26 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
         }
 
         const data = await response.json();
-
         console.table(data);
 
-        new DataTable(tblCreditDetail, {
+        // Check if the totals are included in the response
+        let tprestamo = 0, tintereses = 0, ttotal = 0;
+        if (data.length > 0 && data[0].hasOwnProperty('tprestamo') && data[0].hasOwnProperty('tintereses') && data[0].hasOwnProperty('ttotal')) {
+            tprestamo = parseFloat(data[0].tprestamo);
+            tintereses = parseFloat(data[0].tintereses);
+            ttotal = parseFloat(data[0].ttotal);
+        } else {
+            // If the totals are not included, calculate them manually
+            data.forEach(item => {
+                tprestamo += parseFloat(item.dpaycapital);
+                tintereses += parseFloat(item.dpayinteres);
+                ttotal += parseFloat(item.total);
+            });
+        }
+
+        tblCreditDetail.dataTableInstance = new DataTable(tblCreditDetail, {
             perPage: 10,
             data: {
-                // headings: Object.keys(data[0]),
                 headings: ['ID', 'Pag a Capital', 'Pago Interes', 'Total', 'Fecha Pago', 'Estado'],
                 data: data.map(function (item) {
                     var id = item['icvedetallepago'];
@@ -1154,31 +1229,55 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                         style: 'currency',
                         currency: 'MXN'
                     });
-                    let total = parseFloat(item['dpaycapital']) + parseFloat(item['dpayinteres']) ;
+                    let total = parseFloat(item['total']);
                     let totalFormateado = total.toLocaleString('es-MX', {
                         style: 'currency',
                         currency: 'MXN'
                     });
+
+                    let fechaPago = item['dfechapago'];
+                    let fechaPagoDate = new Date(fechaPago);
+                    let fechaActual = new Date();
+                    fechaActual.setDate(fechaActual.getDate() - 1);
+
+                    let icon = ``;
+                    if (fechaPagoDate < fechaActual && item['cestatuspago'] != '1') {
+                        icon = `<span class="badge bg-danger" style="font-size: 12px"> VENCIDO </span>`;
+                    } else {
+                        if (item['cestatuspago'] == '0') {
+                            icon = `<i class="fa fa-times-circle" style="color:red;"></i>`;
+                        } else {
+                            icon = `<i class="fas fa-check-circle" style="color:green;"></i>`;
+                        }
+                    }
+
                     return [
                         id,
                         dpaycapitalFormateado,
                         dpayinteresFormateado,
                         totalFormateado,
                         item['dfechapago'],
-                        item['cestatuspago'] == '0' 
-                            ? `<i class="fas fa-check-circle" style="color:red;"></i>` 
-                            : `<i class="fas fa-check-circle" style="color:green;"></i>`
+                        icon
                     ]
                 })
             }
         });
 
+        document.getElementById(`rowDetailLoan${idcliente}`).style.display = 'block';
+
+        document.getElementById(`tprestamo-${idcliente}`).innerHTML = `${tprestamo.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`;
+        document.getElementById(`tinteres-${idcliente}`).innerHTML = `${tintereses.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`;
+        document.getElementById(`tapagar-${idcliente}`).innerHTML = `${ttotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`;
+
     } catch (error) {
-        throw new Error(`No se pueden obtener los pagos del credito solicitado: ${error.message}`);
+        throw new Error(`No se pueden obtener los pagos del crédito solicitado: ${error.message}`);
     }
 }
 
 
+window.changeLoanScheme = (idCredit, op = null) => {
+    $("#mod-cambioEsquema").modal('show');
+}
 
 const leerRowCliente = (id) => {
     const xhr = new XMLHttpRequest();
@@ -1187,12 +1286,10 @@ const leerRowCliente = (id) => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const cliente = JSON.parse(xhr.responseText);
-            console.table(cliente);
             const defaultOptionUDP = document.createElement('option');
             defaultOptionUDP.value = cliente[0].icvegrado;
             defaultOptionUDP.textContent = cliente[0].cgradoabrevia;
             selectGradosUDP.append(defaultOptionUDP);
-            leerGrados2();
             document.getElementById('udp-icvegrado').value = cliente[0].icvegrado;
             document.getElementById('udp-namecustomer').value = cliente[0].name;
             document.getElementById('udp-addresscustomer').value = cliente[0].address;
@@ -1239,8 +1336,6 @@ const leerTipoCliente = () => {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const tiposClientes = JSON.parse(xhr.responseText);
-            console.log('LISTADO TIPOS DE CLIENTE');
-            console.table(tiposClientes);
 
             selectTipoCliente.innerHTML = '';
 
@@ -1270,7 +1365,7 @@ const actualizarCliente = (id, icvegrado, name, address, mobile) => {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.log('Cliente actualizado correctamente');
+            console.log('Cliente actualizado correctamente'); // TODO: agregar lo necesario
             // Lógica adicional después de actualizar el cliente
         } else {
             console.error('Error al actualizar el cliente');
@@ -1286,7 +1381,7 @@ const eliminarCliente = (id) => {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.log('Cliente eliminado correctamente');
+            console.log('Cliente eliminado correctamente'); // TODO: Agregar lo necesario despues del cliente eliminado
             // Lógica adicional después de eliminar el cliente
         } else {
             console.error('Error al eliminar el cliente');
@@ -1373,9 +1468,10 @@ varCP.addEventListener('blur', () => {
     readCodigosPostal(cp);
 });
 
-
+updatePaysStatusCustomer();
 actFecha();
 leerClientes();
 initMap();
 
 
+            

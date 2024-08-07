@@ -613,6 +613,38 @@ $fecha_actual = $formatter->format(new DateTime());
 <!-- /.modal -->
 
 
+<!-- Modal -->
+<div class="modal fade" id="mod-cambioEsquema" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+                <div class="modal-header">
+                        <h5 class="modal-title"><strong>Cambio de Esquema del Pr&eacute;stamo</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    Add rows here
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#exampleModal').on('show.bs.modal', event => {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        // Use above variables to manipulate the DOM
+        
+    });
+</script>
+
 
 <?php
 include_once "dashboard/endTemplateDashboard.php";
