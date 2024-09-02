@@ -133,6 +133,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resp = $credits->updatePaysStatusCustomer();
             echo json_encode($resp);
             break;
+
+        case 'readPaysPendingCredit':
+            $idCredit = $_POST['idCredit'];
+            $resp = $credits->readPaysPendingCredit($idCredit);
+            echo json_encode($resp);
+            break;
+
+        case 'aplyChangeSchemePaysLate':
+            $idCredit         = $_POST['idCredit'];
+            $interesAplicadoN = $_POST['interesAplicadoN'];
+            $cantseman        = $_POST['cantseman'];
+            $amountNewScheme  = $_POST['amountNewScheme'];
+
+            $resp = $credits->setChangeSchemeLate($idCredit, $interesAplicadoN, $cantseman, $amountNewScheme);
+            echo json_encode($resp);
+            break;
         default:
             echo 'Operación no válida';
             break;

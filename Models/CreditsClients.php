@@ -2,6 +2,8 @@
 <?php
 include_once('Abstracts/OperationsPaysClient.php');
 include_once('Conexion.php');
+include_once('Log/Log.php');
+date_default_timezone_set('America/Mexico_City');
 
 class CreditsClients extends OperationsPaysClient
 {
@@ -9,6 +11,7 @@ class CreditsClients extends OperationsPaysClient
     private $conexion;
     var $acceso;
     private static $conn;
+    private $monitor;
 
     /**
      * __construct
@@ -20,6 +23,7 @@ class CreditsClients extends OperationsPaysClient
         $db = new Conexion();
         $this->acceso = $db->pdo;
         self::$conn = $this->acceso;
+        $this->monitor = new Log();
     }
 
     /**
@@ -33,7 +37,7 @@ class CreditsClients extends OperationsPaysClient
         try {
             $sql = "SELECT 
                         creditos.*, 
-                        SUM(CASE WHEN pagos.cestatuspago = 2 THEN 1 ELSE 0 END) AS status_2
+                        SUM(CASE WHEN pagos.cestatuspago = 2 OR pagos.cestatuspago = 3 THEN 1 ELSE 0 END) AS status_2
                     FROM 
                         catcreditos AS creditos
                     INNER JOIN 
@@ -64,7 +68,7 @@ class CreditsClients extends OperationsPaysClient
                         (SELECT SUM(dpayinteres) FROM catcreditctlpagcust WHERE icvecredito = ?) as tintereses,
                         (SELECT SUM(total) FROM catcreditctlpagcust WHERE icvecredito = ?) as ttotal
                     FROM catcreditctlpagcust
-                    WHERE icvecredito = ?";
+                    WHERE icvecredito = ? AND cestatuspago IN(0, 1) AND dfecharealpago IS NULL";
             $statement = $this->acceso->prepare($sql);
             $statement->execute([$idcreditCustomer, $idcreditCustomer, $idcreditCustomer, $idcreditCustomer]);
 
@@ -75,7 +79,8 @@ class CreditsClients extends OperationsPaysClient
     }
 
 
-    public function getReferedCustomer(int $icvecliente): ?array{
+    public function getReferedCustomer(int $icvecliente): ?array
+    {
         try {
             $sql = "SELECT * FROM catclireferidos WHERE icvecliente = ?";
             $statement = $this->acceso->prepare($sql);
@@ -197,21 +202,131 @@ class CreditsClients extends OperationsPaysClient
 
                 $statement = $this->acceso->prepare($sql);
                 $resp['resp'] = $statement->execute();
-                if($resp['resp']){
+                if ($resp['resp']) {
                     $resp['resp2'] = CreditsClients::updateProcessSQL();
                 }
                 return $resp;
-            }else{
+            } else {
                 $resp['resp'] = false;
                 return $resp;
             }
-           
         } catch (PDOException $e) {
             throw new Error('Error al actualizar los status de pago de los creditos.' . $e->getMessage());
         }
     }
 
-    
+    /**
+     * readPaysPendingCredit 
+     * Se leen cada uno de los pagos pendientes.
+     * 
+     * @param  mixed $idCredit
+     * @return array
+     */
+    public function readPaysPendingCredit(int $idCredit): ?array
+    {
+        try {
+            $sql = "SELECT * FROM catcreditctlpagcust 
+                WHERE icvecredito = ? AND cestatuspago != 1 AND cestatuspago != 4";
+            $statement = $this->acceso->prepare($sql);
+            $statement->execute([$idCredit]);
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Error('Error al leer los pagos pendientes del créditos. ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * setChangeSchemeLate
+     *
+     * @param  int $idCredit
+     * @param  int $cantseman
+     * @param  float $amountNewScheme
+     * @return string
+     */
+    public function setChangeSchemeLate(int $idCredit, float $interesAplicadoN, int $cantseman, float $amountNewScheme): ?bool
+    {
+        $resp = array();
+        $interesBase  = ($amountNewScheme * (float) $interesAplicadoN) / 100;
+        $prestamoBase = $amountNewScheme / $cantseman;
+        $totalBase    = $prestamoBase + $interesBase;
+
+        $fechaActual = new DateTime();
+        $fechasPago = [];
+
+        $resp['resp'] = false; 
+
+        for ($i = 1; $i <= $cantseman; $i++) {
+            $fechaPago = clone $fechaActual;
+            $fechaPago->modify('+' . $i . ' weeks');
+            $fechasPago[] = $fechaPago->format('Y-m-d');
+
+            try {
+                $this->acceso->beginTransaction();
+                $exeSQL = CreditsClients::setStatusChangePaysLate($idCredit);
+
+                if ($exeSQL) {
+                    $sql = "INSERT INTO catcreditctlpagcust
+                    (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago) 
+                    VALUES (?, ?, ?, ?, ?, ?)";
+                    $statement = $this->acceso->prepare($sql);
+                    $statement->execute([
+                        $idCredit,
+                        $prestamoBase,
+                        $interesBase,
+                        $totalBase,
+                        $fechasPago[$i - 1], // Uso correcto del array
+                        0
+                    ]);
+                    $this->acceso->commit();
+                    $resp['resp'] = true; // Solo se establece como verdadero si una inserción tiene éxito
+                } else {
+                    $this->acceso->rollBack();
+                    $resp['resp'] = false;
+                    // No devolvemos aún, permitimos que el ciclo continúe
+                }
+            } catch (PDOException $e) {
+                if ($this->acceso->inTransaction()) {
+                    $this->acceso->rollBack();
+                }
+                $this->monitor->setLog('Clientes', $e);
+                return [false, $e];
+            }
+        }
+
+        return $resp['resp']; // Devuelve el resultado después de que el bucle haya finalizado
+
+    }
+
+    /**
+     * setStatusChangePaysLate
+     * Se cambia el estatus de la tabla de control de pagos
+     * donde 3 => retraso en pago, 2 => Está atrasado pero no se ha aplicado interés
+     * donde 4 => Ya se negoció un esquema de pago
+     * @param  int $idCredit
+     * @return bool
+     */
+    private static function setStatusChangePaysLate(int $idCredit): ?bool
+    {
+        $resp = array();
+        try {
+            $sql = "UPDATE catcreditctlpagcust SET cestatuspago = 4, dfecharealpago = NOW() WHERE icvecredito = ? AND cestatuspago = 3";
+            $statement = CreditsClients::$conn->prepare($sql);
+            $resp['resp'] = $statement->execute([$idCredit]);
+
+            if ($resp['resp']) {
+                $resp['resp'] = true;
+            } else {
+                $resp['resp'] = false;
+            }
+
+            return $resp['resp'];
+        } catch (PDOException $e) {
+            throw new Error('Error al actualizar los estatus de pagos del crédito.' . $e->getMessage());
+        }
+    }
+
+
     /**
      * searchProcessSQL
      * Se busca el proceso para indentificar la ultima fecha de actualizacion
@@ -229,7 +344,13 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
-    private static function updateProcessSQL(): ?bool{
+    /**
+     * updateProcessSQL
+     * Proceso por el cual se actualiza la bitacora de Procesos SQL.
+     * @return bool
+     */
+    private static function updateProcessSQL(): ?bool
+    {
         try {
             $query = "UPDATE bit_ctrlsql SET dtfechaejec = NOW() 
                     WHERE cnombreproceso = 'updatePaysStatusCustomer'";

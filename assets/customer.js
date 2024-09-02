@@ -62,6 +62,13 @@ $("#modalAgregar").on('hidden.bs.modal', function () {
     location.reload();
 });
 
+$('#mod-cambioEsquema').on('hidden.bs.modal', () => {
+    document.getElementById('persemanas').value = 0;
+    document.getElementById('tTotalIntereses').textContent = `0 %`;
+    document.getElementById('nPagoPSemanal').textContent = `$0.00 MXN`;
+    document.getElementById('totNuevoEsq').textContent = `$0.00 MXN`;
+});
+
 //Recuperacion de los valores de los botones dentro de la vista Customers
 const btnAgregar = document.querySelector('#agregar-cliente');
 const btnEditarCliente = document.querySelector('#agregar-cliente');
@@ -70,9 +77,120 @@ const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
 const selectTipoCliente = document.querySelector('#typeClient');
 const barprestamosoli = document.getElementById('barprestamosoli');
+const persemanas = document.getElementById('persemanas');
+const btnSaveNewEsq = document.getElementById('btnSaveNewEsq');
+
 
 barprestamosoli.value = 0;
 
+persemanas.addEventListener('change', () => {
+    let cantseman = parseFloat(document.getElementById('persemanas').value);
+    let totalAdeudoStr = document.getElementById('totalAdeudo').value;
+    let totalAdeudo = parseFloat(totalAdeudoStr.replace(/[$,]/g, ''));  // Eliminar $ y comas
+
+    let tTotalIntereses = document.getElementById('tTotalIntereses');
+    let nPagoPSemanal = document.getElementById('nPagoPSemanal');
+    let totNuevoEsq = document.getElementById('totNuevoEsq');
+
+    if (isNaN(cantseman) || isNaN(totalAdeudo)) {
+        Swal.fire({
+            title: "Error",
+            html: `Por favor ingrese valores numéricos válidos.`,
+            icon: "error"
+        });
+        return;
+    }
+
+    const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
+    const interesCalculado = rango ? rango.interes : 0;
+
+    document.getElementById('tInteresAplicado').innerHTML = `${interesCalculado} %`;
+    document.getElementById('interesAplicadoN').value = interesCalculado;
+
+    if (cantseman > 0) {
+        let preinteres = (totalAdeudo * interesCalculado) / 100;
+        let totalInteres = preinteres * cantseman;
+        let granTotal = totalAdeudo + totalInteres;
+        let pagoPeriodo = granTotal / cantseman;
+
+        tTotalIntereses.textContent = `${formatter.format(totalInteres)} MXN`;
+        nPagoPSemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
+        totNuevoEsq.textContent = `${formatter.format(granTotal)} MXN`;
+
+    } else {
+        Swal.fire({
+            title: "Advertencia",
+            html: `Selecciona la cantidad de semanas para la simulación del nuevo esquema.`,
+            icon: "warning"
+        });
+    }
+});
+
+btnSaveNewEsq.addEventListener('click', () => {
+    let cantseman        = parseFloat(document.getElementById('persemanas').value);
+    let idCredit         = document.getElementById('idCreditCustomer').value;
+    let totalAdeudoStr   = document.getElementById('totalAdeudo').value;
+    let totalAdeudo      = parseFloat(totalAdeudoStr.replace(/[$,]/g, ''));
+    let interesAplicadoN = document.getElementById('interesAplicadoN').value;
+    swalWithBootstrapButtons.fire({
+        title: "¿Desea cambiar el esquema de pagos del cliente?",
+        text: "Recuerde que el nuevo esquema de pagos contempla los intereses totales del crédito vigente.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No.",
+        confirmButtonText: "Si.",
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            if (cantseman == 0) {
+                Swal.fire({
+                    title: "Advertencia",
+                    html: `Selecciona la cantidad de semanas para la simulación del nuevo esquema.`,
+                    icon: "warning"
+                });
+            } else {
+                const data = await aplyChangeSchemePays(cantseman, interesAplicadoN, totalAdeudo, idCredit);
+                console.log(data);
+            }
+        }
+    });
+});
+
+/**
+ * 
+ * @param {number} cantseman 
+ * @param {number} interesAplicadoN 
+ * @param {number} amount 
+ * @param {number} idCredit 
+ */
+const aplyChangeSchemePays = async (cantseman, interesAplicadoN, amount, idCredit) => {
+    let params =
+        'operation=aplyChangeSchemePaysLate' +
+        '&cantseman=' + cantseman +
+        '&interesAplicadoN=' + interesAplicadoN +
+        '&idCredit=' + idCredit +
+        '&amountNewScheme=' + amount;
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para aplicar el nuevo esquema de pagos`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        throw new Error(`No se pudo aplicar el nuevo esquema de pagos: ${error.message}`);
+    }
+}
 
 /* Se empieza a ver el tema de calculo de solicitud de prestamo */
 const cantsemanSelect = document.getElementById('cantseman');
@@ -493,14 +611,6 @@ btnInsertarCliente.addEventListener('click', () => {
             formDataCustomer.append('fileidINEidentif', document.getElementById('idINEidentif').files[0]);
             formDataCustomer.append('fileidCompIngresos', document.getElementById('idCompIngresos').files[0]);
 
-
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger"
-                },
-                buttonsStyling: false
-            });
             swalWithBootstrapButtons.fire({
                 title: "¿Desea agregar los datos del cliente?",
                 text: "Recuerde que puede capturar los datos de referido.",
@@ -566,9 +676,6 @@ const updatePaysStatusCustomer = async () => {
         }
 
         const data = await response.json();
-
-
-
 
     } catch (error) {
         throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
@@ -650,15 +757,15 @@ const leerClientes = async () => {
                     }, 50);
                     return `
                     <div class="row">
-                        <div class="col-sm-12" style="color: black;">
+                        <div class="col-12" style="color: black;">
                             <div class="card card-success card-tabs">
                                 <div class="card-header p-0 pt-1">
                                     <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Creditos</a>
+                                            <a class="nav-link active" id="custom-tabs-one-home-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-home${rowData[1]}" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Cr\u00E9ditos</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Datos Personales y Dirección</a>
+                                            <a class="nav-link" id="custom-tabs-one-profile-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-profile${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Datos Personales y Direcci\u00F3n</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="custom-tabs-one-banks-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-banks${rowData[1]}" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Cuentas bancarias</a>
@@ -667,7 +774,7 @@ const leerClientes = async () => {
                                             <a class="nav-link" id="custom-tabs-one-messages-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-messages${rowData[1]}" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Referido</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentacion Cargada</a>
+                                            <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentaci\u00F3n Cargada</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -675,29 +782,31 @@ const leerClientes = async () => {
                                     <div class="tab-content" id="custom-tabs-one-tabContent">
                                         <div class="tab-pane fade show active " id="custom-tabs-one-home${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                             <div class="row">
-                                                <div class="col-md-5">
-                                                    <div class="card card-success card-outline">
+                                                <div class="col-6">
+                                                    <div class="card card-success card-outline" >
                                                         <div class="card-body box-profile">
                                                             <h3 class="profile-username text-center">
                                                                 <div id="nameCustomer-${rowData[1]}">CR&Eacute;DITOS DEL CLIENTE ACTIVOS</div>
                                                             </h3>
-                                                            <hr>
+                                                            <hr class="c-hr">
                                                             <div id="credits${rowData[1]}">
                                                                 <table id="tblcredits${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row" style="text-align:end;">
+                                                                <div class="col-12">
+                                                                    <button id="btnAddCredit" type="button" class="btn btn-success">Agregar Cr&eacute;dito</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-7">
+                                                <div class="col-6">
                                                     <div class="card card-success card-outline" id="rowDetailLoan${rowData[1]}" style="display:none;">
                                                         <div class="card-body box-profile">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <h3 class="profile-username text-center">
-                                                                        <div id="nameCustomerDet-${rowData[1]}">DETALLE DEL CR&Eacute;DITO SELECCIONADO</div>
-                                                                    </h3>
-                                                                </div>
-                                                            </div>
+                                                            <h3 class="profile-username text-center">
+                                                                <div id="nameCustomerDet-${rowData[1]}">DETALLE DEL CR&Eacute;DITO SELECCIONADO</div>
+                                                            </h3>
                                                             <div class="row">
                                                                 <div class="col-md-4">
                                                                     <div class="description-block border-right">
@@ -719,12 +828,9 @@ const leerClientes = async () => {
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <div id="creditsPays${rowData[1]}">
-                                                                        <table id="tblcreditspays${rowData[1]}" class="table table-hover text-wrap"></table>
-                                                                    </div>
-                                                                </div>
+                                                            
+                                                            <div id="creditsPays${rowData[1]}">
+                                                                <table id="tblcreditspays${rowData[1]}" class="table table-hover text-wrap"></table>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -816,7 +922,7 @@ const readCreditsCustomer = async (idcustomer) => {
 
         const data = await response.json();
 
-       
+
         // console.log(data[0].);
         new DataTable(tblCreditsCustomer, {
             perPage: 5,
@@ -826,24 +932,28 @@ const readCreditsCustomer = async (idcustomer) => {
                 data: data.map(function (item) {
                     var id = item['icvecredito'];
                     let monto = parseFloat(item['dmonto']);
+                    if (item['status_2'] >= 1) {
+                        let btnAddCredit = document.getElementById('btnAddCredit');
+                        btnAddCredit.disabled = true;
+                    }
 
                     let montoFormateado = monto.toLocaleString('es-MX', {
                         style: 'currency',
                         currency: 'MXN'
                     });
                     let interes = parseFloat(item['dinteres']);
-                    
+
                     return [
                         id,
                         montoFormateado,
                         `${interes} %`,
                         item['dtfechasolicitud'],
                         item['dtfechafiniquito'],
-                        item['status_2'] >= 1 
-                            ?  `<button class="btn bg-gradient-warning btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
-                            :  `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Editar Datos" onclick="changeLoanScheme(${id}, 2)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
-                       ,
-                        `<button class="btn bg-gradient-info btn-sx" data-toggle="tooltip" data-placement="top" title="Detalle del Cr&eacute;dito" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
+                        item['status_2'] >= 1
+                            ? `<button class="btn bg-gradient-warning btn-sx custom-tooltip" data-tooltip="Cambio de esquema, para pago atrasado" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
+                            : `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Cambio de esquema" onclick="changeLoanScheme(${id}, 2)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
+                        ,
+                        `<button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Haga click para visualizar el control de pagos" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
                     ]
                 })
             }
@@ -1215,7 +1325,7 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
         tblCreditDetail.innerHTML = ''; // Limpiar el contenido de la tabla
     }
     let params = 'operation=rowCreditCusDetail' + '&idcreditCustomer=' + idcreditCustomer;
-    
+
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -1250,7 +1360,7 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
         tblCreditDetail.dataTableInstance = new DataTable(tblCreditDetail, {
             perPage: 10,
             data: {
-                headings: ['ID', 'Pag a Capital', 'Pago Interes', 'Total', 'Fecha Pago', 'Estado'],
+                headings: ['ID', 'Pag a Capital', 'Pago Interes', 'Total', 'Fecha Pago', 'Estado', 'Confirmar Pago &oacute;<br> Ver Recibo', 'Cobranza'],
                 data: data.map(function (item) {
                     var id = item['icvedetallepago'];
                     let dpaycapital = parseFloat(item['dpaycapital']);
@@ -1291,7 +1401,11 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                         dpayinteresFormateado,
                         totalFormateado,
                         item['dfechapago'],
-                        icon
+                        icon,
+                        item['cestatuspago'] == '1'
+                            ? `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
+                            : `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
+                        `<i class="fas fa-comments-dollar"></i>`
                     ]
                 })
             }
@@ -1309,8 +1423,62 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
 }
 
 
-window.changeLoanScheme = (idCredit, op = null) => {
-    $("#mod-cambioEsquema").modal('show');
+window.changeLoanScheme = async (idCredit, op = null) => {
+    var tblPaysPending = document.getElementById(`tblPaysPending`);
+    let params =
+        'operation=readPaysPendingCredit' +
+        '&idCredit=' + idCredit;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        let ttotal = 0;
+        new DataTable(tblPaysPending, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Total', 'Fecha Pago'],
+                data: data.map(function (item) {
+                    // return Object.values(item);
+                    var id = item['icvedetallepago'];
+                    let total = parseFloat(item['total']);
+                    let totalFormateado = total.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+
+                    ttotal += total;
+                    let ttotalFormateado = ttotal.toLocaleString('es-MX', {
+                        style: 'currency',
+                        currency: 'MXN'
+                    });
+                    document.getElementById('totalAdeudo').value = ttotalFormateado;
+                    document.getElementById('totalAdeudoTxt').innerHTML = ttotalFormateado;
+                    return [
+                        id,
+                        totalFormateado,
+                        item['dfechapago']
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
+    document.getElementById('idCreditCustomer').value = idCredit;
+    $('#mod-cambioEsquema').modal({ backdrop: 'static', keyboard: false }).modal('show');
+
 }
 
 const leerRowCliente = (id) => {
@@ -1427,7 +1595,7 @@ const eliminarCliente = (id) => {
 // Función para abrir el modal de insertar cliente
 const abrirModalInsertarCliente = () => {
     // Lógica para abrir el modal de insertar cliente
-    $('#modalAgregar').modal('show');
+    $('#modalAgregar').modal({ backdrop: 'static', keyboard: false }).modal('show');
 };
 
 // Función para abrir el modal de actualizar datos del cliente
@@ -1508,4 +1676,3 @@ leerClientes();
 initMap();
 
 
-            

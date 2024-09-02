@@ -66,7 +66,7 @@
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <h3>Servicios Mayorqu&iacute;n</h3>
+                                <h3>Financiera Mayorqu&iacute;n</h3>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->

@@ -93,3 +93,11 @@ function formatDateBirthday(dateString) {
 
     return `${day} de ${month} de ${year}`;
 }
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+});

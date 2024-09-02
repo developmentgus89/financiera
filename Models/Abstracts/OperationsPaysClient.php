@@ -49,5 +49,11 @@ abstract class OperationsPaysClient{
      */
     abstract public function updatePaysStatusCustomer(): ?array;
     
-    
+
+    /**
+     * readPaysPendingCredit
+     * Lectura de pagos pendientes del credito para el cambio de esquema
+     * @return array
+     */
+    abstract public  function readPaysPendingCredit(int $idCredit): ?array;
 }

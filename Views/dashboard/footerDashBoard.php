@@ -15,6 +15,8 @@
 	<script src="../utils/plugins/toastr/toastr.min.js"></script>
 	<!-- Toastify - JS -->
 	<script src="../utils/js/libs/toastify-js.js"></script>
+	<!-- Popper - JS -->
+	<script src="../utils/plugins/popper/umd/popper.js"></script>
    
 
 	<!-- DataTables  & Plugins -->

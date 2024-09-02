@@ -193,7 +193,7 @@ class Customer
                     $interesBase,
                     $totalBase,
                     $fechasPago[$i - 1], // Uso correcto del array
-                    '0'
+                    0
                 ]);
             } catch (PDOException $e) {
                 $err = 'Error al insertar el detalle de pagos del prestamo del cliente: ' . $e->getMessage();
@@ -275,7 +275,14 @@ class Customer
             return false;
         }
     }
-
+    
+    /**
+     * processDocument
+     *
+     * @param  int $idCliente
+     * @param  Object $documents
+     * @return void
+     */
     private function processDocument(int $idCliente, $documents)
     {
         $paths = [
@@ -392,15 +399,15 @@ class Customer
         try {
             $query = "SELECT clientes.*, cattipocliente.*, catcreditos.*, pagos.*
                         FROM clientes
-                    INNER JOIN cattipocliente ON clientes.icvetipocliente = cattipocliente.icvetipocliente
-                    INNER JOIN catcreditos ON catcreditos.icvecliente = clientes.icvecliente
-                    INNER JOIN (
+                    LEFT JOIN cattipocliente ON clientes.icvetipocliente = cattipocliente.icvetipocliente
+                    LEFT JOIN catcreditos ON catcreditos.icvecliente = clientes.icvecliente
+                    LEFT JOIN (
                         SELECT icvecredito, MIN(dfechapago) as prox_vencimiento
                             FROM catcreditctlpagcust
-                        WHERE cestatuspago = '0'
+                        WHERE cestatuspago = 0 OR cestatuspago = 3
                         GROUP BY icvecredito
                     ) as prox_pagos ON catcreditos.icvecredito = prox_pagos.icvecredito
-                    INNER JOIN catcreditctlpagcust as pagos
+                    LEFT JOIN catcreditctlpagcust as pagos
                     ON prox_pagos.icvecredito = pagos.icvecredito AND prox_pagos.prox_vencimiento = pagos.dfechapago
                     ORDER BY prox_pagos.prox_vencimiento";
             $statement = $this->acceso->prepare($query);
@@ -472,7 +479,7 @@ class Customer
      * get_AsentamientosByZipCode
      *
      * @param  string $zipCode
-     * @return void
+     * @return array
      */
     public function get_AsentamientosByZipCode($zipCode): array
     {

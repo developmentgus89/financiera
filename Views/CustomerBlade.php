@@ -32,7 +32,7 @@ $fecha_actual = $formatter->format(new DateTime());
             <div class="card-header">
                 <h1 class="card-title"><strong>Cat&aacute;logo de Clientes.</strong></h1>
                 <div class="card-tools float-right m-2">
-                    <button id="agregar-cliente" type="button" class="btn btn-primary"><i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Cliente</button>
+                    <button id="agregar-cliente" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Agrega clientes despliega modal"><i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Cliente</button>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -617,33 +617,153 @@ $fecha_actual = $formatter->format(new DateTime());
 <div class="modal fade" id="mod-cambioEsquema" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content bg-modalVoucher">
-                <div class="modal-header">
-                        <h5 class="modal-title"><strong>Cambio de Esquema del Pr&eacute;stamo</strong></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                    </div>
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Cambio de Esquema del Pr&eacute;stamo</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    Add rows here
+                    <div class="row" style="color: #000000;">
+                        <div class="col-7">
+                            <div class="card card-success card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h3 class="profile-username text-center mt-0">
+                                                    ESQUEMA DE PAGOS NUEVO
+                                                </h3>
+                                                <hr class="c-hr">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="totalAdeudo">Total Adeudo:</label>
+                                                    <input type="hidden" name="interesAplicadoN" id="interesAplicadoN"/>
+                                                    <input type="hidden" name="idCreditCustomer" id="idCreditCustomer"/>
+                                                    <input type="text"
+                                                        class="form-control text-center" name="totalAdeudo" id="totalAdeudo" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="persemanas">Periodo de pagos:</label>
+                                                    <select class="form-control text-center" name="persemanas" id="persemanas">
+                                                        <option value="0">Seleccione</option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                        <option value="13">13</option>
+                                                        <option value="14">14</option>
+                                                        <option value="15">15</option>
+                                                        <option value="16">16</option>
+                                                        <option value="17">17</option>
+                                                        <option value="18">18</option>
+                                                        <option value="19">19</option>
+                                                        <option value="20">20</option>
+                                                        <option value="21">21</option>
+                                                        <option value="22">22</option>
+                                                        <option value="23">23</option>
+                                                        <option value="24">24</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="description-block border-right">
+                                                    <h5>
+                                                        <div id="tInteresAplicado"> 0 %</div>
+                                                    </h5>
+                                                    <span class="description-text">INTER&Eacute;S APLICADO</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="description-block border-right">
+                                                    <h5>
+                                                        <div id="tTotalIntereses">$0.00 MXN</div>
+                                                    </h5>
+                                                    <span class="description-text">TOTAL DE INTERESES</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="description-block border-right">
+                                                    <h5>
+                                                        <div id="nPagoPSemanal">$0.00 MXN</div>
+                                                    </h5>
+                                                    <span class="description-text">NUEVO PAGO SEMANAL</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="description-block border-right">
+                                                    <h2>
+                                                        <div id="totNuevoEsq">$3,000.00 MXN</div>
+                                                    </h2>
+                                                    <span class="description-text">ESQUEMA TOTAL</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="card card-success card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="card-body">
+                                        <h3 class="profile-username text-center mt-0">
+                                            PAGOS PENDIENTES CONSIDERADOS
+                                        </h3>
+                                        <hr class="c-hr">
+                                        <table id="tblPaysPending" class="table"></table>
+                                        <hr class="c-hr">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="description-block border-right">
+                                                    <h3>
+                                                        <div id="totalAdeudoTxt">$0.00</div>
+                                                    </h3>
+                                                    <span class="description-text">TOTAL ADEUDO</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-success" id="btnSaveNewEsq" name="btnSaveNewEsq">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
+<!-- <script>
     $('#exampleModal').on('show.bs.modal', event => {
         var button = $(event.relatedTarget);
         var modal = $(this);
         // Use above variables to manipulate the DOM
-        
+
     });
-</script>
+</script> -->
 
 
 <?php
