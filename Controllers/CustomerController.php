@@ -105,6 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $accountsBanks = $customer->getAccountsBanksCustomer($icvecliente);
             echo json_encode($accountsBanks);
             break;
+        case 'readDoctosCustomer':
+            $icvecliente = $_POST['icvecliente'];
+            $doctosCustomer = $customer->getFilesCustomer($icvecliente);
+            echo json_encode($doctosCustomer);
+            break;
         case 'rowCreditsCustomer':
             $icvecliente = $_POST['icvecliente'];
             $rowCredits = $credits->getRowsCreditsByClient($icvecliente);
@@ -136,18 +141,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'readPaysPendingCredit':
             $idCredit = $_POST['idCredit'];
-            $resp = $credits->readPaysPendingCredit($idCredit);
+            $op       = $_POST['op'];
+            $resp     = $credits->readPaysPendingCredit($idCredit, $op);
             echo json_encode($resp);
             break;
 
         case 'aplyChangeSchemePaysLate':
+            $idCustomer       = $_POST['idCustomer'];
             $idCredit         = $_POST['idCredit'];
             $interesAplicadoN = $_POST['interesAplicadoN'];
             $cantseman        = $_POST['cantseman'];
             $amountNewScheme  = $_POST['amountNewScheme'];
-
-            $resp = $credits->setChangeSchemeLate($idCredit, $interesAplicadoN, $cantseman, $amountNewScheme);
+            $typeOP           = $_POST['typeOP'];
+            $dtFechaLiquid    = $_POST['dtFechaLiquid'];
+            
+            $resp = $credits->setChangeSchemeLate($idCustomer, $idCredit, $interesAplicadoN, $cantseman, $amountNewScheme, $dtFechaLiquid, $typeOP);
             echo json_encode($resp);
+            break;
+
+        case 'aplySetCompletePay':
+            $idPaySetConfirm = $_POST['idPaySetConfirm'];
+            $resp = $credits->setCompletePay($idPaySetConfirm);
             break;
         default:
             echo 'Operación no válida';

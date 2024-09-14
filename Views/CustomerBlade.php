@@ -642,8 +642,10 @@ $fecha_actual = $formatter->format(new DateTime());
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label for="totalAdeudo">Total Adeudo:</label>
-                                                    <input type="hidden" name="interesAplicadoN" id="interesAplicadoN"/>
-                                                    <input type="hidden" name="idCreditCustomer" id="idCreditCustomer"/>
+                                                    <input type="hidden" name="interesAplicadoN" id="interesAplicadoN" />
+                                                    <input type="hidden" name="idCreditCustomer" id="idCreditCustomer" />
+                                                    <input type="hidden" name="idCustomer" id="idCustomer" />
+                                                    <input type="hidden" name="op" id="op" />
                                                     <input type="text"
                                                         class="form-control text-center" name="totalAdeudo" id="totalAdeudo" disabled>
                                                 </div>
@@ -682,6 +684,15 @@ $fecha_actual = $formatter->format(new DateTime());
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="txtFechaLiquid">Fecha estimada de liquidaci&oacute;n:</label>
+                                                    <input type="text"
+                                                        class="form-control text-center" name="txtFechaLiquid" id="txtFechaLiquid" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-4">
                                                 <div class="description-block border-right">
                                                     <h5>
@@ -708,10 +719,10 @@ $fecha_actual = $formatter->format(new DateTime());
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="description-block border-right">
+                                            <div class="col-md-12 mt-3">
+                                                <div class="description-block border-right bg-success">
                                                     <h2>
-                                                        <div id="totNuevoEsq">$3,000.00 MXN</div>
+                                                        <div id="totNuevoEsq">$0.00 MXN</div>
                                                     </h2>
                                                     <span class="description-text">ESQUEMA TOTAL</span>
                                                 </div>
@@ -756,38 +767,60 @@ $fecha_actual = $formatter->format(new DateTime());
     </div>
 </div>
 
-<!-- <script>
-    $('#exampleModal').on('show.bs.modal', event => {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-        // Use above variables to manipulate the DOM
+<!-- Modal -->
+<div class="modal fade" id="mod-setStatusPay" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Carga de voucher para confirmaci&oacute;n de pago</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <label for="amountpay">Cantidad de Pago</label>
+                        <input type="text"
+                            class="form-control" name="amountpay" id="amountpay" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnSaveNewEsq" name="btnSaveNewEsq">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    });
-</script> -->
-
+<!-- Modal -->
+<div class="modal fade" id="mod-DocumentView" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                        <div id="tipoDocumento"></div>
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body iframedocto">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 include_once "dashboard/endTemplateDashboard.php";
-?>
-
-
-<!-- REQUIRED SCRIPTS -->
-<?php
 include_once "dashboard/footerDashBoard.php";
-?>
-<!-- <script>
-    $(function() {
-        $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-</script> -->
-<?php
 require_once('../utils/settings/config.financiera.php');
 ?>
+
 <script src="../assets/Modules/Clients/GoogleMaps/maps.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo GOOGLE_MAPS_API_KEY; ?>&callback=initMap" async defer></script>
 <script src="../assets/conf.js"></script>

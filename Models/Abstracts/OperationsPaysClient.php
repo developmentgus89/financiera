@@ -55,5 +55,5 @@ abstract class OperationsPaysClient{
      * Lectura de pagos pendientes del credito para el cambio de esquema
      * @return array
      */
-    abstract public  function readPaysPendingCredit(int $idCredit): ?array;
+    abstract public  function readPaysPendingCredit(int $idCredit, int $op): ?array;
 }

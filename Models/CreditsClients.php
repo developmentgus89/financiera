@@ -44,7 +44,7 @@ class CreditsClients extends OperationsPaysClient
                         catcreditctlpagcust AS pagos 
                         ON creditos.icvecredito = pagos.icvecredito
                     WHERE 
-                    creditos.icvecliente = ?";
+                    creditos.icvecliente = ? AND creditos.estatus = 1";
             $statement = $this->acceso->prepare($sql);
             $statement->execute([$icvecliente]);
 
@@ -68,7 +68,7 @@ class CreditsClients extends OperationsPaysClient
                         (SELECT SUM(dpayinteres) FROM catcreditctlpagcust WHERE icvecredito = ?) as tintereses,
                         (SELECT SUM(total) FROM catcreditctlpagcust WHERE icvecredito = ?) as ttotal
                     FROM catcreditctlpagcust
-                    WHERE icvecredito = ? AND cestatuspago IN(0, 1) AND dfecharealpago IS NULL";
+                    WHERE icvecredito = ? ";
             $statement = $this->acceso->prepare($sql);
             $statement->execute([$idcreditCustomer, $idcreditCustomer, $idcreditCustomer, $idcreditCustomer]);
 
@@ -222,7 +222,7 @@ class CreditsClients extends OperationsPaysClient
      * @param  mixed $idCredit
      * @return array
      */
-    public function readPaysPendingCredit(int $idCredit): ?array
+    public function readPaysPendingCredit(int $idCredit, int $op): ?array
     {
         try {
             $sql = "SELECT * FROM catcreditctlpagcust 
@@ -236,93 +236,181 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
+
     /**
      * setChangeSchemeLate
      *
+     * @param  int $idCustomrer
      * @param  int $idCredit
+     * @param  int $interesAplicadoN
      * @param  int $cantseman
      * @param  float $amountNewScheme
-     * @return string
+     * @param  string $dtFechaLiquid
+     * @param  int $typeOP
+     * @return bool
      */
-    public function setChangeSchemeLate(int $idCredit, float $interesAplicadoN, int $cantseman, float $amountNewScheme): ?bool
+    public function setChangeSchemeLate(int $idCustomer, int $idCredit, float $interesAplicadoN, int $cantseman, float $amountNewScheme, string $dtFechaLiquid, int $typeOP = null): ?bool
     {
-        $resp = array();
-        $interesBase  = ($amountNewScheme * (float) $interesAplicadoN) / 100;
+        $typeOP = (int) $typeOP;
+        $resp = false;  // Establecemos por defecto en false
+        $interesBase  = ($amountNewScheme * $interesAplicadoN) / 100;
         $prestamoBase = $amountNewScheme / $cantseman;
         $totalBase    = $prestamoBase + $interesBase;
 
         $fechaActual = new DateTime();
         $fechasPago = [];
 
-        $resp['resp'] = false; 
+        $this->acceso->beginTransaction();
 
-        for ($i = 1; $i <= $cantseman; $i++) {
-            $fechaPago = clone $fechaActual;
-            $fechaPago->modify('+' . $i . ' weeks');
-            $fechasPago[] = $fechaPago->format('Y-m-d');
+        try {
+            // Cambiar estatus del crédito
+            $creditStatus = CreditsClients::setStatusCreditCustomer($idCredit, $typeOP);
 
-            try {
-                $this->acceso->beginTransaction();
-                $exeSQL = CreditsClients::setStatusChangePaysLate($idCredit);
+            // Insertar el nuevo crédito
+            $ctrlPaysNewCredit = CreditsClients::setCreditNewScheme($idCustomer, $cantseman, $amountNewScheme, $interesAplicadoN, $dtFechaLiquid);
 
-                if ($exeSQL) {
+            // Se cambia el estatus de los pagos del credito del cliente
+            $exeSQL = CreditsClients::setStatusChangePaysLate($idCredit);
+            
+
+            if ($creditStatus && $exeSQL && !is_null($ctrlPaysNewCredit)) {
+
+                for ($i = 1; $i <= $cantseman; $i++) {
+                    $fechaPago = clone $fechaActual;
+                    $fechaPago->modify('+' . $i . ' weeks');
+                    $fechasPago[] = $fechaPago->format('Y-m-d');
+
+                    // Intentar ejecutar la transacción de pago    
                     $sql = "INSERT INTO catcreditctlpagcust
-                    (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
+                                (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago, statusop) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?)";
                     $statement = $this->acceso->prepare($sql);
+                    // var_dump($sql);
+                    // exit('Estructura del SQL');
                     $statement->execute([
-                        $idCredit,
+                        $ctrlPaysNewCredit,
                         $prestamoBase,
                         $interesBase,
                         $totalBase,
-                        $fechasPago[$i - 1], // Uso correcto del array
+                        $fechasPago[$i - 1], // Uso correcto del índice
+                        0,
                         0
                     ]);
-                    $this->acceso->commit();
-                    $resp['resp'] = true; // Solo se establece como verdadero si una inserción tiene éxito
-                } else {
-                    $this->acceso->rollBack();
-                    $resp['resp'] = false;
-                    // No devolvemos aún, permitimos que el ciclo continúe
                 }
-            } catch (PDOException $e) {
-                if ($this->acceso->inTransaction()) {
-                    $this->acceso->rollBack();
-                }
-                $this->monitor->setLog('Clientes', $e);
-                return [false, $e];
+
+
+                $this->acceso->commit();
+                $resp = true;
             }
+        } catch (PDOException $e) {
+
+            if ($this->acceso->inTransaction()) {
+                $this->acceso->rollBack();
+            }
+            $this->monitor->setLog('Clientes', $e);  // Guardar el error en los logs
+            return null;
         }
 
-        return $resp['resp']; // Devuelve el resultado después de que el bucle haya finalizado
+        return $resp;
+    }
 
+    
+    /**
+     * setCompletePay
+     * Método para cambiar el estatus de pago de un plazo de pago
+     * @param  mixed $idPaySetConfirm
+     * @return array
+     */
+    public function setCompletePay(int $idPaySetConfirm): ?array{
+        try{
+            $this->acceso->beginTransaction();
+            $resp         = array();
+            $sql          = "UPDATE catcreditctlpagcust SET dfecharealpago = NOW(), cestatuspago = 1 WHERE icvedetallepago = ?";
+            $statement    = $this->acceso->prepare($sql);
+            $resp['resp'] = $statement->execute([$idPaySetConfirm]);
+            $this->acceso->commit();
+            return $resp;
+        } catch (PDOException $e) {
+            if ($this->acceso->inTransaction()) {
+                $this->acceso->rollBack();
+            }
+            $this->monitor->setLog('Clientes', $e);  // Guardar el error en los logs
+            return null;
+        }    
+    }
+
+
+    /**
+     * setCreditNewScheme
+     *
+     * @param  int $idCustomer
+     * @param  int $cantseman
+     * @param  float $amount
+     * @param  float $interesAplicado
+     * @param  string $dtFechaLiquid
+     * @return int
+     */
+    private function setCreditNewScheme(int $idCustomer, int $cantseman, float $amount, float $interesAplicado, string $dtFechaLiquid): ?int
+    {
+        try {
+            $sqlCredit = "INSERT INTO catcreditos
+                          (icvecliente, inumpagos, dmonto, dinteres, dtfechasolicitud, dtfechafiniquito, estatus)
+                          VALUES(?, ?, ?, ?, NOW(), ?, 1)";
+            $statement = $this->acceso->prepare($sqlCredit);
+            $statement->execute([
+                $idCustomer,
+                $cantseman,
+                $amount,
+                $interesAplicado,
+                $dtFechaLiquid
+            ]);
+
+            return (int) $this->acceso->lastInsertId();  // Retorna el ID del nuevo crédito
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e);
+            return null;  // Retorna null en caso de error
+        }
+    }
+
+    /**
+     * setStatusCreditCustomer
+     *
+     * @param  int $idCredit Este es el ID del crédito que se está manejando
+     * @param  int $typeOP Este es el tipo de operacion 
+     * @return bool
+     */
+    private function setStatusCreditCustomer(int $idCredit, int $typeOP): ?bool
+    {
+        try {
+            $sql = "UPDATE catcreditos SET estatus = ? WHERE icvecredito = ?";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute([$typeOP, $idCredit]);
+
+            return $resp;  // Devuelve true si se ejecuta correctamente, false si falla
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e);
+            return null;  // Retorna null en caso de error
+        }
     }
 
     /**
      * setStatusChangePaysLate
      * Se cambia el estatus de la tabla de control de pagos
      * donde 3 => retraso en pago, 2 => Está atrasado pero no se ha aplicado interés
-     * donde 4 => Ya se negoció un esquema de pago
+     * donde 4 => Ya se negoció un esquema de pago por presentar un estaus de atraso
      * @param  int $idCredit
      * @return bool
      */
     private static function setStatusChangePaysLate(int $idCredit): ?bool
     {
-        $resp = array();
         try {
-            $sql = "UPDATE catcreditctlpagcust SET cestatuspago = 4, dfecharealpago = NOW() WHERE icvecredito = ? AND cestatuspago = 3";
+            $sql = "UPDATE catcreditctlpagcust SET cestatuspago = 4, statusop = 1, dfecharealpago = NOW() WHERE icvecredito = ? AND cestatuspago in(0,1,2,3)";
             $statement = CreditsClients::$conn->prepare($sql);
-            $resp['resp'] = $statement->execute([$idCredit]);
+            $resp = $statement->execute([$idCredit]);
 
-            if ($resp['resp']) {
-                $resp['resp'] = true;
-            } else {
-                $resp['resp'] = false;
-            }
-
-            return $resp['resp'];
+            return $resp ? true : false;  // Retorna true si fue exitoso, false si no
         } catch (PDOException $e) {
-            throw new Error('Error al actualizar los estatus de pagos del crédito.' . $e->getMessage());
+            throw new Error('Error al actualizar los estatus de pagos del crédito: ' . $e->getMessage());
         }
     }
 

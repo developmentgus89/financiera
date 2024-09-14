@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Mexico_City');
 
 class Log
 {
@@ -6,13 +7,13 @@ class Log
 
     public function __construct()
     {
-        $this->fileName = 'financiera.log';
+        $this->fileName = '../Models/Log/financiera.log';
     }
 
     public function setLog(string $modulo, string $message): void
     {
         try {
-            $fileW = fopen($this->fileName, 'w+'); // Use 'a' to append to the file
+            $fileW = fopen($this->fileName, 'a'); // Usa 'a' 
             if ($fileW) {
                 $fechaActual = (new DateTime())->format('Y-m-d H:i:s');
                 $contenido = $modulo . " --- " . $message . " === " . $fechaActual . PHP_EOL;

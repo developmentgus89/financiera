@@ -30,6 +30,7 @@ class Customer
 
             // Inserción de los datos del cliente
             $personalData = $customerPersonalData[0];
+            
             $query = "INSERT INTO clientes (cclinombre, capaterno, camaterno, iedad,
                         icvetipocliente, dfechanaciemiento, dfechaalta, cestatus, ctelefono) 
                         VALUES (
@@ -82,9 +83,6 @@ class Customer
                 $respDataReferido = $this->insertReferredCustomer($lastInsertId, $customerPersonalData[5]);
             }
 
-
-
-
             if (!$respCredit) {
                 throw new PDOException('Error al insertar los datos del crédito.');
             }
@@ -125,7 +123,6 @@ class Customer
             }
 
             $err = 'Error al insertar el cliente: ' . $e->getMessage();
-            echo $err;
             $this->monitor->setLog('Clientes', $err);
             return [false, $err];
         }
@@ -168,6 +165,8 @@ class Customer
 
     public function insertCreditPaysCustomer(int $idCredit, array $creditDataPaysCustomer)
     {
+        // var_dump($creditDataPaysCustomer);
+        // exit('Datos del control de pagos del prestamo del cliente');
         $prestamo     = $creditDataPaysCustomer['barprestamosoli'];
         $interesBase  = ($prestamo * $creditDataPaysCustomer['interesCredit']) / 100;
         $prestamoBase = $creditDataPaysCustomer['barprestamosoli'] / $creditDataPaysCustomer['cantseman'];
@@ -184,8 +183,8 @@ class Customer
 
             try {
                 $sqlDetCredit = "INSERT INTO catcreditctlpagcust
-                        (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
+                        (icvecredito, dpaycapital, dpayinteres, total, dfechapago, cestatuspago, statusop) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $statement = $this->acceso->prepare($sqlDetCredit);
                 $statement->execute([
                     $idCredit,
@@ -193,6 +192,7 @@ class Customer
                     $interesBase,
                     $totalBase,
                     $fechasPago[$i - 1], // Uso correcto del array
+                    0,
                     0
                 ]);
             } catch (PDOException $e) {
@@ -409,13 +409,22 @@ class Customer
                     ) as prox_pagos ON catcreditos.icvecredito = prox_pagos.icvecredito
                     LEFT JOIN catcreditctlpagcust as pagos
                     ON prox_pagos.icvecredito = pagos.icvecredito AND prox_pagos.prox_vencimiento = pagos.dfechapago
+                    WHERE catcreditos.estatus not in (4,5)
                     ORDER BY prox_pagos.prox_vencimiento";
             $statement = $this->acceso->prepare($query);
-            $statement->execute();
+            $resp = $statement->execute();
+
+            if($resp){
+                $this->monitor->setLog('Clientes', 'Lectura de clientes con todos sus datos se hizo de manera satisfactoria.');
+            }
+
+
 
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo 'Error en la consulta: ' . $e->getMessage();
+            $err = 'Error al insertar el cliente: ' . $e->getMessage();
+            $this->monitor->setLog('Clientes', $err);
+            return [false, $err];
         }
     }
 
@@ -459,6 +468,28 @@ class Customer
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error en la consulta de las cuentas bancarias: ' . $e->getMessage();
+        }
+    }
+    
+    /**
+     * getFilesCustomer
+     *
+     * @param int $idcliente
+     * @return array
+     */
+    public function getFilesCustomer(int $idcliente) : array{
+        try {
+            $query = "SELECT cli_documents.icvecliente, cli_documents.crutadocto,
+                        cattipodocto.ctipodocto, cli_documents.cextensiondocto 
+                        FROM cli_documents 
+                        INNER JOIN cattipodocto on cli_documents.itipodocto = cattipodocto.idcattipodocto
+                        WHERE cli_documents.icvecliente  = ?";
+            $statement = $this->acceso->prepare($query);
+            $statement->execute([$idcliente]);
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error en la consulta de los documentos del cliente: ' . $e->getMessage();
         }
     }
 

@@ -102,7 +102,7 @@ persemanas.addEventListener('change', () => {
     }
 
     const rango = rangosInteres.find(r => cantseman >= r.min && cantseman <= r.max);
-    const interesCalculado = rango ? rango.interes : 0;
+    const interesCalculado = rango ? (rango.interes) / 3 : 0;
 
     document.getElementById('tInteresAplicado').innerHTML = `${interesCalculado} %`;
     document.getElementById('interesAplicadoN').value = interesCalculado;
@@ -117,6 +117,8 @@ persemanas.addEventListener('change', () => {
         nPagoPSemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
         totNuevoEsq.textContent = `${formatter.format(granTotal)} MXN`;
 
+        calculoFecha(cantseman, 'txtFechaLiquid');
+
     } else {
         Swal.fire({
             title: "Advertencia",
@@ -127,11 +129,14 @@ persemanas.addEventListener('change', () => {
 });
 
 btnSaveNewEsq.addEventListener('click', () => {
-    let cantseman        = parseFloat(document.getElementById('persemanas').value);
-    let idCredit         = document.getElementById('idCreditCustomer').value;
-    let totalAdeudoStr   = document.getElementById('totalAdeudo').value;
-    let totalAdeudo      = parseFloat(totalAdeudoStr.replace(/[$,]/g, ''));
+    let cantseman = parseFloat(document.getElementById('persemanas').value);
+    let idCredit = document.getElementById('idCreditCustomer').value;
+    let idCustomer = document.getElementById('idCustomer').value;
+    let totalAdeudoStr = document.getElementById('totalAdeudo').value;
+    let totalAdeudo = parseFloat(totalAdeudoStr.replace(/[$,]/g, ''));
     let interesAplicadoN = document.getElementById('interesAplicadoN').value;
+    let fechaLiquid = document.getElementById('txtFechaLiquid').value;
+    let op = document.getElementById('op').value;
     swalWithBootstrapButtons.fire({
         title: "¿Desea cambiar el esquema de pagos del cliente?",
         text: "Recuerde que el nuevo esquema de pagos contempla los intereses totales del crédito vigente.",
@@ -149,27 +154,49 @@ btnSaveNewEsq.addEventListener('click', () => {
                     icon: "warning"
                 });
             } else {
-                const data = await aplyChangeSchemePays(cantseman, interesAplicadoN, totalAdeudo, idCredit);
-                console.log(data);
+                const data = await aplyChangeSchemePays(idCustomer, cantseman, interesAplicadoN, totalAdeudo, idCredit, op, fechaLiquid);
+                if (data) {
+                    Swal.fire({
+                        title: "Cambio de esquema de pago satisfactorio.",
+                        text: "El cambio de esquema se aplico de manera correcta.",
+                        icon: "success",
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#mod-cambioEsquema').modal('hide');
+                            location.reload();
+                        }
+                    });
+                }
             }
         }
     });
 });
 
+
 /**
  * 
+ * @param {number} idCustomer 
  * @param {number} cantseman 
  * @param {number} interesAplicadoN 
  * @param {number} amount 
  * @param {number} idCredit 
+ * @param {number} op 
+ * @param {string} dtFechaLiquid 
+ * @returns 
  */
-const aplyChangeSchemePays = async (cantseman, interesAplicadoN, amount, idCredit) => {
+const aplyChangeSchemePays = async (idCustomer, cantseman, interesAplicadoN, amount, idCredit, op, dtFechaLiquid) => {
     let params =
         'operation=aplyChangeSchemePaysLate' +
+        '&idCustomer=' + idCustomer +
         '&cantseman=' + cantseman +
         '&interesAplicadoN=' + interesAplicadoN +
         '&idCredit=' + idCredit +
-        '&amountNewScheme=' + amount;
+        '&amountNewScheme=' + amount +
+        '&typeOP=' + op +
+        '&dtFechaLiquid=' + dtFechaLiquid;
 
     try {
         const response = await fetch(baseURL, {
@@ -222,7 +249,7 @@ cantsemanSelect.addEventListener('change', () => {
         sol_totalPrestamo.textContent = `${formatter.format(granTotal)} MXN`;
         sol_pagosemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
 
-        calculoFecha(cantseman);
+        calculoFecha(cantseman, 'dtFechaLiquid');
     } else {
         barprestamosoli.value = 0;
         Swal.fire({
@@ -237,7 +264,7 @@ cantsemanSelect.addEventListener('change', () => {
         sol_totalPrestamo.textContent = `$ 0.00 MXN`;
         sol_pagosemanal.textContent = `$ 0.00 MXN`;
     }
-    calculoFecha(cantseman);
+    calculoFecha(cantseman, 'dtFechaLiquid');
 
 });
 
@@ -269,7 +296,7 @@ barprestamosoli.addEventListener('input', () => {
         sol_totalPrestamo.textContent = `${formatter.format(granTotal)} MXN`;
         sol_pagosemanal.textContent = `${formatter.format(pagoPeriodo)} MXN`;
 
-        calculoFecha(cantseman);
+        calculoFecha(cantseman, 'dtFechaLiquid');
     } else {
         barprestamosoli.value = 0;
         Swal.fire({
@@ -284,7 +311,7 @@ barprestamosoli.addEventListener('input', () => {
         sol_totalPrestamo.textContent = `$ 0.00 MXN`;
         sol_pagosemanal.textContent = `$ 0.00 MXN`;
     }
-    calculoFecha(cantseman);
+    calculoFecha(cantseman, 'dtFechaLiquid');
 
 });
 
@@ -294,15 +321,15 @@ const calculaCantidadPrestamo = () => {
 
 /**
  * 
- * @param {number} cantidadPagos 
- * @param {number} diasPeriodicidad 
+ * @param {int} cantidadPagos 
+ * @param {HTMLInputElement} elementHTML 
  */
-const calculoFecha = (cantidadPagos) => {
+const calculoFecha = (cantidadPagos, elementHTML) => {
     let hoy = new Date();
     let fechaAproxLiquidacion = new Date(hoy.getTime() + (cantidadPagos * 7 * 24 * 60 * 60 * 1000));
     let fechaFormateada = formatDate(fechaAproxLiquidacion);
 
-    document.getElementById('dtFechaLiquid').value = fechaFormateada;
+    document.getElementById(elementHTML).value = fechaFormateada;
 }
 
 
@@ -877,7 +904,9 @@ const leerClientes = async () => {
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                            <div id="filesCustomer${rowData[1]}"></div>
+                                            <div id="filesCustomer${rowData[1]}">
+                                                <table id="tblDoctosCustomer${rowData[1]}" class="table table-hover text-wrap"></table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -950,8 +979,8 @@ const readCreditsCustomer = async (idcustomer) => {
                         item['dtfechasolicitud'],
                         item['dtfechafiniquito'],
                         item['status_2'] >= 1
-                            ? `<button class="btn bg-gradient-warning btn-sx custom-tooltip" data-tooltip="Cambio de esquema, para pago atrasado" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
-                            : `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Cambio de esquema" onclick="changeLoanScheme(${id}, 2)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
+                            ? `<button class="btn bg-gradient-warning btn-sx custom-tooltip" data-tooltip="Cambio de esquema, para pago atrasado" onclick="changeLoanScheme(${idcustomer},${id}, 4)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
+                            : `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Cambio de esquema" onclick="changeLoanScheme(${idcustomer},${id}, 5)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
                         ,
                         `<button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Haga click para visualizar el control de pagos" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
                     ]
@@ -1150,92 +1179,89 @@ const readReferedCustomer = async (idcustomer) => {
     }
 }
 
-const readFilesCustomer = (idcustumer) => {
-    let tableFiles = document.getElementById(`filesCustomer${idcustumer}`);
+const readFilesCustomer = async (idcustomer) => {
+    let tableFiles = document.getElementById(`tblDoctosCustomer${idcustomer}`);
+    let params =
+        'operation=readDoctosCustomer' +
+        '&icvecliente=' + idcustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
-    tableFiles.innerHTML = `
-            <div class="card card-success">
-                <div class="card-header">
-                    <h3 class="card-title">Archivos de comprobaci&oacute;n</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body p-0">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Descripción de Arvhivo</th>
-                                <th>Nombre de Archivo</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Functional-requirements.docx</td>
-                                <td>49.8005 kb</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
-                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>UAT.pdf</td>
-                                <td>28.4883 kb</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
-                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Email-from-flatbal.mln</td>
-                                <td>57.9003 kb</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
-                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Logo.png</td>
-                                <td>50.5190 kb</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
-                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Contract-10_12_2014.docx</td>
-                                <td>44.9715 kb</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-info"><i class="far fa-file-pdf"></i></a>
-                                        <a href="#" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> <!-- /.card-body -->
-            </div> <!-- /.card-success -->
-    `;
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+
+        new DataTable(tableFiles, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['Tipo Documento', 'Extensión', 'Acciones'],
+                data: data.map(function (item) {
+
+                    return [
+                        item['ctipodocto'],
+                        item['cextensiondocto'],
+                        `
+                        <button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick="modalViewDocument('${item['crutadocto']}','${item['cextensiondocto']}','${item['ctipodocto']}')"><i class="fas fa-file-pdf"></i></button>
+                        <button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick=""><i class="fas fa-edit"></i></button>
+                        <button class="btn bg-gradient-danger btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick=""><i class="fas fa-trash-alt"></i></button>
+                        `
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los documentos de comprobación del cliente: ${error.message}`);
+    }
+
+
 
     return tableFiles;
 }
+
+
+window.modalViewDocument = (pathfile, extension, type) => {
+    // Obtener el cuerpo del modal y el contenedor del tipo de documento
+    let modalBody = document.querySelector(".iframedocto");
+    let tipoDocumento = document.getElementById("tipoDocumento");
+
+    // Actualizar el tipo de documento en el modal
+    tipoDocumento.innerHTML = type;
+
+    // Limpiar el contenido actual del modal body
+    modalBody.innerHTML = '';
+
+    // Crear un nuevo elemento iframe
+    let iframeViewer = document.createElement("iframe");
+    iframeViewer.setAttribute('id', 'iframeViewer');
+    iframeViewer.setAttribute('width', '100%');
+    iframeViewer.setAttribute('height', '600px');
+    iframeViewer.setAttribute('frameborder', '0');
+    iframeViewer.setAttribute('allowfullscreen', 'true');
+
+    // Establecer la ruta del archivo en el iframe
+    iframeViewer.setAttribute('src', pathfile);
+
+    // Insertar el nuevo iframe en el modal
+    modalBody.appendChild(iframeViewer);
+
+    // Mostrar el modal después de actualizar el contenido
+    $("#mod-DocumentView").modal("show");
+};
+
+
+
+
+
 
 
 const leerCreditosPorCliente = async (icvecliente) => {
@@ -1340,7 +1366,6 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
         }
 
         const data = await response.json();
-        console.table(data);
 
         // Check if the totals are included in the response
         let tprestamo = 0, tintereses = 0, ttotal = 0;
@@ -1356,12 +1381,13 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                 ttotal += parseFloat(item.total);
             });
         }
-
+        var i = 0;
         tblCreditDetail.dataTableInstance = new DataTable(tblCreditDetail, {
             perPage: 10,
             data: {
                 headings: ['ID', 'Pag a Capital', 'Pago Interes', 'Total', 'Fecha Pago', 'Estado', 'Confirmar Pago &oacute;<br> Ver Recibo', 'Cobranza'],
                 data: data.map(function (item) {
+                    i++;
                     var id = item['icvedetallepago'];
                     let dpaycapital = parseFloat(item['dpaycapital']);
                     let dpayinteres = parseFloat(item['dpayinteres']);
@@ -1396,16 +1422,16 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                     }
 
                     return [
-                        id,
+                        i,
                         dpaycapitalFormateado,
                         dpayinteresFormateado,
                         totalFormateado,
                         item['dfechapago'],
                         icon,
                         item['cestatuspago'] == '1'
-                            ? `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="changeLoanScheme(${id}, 1)" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
-                            : `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
-                        `<i class="fas fa-comments-dollar"></i>`
+                            ? `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="viewVoucherPay(${id}, 1)" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
+                            : `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalSetCompletePay(${id})" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
+                        `<button class="btn bg-gradient-secondary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalDocumentaryDraft(${id})" style="margin: auto 0"><i class="fas fa-comments-dollar"></i></button>`
                     ]
                 })
             }
@@ -1422,12 +1448,18 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
     }
 }
 
-
-window.changeLoanScheme = async (idCredit, op = null) => {
+/**
+ * 
+ * @param {number} idcustomer 
+ * @param {number} idCredit 
+ * @param {number} op 
+ */
+window.changeLoanScheme = async (idcustomer, idCredit, op = null) => {
     var tblPaysPending = document.getElementById(`tblPaysPending`);
     let params =
         'operation=readPaysPendingCredit' +
-        '&idCredit=' + idCredit;
+        '&idCredit=' + idCredit +
+        '&op=' + op;
     try {
         const response = await fetch(baseURL, {
             method: 'POST',
@@ -1443,6 +1475,7 @@ window.changeLoanScheme = async (idCredit, op = null) => {
 
         const data = await response.json();
         let ttotal = 0;
+        var i = 0;
         new DataTable(tblPaysPending, {
             perPage: 5,
             data: {
@@ -1450,6 +1483,7 @@ window.changeLoanScheme = async (idCredit, op = null) => {
                 headings: ['ID', 'Total', 'Fecha Pago'],
                 data: data.map(function (item) {
                     // return Object.values(item);
+                    i++;
                     var id = item['icvedetallepago'];
                     let total = parseFloat(item['total']);
                     let totalFormateado = total.toLocaleString('es-MX', {
@@ -1463,9 +1497,10 @@ window.changeLoanScheme = async (idCredit, op = null) => {
                         currency: 'MXN'
                     });
                     document.getElementById('totalAdeudo').value = ttotalFormateado;
+                    document.getElementById('op').value = op;
                     document.getElementById('totalAdeudoTxt').innerHTML = ttotalFormateado;
                     return [
-                        id,
+                        i,
                         totalFormateado,
                         item['dfechapago']
                     ]
@@ -1477,8 +1512,37 @@ window.changeLoanScheme = async (idCredit, op = null) => {
         throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
     }
     document.getElementById('idCreditCustomer').value = idCredit;
+    document.getElementById('idCustomer').value = idcustomer;
     $('#mod-cambioEsquema').modal({ backdrop: 'static', keyboard: false }).modal('show');
+}
 
+window.showModalSetCompletePay = async (idPaySetConfirm) => {
+    $("#mod-setStatusPay").modal("show");
+}
+
+const setCompletePay = async (idPaySetConfirm) => {
+    let params =
+        'operation=aplySetCompletePay' +
+        '&idPaySetConfirm=' + idPaySetConfirm;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
 }
 
 const leerRowCliente = (id) => {
