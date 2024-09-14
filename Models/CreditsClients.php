@@ -12,6 +12,7 @@ class CreditsClients extends OperationsPaysClient
     var $acceso;
     private static $conn;
     private $monitor;
+    private static $monit;
 
     /**
      * __construct
@@ -24,6 +25,7 @@ class CreditsClients extends OperationsPaysClient
         $this->acceso = $db->pdo;
         self::$conn = $this->acceso;
         $this->monitor = new Log();
+        self::$monit = $this->monitor;
     }
 
     /**
@@ -443,7 +445,10 @@ class CreditsClients extends OperationsPaysClient
             $query = "UPDATE bit_ctrlsql SET dtfechaejec = NOW() 
                     WHERE cnombreproceso = 'updatePaysStatusCustomer'";
             $statement = CreditsClients::$conn->prepare($query);
-            $statement->execute();
+            $resp = $statement->execute();
+            if($resp){
+                CreditsClients::$monit->setLog('Clientes', 'Actualizacion correcta del procedimiento: updatePaysStatusCustomer.');
+            }
             return  true;
         } catch (PDOException $e) {
             throw new Error('Error al actualizar el proceso de corrida status de pago de los creditos.' . $e->getMessage());
