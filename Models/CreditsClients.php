@@ -451,7 +451,9 @@ class CreditsClients extends OperationsPaysClient
             }
             return  true;
         } catch (PDOException $e) {
-            throw new Error('Error al actualizar el proceso de corrida status de pago de los creditos.' . $e->getMessage());
+            $err = 'Error al actualizar el proceso de corrida status de pago de los creditos:' . $e->getMessage();
+            CreditsClients::$monit->setLog('Clientes', $err);
+            return [false, $err];
         }
         return false;
     }

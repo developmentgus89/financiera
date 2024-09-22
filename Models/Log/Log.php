@@ -16,7 +16,7 @@ class Log
             $fileW = fopen($this->fileName, 'a'); // Usa 'a' 
             if ($fileW) {
                 $fechaActual = (new DateTime())->format('Y-m-d H:i:s');
-                $contenido = $modulo . " --- " . $message . " === " . $fechaActual . PHP_EOL;
+                $contenido = $modulo . "|" . $message . "|" . $fechaActual . PHP_EOL;
                 fwrite($fileW, $contenido);
                 fclose($fileW);
             } else {

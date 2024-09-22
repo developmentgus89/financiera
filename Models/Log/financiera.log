@@ -1,3 +1,13 @@
 Clientes --- Lectura de clientes con todos sus datos se hizo de manera satisfactoria. === 2024-09-14 03:18:22
 Clientes --- Lectura de clientes con todos sus datos se hizo de manera satisfactoria. === 2024-09-14 03:19:43
 Clientes --- Lectura de clientes con todos sus datos se hizo de manera satisfactoria. === 2024-09-14 03:25:12
+Clientes --- Lectura de clientes con todos sus datos se hizo de manera satisfactoria. === 2024-09-14 03:26:09
+Clientes --- Lectura de clientes con todos sus datos se hizo de manera satisfactoria. === 2024-09-14 03:26:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-14 03:27:18
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-14 03:29:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-14 03:29:33
+Clientes|Error al actualizar el proceso de corrida status de pago de los creditos:SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dtfechaejec = NOW() 
+                    WHERE cnombreproceso = 'updatePaysStat' at line 1|2024-09-14 03:29:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-14 03:29:54
+Clientes|Error al actualizar el proceso de corrida status de pago de los creditos:SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dtfechaejec = NOW() 
+                    WHERE cnombreproceso = 'updatePaysStat' at line 1|2024-09-14 03:29:54
