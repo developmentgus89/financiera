@@ -768,21 +768,75 @@ $fecha_actual = $formatter->format(new DateTime());
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="mod-setStatusPay" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="mod-setStatusPayAdvance" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content bg-modalVoucher">
             <div class="modal-header">
-                <h5 class="modal-title"><strong>Carga de voucher para confirmaci&oacute;n de pago</strong></h5>
+                <h5 class="modal-title"><strong>Confirmaci&oacute;n de pago por adelantado.</strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="form-group">
-                        <label for="amountpay">Cantidad de Pago</label>
-                        <input type="text"
-                            class="form-control" name="amountpay" id="amountpay" disabled>
+                    <div class="row">
+                        <div class="col-6 text-center">
+                            <label for="">Monto del cr&eacute;dito</label>
+                            <input type="hidden" class="form-control" name="icvedetallepago" id="icvedetallepago">
+                            <input type="hidden" class="form-control" name="txtmontoCredit" id="txtmontoCredit">
+                            <div id="montoCredit"></div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <label for="">Monto del pago del periodo</label>
+                            <input type="hidden" class="form-control" name="txtmontoPerPago" id="txtmontoPerPago">
+                            <div id="montoPerPago"></div>
+                        </div>
+                    </div>
+                    <hr class="modern-hr text-center">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="voucherPaySet">Carga del voucher:</label>
+                                <input type="file" class="form-control-file" name="voucherPaySet" id="voucherPaySet">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="txtImportePago">Capture el importe:</label>
+                                <input type="text" class="form-control" name="txtImportePago" id="txtImportePago">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnSetPayAdvanced" name="btnSetPayAdvanced">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mod-setStatusPay" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>Confirmaci&oacute;n de pago.</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="">Monto del cr&eacute;dito</label>
+                            <div id="montoCredit"></div>
+                        </div>
+                        <div class="col-6">
+                            <label for="">Monto del pago del periodo</label>
+                            <div id="montoPerPago"></div>
+                        </div>
                     </div>
                 </div>
             </div>

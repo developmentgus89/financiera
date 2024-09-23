@@ -27,6 +27,16 @@ $('#interesfijo').inputmask('currency', {
     clearMaskOnLostFocus: false // Mantiene la máscara visible incluso cuando el input pierde el foco
 });
 
+$('#txtImportePago').inputmask('currency', {
+    radixPoint: '.',
+    groupSeparator: ',',
+    allowMinus: false,
+    autoGroup: true,
+    prefix: 'MXN ',
+    digits: 2,
+    rightAlign: false
+});
+
 $("#modalAgregar").on('shown.bs.modal', () => {
     const selectBanks = document.getElementById('selCatIcveBancoCli');
     drawCatalogBanks(selectBanks);
@@ -79,6 +89,7 @@ const selectTipoCliente = document.querySelector('#typeClient');
 const barprestamosoli = document.getElementById('barprestamosoli');
 const persemanas = document.getElementById('persemanas');
 const btnSaveNewEsq = document.getElementById('btnSaveNewEsq');
+const btnSetPayAdvanced = document.getElementById('btnSetPayAdvanced');
 
 
 barprestamosoli.value = 0;
@@ -173,6 +184,46 @@ btnSaveNewEsq.addEventListener('click', () => {
             }
         }
     });
+});
+
+btnSetPayAdvanced.addEventListener('click', () =>{
+    let voucherPaySet   = document.getElementById('voucherPaySet');
+    let txtImportePago  = document.getElementById('txtImportePago');
+    let icvedetallepago = document.getElementById('icvedetallepago');
+    let txtmontoPerPago = document.getElementById('txtmontoPerPago');
+
+    const validFormAddVoucherPay = () => {
+        const fields = [
+            { element: voucherPaySet,  message: 'Cargue el voucher de pago' },
+            { element: txtImportePago, message: 'Ingrese el importe de pago.' }
+        ];
+
+        let hasError = false;
+
+        for (const field of fields) {
+            removeError(field.element);
+            if (field.element.value === '' || field.element.value === null) {
+                showError(field.element, field.message);
+                field.element.focus();
+                hasError = true;
+                break;
+            }
+        }
+
+        if (!hasError) {
+            removeError(txtImportePago);
+            // HACK : Crea el objeto form DATA
+            var formDataAssingPayment = new FormData();
+            formDataAssingPayment.append('operation', "assingPaymentConfirm");
+            formDataAssingPayment.append('icvedetallepago', icvedetallepago.value);
+            formDataAssingPayment.append('txtmontoPerPago', txtmontoPerPago.value);
+            formDataAssingPayment.append('voucherPaySet', voucherPaySet.files[0]);
+            formDataAssingPayment.append('txtImportePago', txtImportePago.value);
+            assingPaymentConfirm(formDataAssingPayment);
+        }
+    }
+
+    validFormAddVoucherPay();
 });
 
 
@@ -650,8 +701,9 @@ btnInsertarCliente.addEventListener('click', () => {
                 if (result.isConfirmed) {
 
                     let idCliente = await insertCustomer(formDataCustomer);
-                    console.table(idCliente); //TODO: Pendiente quitar este console.log
-                    //location.reload();
+                    if(idCliente){
+                        location.reload();
+                    }
                 } else {
                     $('#custom-tabs-one-referidos-tab').tab('show');
                 }
@@ -1517,7 +1569,67 @@ window.changeLoanScheme = async (idcustomer, idCredit, op = null) => {
 }
 
 window.showModalSetCompletePay = async (idPaySetConfirm) => {
-    $("#mod-setStatusPay").modal("show");
+    swalWithBootstrapButtons.fire({
+        title: "¿Desea realizar un pago por adelantado?",
+        text: "Recuerde que puede sobrante del perido de pago actual.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No.",
+        confirmButtonText: "Si.",
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed) {            
+            let idPaySetData = await getDataPay(idPaySetConfirm);
+            let totalCredit  = parseFloat(idPaySetData[0].dmonto);
+            let montoCredit = totalCredit.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            });
+
+            let totalAmountPay = parseFloat(idPaySetData[0].total);
+            let amountPay      = totalAmountPay.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            });
+
+            document.getElementById("montoCredit").innerHTML  = montoCredit;
+            document.getElementById("icvedetallepago").value  = idPaySetData[0].icvedetallepago;
+            document.getElementById("txtmontoCredit").value   = montoCredit;
+            document.getElementById("montoPerPago").innerHTML = amountPay;
+            document.getElementById("txtmontoPerPago").value  = amountPay;
+            $("#mod-setStatusPayAdvance").modal("show");
+
+        }
+    });
+}
+
+/**
+ * 
+ * @param {int} idPaySetConfirm 
+ */
+const getDataPay = async (idPaySetConfirm) => {
+    let params =
+        'operation=getDataPay' +
+        '&idPayCredit=' + idPaySetConfirm;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+        
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener los pagos de capital: ${error.message}`);
+    }
 }
 
 const setCompletePay = async (idPaySetConfirm) => {
@@ -1570,7 +1682,11 @@ const leerRowCliente = (id) => {
     xhr.send(`operation=row&id=${id}`);
 };
 
-
+/**
+ * 
+ * @param {array} formDataCustomer 
+ * @returns 
+ */
 const insertCustomer = async (formDataCustomer) => {
     try {
         const response = await fetch(baseURL, {
@@ -1677,7 +1793,11 @@ const confirmarEliminarCliente = (id) => {
     $('#modalBorrarCliente').modal('show');
 };
 
-
+/**
+ * 
+ * @param {HTMLElement} element 
+ * @param {number} icvebanco 
+ */
 const drawCatalogBanks = async (element, icvebanco = null) => {
     const banks = await moduleAccBanks.moduleAccountsBanks.obtenerBancos();
     element.innerHTML = ``;
@@ -1692,6 +1812,10 @@ const drawCatalogBanks = async (element, icvebanco = null) => {
     element.innerHTML = `<option value="0">SELECCIONE BANCO</option>` + optionsHTML;
 }
 
+/**
+ * Función para poder leer los código postales
+ * @param {string} zipcode 
+ */
 const readCodigosPostal = async (zipcode) => {
     let params =
         'operation=readZipCode' +
@@ -1723,6 +1847,29 @@ const readCodigosPostal = async (zipcode) => {
 
     } catch (error) {
         throw new Error(`No se pueden obtener los codigos postales: ${error.message}`);
+    }
+}
+
+/**
+ * 
+ * @param {Array} data 
+ */
+const assingPaymentConfirm = async (formData) => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            body: formData // Usando FormData directamente
+        });
+
+        if (!response.ok) {
+            throw new Error('Error con la comunicación con el servidor');
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        throw new Error(`Error en el servidor: ${error.message}`);
     }
 }
 

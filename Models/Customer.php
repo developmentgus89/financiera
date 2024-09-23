@@ -322,7 +322,7 @@ class Customer
                             $this->insertDocument($idCliente, $documentType, $fullPath, $fullDocumentName, $documentExtension);
                         } else {
                             // Handle the error if the file couldn't be moved
-                            throw new Exception("Error moving the file: " . $fileInfo['name']);
+                            throw new Exception("Error al mover el archivo: " . $fileInfo['name']);
                         }
                     } else {
                         throw new Exception("Invalid file key or optional file missing: " . $key);

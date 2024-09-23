@@ -11,3 +11,108 @@ Clientes|Error al actualizar el proceso de corrida status de pago de los credito
 Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-14 03:29:54
 Clientes|Error al actualizar el proceso de corrida status de pago de los creditos:SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dtfechaejec = NOW() 
                     WHERE cnombreproceso = 'updatePaysStat' at line 1|2024-09-14 03:29:54
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-21 23:50:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-21 23:50:22
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:12:09
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:12:09
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:12:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:12:12
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:12:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:13:21
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:13:21
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:13:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:27:12
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:27:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:28:36
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:28:36
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:30:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:30:45
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:31:01
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:31:50
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:31:50
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:31:56
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:33:17
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:33:17
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:33:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:34:24
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:34:24
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:34:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:35:01
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:35:01
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:35:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:38:55
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:38:55
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:40:15
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:40:15
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:40:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:48:27
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:48:27
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:48:34
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:49:05
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:49:05
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:49:12
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:49:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:49:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:52:23
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:52:23
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:52:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:52:50
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:52:50
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:52:57
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:53:23
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:53:23
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:53:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:54:41
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:54:41
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:54:46
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 00:55:14
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 00:55:14
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 00:55:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 01:02:08
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-22 01:02:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 01:02:50
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 01:03:03
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 01:04:39
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 01:04:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 19:29:20
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 19:29:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 19:37:49
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 19:37:56
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 19:38:47
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 19:38:53
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 19:39:41
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 19:39:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 19:39:53
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 19:39:59
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:08:07
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:08:15
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:09:53
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:10:00
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:11:35
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:11:43
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:13:09
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:13:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:20:48
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:20:55
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:44:57
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:44:59
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:45:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:46:58
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:47:00
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:47:07
+Clientes|Error al insertar el cliente: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cclinombre' cannot be null|2024-09-22 21:47:16
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 21:48:14
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 21:48:20
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:02:23
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 23:10:22
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:10:41
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:10:55
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:11:00
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:11:25
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 23:12:53
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:14:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 23:19:06
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:19:17
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:20:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-22 23:21:40
+Clientes|Obtencion de los datos del pago => 1|2024-09-22 23:22:22

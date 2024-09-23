@@ -341,6 +341,27 @@ class CreditsClients extends OperationsPaysClient
         }    
     }
 
+    
+    /**
+     * getDataPayCredit
+     * Método para obtener solamente los datos del periodo de pago
+     * @param  mixed $idPayCredit
+     * @return array
+     */
+    public function getDataPayCredit($idPayCredit): ?array{
+        try {
+            $sql = "SELECT catcreditos.dmonto, catcreditctlpagcust.* FROM catcreditctlpagcust
+                        inner join catcreditos on  catcreditctlpagcust.icvecredito = catcreditos.icvecredito 
+                        WHERE icvedetallepago = ?";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute([$idPayCredit]);
+            $this->monitor->setLog('Clientes', "Obtencion de los datos del pago => $resp");
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+           $this->monitor->setLog('Clientes', $e->getMessage());
+        }
+    }
+
 
     /**
      * setCreditNewScheme
@@ -456,5 +477,10 @@ class CreditsClients extends OperationsPaysClient
             return [false, $err];
         }
         return false;
+    }
+
+    // ASAP: Terminar esta función para poder mover el documento
+    private function processDocumentPayment(): ?bool{
+
     }
 }
