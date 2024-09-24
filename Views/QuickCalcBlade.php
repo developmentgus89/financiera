@@ -166,7 +166,7 @@ include_once "dashboard/startTemplateDashboard.php";
                             <div class="form-group">
                                 <label for="customRange1">Porcentaje del pr&eacute;stamo:</label>
                                 <h2 class="mb-5">
-                                    <div id="vcantporcentaje"> 0.00 %</div>
+                                    <div id="vcantporcentaje"> 0.00 %</div> semanal
                                 </h2>
                             </div>
                         </div>
@@ -187,7 +187,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <h4>Monto Solicitado</h4>
                                     </span>
                                     <span class="info-box-number">
-                                        <div id="montoSolicitado">$ 0.00 MXN</div>
+                                        <div id="montoSolicitado"><h3>$ 0.00 MXN</h3></div>
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->
@@ -202,7 +202,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <h4>Intereses</h4>
                                     </span>
                                     <span class="info-box-number">
-                                        <div id="montoIntereses">$ 0.00 MXN</div>
+                                        <div id="montoIntereses"><h3>$ 0.00 MXN</h3></div>
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->
@@ -217,7 +217,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <h4>Pago por semana</h4>
                                     </span>
                                     <span class="info-box-number">
-                                        <div id="pagoSemanal">$ 0.00 MXN</div>
+                                        <div id="pagoSemanal"><h3>$ 0.00 MXN</h3></div>
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->
@@ -232,7 +232,7 @@ include_once "dashboard/startTemplateDashboard.php";
                                         <h4>Total</h4>
                                     </span>
                                     <span class="info-box-number">
-                                        <div id="montoTotal">$ 0.00 MXN</div>
+                                        <div id="montoTotal"><h3>$ 0.00 MXN</h3></div>
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->

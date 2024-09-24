@@ -14,7 +14,7 @@ abstract class OperationsPaysClient{
      * @param  int $id
      * @return array
      */
-    abstract public function getRowSingleCredit(int $id, int $icvecliente): ?array;
+    abstract public function getRowSingleCredit(int $idcreditCustomer): ?array;
     
     /**
      * insertRow
@@ -40,5 +40,20 @@ abstract class OperationsPaysClient{
      * @return bool
      */
     abstract public function delete(int $id, int $icvecliente): ?array;
+
     
+    /**
+     * updatePaysStatusCustomer
+     * Este metodo va a retornar un bool, para el tema del estatus de pago
+     * @return bool
+     */
+    abstract public function updatePaysStatusCustomer(): ?array;
+    
+
+    /**
+     * readPaysPendingCredit
+     * Lectura de pagos pendientes del credito para el cambio de esquema
+     * @return array
+     */
+    abstract public  function readPaysPendingCredit(int $idCredit, int $op): ?array;
 }

@@ -134,7 +134,7 @@ btnSaveAccountBank.addEventListener('click', () => {
                 { element: icveinversionista, message: null },
             );
 
-            setNewDataBank(fields); //Se manda a llmar a la funcion pero se le manda todo el arreglo //! es muy interesante
+            setNewDataBank(fields); 
         }
     }
 

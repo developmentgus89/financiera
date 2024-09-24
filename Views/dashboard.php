@@ -19,7 +19,7 @@ include_once "dashboard/startTemplateDashboard.php";
 <!-- Main content -->
 <div class="content">
 	<div class="row">
-		<div class="col-lg-3 col-6">
+		<div class="col-3">
 			<!-- small box -->
 			<div class="small-box bg-success">
 				<div class="inner">
@@ -32,7 +32,7 @@ include_once "dashboard/startTemplateDashboard.php";
 				<a href="CustomerBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
-		<div class="col-lg-3 col-6">
+		<div class="col-3">
 			<!-- small box -->
 			<div class="small-box bg-info">
 				<div class="inner">
@@ -46,7 +46,7 @@ include_once "dashboard/startTemplateDashboard.php";
 				<a href="InvestorsBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
-		<div class="col-lg-3 col-6">
+		<div class="col-3">
 			<!-- small box -->
 			<div class="small-box bg-warning">
 				<div class="inner">
@@ -60,13 +60,13 @@ include_once "dashboard/startTemplateDashboard.php";
 				<a href="QuickCalcBlade.php" class="small-box-footer">M&aacute;s Informaci&oacute;n <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
-		<div class="col-lg-3 col-6">
+		<div class="col-3">
 			<!-- small box -->
 			<div class="small-box bg-financiera-danger">
 				<div class="inner">
 					<h3>5</h3>
 
-					<h5>Adeudos de Clientes por Vencer o Vencidos</h5>
+					<h5>Adeudos de Clientes por Vencer</h5>
 				</div>
 				<div class="icon">
 					<i class="ion ion-stats-bars"></i>
@@ -76,7 +76,7 @@ include_once "dashboard/startTemplateDashboard.php";
 		</div>
 	</div>
 	<div class="row">
-
+		
 	</div>
 
 	<!-- /.container-fluid -->

@@ -137,6 +137,7 @@
 	height: 100%;
 	position: relative;
 	width: 100%;
+	text-align: center;
 }
 
 .dataTable-sorter::before,

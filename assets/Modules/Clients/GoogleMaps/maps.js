@@ -21,6 +21,32 @@ function initMap() {
     });
 }
 
+function setCustomerMap(lat, long, idCliente) {
+    console.log(`lat: ${lat}`);
+    console.log(`long: ${long}`);
+    var map = new google.maps.Map(document.getElementById(`mapCustomer${idCliente}`), {
+        zoom: 17,
+        center: { lat: parseFloat(lat), lng: parseFloat(long) } // Coordenadas iniciales del mapa
+    });
+
+    var geocoder = new google.maps.Geocoder();
+    var marker = new google.maps.Marker({
+        position: { lat: parseFloat(lat), lng: parseFloat(long) },
+        map: map,
+        title: 'Ubicación del cliente'
+    });
+
+     // Crea un InfoWindow para mostrar información adicional al hacer clic en el marcador
+     var infoWindow = new google.maps.InfoWindow({
+        content: '<strong>Ubicación del Cliente</strong><br>Latitud: ' + lat + '<br>Longitud: ' + long
+    });
+
+    // Añade un evento de clic al marcador para abrir el InfoWindow
+    marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+    });
+}
+
 function geocodeAddress(geocoder, map, calle, numexterior, numinterior, 
         coloniadir, municipiodir, entidaddir, cp, marker) {
     let address = `${calle} ${numexterior} ${numinterior} ${coloniadir} 

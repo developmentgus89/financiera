@@ -71,7 +71,7 @@ table{
 }
 
 .bg-modalVoucher{
-    background-color: darkolivegreen;
+    background-color: rgba(85, 107, 47, 0.818);
 }
 
 .bg-modalCapitalPayment{
@@ -96,3 +96,73 @@ table{
     line-height: normal;
     width: 50px;
 }
+
+.centerColumn{
+    text-align: center;
+}
+
+.dataTable-table{
+    text-align: center;
+    vertical-align: middle;
+}
+
+td, tr, th, thead{
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-tooltip:hover::before,
+.custom-tooltip:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+.custom-tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 150%; /* Cambia según tu necesidad */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+        white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    font-size: 12px; /* Cambia según tu necesidad */
+    }
+
+.custom-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+.modern-hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(to right, #6aae60, #4e8b47);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+    margin: auto 0;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%; 
+  }

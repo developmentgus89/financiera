@@ -316,9 +316,7 @@ const progressBar = () => {
 
 
 const viewVoucherCapitalPayment = async (idcapitalpayment) => {
-    console.info(idcapitalpayment);
-    console.info(`Hola mundo VOucher`);
-
+   
     let params =
         'operation=getVoucherCapitalPayment' +
         '&idcapitalpayment=' + idcapitalpayment;
