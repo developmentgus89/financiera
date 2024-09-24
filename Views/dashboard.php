@@ -91,3 +91,4 @@ include_once "dashboard/endTemplateDashboard.php";
 include_once "dashboard/footerDashBoard.php";
 ?>
 <script src="../assets/mainDashboard.js"></script>
+<script src="../assets/wsListenner.js" defer></script>

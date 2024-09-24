@@ -481,6 +481,6 @@ class CreditsClients extends OperationsPaysClient
 
     // ASAP: Terminar esta función para poder mover el documento
     private function processDocumentPayment(): ?bool{
-
+        return true;
     }
 }
