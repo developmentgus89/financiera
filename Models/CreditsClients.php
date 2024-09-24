@@ -273,7 +273,7 @@ class CreditsClients extends OperationsPaysClient
 
             // Se cambia el estatus de los pagos del credito del cliente
             $exeSQL = CreditsClients::setStatusChangePaysLate($idCredit);
-            
+
 
             if ($creditStatus && $exeSQL && !is_null($ctrlPaysNewCredit)) {
 
@@ -316,39 +316,99 @@ class CreditsClients extends OperationsPaysClient
         return $resp;
     }
 
-    
+
     /**
      * setCompletePay
+     * 23092024 - G Angulo
      * Método para cambiar el estatus de pago de un plazo de pago
-     * @param  mixed $idPaySetConfirm
+     * @param  array $idPaySetConfirm
      * @return array
      */
-    public function setCompletePay(int $idPaySetConfirm): ?array{
-        try{
-            $this->acceso->beginTransaction();
-            $resp         = array();
-            $sql          = "UPDATE catcreditctlpagcust SET dfecharealpago = NOW(), cestatuspago = 1 WHERE icvedetallepago = ?";
-            $statement    = $this->acceso->prepare($sql);
-            $resp['resp'] = $statement->execute([$idPaySetConfirm]);
-            $this->acceso->commit();
-            return $resp;
+    public function setCompletePay(array $dataPaymentCustomer): ?array
+    {
+        try {
+            $respDocProcess = $this->processDocumentPayment($dataPaymentCustomer['voucherPaySet']);
+            // var_dump($respDocProcess);
+            // exit("Repsuesta del procesamiento del documento"); // Verificar procesamiento del documento
+
+            if ($respDocProcess['resp']) {
+                $this->acceso->beginTransaction();
+                $resp = array();
+
+                // Montos de pagos totales y restantes
+                $pagoRestante = (float) $dataPaymentCustomer['txtImportePago'];
+                $icveCredito = $dataPaymentCustomer['icvecredito'];
+                //ASAP: Verificar por que no se hace correctamente la actualización
+                // Consulta los pagos pendientes del crédito, ordenados por fecha de pago ascendente
+                $sqlPagosPendientes = "
+                    SELECT icvedetallepago, total, crecibospago 
+                    FROM catcreditctlpagcust 
+                    WHERE icvecredito = ? AND cestatuspago in(0,2,3) 
+                    ORDER BY dfechapago ASC";
+                $statementPagosPendientes = $this->acceso->prepare($sqlPagosPendientes);
+                $statementPagosPendientes->execute([$icveCredito]);
+                $pagosPendientes = $statementPagosPendientes->fetchAll(PDO::FETCH_ASSOC);
+
+                $resp['pagos_actualizados'] = [];
+
+                foreach ($pagosPendientes as $pago) {
+                    // Actualiza el campo crecibospago concatenando el nuevo recibo
+                    $recibosPago = $pago['crecibospago'] ? $pago['crecibospago'] . '|' : '';
+                    $recibosPago .= '|' . $respDocProcess['doc'] .'|';
+
+                    // Si el pago restante cubre completamente este periodo
+                    if ($pagoRestante >= $pago['total']) {
+                        // Actualiza el pago como completado (cestatuspago = 1)
+                        $sqlUpdatePago = "
+                            UPDATE catcreditctlpagcust 
+                            SET crecibospago = ?, dfecharealpago = NOW(), cestatuspago = 1 
+                            WHERE icvedetallepago = ?";
+                        $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
+                        $statementUpdate->execute([$recibosPago, $pago['icvedetallepago']]);
+
+                        $pagoRestante -= $pago['total']; // Resta el monto cubierto
+                        $resp['pagos_actualizados'][] = $pago['icvedetallepago'];
+                    } else {
+                        // Si el pago restante es parcial para este periodo
+                        $nuevoTotal = $pago['total'] - $pagoRestante; // Se actualiza con lo que queda por pagar
+                        $sqlUpdatePago = "
+                            UPDATE catcreditctlpagcust 
+                            SET crecibospago = ?, dfecharealpago = NOW(), total = ?, cestatuspago = 0 
+                            WHERE icvedetallepago = ?";
+                        $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
+                        $statementUpdate->execute([$recibosPago, $nuevoTotal, $pago['icvedetallepago']]);
+
+                        $resp['pagos_actualizados'][] = $pago['icvedetallepago'];
+                        break; // Se ha usado todo el monto, salimos del loop
+                    }
+                }
+
+                // Si se cubren todos los pagos correctamente
+                $this->acceso->commit();
+                return $resp;
+            } else {
+                $this->acceso->rollBack(); // Si el procesamiento del documento falla, hacer rollback
+            }
+
+            return null;
         } catch (PDOException $e) {
             if ($this->acceso->inTransaction()) {
                 $this->acceso->rollBack();
             }
             $this->monitor->setLog('Clientes', $e);  // Guardar el error en los logs
             return null;
-        }    
+        }
     }
 
-    
+
     /**
      * getDataPayCredit
      * Método para obtener solamente los datos del periodo de pago
      * @param  mixed $idPayCredit
      * @return array
      */
-    public function getDataPayCredit($idPayCredit): ?array{
+    public function getDataPayCredit($idPayCredit): ?array
+    {
         try {
             $sql = "SELECT catcreditos.dmonto, catcreditctlpagcust.* FROM catcreditctlpagcust
                         inner join catcreditos on  catcreditctlpagcust.icvecredito = catcreditos.icvecredito 
@@ -358,7 +418,7 @@ class CreditsClients extends OperationsPaysClient
             $this->monitor->setLog('Clientes', "Obtencion de los datos del pago => $resp");
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-           $this->monitor->setLog('Clientes', $e->getMessage());
+            $this->monitor->setLog('Clientes', $e->getMessage());
         }
     }
 
@@ -467,7 +527,7 @@ class CreditsClients extends OperationsPaysClient
                     WHERE cnombreproceso = 'updatePaysStatusCustomer'";
             $statement = CreditsClients::$conn->prepare($query);
             $resp = $statement->execute();
-            if($resp){
+            if ($resp) {
                 CreditsClients::$monit->setLog('Clientes', 'Actualizacion correcta del procedimiento: updatePaysStatusCustomer.');
             }
             return  true;
@@ -479,8 +539,29 @@ class CreditsClients extends OperationsPaysClient
         return false;
     }
 
-    // ASAP: Terminar esta función para poder mover el documento
-    private function processDocumentPayment(): ?bool{
 
+    /**
+     * processDocumentPayment
+     *
+     * @param  Object $file / en si es de tipo Object por el file
+     * @return bool
+     */
+    private function processDocumentPayment($file): ?array
+    {
+        $resp = array();
+        $targetPath = "../docs/docCustomersPayments/" . basename($file['name']);
+        // Se comprueba en primera instancia si el archivo no viene dañado
+        if (!empty($file['tmp_name']) && $file['error'] == 0) {
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $resp['doc']  = $targetPath;
+                $resp['resp'] = true;
+            } else {
+                $resp['doc']  = null;
+                $resp['resp'] = false;
+                throw new Exception("Error al mover el archivo: " . $file['name']);
+            }
+        }
+
+        return $resp;
     }
 }

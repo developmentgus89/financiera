@@ -173,10 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'assingPaymentConfirm':
             $dataSetPayment = array();
             $dataSetPayment['icvedetallepago'] = $_POST['icvedetallepago'];
+            $dataSetPayment['icvecredito']     = $_POST['icvecredito'];
             $dataSetPayment['txtmontoPerPago'] = $_POST['txtmontoPerPago'];
             $dataSetPayment['txtImportePago']  = $_POST['txtImportePago'];
             $dataSetPayment['voucherPaySet']   = $_FILES['voucherPaySet'];
-            var_dump($dataSetPayment);
+            $resp = $credits->setCompletePay($dataSetPayment);
+            echo json_encode($resp);
             break;
         default:
             echo 'Operación no válida';

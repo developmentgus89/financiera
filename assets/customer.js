@@ -190,6 +190,7 @@ btnSetPayAdvanced.addEventListener('click', () =>{
     let voucherPaySet   = document.getElementById('voucherPaySet');
     let txtImportePago  = document.getElementById('txtImportePago');
     let icvedetallepago = document.getElementById('icvedetallepago');
+    let icvecredito     = document.getElementById('icvecredito');
     let txtmontoPerPago = document.getElementById('txtmontoPerPago');
 
     const validFormAddVoucherPay = () => {
@@ -212,10 +213,10 @@ btnSetPayAdvanced.addEventListener('click', () =>{
 
         if (!hasError) {
             removeError(txtImportePago);
-            // HACK : Crea el objeto form DATA
             var formDataAssingPayment = new FormData();
-            formDataAssingPayment.append('operation', "assingPaymentConfirm");
+            formDataAssingPayment.append('operation', 'assingPaymentConfirm');
             formDataAssingPayment.append('icvedetallepago', icvedetallepago.value);
+            formDataAssingPayment.append('icvecredito', icvecredito.value);
             formDataAssingPayment.append('txtmontoPerPago', txtmontoPerPago.value);
             formDataAssingPayment.append('voucherPaySet', voucherPaySet.files[0]);
             formDataAssingPayment.append('txtImportePago', txtImportePago.value);
@@ -1593,6 +1594,7 @@ window.showModalSetCompletePay = async (idPaySetConfirm) => {
             });
 
             document.getElementById("montoCredit").innerHTML  = montoCredit;
+            document.getElementById("icvecredito").value      = idPaySetData[0].icvecredito;
             document.getElementById("icvedetallepago").value  = idPaySetData[0].icvedetallepago;
             document.getElementById("txtmontoCredit").value   = montoCredit;
             document.getElementById("montoPerPago").innerHTML = amountPay;
