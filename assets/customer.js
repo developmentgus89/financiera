@@ -192,6 +192,7 @@ btnSetPayAdvanced.addEventListener('click', () =>{
     let icvedetallepago = document.getElementById('icvedetallepago');
     let icvecredito     = document.getElementById('icvecredito');
     let txtmontoPerPago = document.getElementById('txtmontoPerPago');
+    let icvecartera     = document.getElementById('icvecartera');
 
     const validFormAddVoucherPay = () => {
         const fields = [
@@ -220,6 +221,7 @@ btnSetPayAdvanced.addEventListener('click', () =>{
             formDataAssingPayment.append('txtmontoPerPago', txtmontoPerPago.value);
             formDataAssingPayment.append('voucherPaySet', voucherPaySet.files[0]);
             formDataAssingPayment.append('txtImportePago', txtImportePago.value);
+            formDataAssingPayment.append('icvecartera', icvecartera.value);
             assingPaymentConfirm(formDataAssingPayment);
         }
     }
@@ -1596,6 +1598,7 @@ window.showModalSetCompletePay = async (idPaySetConfirm) => {
             document.getElementById("montoCredit").innerHTML  = montoCredit;
             document.getElementById("icvecredito").value      = idPaySetData[0].icvecredito;
             document.getElementById("icvedetallepago").value  = idPaySetData[0].icvedetallepago;
+            document.getElementById("icvecartera").value      = idPaySetData[0].icvecartera;
             document.getElementById("txtmontoCredit").value   = montoCredit;
             document.getElementById("montoPerPago").innerHTML = amountPay;
             document.getElementById("txtmontoPerPago").value  = amountPay;

@@ -327,23 +327,23 @@ class CreditsClients extends OperationsPaysClient
     public function setCompletePay(array $dataPaymentCustomer): ?array
     {
         try {
+            // Procesar el documento del pago
             $respDocProcess = $this->processDocumentPayment($dataPaymentCustomer['voucherPaySet']);
-            // var_dump($respDocProcess);
-            // exit("Repsuesta del procesamiento del documento"); // Verificar procesamiento del documento
 
             if ($respDocProcess['resp']) {
                 $this->acceso->beginTransaction();
                 $resp = array();
 
                 // Montos de pagos totales y restantes
-                $pagoRestante = (float) $dataPaymentCustomer['txtImportePago'];
+                $pagoRestante = $dataPaymentCustomer['txtImportePago'];
                 $icveCredito = $dataPaymentCustomer['icvecredito'];
-                //ASAP: Verificar por que no se hace correctamente la actualización
+                $icveCartera = $dataPaymentCustomer['icvecartera'];
+
                 // Consulta los pagos pendientes del crédito, ordenados por fecha de pago ascendente
                 $sqlPagosPendientes = "
-                    SELECT icvedetallepago, total, crecibospago 
+                    SELECT icvedetallepago, total, dpaycapital, dpayinteres, crecibospago 
                     FROM catcreditctlpagcust 
-                    WHERE icvecredito = ? AND cestatuspago in(0,2,3) 
+                    WHERE icvecredito = ? AND cestatuspago IN (0, 2, 3) 
                     ORDER BY dfechapago ASC";
                 $statementPagosPendientes = $this->acceso->prepare($sqlPagosPendientes);
                 $statementPagosPendientes->execute([$icveCredito]);
@@ -352,9 +352,19 @@ class CreditsClients extends OperationsPaysClient
                 $resp['pagos_actualizados'] = [];
 
                 foreach ($pagosPendientes as $pago) {
-                    // Actualiza el campo crecibospago concatenando el nuevo recibo
-                    $recibosPago = $pago['crecibospago'] ? $pago['crecibospago'] . '|' : '';
-                    $recibosPago .= '|' . $respDocProcess['doc'] .'|';
+                    // Recuperar y decodificar los recibos anteriores
+                    $recibosPago = $pago['crecibospago'] ? json_decode($pago['crecibospago'], true) : [];
+
+                    // Añadir la nueva entrada de recibo con ruta, monto y descripción
+                    $reciboActual = [
+                        $respDocProcess['doc'],   // Ruta del archivo
+                        min($pagoRestante, $pago['total']),  // Monto pagado (lo máximo que cubre este pago)
+                        'Pago por adelantado'      // Descripción
+                    ];
+                    $recibosPago[] = $reciboActual; // Añadir el nuevo recibo al arreglo
+
+                    // Convertir de nuevo a formato JSON
+                    $recibosPagoJson = json_encode($recibosPago);
 
                     // Si el pago restante cubre completamente este periodo
                     if ($pagoRestante >= $pago['total']) {
@@ -364,24 +374,34 @@ class CreditsClients extends OperationsPaysClient
                             SET crecibospago = ?, dfecharealpago = NOW(), cestatuspago = 1 
                             WHERE icvedetallepago = ?";
                         $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
-                        $statementUpdate->execute([$recibosPago, $pago['icvedetallepago']]);
+                        $statementUpdate->execute([$recibosPagoJson, $pago['icvedetallepago']]);
 
-                        $pagoRestante -= $pago['total']; // Resta el monto cubierto
+                        // Resta el monto cubierto por este pago
+                        $pagoRestante -= $pago['total'];
                         $resp['pagos_actualizados'][] = $pago['icvedetallepago'];
                     } else {
                         // Si el pago restante es parcial para este periodo
-                        $nuevoTotal = $pago['total'] - $pagoRestante; // Se actualiza con lo que queda por pagar
+                        $nuevoTotal = $pago['total'] - $pagoRestante; // Actualiza el total restante de este pago
                         $sqlUpdatePago = "
                             UPDATE catcreditctlpagcust 
                             SET crecibospago = ?, dfecharealpago = NOW(), total = ?, cestatuspago = 0 
                             WHERE icvedetallepago = ?";
                         $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
-                        $statementUpdate->execute([$recibosPago, $nuevoTotal, $pago['icvedetallepago']]);
+                        $statementUpdate->execute([$recibosPagoJson, $nuevoTotal, $pago['icvedetallepago']]);
 
                         $resp['pagos_actualizados'][] = $pago['icvedetallepago'];
                         break; // Se ha usado todo el monto, salimos del loop
                     }
                 }
+                // BUG: No se actualiza correctamente el saldo de la cartera
+                // Actualizar el saldo en la tabla catcarteras
+                $sqlUpdateCartera = "
+                        UPDATE catcarteras 
+                        SET dsaldo = dsaldo + ? 
+                        WHERE icvecartera = ?";
+                $statementUpdateCartera = $this->acceso->prepare($sqlUpdateCartera);
+                $statementUpdateCartera->execute([$pago['total'], $icveCartera]);
+
 
                 // Si se cubren todos los pagos correctamente
                 $this->acceso->commit();
@@ -401,6 +421,8 @@ class CreditsClients extends OperationsPaysClient
     }
 
 
+
+
     /**
      * getDataPayCredit
      * Método para obtener solamente los datos del periodo de pago
@@ -410,9 +432,10 @@ class CreditsClients extends OperationsPaysClient
     public function getDataPayCredit($idPayCredit): ?array
     {
         try {
-            $sql = "SELECT catcreditos.dmonto, catcreditctlpagcust.* FROM catcreditctlpagcust
-                        inner join catcreditos on  catcreditctlpagcust.icvecredito = catcreditos.icvecredito 
-                        WHERE icvedetallepago = ?";
+            $sql = "SELECT clientes.icvecartera , catcreditos.icvecliente , catcreditos.dmonto, catcreditctlpagcust.* FROM catcreditctlpagcust
+	                    INNER JOIN catcreditos on  catcreditctlpagcust.icvecredito = catcreditos.icvecredito
+	                    INNER JOIN clientes on catcreditos.icvecliente = clientes.icvecliente 
+                    WHERE icvedetallepago = ?";
             $statement = $this->acceso->prepare($sql);
             $resp = $statement->execute([$idPayCredit]);
             $this->monitor->setLog('Clientes', "Obtencion de los datos del pago => $resp");
@@ -548,8 +571,15 @@ class CreditsClients extends OperationsPaysClient
      */
     private function processDocumentPayment($file): ?array
     {
+        $randomNumber = str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Extraer la extensión del archivo original
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        // Renombrar el archivo con el nuevo nombre
+        $newFileName = "voucherCustomer_" . $randomNumber . "." . $fileExtension;
         $resp = array();
-        $targetPath = "../docs/docCustomersPayments/" . basename($file['name']);
+        $targetPath = "../docs/docCustomersPayments/" . $newFileName;
         // Se comprueba en primera instancia si el archivo no viene dañado
         if (!empty($file['tmp_name']) && $file['error'] == 0) {
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {

@@ -175,7 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $dataSetPayment['icvedetallepago'] = $_POST['icvedetallepago'];
             $dataSetPayment['icvecredito']     = $_POST['icvecredito'];
             $dataSetPayment['txtmontoPerPago'] = $_POST['txtmontoPerPago'];
-            $dataSetPayment['txtImportePago']  = $_POST['txtImportePago'];
+            $dataSetPayment['icvecartera']     = $_POST['icvecartera'];
+            $dataSetPayment['txtImportePago']  = (float) str_replace(['MXN', ' ', ','], '', $_POST['txtImportePago']);
             $dataSetPayment['voucherPaySet']   = $_FILES['voucherPaySet'];
             $resp = $credits->setCompletePay($dataSetPayment);
             echo json_encode($resp);

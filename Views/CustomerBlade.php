@@ -785,6 +785,7 @@ $fecha_actual = $formatter->format(new DateTime());
                             <input type="hidden" class="form-control" name="icvecredito" id="icvecredito">
                             <input type="hidden" class="form-control" name="icvedetallepago" id="icvedetallepago">
                             <input type="hidden" class="form-control" name="txtmontoCredit" id="txtmontoCredit">
+                            <input type="hidden" class="form-control" name="icvecartera" id="icvecartera">
                             <div id="montoCredit"></div>
                         </div>
                         <div class="col-6 text-center">
