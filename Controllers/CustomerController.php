@@ -181,6 +181,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resp = $credits->setCompletePay($dataSetPayment);
             echo json_encode($resp);
             break;
+        
+        case 'readNumberPay':
+            $idNumberPay = $_POST['idNumberPay'];
+            $resp = $credits->getDataNumberPay($idNumberPay);
+            echo json_encode($resp);
+            break;
         default:
             echo 'Operación no válida';
             break;

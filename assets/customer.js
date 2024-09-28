@@ -186,17 +186,17 @@ btnSaveNewEsq.addEventListener('click', () => {
     });
 });
 
-btnSetPayAdvanced.addEventListener('click', () =>{
-    let voucherPaySet   = document.getElementById('voucherPaySet');
-    let txtImportePago  = document.getElementById('txtImportePago');
+btnSetPayAdvanced.addEventListener('click', () => {
+    let voucherPaySet = document.getElementById('voucherPaySet');
+    let txtImportePago = document.getElementById('txtImportePago');
     let icvedetallepago = document.getElementById('icvedetallepago');
-    let icvecredito     = document.getElementById('icvecredito');
+    let icvecredito = document.getElementById('icvecredito');
     let txtmontoPerPago = document.getElementById('txtmontoPerPago');
-    let icvecartera     = document.getElementById('icvecartera');
+    let icvecartera = document.getElementById('icvecartera');
 
     const validFormAddVoucherPay = () => {
         const fields = [
-            { element: voucherPaySet,  message: 'Cargue el voucher de pago' },
+            { element: voucherPaySet, message: 'Cargue el voucher de pago' },
             { element: txtImportePago, message: 'Ingrese el importe de pago.' }
         ];
 
@@ -704,7 +704,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 if (result.isConfirmed) {
 
                     let idCliente = await insertCustomer(formDataCustomer);
-                    if(idCliente){
+                    if (idCliente) {
                         location.reload();
                     }
                 } else {
@@ -1436,6 +1436,8 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                 ttotal += parseFloat(item.total);
             });
         }
+
+
         var i = 0;
         tblCreditDetail.dataTableInstance = new DataTable(tblCreditDetail, {
             perPage: 10,
@@ -1475,6 +1477,22 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                             icon = `<i class="fas fa-check-circle" style="color:green;"></i>`;
                         }
                     }
+                    let cadenaRecibos = '';
+                    let recibos = '';
+                    let cantRecibos = 0;
+                    if (item['crecibospago'] != null) {
+                        cadenaRecibos = item['crecibospago'].replace(/\\"/g, '"');
+                        recibos = JSON.parse(cadenaRecibos);
+                        cantRecibos = recibos.length;
+                    } else {
+                        cantRecibos = 0;
+                    }
+
+                    let iconito = "";
+                    if (cantRecibos > 1) {
+                        iconito = `<i class="fas fa-bell" style="color: #dec221"></i>`;
+                        icon = `${icon} ${iconito}`;
+                    }
 
                     return [
                         i,
@@ -1484,9 +1502,9 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                         item['dfechapago'],
                         icon,
                         item['cestatuspago'] == '1'
-                            ? `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="viewVoucherPay(${id}, 1)" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
-                            : `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalSetCompletePay(${id})" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
-                        `<button class="btn bg-gradient-secondary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalDocumentaryDraft(${id})" style="margin: auto 0"><i class="fas fa-comments-dollar"></i></button>`
+                            ? `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Visualizar voucher de pago" onclick="viewVoucherPay(${id})" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
+                            : `<button class="btn bg-gradient-primary btn-sx custom-tooltip" data-tooltip="Aplicar pago" onclick="showModalSetCompletePay(${id})" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
+                        `<button class="btn bg-gradient-secondary btn-sx custom-tooltip" data-tooltip="Agregar gestión de cobranza" title="Cambiar Esquema" onclick="showModalDocumentaryDraft(${id})" style="margin: auto 0"><i class="fas fa-comments-dollar"></i></button>`
                     ]
                 })
             }
@@ -1581,31 +1599,80 @@ window.showModalSetCompletePay = async (idPaySetConfirm) => {
         confirmButtonText: "Si.",
         reverseButtons: true
     }).then(async (result) => {
-        if (result.isConfirmed) {            
+        if (result.isConfirmed) {
             let idPaySetData = await getDataPay(idPaySetConfirm);
-            let totalCredit  = parseFloat(idPaySetData[0].dmonto);
+            let totalCredit = parseFloat(idPaySetData[0].dmonto);
             let montoCredit = totalCredit.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
 
             let totalAmountPay = parseFloat(idPaySetData[0].total);
-            let amountPay      = totalAmountPay.toLocaleString('es-MX', {
+            let amountPay = totalAmountPay.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
 
-            document.getElementById("montoCredit").innerHTML  = montoCredit;
-            document.getElementById("icvecredito").value      = idPaySetData[0].icvecredito;
-            document.getElementById("icvedetallepago").value  = idPaySetData[0].icvedetallepago;
-            document.getElementById("icvecartera").value      = idPaySetData[0].icvecartera;
-            document.getElementById("txtmontoCredit").value   = montoCredit;
+            document.getElementById("montoCredit").innerHTML = montoCredit;
+            document.getElementById("icvecredito").value = idPaySetData[0].icvecredito;
+            document.getElementById("icvedetallepago").value = idPaySetData[0].icvedetallepago;
+            document.getElementById("icvecartera").value = idPaySetData[0].icvecartera;
+            document.getElementById("txtmontoCredit").value = montoCredit;
             document.getElementById("montoPerPago").innerHTML = amountPay;
-            document.getElementById("txtmontoPerPago").value  = amountPay;
+            document.getElementById("txtmontoPerPago").value = amountPay;
             $("#mod-setStatusPayAdvance").modal("show");
 
         }
     });
+}
+
+/**
+ * Funcion que permite visualizar cuales son los voucher por cada 
+ * número de pago del crédito
+ * @param {number} idNumberPay 
+ */
+window.viewVoucherPay = async (idNumberPay) => {
+    let tblViewVoucher = document.getElementById('tblViewsRowsVouchers');
+    let params =
+        'operation=readNumberPay' +
+        '&idNumberPay=' + idNumberPay;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        // new DataTable(tblPaysPending, {
+        //     perPage: 5,
+        //     data: {
+        //         // headings: Object.keys(data[0]),
+        //         headings: ['ID', 'Monto', 'Observaciones', 'Recibo'],
+        //         data: data.map(function (item) {
+        //             // return Object.values(item);
+        //             i++;
+                    
+        //             return [
+        //                 i,
+        //                 totalFormateado,
+        //                 item['dfechapago']
+        //             ]
+        //         })
+        //     }
+        // });
+        $("#modalViewVoucher").modal("show");
+    } catch (error) {
+        throw new Error(`No se pueden obtener los recibos de pago: ${error.message}`);
+    }
 }
 
 /**
@@ -1628,7 +1695,7 @@ const getDataPay = async (idPaySetConfirm) => {
         if (!response.ok) {
             throw new Error(`Error en la solicitud para obtener los pagos`);
         }
-        
+
         const data = await response.json();
         return data;
 

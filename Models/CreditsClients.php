@@ -395,12 +395,13 @@ class CreditsClients extends OperationsPaysClient
                 }
                 // BUG: No se actualiza correctamente el saldo de la cartera
                 // Actualizar el saldo en la tabla catcarteras
+                
                 $sqlUpdateCartera = "
                         UPDATE catcarteras 
                         SET dsaldo = dsaldo + ? 
                         WHERE icvecartera = ?";
                 $statementUpdateCartera = $this->acceso->prepare($sqlUpdateCartera);
-                $statementUpdateCartera->execute([$pago['total'], $icveCartera]);
+                $statementUpdateCartera->execute([$dataPaymentCustomer['txtImportePago'], $icveCartera]);
 
 
                 // Si se cubren todos los pagos correctamente
@@ -438,6 +439,27 @@ class CreditsClients extends OperationsPaysClient
                     WHERE icvedetallepago = ?";
             $statement = $this->acceso->prepare($sql);
             $resp = $statement->execute([$idPayCredit]);
+            $this->monitor->setLog('Clientes', "Obtencion de los datos del pago => $resp");
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e->getMessage());
+        }
+    }
+    
+    /**
+     * getDataNumberPay
+     *
+     * @param  int $idNumberPay
+     * @return array
+     */
+    public function getDataNumberPay($idNumberPay): ?array
+    {
+        try {
+            $sql = "SELECT catcreditctlpagcust.icvedetallepago, catcreditctlpagcust.crecibospago  
+                    FROM catcreditctlpagcust
+                    WHERE catcreditctlpagcust.icvedetallepago = ?";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute([$idNumberPay]);
             $this->monitor->setLog('Clientes', "Obtencion de los datos del pago => $resp");
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

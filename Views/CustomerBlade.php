@@ -871,6 +871,28 @@ $fecha_actual = $formatter->format(new DateTime());
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalViewVoucher" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                    Listado de vouchers de pago.
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tblViewsRowsVouchers" class="table table-hover text-wrap"></table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 include_once "dashboard/endTemplateDashboard.php";
 include_once "dashboard/footerDashBoard.php";
