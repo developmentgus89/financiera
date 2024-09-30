@@ -203,3 +203,396 @@ Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria
 Clientes|Obtencion de los datos del pago => 1|2024-09-26 23:50:05
 Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-26 23:53:19
 Clientes|Obtencion de los datos del pago => 1|2024-09-26 23:53:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:12:33
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-28 18:12:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:40:28
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 18:40:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:43:33
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 18:44:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:46:55
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:47:37
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:48:19
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:49:42
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:51:11
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:52:26
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:53:44
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:57:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:57:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 18:59:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:00:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:01:04
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:08:00
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:08:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:08:57
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:09:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:13:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:15:34
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:16:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:17:01
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:19:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:19:27
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:20:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:27:09
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:31:11
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:31:53
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:32:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:35:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:47:18
+Clientes|SQLSTATE[42S02]: Base table or view not found: 1146 Table 'financiera.catcredits' doesn't exist|2024-09-28 19:47:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 19:48:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 19:48:25
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 20:02:46
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 20:03:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 20:04:12
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 20:04:18
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 20:04:56
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 20:04:57
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 20:05:03
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 21:30:58
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 21:31:01
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 21:32:16
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 21:32:20
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 21:33:12
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 21:33:15
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 21:39:18
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 21:39:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:25:10
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 22:25:20
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:26:41
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:26:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:28:15
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:28:18
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 22:28:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:30:04
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:30:11
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 22:30:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:32:30
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:32:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:34:26
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:34:30
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:34:40
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:39:05
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:39:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:39:38
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:39:43
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:40:28
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:40:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:41:13
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:41:16
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:41:21
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:41:24
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:41:26
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:42:51
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:43:11
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:45:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:45:24
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:45:27
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:45:34
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:47:48
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:47:50
+Clientes|Obtencion de los datos del pago => 1|2024-09-28 22:48:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:52:34
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:52:37
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:53:09
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:53:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:53:35
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:53:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:55:31
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:55:37
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:57:37
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:57:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:58:09
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:58:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 22:58:42
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 22:58:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-28 23:00:16
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-28 23:00:18
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 12:04:02
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-29 12:04:02
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 12:04:04
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 12:15:10
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 12:15:13
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 12:43:23
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 12:43:35
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 12:45:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 12:45:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 12:45:40
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 12:50:04
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 12:50:06
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 12:50:11
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:06:53
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:07:01
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:07:44
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:08:14
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:08:19
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:08:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:09:53
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:10:30
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:10:32
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:10:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:16:56
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:16:59
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:17:03
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:17:21
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:17:23
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:19:13
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:19:16
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:19:36
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:19:38
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:23:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:23:57
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:23:59
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:24:04
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:24:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:25:52
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:25:55
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:25:59
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:28:33
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:28:36
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:28:39
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:41:09
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:41:11
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:41:13
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 13:41:32
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 13:41:35
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:41:38
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:42:16
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 13:42:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:52:23
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 14:53:06
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:53:09
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 14:53:12
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 14:53:14
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:53:20
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 14:54:10
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 14:54:13
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:54:16
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 14:54:34
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 14:54:36
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:54:39
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 14:56:28
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 14:56:31
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 14:56:34
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:08:42
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:08:45
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:08:48
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:18:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:18:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:18:27
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:22:14
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:22:16
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:22:19
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:25:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:26:17
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:26:20
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:26:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:27:05
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:27:08
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:27:11
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:29:02
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:29:05
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:29:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:30:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:30:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:30:33
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:30:37
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:31:19
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:31:42
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:31:44
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:31:55
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:32:05
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:32:08
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:32:13
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:32:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:32:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:32:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:32:39
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:32:44
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:32:51
+Clientes|PDOException: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'crecibospago' at row 1 in C:\wamp64\www\financiera\Models\CreditsClients.php:376
+Stack trace:
+#0 C:\wamp64\www\financiera\Models\CreditsClients.php(376): PDOStatement->execute(Array)
+#1 C:\wamp64\www\financiera\Controllers\CustomerController.php(188): CreditsClients->setCompletePay(Array)
+#2 {main}|2024-09-29 15:33:07
+Clientes|PDOException: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'crecibospago' at row 1 in C:\wamp64\www\financiera\Models\CreditsClients.php:376
+Stack trace:
+#0 C:\wamp64\www\financiera\Models\CreditsClients.php(376): PDOStatement->execute(Array)
+#1 C:\wamp64\www\financiera\Controllers\CustomerController.php(188): CreditsClients->setCompletePay(Array)
+#2 {main}|2024-09-29 15:33:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:34:13
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:34:16
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:34:38
+Clientes|PDOException: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'crecibospago' at row 1 in C:\wamp64\www\financiera\Models\CreditsClients.php:376
+Stack trace:
+#0 C:\wamp64\www\financiera\Models\CreditsClients.php(376): PDOStatement->execute(Array)
+#1 C:\wamp64\www\financiera\Controllers\CustomerController.php(188): CreditsClients->setCompletePay(Array)
+#2 {main}|2024-09-29 15:34:51
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:37:01
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:37:04
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:37:07
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:37:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:38:03
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:38:06
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:38:09
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:39:00
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:39:03
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:39:05
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:39:14
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:39:19
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:39:50
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:39:59
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:40:01
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:41:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:44:43
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:44:45
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:44:48
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:44:52
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:45:04
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:45:06
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:45:10
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:45:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:45:15
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:45:18
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:45:21
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:45:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:46:17
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:46:21
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:46:24
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:46:27
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:48:48
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:48:52
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:51:00
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:51:03
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:51:03
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:51:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:52:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:52:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:52:10
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:52:15
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:52:18
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:53:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:53:24
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:53:26
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:53:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:55:00
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:55:02
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:55:05
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:55:10
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:55:17
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:56:16
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:56:18
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:56:21
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:56:24
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:56:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:57:28
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:57:31
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:57:34
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:57:37
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:57:51
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:58:37
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:58:39
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:58:52
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:58:55
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 15:59:11
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 15:59:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:59:28
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 15:59:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:02:18
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 16:02:20
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:02:25
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:02:28
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:02:34
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:02:42
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:02:52
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:03:08
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 16:06:15
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:06:38
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 16:07:17
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:09:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:14:39
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:16:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:16:53
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-29 16:16:53
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:55:56
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:56:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:57:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 16:57:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:05:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:05:33
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:06:17
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:06:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:06:32
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:07:09
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:07:17
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:08:07
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:08:54
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:08:58
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 17:12:04
+Clientes|Obtencion de los datos del pago => 1|2024-09-29 17:13:26
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:19:48
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:19:50
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:20:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:22:31
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:22:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:22:55
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:23:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:25:00
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:25:35
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:25:39
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:26:06
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:26:39
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:27:21
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:27:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:31:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:31:42
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:31:46
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:32:07
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:32:10
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:32:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:32:27
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:33:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 17:33:32
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 17:33:37
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:08:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:08:43
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:08:45
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:09:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:09:31
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:09:34
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:10:00
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:10:03
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:11:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:11:25
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:11:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:11:55
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:11:59
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:12:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:12:27
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:13:12
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:19:46
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:22:51
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:22:54
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:24:21
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:24:24
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:25:13
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:25:34
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:25:51
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:36:18
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:36:22
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:39:43
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:44:08
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:45:03
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:45:06
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:45:53
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:45:56
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:51:33
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:51:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:54:01
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:54:05
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:56:18
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:56:29
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 18:58:16
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:58:20
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 18:58:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-29 20:04:03
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 20:04:06

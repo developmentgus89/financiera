@@ -121,6 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rowsRefered = $credits->getReferedCustomer($icvecliente);
             echo json_encode($rowsRefered);
             break;
+        
+        case 'readHistoryCreditsCustomer':
+            $icvecliente        = $_POST['icvecliente'];
+            $rowsHistoryCredits = $credits->getHistoryCreditsCustomer($icvecliente);
+            echo json_encode($rowsHistoryCredits);
+
+            break;
 
         case 'rowCreditCusDetail':
             $idcreditCustomer = $_POST['idcreditCustomer'];

@@ -46,7 +46,7 @@ class CreditsClients extends OperationsPaysClient
                         catcreditctlpagcust AS pagos 
                         ON creditos.icvecredito = pagos.icvecredito
                     WHERE 
-                    creditos.icvecliente = ? AND creditos.estatus = 1";
+                    creditos.icvecliente = ? AND creditos.estatus = 0";
             $statement = $this->acceso->prepare($sql);
             $statement->execute([$icvecliente]);
 
@@ -369,8 +369,7 @@ class CreditsClients extends OperationsPaysClient
                     // Si el pago restante cubre completamente este periodo
                     if ($pagoRestante >= $pago['total']) {
                         // Actualiza el pago como completado (cestatuspago = 1)
-                        $sqlUpdatePago = "
-                            UPDATE catcreditctlpagcust 
+                        $sqlUpdatePago = "UPDATE catcreditctlpagcust 
                             SET crecibospago = ?, dfecharealpago = NOW(), cestatuspago = 1 
                             WHERE icvedetallepago = ?";
                         $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
@@ -382,8 +381,7 @@ class CreditsClients extends OperationsPaysClient
                     } else {
                         // Si el pago restante es parcial para este periodo
                         $nuevoTotal = $pago['total'] - $pagoRestante; // Actualiza el total restante de este pago
-                        $sqlUpdatePago = "
-                            UPDATE catcreditctlpagcust 
+                        $sqlUpdatePago = "UPDATE catcreditctlpagcust 
                             SET crecibospago = ?, dfecharealpago = NOW(), total = ?, cestatuspago = 0 
                             WHERE icvedetallepago = ?";
                         $statementUpdate = $this->acceso->prepare($sqlUpdatePago);
@@ -395,14 +393,37 @@ class CreditsClients extends OperationsPaysClient
                 }
                 // BUG: No se actualiza correctamente el saldo de la cartera
                 // Actualizar el saldo en la tabla catcarteras
-                
-                $sqlUpdateCartera = "
-                        UPDATE catcarteras 
+
+                $sqlUpdateCartera = " UPDATE catcarteras 
                         SET dsaldo = dsaldo + ? 
                         WHERE icvecartera = ?";
                 $statementUpdateCartera = $this->acceso->prepare($sqlUpdateCartera);
                 $statementUpdateCartera->execute([$dataPaymentCustomer['txtImportePago'], $icveCartera]);
 
+                // Verificar si quedan pagos pendientes para actualizar statusop a 1
+                $sqlCheckPagosPendientes = " SELECT COUNT(*) as pagos_pendientes 
+                                                FROM catcreditctlpagcust 
+                                                WHERE icvecredito = ? AND cestatuspago IN (0, 2, 3)";
+                $statementCheckPagosPendientes = $this->acceso->prepare($sqlCheckPagosPendientes);
+                $statementCheckPagosPendientes->execute([$icveCredito]);
+                $resultadoPagosPendientes = $statementCheckPagosPendientes->fetch(PDO::FETCH_ASSOC);
+
+                if ($resultadoPagosPendientes['pagos_pendientes'] == 0) {
+                    // Actualizar el campo statusop a 1 si ya no hay pagos pendientes
+                    $sqlUpdateStatusOp = "UPDATE catcreditctlpagcust 
+                                            SET statusop = 1 
+                                        WHERE icvecredito = ?";
+                    $statementUpdateStatusOp = $this->acceso->prepare($sqlUpdateStatusOp);
+                    $resp2 = $statementUpdateStatusOp->execute([$icveCredito]);
+                    if($resp2){
+                        $stmSQLStatusCredit = "UPDATE catcreditos SET estatus = 1 WHERE icvecredito = ?";
+                        $stmUpdateStatusCredit = $this->acceso->prepare($stmSQLStatusCredit);
+                        $stmUpdateStatusCredit->execute([$icveCredito]);
+                    }
+
+                }
+
+                $resp['op'][] = true;
 
                 // Si se cubren todos los pagos correctamente
                 $this->acceso->commit();
@@ -445,7 +466,7 @@ class CreditsClients extends OperationsPaysClient
             $this->monitor->setLog('Clientes', $e->getMessage());
         }
     }
-    
+
     /**
      * getDataNumberPay
      *
@@ -467,6 +488,26 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
+    
+    /**
+     * getHistoryCreditsCustomer
+     * Método de clase que sirve para obtener el historial
+     * de créditos del cliente
+     * @param  int $icveCliente
+     * @return array
+     */
+    public function getHistoryCreditsCustomer(int $icveCliente): ?array
+    {
+        try {
+            $sql = "SELECT * FROM catcreditos WHERE icvecliente = ? ORDER BY dtfechasolicitud ASC";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute([$icveCliente]);
+            $this->monitor->setLog('Clientes', "Obtencion del historial de creditos del cliente => $resp");
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e->getMessage());
+        }
+    }
 
     /**
      * setCreditNewScheme
@@ -483,7 +524,7 @@ class CreditsClients extends OperationsPaysClient
         try {
             $sqlCredit = "INSERT INTO catcreditos
                           (icvecliente, inumpagos, dmonto, dinteres, dtfechasolicitud, dtfechafiniquito, estatus)
-                          VALUES(?, ?, ?, ?, NOW(), ?, 1)";
+                          VALUES(?, ?, ?, ?, NOW(), ?, 0)";
             $statement = $this->acceso->prepare($sqlCredit);
             $statement->execute([
                 $idCustomer,

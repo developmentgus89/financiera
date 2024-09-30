@@ -30,7 +30,7 @@ class Customer
 
             // Inserción de los datos del cliente
             $personalData = $customerPersonalData[0];
-            
+
             $query = "INSERT INTO clientes (cclinombre, capaterno, camaterno, iedad,
                         icvetipocliente, dfechanaciemiento, dfechaalta, cestatus, ctelefono) 
                         VALUES (
@@ -143,7 +143,7 @@ class Customer
         try {
             $sqlCredit = "INSERT INTO catcreditos
                         (icvecliente, inumpagos, dmonto, dinteres, dtfechasolicitud, dtfechafiniquito, estatus)
-                        VALUES(?, ?, ?, ?, NOW(), ?, 1)";
+                        VALUES(?, ?, ?, ?, NOW(), ?, 0)";
             $statement = $this->acceso->prepare($sqlCredit);
             $statement->execute([
                 $idCliente,
@@ -275,7 +275,7 @@ class Customer
             return false;
         }
     }
-    
+
     /**
      * processDocument
      *
@@ -368,16 +368,16 @@ class Customer
     }
 
 
-    private function insertReferredCustomer($idCliente, array $dataCustomerReferred) : bool
+    private function insertReferredCustomer($idCliente, array $dataCustomerReferred): bool
     {
         try {
             $query = "INSERT INTO catclireferidos (icvecliente, cnombreref, ctelefonoref, cobsnotref) 
             VALUES (?, ?, ?, ?)";
             $statement = $this->acceso->prepare($query);
             $statement->execute([
-                $idCliente, 
-                $dataCustomerReferred['nombreReferido'], 
-                $dataCustomerReferred['telefonoReferido'], 
+                $idCliente,
+                $dataCustomerReferred['nombreReferido'],
+                $dataCustomerReferred['telefonoReferido'],
                 $dataCustomerReferred['observacionesReferido']
             ]);
             return true;
@@ -397,24 +397,32 @@ class Customer
     public function obtenerClientes(): array
     {
         try {
-            $query = "SELECT clientes.*, cattipocliente.*, catcreditos.*, pagos.*
-                        FROM clientes
+            $query = "SELECT clientes.*, cattipocliente.*, catcreditos.*, pagos.*, 
+                        IFNULL(pendientes.pagos_pendientes, 0) as pagos_pendientes
+                    FROM clientes
                     LEFT JOIN cattipocliente ON clientes.icvetipocliente = cattipocliente.icvetipocliente
                     LEFT JOIN catcreditos ON catcreditos.icvecliente = clientes.icvecliente
                     LEFT JOIN (
                         SELECT icvecredito, MIN(dfechapago) as prox_vencimiento
-                            FROM catcreditctlpagcust
-                        WHERE cestatuspago = 0 OR cestatuspago = 3
+                        FROM catcreditctlpagcust
+                        WHERE cestatuspago IN(0,2,3 )
                         GROUP BY icvecredito
                     ) as prox_pagos ON catcreditos.icvecredito = prox_pagos.icvecredito
                     LEFT JOIN catcreditctlpagcust as pagos
-                    ON prox_pagos.icvecredito = pagos.icvecredito AND prox_pagos.prox_vencimiento = pagos.dfechapago
-                    WHERE catcreditos.estatus not in (4,5)
-                    ORDER BY prox_pagos.prox_vencimiento";
+                    ON prox_pagos.icvecredito = pagos.icvecredito 
+                    AND prox_pagos.prox_vencimiento = pagos.dfechapago
+                    LEFT JOIN (
+                        SELECT icvecredito, COUNT(*) as pagos_pendientes
+                        FROM catcreditctlpagcust
+                        WHERE cestatuspago IN (2, 3)
+                        GROUP BY icvecredito
+                    ) as pendientes ON catcreditos.icvecredito = pendientes.icvecredito
+                    WHERE catcreditos.estatus NOT IN (4, 5) 
+                    ORDER BY pagos.total = 0 DESC, prox_pagos.prox_vencimiento ASC";
             $statement = $this->acceso->prepare($query);
             $resp = $statement->execute();
 
-            if($resp){
+            if ($resp) {
                 $this->monitor->setLog('Clientes', 'Lectura de clientes con todos sus datos se hizo de manera satisfactoria.');
             }
 
@@ -445,7 +453,8 @@ class Customer
         }
     }
 
-    public function getAccountsBanksCustomer(int $idcliente) : array{
+    public function getAccountsBanksCustomer(int $idcliente): array
+    {
         try {
             $query = "SELECT 
                             ctascus.*, 
@@ -470,14 +479,15 @@ class Customer
             echo 'Error en la consulta de las cuentas bancarias: ' . $e->getMessage();
         }
     }
-    
+
     /**
      * getFilesCustomer
      *
      * @param int $idcliente
      * @return array
      */
-    public function getFilesCustomer(int $idcliente) : array{
+    public function getFilesCustomer(int $idcliente): array
+    {
         try {
             $query = "SELECT cli_documents.icvecliente, cli_documents.crutadocto,
                         cattipodocto.ctipodocto, cli_documents.cextensiondocto 
