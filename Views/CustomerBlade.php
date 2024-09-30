@@ -183,7 +183,7 @@ $fecha_actual = $formatter->format(new DateTime());
                                                                 <div class="form-group">
                                                                     <label for="ctelefono">Tel&eacute;fono <span style="color: red">*</span>:</label>
                                                                     <input type="number" class="form-control" name="ctelefono" id="ctelefono" aria-describedby="hctelefono">
-                                                                    <small id="hctelefono" class="form-text">N&aacute;mero fijo d de celular</small>
+                                                                    <small id="hctelefono" class="form-text">N&uacute;mero fijo o de celular</small>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -785,6 +785,7 @@ $fecha_actual = $formatter->format(new DateTime());
                             <input type="hidden" class="form-control" name="icvecredito" id="icvecredito">
                             <input type="hidden" class="form-control" name="icvedetallepago" id="icvedetallepago">
                             <input type="hidden" class="form-control" name="txtmontoCredit" id="txtmontoCredit">
+                            <input type="hidden" class="form-control" name="icvecartera" id="icvecartera">
                             <div id="montoCredit"></div>
                         </div>
                         <div class="col-6 text-center">
@@ -870,6 +871,72 @@ $fecha_actual = $formatter->format(new DateTime());
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalViewVoucher" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                    Listado de vouchers de pago.
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tblViewsRowsVouchers" class="table table-hover text-wrap"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPhysicalVoucherView" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                        Comprobaci&oacute;n de Pago
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center iframeVoucher">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalViewRoute" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                        Ruta de llegada al cliente.
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="mapRoute" style="width:100%;height:450px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 include_once "dashboard/endTemplateDashboard.php";
 include_once "dashboard/footerDashBoard.php";

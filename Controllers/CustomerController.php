@@ -121,6 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rowsRefered = $credits->getReferedCustomer($icvecliente);
             echo json_encode($rowsRefered);
             break;
+        
+        case 'readHistoryCreditsCustomer':
+            $icvecliente        = $_POST['icvecliente'];
+            $rowsHistoryCredits = $credits->getHistoryCreditsCustomer($icvecliente);
+            echo json_encode($rowsHistoryCredits);
+
+            break;
 
         case 'rowCreditCusDetail':
             $idcreditCustomer = $_POST['idcreditCustomer'];
@@ -175,9 +182,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $dataSetPayment['icvedetallepago'] = $_POST['icvedetallepago'];
             $dataSetPayment['icvecredito']     = $_POST['icvecredito'];
             $dataSetPayment['txtmontoPerPago'] = $_POST['txtmontoPerPago'];
-            $dataSetPayment['txtImportePago']  = $_POST['txtImportePago'];
+            $dataSetPayment['icvecartera']     = $_POST['icvecartera'];
+            $dataSetPayment['txtImportePago']  = (float) str_replace(['MXN', ' ', ','], '', $_POST['txtImportePago']);
             $dataSetPayment['voucherPaySet']   = $_FILES['voucherPaySet'];
             $resp = $credits->setCompletePay($dataSetPayment);
+            echo json_encode($resp);
+            break;
+        
+        case 'readNumberPay':
+            $idNumberPay = $_POST['idNumberPay'];
+            $resp = $credits->getDataNumberPay($idNumberPay);
             echo json_encode($resp);
             break;
         default:

@@ -43,6 +43,22 @@ $("#modalAgregar").on('shown.bs.modal', () => {
     // getBanks(selectBanks);
 });
 
+// function setDateFormatHelp() {
+//     const dateInputHelp = document.getElementById('hclientDateRegister');
+//     const language = navigator.language || navigator.userLanguage; // Detecta el idioma
+
+//     if (language.startsWith('es')) {
+//         // Español
+//         dateInputHelp.textContent = 'Formato: dd/mm/aaaa'; // Formato en español
+//     } else if (language.startsWith('en')) {
+//         // Inglés
+//         dateInputHelp.textContent = 'Format: mm/dd/yyyy'; // Formato en inglés
+//     } else {
+//         // Otros idiomas, puedes ajustar o añadir más condiciones
+//         dateInputHelp.textContent = 'Format: yyyy-mm-dd'; // Formato por defecto
+//     }
+// }
+
 const textInputs = document.querySelectorAll('input[type="text"]');
 
 textInputs.forEach(input => {
@@ -186,16 +202,17 @@ btnSaveNewEsq.addEventListener('click', () => {
     });
 });
 
-btnSetPayAdvanced.addEventListener('click', () =>{
-    let voucherPaySet   = document.getElementById('voucherPaySet');
-    let txtImportePago  = document.getElementById('txtImportePago');
+btnSetPayAdvanced.addEventListener('click', () => {
+    let voucherPaySet = document.getElementById('voucherPaySet');
+    let txtImportePago = document.getElementById('txtImportePago');
     let icvedetallepago = document.getElementById('icvedetallepago');
-    let icvecredito     = document.getElementById('icvecredito');
+    let icvecredito = document.getElementById('icvecredito');
     let txtmontoPerPago = document.getElementById('txtmontoPerPago');
+    let icvecartera = document.getElementById('icvecartera');
 
-    const validFormAddVoucherPay = () => {
+    const validFormAddVoucherPay = async () => {
         const fields = [
-            { element: voucherPaySet,  message: 'Cargue el voucher de pago' },
+            { element: voucherPaySet, message: 'Cargue el voucher de pago' },
             { element: txtImportePago, message: 'Ingrese el importe de pago.' }
         ];
 
@@ -210,7 +227,7 @@ btnSetPayAdvanced.addEventListener('click', () =>{
                 break;
             }
         }
-
+        let resp = null;
         if (!hasError) {
             removeError(txtImportePago);
             var formDataAssingPayment = new FormData();
@@ -220,7 +237,24 @@ btnSetPayAdvanced.addEventListener('click', () =>{
             formDataAssingPayment.append('txtmontoPerPago', txtmontoPerPago.value);
             formDataAssingPayment.append('voucherPaySet', voucherPaySet.files[0]);
             formDataAssingPayment.append('txtImportePago', txtImportePago.value);
-            assingPaymentConfirm(formDataAssingPayment);
+            formDataAssingPayment.append('icvecartera', icvecartera.value);
+            resp = await assingPaymentConfirm(formDataAssingPayment);
+            
+            if(resp){
+                $('#mod-setStatusPayAdvance').modal('hide');
+                Swal.fire({
+                    title: "Correcto",
+                    html: `Se realiz\u00F3 el pago de manera satisfactoria`,
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        location.reload();
+                    }
+                });;
+            }else{
+
+            }
         }
     }
 
@@ -702,7 +736,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 if (result.isConfirmed) {
 
                     let idCliente = await insertCustomer(formDataCustomer);
-                    if(idCliente){
+                    if (idCliente) {
                         location.reload();
                     }
                 } else {
@@ -773,13 +807,27 @@ const leerClientes = async () => {
                 var table = $('#tablaClientes').DataTable({
                     data: data.map(function (item) {
                         var id = item['icvecliente'];
+                        let iconito = '';
+                        let totalFormat = '';
+                        if(item['pagos_pendiente'] > 0){
+                            iconito = `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`;
+                        }else{
+                            iconito = `<span class="badge bg-primary" style="font-size: 12px"> AL CORRIENTE </span>`;
+                        }
+
+                        if(item['total']){
+                            totalFormat = parseFloat(item['total']).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+                        }else{
+                            totalFormat = '';
+                        }
+
                         return [
                             "",
                             id,
                             `${item['cclinombre']} ${item['capaterno']} ${item['camaterno']}`,
                             item['dfechapago'],
-                            parseFloat(item['total']).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' }),
-                            `<span class="badge bg-danger" style="font-size: 12px"> PAGOS PENDIENTES </span>`,
+                            totalFormat,
+                            iconito,
                             item['ctelefono'],
                             item['cabreviiatipo'],
                             item['cestatus']
@@ -800,7 +848,7 @@ const leerClientes = async () => {
                         { title: "Nombre" },
                         { title: "Fecha Pago" },
                         { title: "Monto Pago" },
-                        { title: "No. de Prestamos" },
+                        { title: "Estatus de Pago" },
                         { title: "Telefono" },
                         { title: "Tipo Cliente" },
                         { title: "Status" }
@@ -834,6 +882,7 @@ const leerClientes = async () => {
                         readAccountsBanksCustomer(rowData[1]);
                         readReferedCustomer(rowData[1]);
                         readFilesCustomer(rowData[1]);
+                        readHistoryCreditsCustomer(rowData[1]);
                     }, 50);
                     return `
                     <div class="row">
@@ -856,6 +905,9 @@ const leerClientes = async () => {
                                         <li class="nav-item">
                                             <a class="nav-link" id="custom-tabs-one-settings-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-one-settings${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documentaci\u00F3n Cargada</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-history-credits-tab${rowData[1]}" data-toggle="pill" href="#custom-tabs-credits-history${rowData[1]}" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Historial de Cr&eacute;ditos</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="card-body">
@@ -875,7 +927,7 @@ const leerClientes = async () => {
                                                             <hr>
                                                             <div class="row" style="text-align:end;">
                                                                 <div class="col-12">
-                                                                    <button id="btnAddCredit" type="button" class="btn btn-success">Agregar Cr&eacute;dito</button>
+                                                                    <button id="btnAddCredit${rowData[1]}" type="button" class="btn btn-success">Agregar Cr&eacute;dito</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -957,9 +1009,39 @@ const leerClientes = async () => {
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="custom-tabs-one-settings${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                            <div id="filesCustomer${rowData[1]}">
-                                                <table id="tblDoctosCustomer${rowData[1]}" class="table table-hover text-wrap"></table>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="card card-success card-outline">
+                                                        <div class="card-body box-profile">
+                                                            <h3 class="profile-username text-center">
+                                                                <div id="nameCustomer-${rowData[1]}">DOCUMENTACI&Oacute;N DEL CLIENTE COMPROBATORIA</div>
+                                                            </h3>
+                                                            <hr>
+                                                            <div id="filesCustomer${rowData[1]}">
+                                                                <table id="tblDoctosCustomer${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="custom-tabs-credits-history${rowData[1]}" role="tabpanel" aria-labelledby="custom-tabs-credits-history-tab">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h3 class="profile-username text-center">
+                                                        <div id="titleHistory-${rowData[1]}">HISTORIAL DE CR&Eacute;DITOS</div>
+                                                    </h3>
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div id="creditsHistoryCustomer${rowData[1]}">
+                                                        <table id="tblCreditsHistoryCustomer${rowData[1]}" class="table table-hover text-wrap"></table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -1004,42 +1086,61 @@ const readCreditsCustomer = async (idcustomer) => {
 
         const data = await response.json();
 
-
-        // console.log(data[0].);
-        new DataTable(tblCreditsCustomer, {
-            perPage: 5,
-            data: {
-                // headings: Object.keys(data[0]),
-                headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n', 'Cambio de Esquema', 'Pagos'],
-                data: data.map(function (item) {
-                    var id = item['icvecredito'];
-                    let monto = parseFloat(item['dmonto']);
-                    if (item['status_2'] >= 1) {
-                        let btnAddCredit = document.getElementById('btnAddCredit');
-                        btnAddCredit.disabled = true;
-                    }
-
-                    let montoFormateado = monto.toLocaleString('es-MX', {
-                        style: 'currency',
-                        currency: 'MXN'
-                    });
-                    let interes = parseFloat(item['dinteres']);
-
-                    return [
-                        id,
-                        montoFormateado,
-                        `${interes} %`,
-                        item['dtfechasolicitud'],
-                        item['dtfechafiniquito'],
-                        item['status_2'] >= 1
-                            ? `<button class="btn bg-gradient-warning btn-sx custom-tooltip" data-tooltip="Cambio de esquema, para pago atrasado" onclick="changeLoanScheme(${idcustomer},${id}, 4)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
-                            : `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Cambio de esquema" onclick="changeLoanScheme(${idcustomer},${id}, 5)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
-                        ,
-                        `<button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Haga click para visualizar el control de pagos" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
+        if (data[0].icvecredito === null) {
+            new DataTable(tblCreditsCustomer, {
+                perPage: 5,
+                data: {
+                    headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n', 'Cambio de Esquema', 'Pagos'],
+                    data: [
+                        ['', '', '', '', '', '', ''] // Celdas vacías para crear la fila
                     ]
-                })
-            }
-        });
+                },
+                afterDraw: function () {
+                    setTimeout(function () {
+                        let tblBody = document.querySelector(`#${tblCreditsCustomer} tbody`);
+                        let firstRow = tblBody.querySelector('tr');
+                        if (firstRow) {
+                            firstRow.innerHTML = `<td colspan="7" class="text-center"><strong>ESTE CLIENTE NO CUENTA CON CRÉDITOS ACTIVOS</strong></td>`;
+                        }
+                    }, 100); // Esperamos 100ms para asegurarnos de que la tabla se ha renderizado
+                }
+            });
+        } else {
+            new DataTable(tblCreditsCustomer, {
+                perPage: 5,
+                data: {
+                    // headings: Object.keys(data[0]),
+                    headings: ['ID', 'Monto Cr\u00E9dito', 'Inter\u00E9s aplicado', 'Fecha Solicitud', 'Fecha Liquidaci\u00F3n', 'Cambio de Esquema', 'Pagos'],
+                    data: data.map(function (item) {
+                        var id = item['icvecredito'];
+                        let monto = parseFloat(item['dmonto']);
+                        let btnAddCredit = document.getElementById(`btnAddCredit${idcustomer}`);
+                        if (item['status_2'] >= 1) {
+                            btnAddCredit.disabled = true;
+                        }
+
+                        let montoFormateado = monto.toLocaleString('es-MX', {
+                            style: 'currency',
+                            currency: 'MXN'
+                        });
+                        let interes = parseFloat(item['dinteres']);
+
+                        return [
+                            id,
+                            montoFormateado,
+                            `${interes} %`,
+                            item['dtfechasolicitud'],
+                            item['dtfechafiniquito'],
+                            item['status_2'] >= 1
+                                ? `<button class="btn bg-gradient-warning btn-sx custom-tooltip" data-tooltip="Cambio de esquema, para pago atrasado" onclick="changeLoanScheme(${idcustomer},${id}, 4)" style="margin: auto 0"><i class="fas fa-exclamation-triangle"></i></button>`
+                                : `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Cambio de esquema" onclick="changeLoanScheme(${idcustomer},${id}, 5)" style="margin: auto 0"><i class="fas fa-handshake"></i></button>`
+                            ,
+                            `<button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Haga click para visualizar el control de pagos" onclick="detailCreditsCustomer(${idcustomer}, ${id} )" style="margin: auto 0"><i class="fa fa-list"></i></button>`
+                        ]
+                    })
+                }
+            });
+        }
 
     } catch (error) {
         throw new Error(`No se pueden obtener los creditos activos del cliente: ${error.message}`);
@@ -1051,6 +1152,8 @@ const readCreditsCustomer = async (idcustomer) => {
  * geolocalizacion con Google Maps
  * @param {number} idcostumer 
  * @param {Array} dataCustomer 
+ * @param {string} latitud | Este parametro sirve para buscar 
+ * @param {string} longitud | Este parametro sirve para buscar 
  * @returns 
  */
 const readAddressMap = (idcostumer, dataCustomer) => {
@@ -1128,6 +1231,8 @@ const readAddressMap = (idcostumer, dataCustomer) => {
                         <div id="mapCustomer${idcostumer}" style="width:100%;height:250px;"></div>
                     </li>
                 </ul>
+                <hr>
+                <button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Mostrar ruta de llegada al cliente" onclick="openModalRoute(${dataCustomer.latitud}, ${dataCustomer.longitud})"><i class="fas fa-road"></i> &nbsp;&nbsp;&nbsp;RUTA</button>
             </div><!-- /.card-body -->
         </div><!-- /.card-success -->
     </div><!-- /.end-col-md-4 -->
@@ -1281,7 +1386,88 @@ const readFilesCustomer = async (idcustomer) => {
     return tableFiles;
 }
 
+/**
+ * Función que sirve para leer todo el historial de créditos
+ * del cliente y en sus diferentes estatus recordando lo siguiente:
+ * 0: Credito en proceso
+ * 1: Crédito completado
+ * 4: Crédito con cambio de esquema por mutuo acuerdo por presentar atrasos de pago
+ * 5: Crédito con cambio de esquema por mutuo acuerdo por manifestar imposibilidad de pago 
+ * @param {number} idcustomer 
+ */
+const readHistoryCreditsCustomer = async (idcustomer) => {
+    let tblHistoryCredits = document.getElementById(`tblCreditsHistoryCustomer${idcustomer}`);
+    let params =
+        'operation=readHistoryCreditsCustomer' +
+        '&icvecliente=' + idcustomer;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
 
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener el historial de creditos`);
+        }
+
+        const data = await response.json();
+
+        let i             = 0;
+        let badge         = "";
+        let observaciones = "";
+        new DataTable(tblHistoryCredits, {
+            perPage: 5,
+            data: {
+                // headings: Object.keys(data[0]),
+                headings: ['ID', 'Clave Crédito', 'Monto', 'Interés Aplicado', 'Fecha Hora de Solicitud', 'Estatus', 'Observaciones'],
+                data: data.map(function (item) {
+                    i++;
+                    switch (item['estatus']) {
+                        case 0:
+                            badge = '<small class="badge badge-primary"><i class="far fa-credit-card"></i> Abierto</small>';
+                            observaciones = '<p style="text-align: left !important;">Crédito abierto en proceso de pago.<p>';
+                            break;
+                        case 1:
+                            badge = '<small class="badge badge-success"><i class="far fa-check-circle"></i> Cerrado</small>';
+                            observaciones = '<p style="text-align: left !important;">Crédito terminado de pagar.<p>';
+                            break;
+                        case 4:
+                            badge = '<small class="badge badge-danger"><i class="far fa-clock"></i> Cambio Esquema</small>';
+                            observaciones = '<p style="text-align: left !important;">Crédito que presenta cambio de esquema aplicado por atraso de pago.<p>';
+                            break;
+                        case 5:
+                            badge = '<small class="badge badge-warning"><i class="far fa-clock"></i> Cambio Esquema</small>';
+                            observaciones = '<p style="text-align: left !important;">Crédito que presenta cambio de esquema aplicado por mutuo acuerdo por imprevisto del cliente.<p>';
+                            break;
+                    }
+
+                    return [
+                        i,
+                        item['icvecredito'],
+                        item['dmonto'],
+                        `${item['dinteres']} %`,
+                        item['dtfechasolicitud'],
+                        badge,
+                        observaciones
+                    ]
+                })
+            }
+        });
+
+    } catch (error) {
+        throw new Error(`No se pueden obtener el historial de crédito del cliente del cliente: ${error.message}`);
+    }
+}
+
+/**
+ * 
+ * @param {string} pathfile 
+ * @param {string} extension 
+ * @param {string} type 
+ */
 window.modalViewDocument = (pathfile, extension, type) => {
     // Obtener el cuerpo del modal y el contenedor del tipo de documento
     let modalBody = document.querySelector(".iframedocto");
@@ -1311,7 +1497,16 @@ window.modalViewDocument = (pathfile, extension, type) => {
     $("#mod-DocumentView").modal("show");
 };
 
-
+/**
+ * Funcion que sirve para mostrar la ruta
+ * desde la ubicación del usuario a las coordenadas dadas
+ */
+window.openModalRoute = (latitud,longitud) => {
+    $('#modalViewRoute').modal({ backdrop: 'static', keyboard: false }).modal('show');
+    $('#modalViewRoute').on('shown.bs.modal', function () {
+        initMapRoute(latitud, longitud);
+    });
+}
 
 
 
@@ -1434,6 +1629,8 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                 ttotal += parseFloat(item.total);
             });
         }
+
+
         var i = 0;
         tblCreditDetail.dataTableInstance = new DataTable(tblCreditDetail, {
             perPage: 10,
@@ -1473,6 +1670,22 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                             icon = `<i class="fas fa-check-circle" style="color:green;"></i>`;
                         }
                     }
+                    let cadenaRecibos = '';
+                    let recibos = '';
+                    let cantRecibos = 0;
+                    if (item['crecibospago'] != null) {
+                        cadenaRecibos = item['crecibospago'].replace(/\\"/g, '"');
+                        recibos = JSON.parse(cadenaRecibos);
+                        cantRecibos = recibos.length;
+                    } else {
+                        cantRecibos = 0;
+                    }
+
+                    let iconito = "";
+                    if (cantRecibos > 1) {
+                        iconito = `<i class="fas fa-bell" style="color: #dec221"></i>`;
+                        icon = `${icon} ${iconito}`;
+                    }
 
                     return [
                         i,
@@ -1482,9 +1695,11 @@ window.detailCreditsCustomer = async (idcliente, idcreditCustomer) => {
                         item['dfechapago'],
                         icon,
                         item['cestatuspago'] == '1'
-                            ? `<button class="btn bg-gradient-success btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="viewVoucherPay(${id}, 1)" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
-                            : `<button class="btn bg-gradient-primary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalSetCompletePay(${id})" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
-                        `<button class="btn bg-gradient-secondary btn-sx" data-toggle="tooltip" data-placement="top" title="Cambiar Esquema" onclick="showModalDocumentaryDraft(${id})" style="margin: auto 0"><i class="fas fa-comments-dollar"></i></button>`
+                            ? `<button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Visualizar voucher de pago" onclick="viewVoucherPay(${id})" style="margin: auto 0"><i class="fas fa-receipt"></i></button>`
+                            : `<button class="btn bg-gradient-primary btn-sx custom-tooltip" data-tooltip="Aplicar pago" onclick="showModalSetCompletePay(${id})" style="margin: auto 0"><i class="fas fa-wallet"></i></button>`,
+                        item['cestatuspago'] == '2' || item['cestatuspago'] == '3'
+                            ? `<button class="btn bg-gradient-secondary btn-sx custom-tooltip" data-tooltip="Agregar gestión de cobranza" title="Cambiar Esquema" onclick="showModalDocumentaryDraft(${id})" style="margin: auto 0"><i class="fas fa-comments-dollar"></i></button>`
+                            :``,
                     ]
                 })
             }
@@ -1571,38 +1786,131 @@ window.changeLoanScheme = async (idcustomer, idCredit, op = null) => {
 
 window.showModalSetCompletePay = async (idPaySetConfirm) => {
     swalWithBootstrapButtons.fire({
-        title: "¿Desea realizar un pago por adelantado?",
-        text: "Recuerde que puede sobrante del perido de pago actual.",
+        title: "¿Desea aplicar el pago correspondiente?",
+        text: "Recuerde que puede sobrante del perido de pago actual, aplica al siguiete periodo de pago.",
         icon: "warning",
         showCancelButton: true,
         cancelButtonText: "No.",
         confirmButtonText: "Si.",
         reverseButtons: true
     }).then(async (result) => {
-        if (result.isConfirmed) {            
+        if (result.isConfirmed) {
             let idPaySetData = await getDataPay(idPaySetConfirm);
-            let totalCredit  = parseFloat(idPaySetData[0].dmonto);
+            let totalCredit = parseFloat(idPaySetData[0].dmonto);
             let montoCredit = totalCredit.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
 
             let totalAmountPay = parseFloat(idPaySetData[0].total);
-            let amountPay      = totalAmountPay.toLocaleString('es-MX', {
+            let amountPay = totalAmountPay.toLocaleString('es-MX', {
                 style: 'currency',
                 currency: 'MXN'
             });
 
-            document.getElementById("montoCredit").innerHTML  = montoCredit;
-            document.getElementById("icvecredito").value      = idPaySetData[0].icvecredito;
-            document.getElementById("icvedetallepago").value  = idPaySetData[0].icvedetallepago;
-            document.getElementById("txtmontoCredit").value   = montoCredit;
+            document.getElementById("montoCredit").innerHTML = montoCredit;
+            document.getElementById("icvecredito").value = idPaySetData[0].icvecredito;
+            document.getElementById("icvedetallepago").value = idPaySetData[0].icvedetallepago;
+            document.getElementById("icvecartera").value = idPaySetData[0].icvecartera;
+            document.getElementById("txtmontoCredit").value = montoCredit;
             document.getElementById("montoPerPago").innerHTML = amountPay;
-            document.getElementById("txtmontoPerPago").value  = amountPay;
-            $("#mod-setStatusPayAdvance").modal("show");
+            document.getElementById("txtmontoPerPago").value = amountPay;
+            $("#mod-setStatusPayAdvance").modal({ backdrop: 'static', keyboard: false }).modal('show');
 
         }
     });
+}
+
+/**
+ * Funcion que permite visualizar cuales son los voucher por cada 
+ * número de pago del crédito
+ * @param {number} idNumberPay 
+ */
+window.viewVoucherPay = async (idNumberPay) => {
+    let tblViewVoucher = document.getElementById('tblViewsRowsVouchers');
+    // Limpiar la tabla si ya tiene contenido
+    if (tblViewVoucher.dataTableInstance) {
+        tblViewVoucher.dataTableInstance.destroy();
+        tblViewVoucher.dataTableInstance = null;
+    }
+    
+    // Limpiar manualmente el contenido de la tabla
+    tblViewVoucher.innerHTML = '';
+    let params =
+        'operation=readNumberPay' +
+        '&idNumberPay=' + idNumberPay;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        let recibos = JSON.parse(data[0].crecibospago);
+        
+        let i = 0;
+        tblViewVoucher.dataTableInstance = new DataTable(tblViewVoucher, {
+            perPage: 5,
+            data: {
+                headings: ['ID', 'Monto', 'Observaciones', 'Recibo'],
+                data: recibos
+                    .filter(function(item) {
+                        return item[1] !== 0; // Filtra los items con item[1] mayor que cero
+                    })
+                    .map(function(item) {
+                        i++;
+                        let montoFormateado = item[1].toLocaleString('es-MX', {
+                            style: 'currency',
+                            currency: 'MXN'
+                        });
+        
+                        return [
+                            i,
+                            montoFormateado,
+                            item[2],
+                            `<button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Haga click para visualizar el comprobante de pago" onclick="viewPhysicalVoucher('${item[0]}')" style="margin: auto 0"><i class="fa fa-list"></i></button>`,
+                        ];
+                    })
+            }
+        });
+        $("#modalViewVoucher").modal({ backdrop: 'static', keyboard: false }).modal('show');
+    } catch (error) {
+        throw new Error(`No se pueden obtener los recibos de pago: ${error.message}`);
+    }
+}
+
+/**
+ * Método que va a servir para poder visualizar 
+ * el voucher de pago.
+ * @param {string} srcVoucher 
+ */
+window.viewPhysicalVoucher = (srcVoucher) => {
+    let modalBody = document.querySelector(".iframeVoucher");
+
+    // Limpiar el contenido actual del modal body
+    modalBody.innerHTML = '';
+
+    // Crear un nuevo elemento iframe
+    let iframeViewer = document.createElement("iframe");
+    iframeViewer.setAttribute('id', 'iframeViewer');
+    iframeViewer.setAttribute('width', '100%');
+    iframeViewer.setAttribute('height', '600px');
+    iframeViewer.setAttribute('frameborder', '0');
+    iframeViewer.setAttribute('allowfullscreen', 'true');
+
+    // Establecer la ruta del archivo en el iframe
+    iframeViewer.setAttribute('src', srcVoucher);
+
+    // Insertar el nuevo iframe en el modal
+    modalBody.appendChild(iframeViewer);
+    $("#modalPhysicalVoucherView").modal({ backdrop: 'static', keyboard: false }).modal('show');
 }
 
 /**
@@ -1625,7 +1933,7 @@ const getDataPay = async (idPaySetConfirm) => {
         if (!response.ok) {
             throw new Error(`Error en la solicitud para obtener los pagos`);
         }
-        
+
         const data = await response.json();
         return data;
 
@@ -1868,7 +2176,8 @@ const assingPaymentConfirm = async (formData) => {
         }
 
         const data = await response.json();
-        return data;
+        
+        return data['op'][0];
 
     } catch (error) {
         throw new Error(`Error en el servidor: ${error.message}`);
@@ -1883,9 +2192,9 @@ varCP.addEventListener('blur', () => {
     readCodigosPostal(cp);
 });
 
+// Llama a la función para establecer el formato de ayuda al cargar la página
+// window.onload = setDateFormatHelp;
 updatePaysStatusCustomer();
 actFecha();
 leerClientes();
 initMap();
-
-
