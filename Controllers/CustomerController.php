@@ -188,6 +188,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resp = $credits->setCompletePay($dataSetPayment);
             echo json_encode($resp);
             break;
+
+        case 'updateFileCustomer':
+            $dataUpdateFile = array();
+            $dataUpdateFile['idDocFile']     = $_POST['idDocFile'];
+            $dataUpdateFile['routeFile']     = $_POST['routeFile'];
+            $dataUpdateFile['fileUploadNew'] = $_FILES['fileUploadNew'];
+            $resp = $customer->updateFileCustomer($dataUpdateFile);
+            echo json_encode($resp);
+            break;
         
         case 'readNumberPay':
             $idNumberPay = $_POST['idNumberPay'];

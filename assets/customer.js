@@ -96,16 +96,17 @@ $('#mod-cambioEsquema').on('hidden.bs.modal', () => {
 });
 
 //Recuperacion de los valores de los botones dentro de la vista Customers
-const btnAgregar = document.querySelector('#agregar-cliente');
-const btnEditarCliente = document.querySelector('#agregar-cliente');
-const btnEliminarCliente = document.querySelector('#btnEliminarCliente');
-const btnInsertarCliente = document.querySelector('#btnInsertarCliente');
+const btnAgregar           = document.querySelector('#agregar-cliente');
+const btnEditarCliente     = document.querySelector('#agregar-cliente');
+const btnEliminarCliente   = document.querySelector('#btnEliminarCliente');
+const btnInsertarCliente   = document.querySelector('#btnInsertarCliente');
 const btnActualizarCliente = document.querySelector('#btnActualizarCliente');
-const selectTipoCliente = document.querySelector('#typeClient');
-const barprestamosoli = document.getElementById('barprestamosoli');
-const persemanas = document.getElementById('persemanas');
-const btnSaveNewEsq = document.getElementById('btnSaveNewEsq');
-const btnSetPayAdvanced = document.getElementById('btnSetPayAdvanced');
+const selectTipoCliente    = document.querySelector('#typeClient');
+const barprestamosoli      = document.getElementById('barprestamosoli');
+const persemanas           = document.getElementById('persemanas');
+const btnSaveNewEsq        = document.getElementById('btnSaveNewEsq');
+const btnSetPayAdvanced    = document.getElementById('btnSetPayAdvanced');
+const btnUpdateFile        = document.getElementById('btnUpdateFile');
 
 
 barprestamosoli.value = 0;
@@ -1207,13 +1208,17 @@ const readAddressMap = (idcostumer, dataCustomer) => {
                             <tr class="text-center">
                                 <td colspan="2"><b>Coordenadas de Geolocalizaci&oacute;n</b></td>
                             </tr>
-                            <tr class="text-center">
+                            <tr>
                                 <td><b>Latitud</b></td>
                                 <td><b>Longitud</b></td>
                             </tr>
-                            <tr class="text-center">
+                            <tr>
                                 <td>${dataCustomer.latitud}</td>
                                 <td>${dataCustomer.longitud}</td>
+                            </tr>
+                            <tr class="text-center">
+                                <td><b>Referencia:</b></td>
+                                <td>${dataCustomer.creferencia ? dataCustomer.creferencia : 'SIN REFERENCIA'}</td>
                             </tr>
                         </table>
                     </li>
@@ -1369,8 +1374,7 @@ const readFilesCustomer = async (idcustomer) => {
                         item['cextensiondocto'],
                         `
                         <button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick="modalViewDocument('${item['crutadocto']}','${item['cextensiondocto']}','${item['ctipodocto']}')"><i class="fas fa-file-pdf"></i></button>
-                        <button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick=""><i class="fas fa-edit"></i></button>
-                        <button class="btn bg-gradient-danger btn-sx custom-tooltip" data-tooltip="Previsualizar documento" onclick=""><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn bg-gradient-info btn-sx custom-tooltip" data-tooltip="Modificar documento" onclick="modalEditDocumento(${item['icvedoctoscli']},'${item['ctipodocto']}','${item['crutadocto']}')"><i class="fas fa-edit"></i></button>
                         `
                     ]
                 })
@@ -1459,6 +1463,83 @@ const readHistoryCreditsCustomer = async (idcustomer) => {
 
     } catch (error) {
         throw new Error(`No se pueden obtener el historial de crédito del cliente del cliente: ${error.message}`);
+    }
+}
+
+btnUpdateFile.addEventListener('click', () =>{
+    let idDocFile     = document.getElementById('idDocFile');
+    let fileUploadNew = document.getElementById('fileUploadNew');
+    let routeFile     = document.getElementById('routeFile');
+
+    const validFormUpdateFile = async () => {
+        const fields = [
+            { element: fileUploadNew, message: 'Cargue el documento a actualizar.' },
+        ];
+
+        let hasError = false;
+
+        for (const field of fields) {
+            removeError(field.element);
+            if (field.element.value === '' || field.element.value === null) {
+                showError(field.element, field.message);
+                field.element.focus();
+                hasError = true;
+                break;
+            }
+        }
+        let resp = null;
+        if (!hasError) {
+            removeError(txtImportePago);
+            var formUpdateFileCustomer = new FormData();
+            formUpdateFileCustomer.append('operation', 'updateFileCustomer');
+            formUpdateFileCustomer.append('idDocFile', idDocFile.value);
+            formUpdateFileCustomer.append('routeFile', routeFile.value);
+            formUpdateFileCustomer.append('fileUploadNew', fileUploadNew.files[0]);
+            resp = await updateFileCustomer(formUpdateFileCustomer);
+            
+            if(resp){
+                $('#modalEditFile').modal('hide');
+                Swal.fire({
+                    title: "Correcto",
+                    html: `Se actualiz\u00F3 el documento de manera satisfactoria`,
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        location.reload();
+                    }
+                });
+            }else{
+                Swal.fire({
+                    title: "Error",
+                    html: `Se present\u00F3 un error interno en el servidor, no se pudo actualizar el documento.`,
+                    icon: "error"
+                });
+            }
+        }
+    }
+
+    validFormUpdateFile();
+
+});
+
+const updateFileCustomer = async (formData) => {
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            body: formData // Usando FormData directamente
+        });
+
+        if (!response.ok) {
+            throw new Error('Error con la comunicación con el servidor');
+        }
+
+        const data = await response.json();
+        
+        return data['respuesta'];
+
+    } catch (error) {
+        throw new Error(`Error en el servidor: ${error.message}`);
     }
 }
 
@@ -1911,6 +1992,15 @@ window.viewPhysicalVoucher = (srcVoucher) => {
     // Insertar el nuevo iframe en el modal
     modalBody.appendChild(iframeViewer);
     $("#modalPhysicalVoucherView").modal({ backdrop: 'static', keyboard: false }).modal('show');
+}
+
+window.modalEditDocumento = (idDoctoCustomer, tipoDocTitle, routeFile) => {
+    document.getElementById("idDocFile").value = idDoctoCustomer;
+    document.getElementById("routeFile").value = routeFile;
+    let tipoDocumento = document.getElementById("tipoDocumentoFile");
+    tipoDocumento.innerHTML = tipoDocTitle;
+
+    $("#modalEditFile").modal({ backdrop: 'static', keyboard: false }).modal('show');
 }
 
 /**

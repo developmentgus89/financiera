@@ -489,7 +489,7 @@ class Customer
     public function getFilesCustomer(int $idcliente): array
     {
         try {
-            $query = "SELECT cli_documents.icvecliente, cli_documents.crutadocto,
+            $query = "SELECT cli_documents.icvedoctoscli, cli_documents.icvecliente, cli_documents.crutadocto,
                         cattipodocto.ctipodocto, cli_documents.cextensiondocto 
                         FROM cli_documents 
                         INNER JOIN cattipodocto on cli_documents.itipodocto = cattipodocto.idcattipodocto
@@ -517,6 +517,48 @@ class Customer
     }
 
     /**
+     * updateFileCustomer
+     * Método que sirve para actualizar el archivo cargado por parte del cliente
+     * @param  mixed $dataFile
+     * @return array
+     */
+    public function updateFileCustomer(array $dataFile): ?array
+    {
+        try {
+            $ruta = dirname($dataFile['routeFile']);
+            // Genera un nuevo nombre único para el archivo, conservando la extensión original
+            $extension = pathinfo($dataFile['fileUploadNew']['name'], PATHINFO_EXTENSION);
+            $nuevoNombre = 'cliente_' . date('Ymd_His') . '.' . $extension;  
+
+            // Construye la ruta completa con el nuevo nombre del archivo
+            $rutaCompleta = $ruta . '/' . $nuevoNombre;
+            $respProcessFUpload = $this->processFileCustomer($dataFile['fileUploadNew']['tmp_name'], $rutaCompleta);
+            $respProcessFDelete = $this->deleteFileCustomer($dataFile['routeFile']);
+            if ($respProcessFUpload && $respProcessFDelete) {
+                $this->acceso->beginTransaction();
+                $sqlSTM = "UPDATE cli_documents SET crutadocto = ? WHERE icvedoctoscli = ?";
+                $statement = $this->acceso->prepare($sqlSTM);
+                $answer = $statement->execute([$rutaCompleta, $dataFile['idDocFile']]);
+                if($answer){
+                    $this->acceso->commit();
+                    $resp['respuesta'] = true;
+                }else{
+                    $this->acceso->rollBack();
+                    $resp['respuesta'] = false;
+                }
+                return $resp;
+            }
+            $this->monitor->setLog('Clientes - Eliminación y carga de archivo nuevo', 'Se quita el archivo y se sube el nuevo');  // Guardar el log de operacion en los logs
+        } catch (PDOException $e) {
+            if ($this->acceso->inTransaction()) {
+                $this->acceso->rollBack();
+            }
+            $this->monitor->setLog('Clientes', $e);  // Guardar el error en los logs
+            return null;
+        }
+    }
+
+    /**
      * get_AsentamientosByZipCode
      *
      * @param  string $zipCode
@@ -536,6 +578,41 @@ class Customer
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Error en la consulta para códigos postales: ' . $e->getMessage();
+        }
+    }
+
+    /**
+     * deleteFileCustomer
+     * Se elimina el archivo indicado son los de la documentación comprobatoria
+     * @param  string $routeFile
+     * @return bool
+     */
+    private function deleteFileCustomer(string $routeFile): ?bool
+    {
+        try {
+            $processFile = unlink($routeFile);
+            return $processFile;
+        } catch (Exception $e) {
+            $this->monitor->setLog('Clientes - Eliminación documentos', $e);  // Guardar el error en los logs
+            return null;
+        }
+    }
+
+    /**
+     * processFileCustomer
+     * Método paa subir archivo
+     * @param  string $file
+     * @param  string $ruta
+     * @return bool
+     */
+    private function processFileCustomer(string $file, string $ruta): ?bool
+    {
+        try {
+            $processFile = move_uploaded_file($file, $ruta);
+            return $processFile;
+        } catch (Exception $e) {
+            $this->monitor->setLog('Clientes - Eliminación documentos', $e);  // Guardar el error en los logs
+            return null;
         }
     }
 }
