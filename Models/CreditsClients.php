@@ -632,7 +632,7 @@ class CreditsClients extends OperationsPaysClient
      * @param  Object $file / en si es de tipo Object por el file
      * @return bool
      */
-    private function processDocumentPayment($file): ?array
+    public function processDocumentPayment($file): ?array
     {
         $randomNumber = str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT);
 

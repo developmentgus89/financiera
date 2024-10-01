@@ -937,6 +937,38 @@ $fecha_actual = $formatter->format(new DateTime());
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalEditFile" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                    <div id="tipoDocumentoFile"></div>
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="idDocFile" id="idDocFile"/>
+                <input type="hidden" name="routeFile" id="routeFile"/>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                          <label for="">Documento de Comprobaci&oacute;n:</label>
+                          <input type="file" class="form-control-file mb-3" name="fileUploadNew" id="fileUploadNew" aria-describedby="fileHelpId">
+                          <small id="fileHelpId" class="form-text" style="color:white;">El archivo puede ser formato PDF o JPG, JPEG o PNG</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="btnUpdateFile">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 include_once "dashboard/endTemplateDashboard.php";
 include_once "dashboard/footerDashBoard.php";
