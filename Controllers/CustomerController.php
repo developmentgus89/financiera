@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $customerData[3]['numinterior']  = $_POST['numinterior'];
             $customerData[3]['pricalle']     = $_POST['pricalle'];
             $customerData[3]['segcalle']     = $_POST['segcalle'];
+            $customerData[3]['creferencia']  = $_POST['creferencia'];
             $customerData[3]['cp']           = $_POST['cp'];
             $customerData[3]['entidaddir']   = $_POST['entidaddir'];
             $customerData[3]['municipiodir'] = $_POST['municipiodir'];

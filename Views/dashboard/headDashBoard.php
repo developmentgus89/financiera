@@ -36,8 +36,8 @@
   
 
   <!-- jquery-validation -->
-  <script src="../utils/plugins/jquery-validation/jquery.validate.min.js"></script>
-  <script src="../utils/plugins/jquery-validation/additional-methods.min.js"></script>
+  <!-- <script src="../utils/plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="../utils/plugins/jquery-validation/additional-methods.min.js"></script> -->
 
 
   <link rel="shortcut icon" href="../utils/img/icons.png" type="image/x-icon">

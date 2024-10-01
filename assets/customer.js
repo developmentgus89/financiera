@@ -466,17 +466,18 @@ btnInsertarCliente.addEventListener('click', () => {
     let selCatIcveBancoCli = document.getElementById('selCatIcveBancoCli');
 
     // Datos del domicilio del cliente
-    let ccalle = document.getElementById('ccalle');
-    let numinterior = document.getElementById('numinterior');
-    let numexterior = document.getElementById('numexterior');
-    let pricalle = document.getElementById('pricalle');
-    let segcalle = document.getElementById('segcalle');
-    let cp = document.getElementById('cp');
-    let entidaddir = document.getElementById('entidaddir');
+    let ccalle       = document.getElementById('ccalle');
+    let numinterior  = document.getElementById('numinterior');
+    let numexterior  = document.getElementById('numexterior');
+    let pricalle     = document.getElementById('pricalle');
+    let segcalle     = document.getElementById('segcalle');
+    let creferencia  = document.getElementById('creferencia');
+    let cp           = document.getElementById('cp');
+    let entidaddir   = document.getElementById('entidaddir');
     let municipiodir = document.getElementById('municipiodir');
-    let coloniadir = document.getElementById('coloniadir');
-    let latitud = document.getElementById('latitud');
-    let longitud = document.getElementById('longitud');
+    let coloniadir   = document.getElementById('coloniadir');
+    let latitud      = document.getElementById('latitud');
+    let longitud     = document.getElementById('longitud');
 
     // Datos de los documentos del cliente
     let idComprobanteDom = document.getElementById('idComprobanteDom');
@@ -712,6 +713,7 @@ btnInsertarCliente.addEventListener('click', () => {
             formDataCustomer.append('numinterior', numinterior.value);
             formDataCustomer.append('pricalle', pricalle.value);
             formDataCustomer.append('segcalle', segcalle.value);
+            formDataCustomer.append('creferencia', creferencia.value);
             formDataCustomer.append('cp', cp.value);
             formDataCustomer.append('entidaddir', entidaddir.value);
             formDataCustomer.append('municipiodir', municipiodir.value);

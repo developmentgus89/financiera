@@ -4,8 +4,8 @@
 	<script src="../utils/plugins/jquery/jquery.min.js"></script>
 	<script src="../utils/plugins/input-masks/jquery.inputmask.min.js"></script>
 	<!-- jquery-validation -->
-	<script src="../utils/plugins/jquery-validation/jquery.validate.min.js"></script>
-	<script src="../utils/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- <script src="../utils/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="../utils/plugins/jquery-validation/additional-methods.min.js"></script> -->
 	<!-- Bootstrap 4 -->
 	<script src="../utils/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="../utils/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>

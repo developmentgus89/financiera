@@ -75,9 +75,9 @@ class PaysInvestments
             $query = "INSERT INTO paginteresesinv (icveinversionista, icvedetalleinver, montoinvhist, 
                                                 fmonto_pagado, dfecharegistro, cstatuspago, 
                                                 dtfechapagconfirmado, comprobantepago) 
-                                    VALUES(?, ?, ?, ?, ?,'NP', null, null)";
+                                    VALUES(?, ?, ?, ?, NOW(),'NP', null, null)";
             $statement = $this->acceso->prepare($query);
-            $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest, $fecha]);
+            $statement->execute([$icveinversionista, $icvedetalleinver, $dmonto, $payInterest]);
             $resp['msj'] = 'success';
             $resp['text'] = 'Se inserto el pago correctamente';
             return $resp;

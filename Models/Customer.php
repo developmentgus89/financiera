@@ -247,8 +247,8 @@ class Customer
                                     (icvecliente, ccalle, cnuminterior, cnumexterior,
                                     pricalle, segcalle, ccolonia, cdelegmunicipio, 
                                     centfederativa, cpais, ccodpostal, cfotofrente, 
-                                    longitud, latitud)
-                                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                    longitud, latitud, creferencia)
+                                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $statement = $this->acceso->prepare($sqlCredit);
             $statement->execute([
                 $idCliente,
@@ -264,7 +264,8 @@ class Customer
                 $dataAddressCustomer['cp'],
                 'fotodomicilio/' . $idCliente,
                 $dataAddressCustomer['longitud'],
-                $dataAddressCustomer['latitud']
+                $dataAddressCustomer['latitud'],
+                $dataAddressCustomer['creferencia'],
             ]);
             return true;
         } catch (PDOException $e) {

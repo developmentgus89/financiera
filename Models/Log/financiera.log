@@ -677,3 +677,21 @@ Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-29 23:56:3
 Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:01:20
 Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-09-30 20:01:20
 Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-30 20:01:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:25:11
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-30 20:25:14
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:27:16
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:27:18
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:46:22
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 20:46:25
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 21:34:38
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 21:34:50
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 21:35:21
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-30 21:35:28
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 21:35:46
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 21:59:26
+Clientes|Error al insertar el cliente: SQLSTATE[HY000]: General error: 1364 Field 'icvecartera' doesn't have a default value|2024-09-30 22:02:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 22:02:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 22:04:52
+Clientes|Datos generales del cliente insertados correctamenete|2024-09-30 22:07:32
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-09-30 22:07:32
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-09-30 22:07:39

@@ -90,8 +90,14 @@
                 </li>
                 <li class="nav-item">
                     <a href="" class="nav-link">
-                        &nbsp;&nbsp;<i class="nav-icon fas fa-money-check-alt" style="color: red;"></i>
+                        &nbsp;&nbsp;<i class="nav-icon fas fa-university" style="color: yellow;"></i>
                         <p>Cat&aacute;logo de Bancos</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        &nbsp;&nbsp;<i class="nav-icon fas fa-wallet" style="color: red;"></i>
+                        <p>Cat&aacute;logo de Carteras</p>
                     </a>
                 </li>
             </ul>
