@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Servicios Mayorqu&iacute;n</title>
+  <title>Financiera Mayorqu&iacute;n</title>
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="utils/plugins/fontawesome-free/css/all.min.css">

@@ -1161,7 +1161,17 @@ const readCreditsCustomer = async (idcustomer) => {
  */
 const readAddressMap = (idcostumer, dataCustomer) => {
     let address = document.getElementById(`address-map${idcostumer}`);
-
+    
+    const customerAddress = {
+        calle: dataCustomer.ccalle,
+        numexterior: dataCustomer.cnumexterior,
+        numinterior: dataCustomer.cnuminterior,
+        colonia: dataCustomer.icvecatcolonia,
+        cdelegmunicipio: dataCustomer.cdelegmunicipio,
+        centfederativa: dataCustomer.centfederativa,
+        codpostal: dataCustomer.codpostal,
+        codpostal: dataCustomer.codpostal,
+    }
     address.innerHTML = `
                 <div class="row">
                     <div class="col-md-4">
@@ -1225,6 +1235,8 @@ const readAddressMap = (idcostumer, dataCustomer) => {
                         </table>
                     </li>
                 </ul>
+                <hr>
+                <button class="btn bg-gradient-success btn-sx custom-tooltip" data-tooltip="Editar los datos del domicilio del cliente" onclick="openModalEditAddress(${dataCustomer.icvedomicilio},${dataCustomer.latitud}, ${dataCustomer.longitud})"><i class="fas fa-edit"></i> &nbsp;&nbsp;&nbsp;MODIFICAR DOMICILIO</button>
             </div><!-- /.card-body -->
         </div><!-- /.card-success -->
     </div><!-- /.end-col-md-4 -->
@@ -1996,6 +2008,12 @@ window.viewPhysicalVoucher = (srcVoucher) => {
     $("#modalPhysicalVoucherView").modal({ backdrop: 'static', keyboard: false }).modal('show');
 }
 
+/**
+ * funcion que abre el modal para editar la documentación comprobatoria del cliente
+ * @param {number} idDoctoCustomer 
+ * @param {string} tipoDocTitle 
+ * @param {string} routeFile 
+ */
 window.modalEditDocumento = (idDoctoCustomer, tipoDocTitle, routeFile) => {
     document.getElementById("idDocFile").value = idDoctoCustomer;
     document.getElementById("routeFile").value = routeFile;
@@ -2003,6 +2021,29 @@ window.modalEditDocumento = (idDoctoCustomer, tipoDocTitle, routeFile) => {
     tipoDocumento.innerHTML = tipoDocTitle;
 
     $("#modalEditFile").modal({ backdrop: 'static', keyboard: false }).modal('show');
+}
+
+/**
+ * 
+ * @param {number} icvedomicilio 
+ * @param {number} latitud 
+ * @param {number} longitud 
+ */
+window.openModalEditAddress = (icvedomicilio, latitud, longitud) => {
+
+    $("#modalEditAddress").modal({ backdrop: 'static', keyboard: false }).modal('show');
+    $('#modalEditAddress').on('shown.bs.modal', function () {
+        initMapUpdate(latitud, longitud);
+    });
+}
+
+
+const getDataAddressCustomerUpdate = async (icvedomicilio) =>{
+    try{
+
+    }catch(error){
+        throw new Error(`No se pueden obtener los recibos de pago: ${error.message}`);
+    }
 }
 
 /**

@@ -16,6 +16,11 @@ require_once '../Models/DashBoard.php';
                 $cinvestors = $dashBoard->countInvestors();
                 echo json_encode($cinvestors);
                 break;
+
+            case 'getWallets':
+                $wallets = $dashBoard->getWallets();
+                echo json_encode($wallets);
+                break;
             
             default:
                 echo "Esta opción no se encuentra dentro del controlador del DashBoard";

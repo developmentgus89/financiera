@@ -28,6 +28,15 @@ class DashBoard {
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+     // Conteo de inversionistas
+     public function getWallets(){
+        $sql = 'SELECT * FROM catcarteras';
+        $statement = $this->acceso->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

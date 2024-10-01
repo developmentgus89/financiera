@@ -885,7 +885,7 @@ $fecha_actual = $formatter->format(new DateTime());
         <div class="modal-content bg-modalVoucher">
             <div class="modal-header">
                 <h5 class="modal-title"><strong>
-                    Listado de vouchers de pago.
+                        Listado de vouchers de pago.
                     </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -951,21 +951,21 @@ $fecha_actual = $formatter->format(new DateTime());
         <div class="modal-content bg-modalVoucher">
             <div class="modal-header">
                 <h5 class="modal-title"><strong>
-                    <div id="tipoDocumentoFile"></div>
+                        <div id="tipoDocumentoFile"></div>
                     </strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="idDocFile" id="idDocFile"/>
-                <input type="hidden" name="routeFile" id="routeFile"/>
+                <input type="hidden" name="idDocFile" id="idDocFile" />
+                <input type="hidden" name="routeFile" id="routeFile" />
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                          <label for="">Documento de Comprobaci&oacute;n:</label>
-                          <input type="file" class="form-control-file mb-3" name="fileUploadNew" id="fileUploadNew" aria-describedby="fileHelpId">
-                          <small id="fileHelpId" class="form-text" style="color:white;">El archivo puede ser formato PDF o JPG, JPEG o PNG</small>
+                            <label for="">Documento de Comprobaci&oacute;n:</label>
+                            <input type="file" class="form-control-file mb-3" name="fileUploadNew" id="fileUploadNew" aria-describedby="fileHelpId">
+                            <small id="fileHelpId" class="form-text" style="color:white;">El archivo puede ser formato PDF o JPG, JPEG o PNG</small>
                         </div>
                     </div>
                 </div>
@@ -973,6 +973,138 @@ $fecha_actual = $formatter->format(new DateTime());
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-success" id="btnUpdateFile">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditAddress" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content bg-modalVoucher">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>
+                        Modificaci&oacute;n de los Datos del Domicilio del Cliente.
+                    </strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-success">
+                            <div class="card-header">
+                                <h3 class="card-title">Dirección y Geolocalizazción</h3>
+                            </div>
+                            <div class="card-body" style="color:black;">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="ccalle-upd">Calle <span style="color: red">*</span>:</label>
+                                                    <input type="text" class="form-control" name="ccalle-upd" id="ccalle-upd">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="numexterior-upd">Número Exterior <span style="color: red">*</span>:</label>
+                                                    <input type="text" class="form-control" name="numexterior-upd" id="numexterior-upd">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="numinterior-upd">Número Interior</label>
+                                                    <input type="text" class="form-control" name="numinterior-upd" id="numinterior-upd">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="pricalle-upd">Primer entre calle <span style="color: red">*</span></label>
+                                                    <input type="text" class="form-control" name="pricalle-upd" id="pricalle-upd">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="segcalle-udp">Segunda entre calle <span style="color: red">*</span></label>
+                                                    <input type="text" class="form-control" name="segcalle-udp" id="segcalle-udp">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cp-upd">Código Postal (CP)<span style="color: red">*</span>: </label>
+                                                    <input type="text" class="form-control" name="cp-upd" id="cp-upd" minlength="5" maxlength="5">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="creferencia-upd">Referencia:</label>
+                                                    <input type="text" class="form-control" name="creferencia-upd" id="creferencia-upd">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="entidaddir-upd">Entidad:</label>
+                                                    <input type="text" class="form-control" name="entidaddir-upd" id="entidaddir-upd" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="municipiodir-upd">Alcaldía o Municipio</label>
+                                                    <input type="text" class="form-control" name="municipiodir-upd" id="municipiodir-upd" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="coloniadir-upd">Asentamiento o Colonia <span style="color: red">*</span>:</label>
+                                                    <select class="form-control" name="coloniadir-upd" id="coloniadir-upd">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="latitud">Latitud:</label>
+                                                    <input type="text" class="form-control" name="latitud" id="latitud" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="longitud">Longitud</label>
+                                                    <input type="text" class="form-control" name="longitud" id="longitud" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div id="mapUpdate" style="width:100%;height:450px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <strong> (<span style="color: red">*</span>) Campos Obligatorios. </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="btnUpdateAddress">Actualizar</button>
             </div>
         </div>
     </div>

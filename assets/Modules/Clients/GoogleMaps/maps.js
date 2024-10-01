@@ -9,14 +9,39 @@ function initMap() {
 
     document.getElementById('coloniadir').addEventListener('change', function () {
 
-        let calle = document.getElementById('ccalle').value;
-        let numexterior = document.getElementById('numexterior').value;
-        let numinterior = document.getElementById('numinterior').value;
-        let cp = document.getElementById('cp').value;
-        let entidaddir = document.getElementById('entidaddir').value;
+        let calle        = document.getElementById('ccalle').value;
+        let numexterior  = document.getElementById('numexterior').value;
+        let numinterior  = document.getElementById('numinterior').value;
+        let cp           = document.getElementById('cp').value;
+        let entidaddir   = document.getElementById('entidaddir').value;
         let municipiodir = document.getElementById('municipiodir').value;
-        let coloniadir = document.getElementById('coloniadir').value;
+        let coloniadir   = document.getElementById('coloniadir').value;
+
         geocodeAddress(geocoder, map, calle, numexterior,
+            numinterior, coloniadir, municipiodir, entidaddir, cp, marker);
+    });
+}
+
+function initMapUpdate(latitud, longitud) {
+    var map = new google.maps.Map(document.getElementById('mapUpdate'), {
+        zoom: 13,
+        center: { lat: 32.518251, lng: -117.112720 } // Coordenadas iniciales del mapa
+    });
+
+    var geocoder = new google.maps.Geocoder();
+    var marker = null; // Inicializa la variable marcador
+
+    document.getElementById('coloniadir-upd').addEventListener('change', function () {
+
+        let calle        = document.getElementById('ccalle-upd').value;
+        let numexterior  = document.getElementById('numexterior-upd').value;
+        let numinterior  = document.getElementById('numinterior-upd').value;
+        let cp           = document.getElementById('cp-upd').value;
+        let entidaddir   = document.getElementById('entidaddir-upd').value;
+        let municipiodir = document.getElementById('municipiodir-upd').value;
+        let coloniadir   = document.getElementById('coloniadir-upd').value;
+        
+        geocodeAddressUpdate(geocoder, map, calle, numexterior,
             numinterior, coloniadir, municipiodir, entidaddir, cp, marker);
     });
 }
@@ -78,6 +103,45 @@ function geocodeAddress(geocoder, map, calle, numexterior, numinterior,
                     document.getElementById('latitud').value = Math.trunc(pos.lat() * 1e6) / 1e6;
                     document.getElementById('longitud').value = Math.trunc(pos.lng() * 1e6) / 1e6;
 
+                });
+            }
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+function geocodeAddressUpdate(geocoder, map, calle, numexterior, numinterior,
+    coloniadir, municipiodir, entidaddir, cp, marker) {
+    let address = `${calle} ${numexterior} ${numinterior} ${coloniadir} 
+        ${municipiodir} ${entidaddir} ${cp}`;
+    geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === 'OK') {
+            map.setCenter(results[0].geometry.location);
+            map.setZoom(17); // Ajusta el zoom para un enfoque más cercano
+
+            // Verifica si el marcador ya existe
+            if (marker && marker.setMap) {
+                // Mueve el marcador existente
+                marker.setPosition(null);
+            } else {
+                // Crea un nuevo marcador si no existe uno
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    draggable: true // Hace que el marcador sea arrastrable
+                });
+
+                var posi = marker.getPosition();
+
+                document.getElementById('latitud-upd').value = posi.lat();
+                document.getElementById('longitud-udp').value = posi.lng();
+
+                marker.addListener('dragend', function () {
+                    var pos = marker.getPosition();
+                    console.log(pos.lat(), pos.lng());
+                    document.getElementById('latitud-udp').value = Math.trunc(pos.lat() * 1e6) / 1e6;
+                    document.getElementById('longitud-udp').value = Math.trunc(pos.lng() * 1e6) / 1e6;
                 });
             }
         } else {

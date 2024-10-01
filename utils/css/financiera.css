@@ -48,6 +48,11 @@
     color: white;
 }
 
+.fondo-graficas{
+    background-color: rgba(181, 255, 200, 0.641);
+    color: rgb(0, 0, 0);
+}
+
 .fondo-tabs{
     background-color: rgba(0, 100, 0, 0.818);
     color: white;

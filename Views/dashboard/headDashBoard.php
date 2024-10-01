@@ -8,7 +8,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Servicios | Mayorquin </title>
+  <title>Financiera | Mayorquin </title>
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../utils/plugins/fontawesome-free/css/all.min.css">

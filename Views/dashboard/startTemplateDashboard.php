@@ -32,7 +32,7 @@
             <!-- Brand Logo -->
             <a href="dashboard.php" class="brand-link">
                 <img src="../utils/img/icons.png" alt="Sistema de Inventario" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light text-titled">Servicios | Mayorqu&iacute;n</span>
+                <span class="brand-text font-weight-light text-titled">Financiera | Mayorqu&iacute;n</span>
             </a>
 
             <!-- Sidebar -->
