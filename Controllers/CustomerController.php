@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Crear cliente
             $resp = $customer->insertarCliente($customerData);
-            echo json_encode($resp);
+            echo $resp;
             break;
 
 
@@ -202,6 +202,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'readNumberPay':
             $idNumberPay = $_POST['idNumberPay'];
             $resp = $credits->getDataNumberPay($idNumberPay);
+            echo json_encode($resp);
+            break;
+
+        case 'getDataAddressCustomer':
+            $icvedomicilio = $_POST['icveDomicilio'];
+            $resp = $credits->getDataAddressCustomer($icvedomicilio);
             echo json_encode($resp);
             break;
         default:

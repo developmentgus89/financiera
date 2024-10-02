@@ -65,6 +65,11 @@ class Investor
             $statementInverdetalle = $this->acceso->prepare($queryInverdetalle);
             $statementInverdetalle->execute([$icveinversionista, $invinteres, $invDateRegister, $invcantinvertida]);
 
+            //* Actualizar el saldo de la carte de Financiera
+            $sqlUpdate = "UPDATE catcarteras SET dsaldo = dsaldo + ? WHERE icvecartera = 1"; //Siempre se actualiza el saldo de financiera
+            $statementInverdetalle = $this->acceso->prepare($sqlUpdate);
+            $statementInverdetalle->execute([$invcantinvertida]);
+
             // Devuelve true si todo es correcto
             $resp['msj'] = true;
             return $resp;
@@ -77,9 +82,9 @@ class Investor
      * getInvestorDetails
      *
      * @param  number $icveinvestor
-     * @return void
+     * @return array
      */
-    public function getInvestorDetails($icveinvestor)
+    public function getInvestorDetails($icveinvestor):?array
     {
         try {
             $query = "SELECT * FROM inverdetalle 
@@ -250,7 +255,7 @@ class Investor
      * rowInvestor
      *
      * @param $id 
-     * @return void
+     * @return array
      */
     public function rowInvestor($id)
     {
@@ -477,7 +482,7 @@ class Investor
      * get_paysdetailsinterest
      *
      * @param  number $icveinversionista
-     * @return void
+     * @return array
      */
     public function get_paysdetailsinterest($icveinversionista)
     {

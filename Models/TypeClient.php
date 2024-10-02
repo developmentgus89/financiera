@@ -51,7 +51,7 @@ class TypeClient{
 
     public function obtenerTipoCliente() {
         try {
-            $query = "SELECT * FROM financiera.cattipocliente AS tcliente
+            $query = "SELECT * FROM cattipocliente AS tcliente
                     INNER JOIN cattasascomisiones AS tasa 
                     ON tcliente.icvetasascomisiones = tasa.icvetasascomisiones";
             $statement = $this->acceso->prepare($query);

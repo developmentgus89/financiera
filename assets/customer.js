@@ -246,7 +246,9 @@ btnSetPayAdvanced.addEventListener('click', () => {
                 Swal.fire({
                     title: "Correcto",
                     html: `Se realiz\u00F3 el pago de manera satisfactoria`,
-                    icon: "success"
+                    icon: "success",
+                    allowOutsideClick: false,  // Desactiva el clic fuera del modal
+                    allowEscapeKey: false
                 }).then((result) => {
                     if (result.isConfirmed) {
                         
@@ -2029,17 +2031,65 @@ window.modalEditDocumento = (idDoctoCustomer, tipoDocTitle, routeFile) => {
  * @param {number} latitud 
  * @param {number} longitud 
  */
-window.openModalEditAddress = (icvedomicilio, latitud, longitud) => {
+window.openModalEditAddress = async (icvedomicilio, latitud, longitud) => {
+    const dataAddress = await getDataAddressCustomerUpdate(icvedomicilio);
+
+    document.getElementById('ccalle-upd').value       = dataAddress[0].ccalle;
+    document.getElementById('numexterior-upd').value  = dataAddress[0].cnumexterior;
+    document.getElementById('numinterior-upd').value  = dataAddress[0].cnuminterior == null? '': dataAddress[0].cnuminterior;
+    document.getElementById('pricalle-upd').value     = dataAddress[0].pricalle;
+    document.getElementById('segcalle-udp').value     = dataAddress[0].segcalle;
+    document.getElementById('entidaddir-upd').value   = dataAddress[0].centfederativa;
+    document.getElementById('municipiodir-upd').value = dataAddress[0].cdelegmunicipio;
+    document.getElementById('cp-upd').value           = dataAddress[0].ccodpostal;
+    document.getElementById('latitud-udp').value      = dataAddress[0].latitud;
+    document.getElementById('longitud-udp').value     = dataAddress[0].longitud;
+    document.getElementById('creferencia-upd').value  = dataAddress[0].creferencia;
+
+    let valorCatColoniaBD = dataAddress[0].creferencia;
+    const cp = document.getElementById('cp-upd');
+    cp.addEventListener('blur', () =>{
+        readCodigosPostal('entidaddir-upd','municipiodir-upd','coloniadir-upd',cp.value);
+    });
 
     $("#modalEditAddress").modal({ backdrop: 'static', keyboard: false }).modal('show');
     $('#modalEditAddress').on('shown.bs.modal', function () {
+        console.log(valorCatColoniaBD);
+        readCodigosPostal(
+            'entidaddir-upd',
+            'municipiodir-upd',
+            'coloniadir-upd',
+            document.getElementById('cp-upd').value,
+            valorCatColoniaBD
+        );
         initMapUpdate(latitud, longitud);
     });
 }
 
-
+/**
+ * Funcion que sirve para obtener los datos del domicilio del cliente
+ * @param {number} icvedomicilio 
+ * @returns 
+ */
 const getDataAddressCustomerUpdate = async (icvedomicilio) =>{
-    try{
+        let params =
+        'operation=getDataAddressCustomer' +
+        '&icveDomicilio=' + icvedomicilio;
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        return data;
 
     }catch(error){
         throw new Error(`No se pueden obtener los recibos de pago: ${error.message}`);
@@ -2256,10 +2306,14 @@ const drawCatalogBanks = async (element, icvebanco = null) => {
 }
 
 /**
- * Función para poder leer los código postales
- * @param {string} zipcode 
+ * 
+ * @param {*} inputEstado 
+ * @param {*} inputDelMunicipio 
+ * @param {*} select 
+ * @param {*} zipcode 
  */
-const readCodigosPostal = async (zipcode) => {
+const readCodigosPostal = async (inputEstado, inputDelMunicipio, select, zipcode, selectValor = null) => {
+    console.log(selectValor);
     let params =
         'operation=readZipCode' +
         '&zipcode=' + zipcode;
@@ -2278,12 +2332,16 @@ const readCodigosPostal = async (zipcode) => {
 
         const data = await response.json();
 
-        let colonias = document.getElementById('coloniadir');
-        document.getElementById('entidaddir').value = data[0].cnombreestprovincia;
-        document.getElementById('municipiodir').value = data[0].cnomlocmun;
+        let colonias = document.getElementById(select);
+        document.getElementById(inputEstado).value = data[0].cnombreestprovincia;
+        document.getElementById(inputDelMunicipio).value = data[0].cnomlocmun;
 
         const optionsHTML = data.map(col => {
-            return `<option value="${col.icvecatcolonia}">${col.cnombre}</option>`;
+            if(col.icvecatcolonia = selectValor){
+                return `<option value="${col.icvecatcolonia}" selected>${col.cnombre}</option>`;
+            }else{
+                return `<option value="${col.icvecatcolonia}">${col.cnombre}</option>`;
+            }
         }).join('');
 
         colonias.innerHTML = `<option value="">SELECCIONE COLONIA</option>` + optionsHTML;
@@ -2322,7 +2380,7 @@ const varCP = document.getElementById('cp');
 varCP.addEventListener('blur', () => {
     let cp = document.getElementById('cp').value;
 
-    readCodigosPostal(cp);
+    readCodigosPostal('entidaddir','municipiodir','coloniadir',cp);
 });
 
 // Llama a la función para establecer el formato de ayuda al cargar la página

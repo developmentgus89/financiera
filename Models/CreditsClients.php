@@ -509,6 +509,19 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
+
+    public function getDataAddressCustomer(int $icvedomicilio): ?array{
+        try {
+            $sql = "SELECT * FROM domicilio WHERE icvedomicilio = ?";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute([$icvedomicilio]);
+            $this->monitor->setLog('Clientes', "Obtencion del domicilio del cliente => $resp");
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e->getMessage());
+        }
+    }
+
     /**
      * setCreditNewScheme
      *

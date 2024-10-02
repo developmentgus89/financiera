@@ -9,13 +9,13 @@ function initMap() {
 
     document.getElementById('coloniadir').addEventListener('change', function () {
 
-        let calle        = document.getElementById('ccalle').value;
-        let numexterior  = document.getElementById('numexterior').value;
-        let numinterior  = document.getElementById('numinterior').value;
-        let cp           = document.getElementById('cp').value;
-        let entidaddir   = document.getElementById('entidaddir').value;
+        let calle = document.getElementById('ccalle').value;
+        let numexterior = document.getElementById('numexterior').value;
+        let numinterior = document.getElementById('numinterior').value;
+        let cp = document.getElementById('cp').value;
+        let entidaddir = document.getElementById('entidaddir').value;
         let municipiodir = document.getElementById('municipiodir').value;
-        let coloniadir   = document.getElementById('coloniadir').value;
+        let coloniadir = document.getElementById('coloniadir').value;
 
         geocodeAddress(geocoder, map, calle, numexterior,
             numinterior, coloniadir, municipiodir, entidaddir, cp, marker);
@@ -24,23 +24,40 @@ function initMap() {
 
 function initMapUpdate(latitud, longitud) {
     var map = new google.maps.Map(document.getElementById('mapUpdate'), {
-        zoom: 13,
-        center: { lat: 32.518251, lng: -117.112720 } // Coordenadas iniciales del mapa
+        zoom: 17,
+        center: { lat: latitud, lng: longitud } // Coordenadas iniciales del mapa
     });
 
     var geocoder = new google.maps.Geocoder();
     var marker = null; // Inicializa la variable marcador
+    marker = new google.maps.Marker({
+        position: { lat: parseFloat(latitud), lng: parseFloat(longitud) },
+        map: map,
+        title: 'Ubicación del cliente',
+        draggable: true
+    });
+    var posi = marker.getPosition();
 
+    document.getElementById('latitud-udp').value = posi.lat();
+    document.getElementById('longitud-udp').value = posi.lng();
+
+    marker.addListener('dragend', function () {
+        var pos = marker.getPosition();
+        console.log(pos.lat(), pos.lng());
+        document.getElementById('latitud-udp').value = Math.trunc(pos.lat() * 1e6) / 1e6;
+        document.getElementById('longitud-udp').value = Math.trunc(pos.lng() * 1e6) / 1e6;
+
+    });
     document.getElementById('coloniadir-upd').addEventListener('change', function () {
 
-        let calle        = document.getElementById('ccalle-upd').value;
-        let numexterior  = document.getElementById('numexterior-upd').value;
-        let numinterior  = document.getElementById('numinterior-upd').value;
-        let cp           = document.getElementById('cp-upd').value;
-        let entidaddir   = document.getElementById('entidaddir-upd').value;
+        let calle = document.getElementById('ccalle-upd').value;
+        let numexterior = document.getElementById('numexterior-upd').value;
+        let numinterior = document.getElementById('numinterior-upd').value;
+        let cp = document.getElementById('cp-upd').value;
+        let entidaddir = document.getElementById('entidaddir-upd').value;
         let municipiodir = document.getElementById('municipiodir-upd').value;
-        let coloniadir   = document.getElementById('coloniadir-upd').value;
-        
+        let coloniadir = document.getElementById('coloniadir-upd').value;
+
         geocodeAddressUpdate(geocoder, map, calle, numexterior,
             numinterior, coloniadir, municipiodir, entidaddir, cp, marker);
     });

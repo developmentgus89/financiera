@@ -27,32 +27,26 @@ $fecha_actual = $formatter->format(new DateTime());
 
 <!-- Main content -->
 <div class="content">
-    <div class="col-md-12">
-        <div class="card card-success">
-            <div class="card-header">
-                <h1 class="card-title"><strong>Cat&aacute;logo de Clientes.</strong></h1>
-                <div class="card-tools float-right m-2">
-                    <button id="agregar-cliente" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Agrega clientes despliega modal"><i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Cliente</button>
-                </div>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body table-responsive p-3 login-body">
-                <table id="tablaClientes" class="table table-hover text-wrap">
-                </table>
-            </div>
-            <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
+    <div class="row">
+        
     </div>
-    <!-- /.container-fluid -->
-    <div id="panel" class="panel" style="display: none;">
-        <div class="panel-header">
-            Detalles del Cliente
-            <button id="cerrarPanel" class="btn-close" aria-label="Cerrar"></button>
-        </div>
-        <div class="panel-body">
-            <!-- Aquí puedes agregar los detalles del cliente -->
-            <p>Detalles del cliente aquí...</p>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h1 class="card-title"><strong>Cat&aacute;logo de Clientes.</strong></h1>
+                    <div class="card-tools float-right m-2">
+                        <button id="agregar-cliente" type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Agrega clientes despliega modal"><i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Cliente</button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-3 login-body">
+                    <table id="tablaClientes" class="table table-hover text-wrap">
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
         </div>
     </div>
 </div>
@@ -1075,13 +1069,13 @@ $fecha_actual = $formatter->format(new DateTime());
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="latitud">Latitud:</label>
-                                                    <input type="text" class="form-control" name="latitud" id="latitud" readonly>
+                                                    <input type="text" class="form-control" name="latitud-udp" id="latitud-udp" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label for="longitud">Longitud</label>
-                                                    <input type="text" class="form-control" name="longitud" id="longitud" readonly>
+                                                    <input type="text" class="form-control" name="longitud-udp" id="longitud-udp" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">

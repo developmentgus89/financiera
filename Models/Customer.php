@@ -22,7 +22,7 @@ class Customer
      * @param  array[] $customerPersonalData
      * @return array
      */
-    public function insertarCliente(array $customerPersonalData): array
+    public function insertarCliente(array $customerPersonalData): bool
     {
 
         try {
@@ -113,10 +113,11 @@ class Customer
             if (verifRespBool($resp)) {
                 $this->acceso->commit();
                 $this->monitor->setLog('Clientes', 'Datos generales del cliente insertados correctamenete');
+                return true;
             }
 
 
-            return $resp;
+            // return $resp;
         } catch (PDOException $e) {
             if ($this->acceso->inTransaction()) {
                 $this->acceso->rollBack();

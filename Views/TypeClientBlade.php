@@ -20,24 +20,16 @@ include_once "dashboard/startTemplateDashboard.php";
 <!-- Main content -->
 <div class="content">
     <div class="col-md-12">
-        <div class="card card-info">
+        <div class="card card-success">
             <div class="card-header">
-                <h2 class="col-6 ">Cat&aacute;logo de Tipos de Cliente</h2>
-                <div class="col-2 card-title">
-
+            <h1 class="card-title"><strong>Cat&aacute;logo de Tipos de Cliente.</strong></h1>
+                <div class="card-tools float-right m-2">
+                    <button type="button" class="btn btn-block bg-gradient-primary btn-sm" id="agregar-tasa"><i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Tipo de Cliente</button>
                 </div>
-                <div class="col-4 card-title">
-                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="agregar-tasa">
-                        <i class="nav-icon fas fa-plus-square"></i> &nbsp; Agregar Tipo de Cliente
-                    </button>
-                </div>
-
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="tblTipoCliente" class="table table-bordered table-dark">
-
-                </table>
+            <div class="card-body login-body">
+                <table id="tblTipoCliente" class="table table-hover text-wrap"></table>
             </div>
             <!-- /.card-body -->
         </div>
@@ -95,7 +87,7 @@ include_once "dashboard/startTemplateDashboard.php";
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content modal-lg fondo_cliente_edit_modal">
+        <div class="modal-content modal-lg bg-modalVoucher">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalEditarLabel">Editar registro del "Tipo Cliente"</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -113,7 +105,7 @@ include_once "dashboard/startTemplateDashboard.php";
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success" id="btnActTasaInteresTCliente">Actualizar</button>
             </div>
         </div>
