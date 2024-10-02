@@ -210,6 +210,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resp = $credits->getDataAddressCustomer($icvedomicilio);
             echo json_encode($resp);
             break;
+
+        case 'getReadOnlyWallets':
+            $resp = $credits->getReadOnlyWallets();
+            echo json_encode($resp);
+            break;
         default:
             echo 'Operación no válida';
             break;

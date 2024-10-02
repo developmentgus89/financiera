@@ -1065,6 +1065,75 @@ const leerClientes = async () => {
     xhr.send('operation=read');
 };
 
+const getReadOnlyWallets = async () => {
+    let params = 'operation=getReadOnlyWallets';
+    let walletsContainer = document.getElementById('walletsContainer'); // Elemento donde se va a insertar el HTML
+
+    try {
+        const response = await fetch(baseURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud para obtener los pagos`);
+        }
+
+        const data = await response.json();
+        console.table(data);
+        
+        // Limpiar el contenedor antes de agregar el nuevo contenido
+        walletsContainer.innerHTML = '';
+
+        // Array con las clases de fondo que se usarán aleatoriamente
+        const bgClasses = ['bg-warning', 'bg-success', 'bg-danger'];
+
+        // Crear un contenedor para las filas
+        let rowHTML = '<div class="row">';
+
+        // Iterar sobre los datos recibidos y crear el HTML dinámicamente
+        data.forEach((wallet, index) => {
+            // Elegir un color de fondo aleatorio del array
+            let randomBgClass = bgClasses[Math.floor(Math.random() * bgClasses.length)];
+
+            // Crear el HTML de la cartera
+            let walletHTML = `
+                <div class="col-md-3">
+                    <div class="info-box mb-3 bg-info">
+                        <span class="info-box-icon"><i class="fas fa-wallet"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">${wallet.cnomcartera}</span>
+                            <span class="info-box-number">${parseFloat(wallet.dsaldo).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            `;
+
+            // Añadir el HTML de la cartera a la fila actual
+            rowHTML += walletHTML;
+
+            // Cada vez que se añadan 4 carteras, cerrar la fila actual y comenzar una nueva
+            if ((index + 1) % 4 === 0) {
+                rowHTML += '</div><div class="row">'; // Cerrar la fila actual y abrir una nueva
+            }
+        });
+
+        // Cerrar la última fila
+        rowHTML += '</div>';
+
+        // Insertar el HTML dinámico en el contenedor
+        walletsContainer.innerHTML = rowHTML;
+
+    } catch (error) {
+        throw new Error(`No se pueden leer el template de las Wallets: ${error.message}`);
+    }
+}
+
 /**
  * Funcion para leer creditos del cliente
  * @param {number} idcustomer 
@@ -2387,5 +2456,6 @@ varCP.addEventListener('blur', () => {
 // window.onload = setDateFormatHelp;
 updatePaysStatusCustomer();
 actFecha();
+getReadOnlyWallets();
 leerClientes();
 initMap();

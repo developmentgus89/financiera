@@ -28,7 +28,23 @@ $fecha_actual = $formatter->format(new DateTime());
 <!-- Main content -->
 <div class="content">
     <div class="row">
-        
+        <div class="col-md-12">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h1 class="card-title"><strong>Saldos de Carteras.</strong></h1>
+                    <div class="card-tools float-right m-2">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-3 login-body">
+                    <div id="walletsContainer"></div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">

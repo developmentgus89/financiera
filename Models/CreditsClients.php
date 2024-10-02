@@ -509,13 +509,37 @@ class CreditsClients extends OperationsPaysClient
         }
     }
 
-
+    
+    /**
+     * getDataAddressCustomer
+     *
+     * @param  mixed $icvedomicilio
+     * @return array
+     */
     public function getDataAddressCustomer(int $icvedomicilio): ?array{
         try {
             $sql = "SELECT * FROM domicilio WHERE icvedomicilio = ?";
             $statement = $this->acceso->prepare($sql);
             $resp = $statement->execute([$icvedomicilio]);
             $this->monitor->setLog('Clientes', "Obtencion del domicilio del cliente => $resp");
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $this->monitor->setLog('Clientes', $e->getMessage());
+        }
+    }
+
+    
+    /**
+     * getReadOnlyWallets
+     *
+     * @return array
+     */
+    public function getReadOnlyWallets():? array{
+        try {
+            $sql = "SELECT * FROM catcarteras";
+            $statement = $this->acceso->prepare($sql);
+            $resp = $statement->execute();
+            $this->monitor->setLog('Clientes', "Obtencion de las carteras de la empresa => $resp");
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             $this->monitor->setLog('Clientes', $e->getMessage());
