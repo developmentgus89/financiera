@@ -22,7 +22,7 @@ class Customer
      * @param  array[] $customerPersonalData
      * @return array
      */
-    public function insertarCliente(array $customerPersonalData): bool
+    public function insertarCliente(array $customerPersonalData): array
     {
 
         try {
@@ -60,6 +60,9 @@ class Customer
             $respCredit         = $this->insertCreditCustomer($lastInsertId, $creditDataCustomer);
             $idCredit           = $this->acceso->lastInsertId();
 
+            //Afecta el saldo de la cartera
+            $respaffectedWalletBalance = $this->affectedWalletBalance($creditDataCustomer['barprestamosoli']);
+
             //Inserta el control de pagos del credito que se inserto
             $respCreditPays = $this->insertCreditPaysCustomer($idCredit, $creditDataCustomer);
 
@@ -91,14 +94,15 @@ class Customer
 
             // Devuelve true si todo es correcto
             $resp = array();
-            $resp['idCliente']        = (int) $lastInsertId;
-            $resp['opDatPersonales']  = true;
-            $resp['opDataCredit']     = $respCredit;
-            $resp['opDataCreditPays'] = $respCreditPays;
-            $resp['opDataCtaBank']    = $respCtaBank;
-            $resp['opDataAddress']    = $respDataAddress;
-            $resp['opDataDocsCli']    = $respDataDocs;
-            $resp['opDataReferred']   = $respDataDocs;
+            $resp['idCliente']                 = (int) $lastInsertId;
+            $resp['opDatPersonales']           = true;
+            $resp['opDataCredit']              = $respCredit;
+            $resp['opDataCreditWalletBalanve'] = $respaffectedWalletBalance;
+            $resp['opDataCreditPays']          = $respCreditPays;
+            $resp['opDataCtaBank']             = $respCtaBank;
+            $resp['opDataAddress']             = $respDataAddress;
+            $resp['opDataDocsCli']             = $respDataDocs;
+            $resp['opDataReferred']            = $respDataDocs;
 
             function verifRespBool($arr)
             {
@@ -113,11 +117,10 @@ class Customer
             if (verifRespBool($resp)) {
                 $this->acceso->commit();
                 $this->monitor->setLog('Clientes', 'Datos generales del cliente insertados correctamenete');
-                return true;
             }
 
 
-            // return $resp;
+            return $resp;
         } catch (PDOException $e) {
             if ($this->acceso->inTransaction()) {
                 $this->acceso->rollBack();
@@ -127,6 +130,27 @@ class Customer
             $this->monitor->setLog('Clientes', $err);
             return [false, $err];
         }
+    }
+
+    private function affectedWalletBalance(float $saldo, int $icvecartera = 1):? bool{
+        try{
+            // Affected Wallet Balance
+            // ASAP: cambiar la cartera seleccionada del cliente.
+            // TODO: Crear el método de afectación de saldo
+            $sqlAffecWallet = "UPDATE catcarteras SET dsaldo = dsaldo - ? WHERE icvecartera = ?";
+            $stmAffecWallet = $this->acceso->prepare($sqlAffecWallet);
+            $stmAffecWallet->execute([$saldo, $icvecartera]);
+            return true;
+        }catch (PDOException $e) {
+            if ($this->acceso->inTransaction()) {
+                $this->acceso->rollBack();
+            }
+
+            $err = 'Error al actualizar el saldo de la cartera el cliente: ' . $e->getMessage();
+            $this->monitor->setLog('Clientes - Afectación saldo cartera', $err);
+            return [false, $err];
+        }
+            
     }
 
     /**

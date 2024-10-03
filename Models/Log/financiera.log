@@ -820,3 +820,52 @@ Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 21:39:59
 Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 21:39:59
 Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 21:44:29
 Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 21:44:29
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:10:21
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:10:21
+Clientes|Error al insertar el detalle de pagos del prestamo del cliente: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`financiera`.`catcreditctlpagcust`, CONSTRAINT `catcreditctlpagcust_ibfk_1` FOREIGN KEY (`icvecredito`) REFERENCES `catcreditos` (`icvecredito`))|2024-10-01 22:13:17
+Clientes|Error al insertar el detalle de pagos del prestamo del cliente: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`financiera`.`catcreditctlpagcust`, CONSTRAINT `catcreditctlpagcust_ibfk_1` FOREIGN KEY (`icvecredito`) REFERENCES `catcreditos` (`icvecredito`))|2024-10-01 22:14:33
+Clientes|Error al insertar el detalle de pagos del prestamo del cliente: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`financiera`.`catcreditctlpagcust`, CONSTRAINT `catcreditctlpagcust_ibfk_1` FOREIGN KEY (`icvecredito`) REFERENCES `catcreditos` (`icvecredito`))|2024-10-01 22:19:19
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:30:40
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:30:40
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:30:49
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:30:49
+Clientes|Datos generales del cliente insertados correctamenete|2024-10-01 22:34:05
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:35:02
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:35:02
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:35:36
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:35:36
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:38:53
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:38:53
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-01 22:39:07
+Clientes|Datos generales del cliente insertados correctamenete|2024-10-01 22:42:29
+Clientes|Datos generales del cliente insertados correctamenete|2024-10-01 22:43:26
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:44:03
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:44:03
+Clientes|Datos generales del cliente insertados correctamenete|2024-10-01 22:47:09
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-01 22:47:09
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-01 22:47:09
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 21:33:41
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 21:33:41
+Clientes|Actualizacion correcta del procedimiento: updatePaysStatusCustomer.|2024-10-02 21:33:41
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:33:46
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:34:31
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:24
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:40
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:42
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:44
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:46
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:48
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:36:49
+Clientes|Datos generales del cliente insertados correctamenete|2024-10-02 21:39:30
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 21:39:30
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 21:39:30
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:39:40
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 21:44:47
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 21:44:47
+Clientes|Obtencion del historial de creditos del cliente => 1|2024-10-02 21:44:55
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 21:47:26
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 21:47:26
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 21:47:54
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 21:47:54
+Clientes|Lectura de clientes con todos sus datos se hizo de manera satisfactoria.|2024-10-02 22:27:52
+Clientes|Obtencion de las carteras de la empresa => 1|2024-10-02 22:27:52

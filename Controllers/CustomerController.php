@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Crear cliente
             $resp = $customer->insertarCliente($customerData);
-            echo $resp;
+            echo json_encode($resp);
             break;
 
 

@@ -741,6 +741,7 @@ btnInsertarCliente.addEventListener('click', () => {
                 if (result.isConfirmed) {
 
                     let idCliente = await insertCustomer(formDataCustomer);
+                    console.table(idCliente);
                     if (idCliente) {
                         location.reload();
                     }
